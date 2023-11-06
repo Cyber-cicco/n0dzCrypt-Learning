@@ -3,7 +3,6 @@ package fr.diginamic.digilearning.entities;
 import fr.diginamic.digilearning.entities.enums.StatusValidation;
 import fr.diginamic.digilearning.entities.enums.TypeEvenement;
 import jakarta.persistence.*;
-import org.dgn.entites.TousCentres;
 
 import java.time.LocalDate;
 

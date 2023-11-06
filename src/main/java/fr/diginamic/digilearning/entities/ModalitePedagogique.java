@@ -57,4 +57,7 @@ public class ModalitePedagogique {
 	@Column(name = "tjm_partiel")
 	private boolean tjmPartiel;
 
+	@OneToMany(mappedBy = "modalitePedagogique")
+	private List<Cours> cours;
+
 }

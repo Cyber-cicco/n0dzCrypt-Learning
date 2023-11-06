@@ -38,10 +38,6 @@ public class Bulletin {
 	@JoinColumn(name = "ID_SESSION")
 	private Session session;
 
-	/** utilisateur : Utilisateur */
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_UTILISATEUR")
-	private Utilisateur utilisateur;
 
 	/** evalSavoir : String */
 	@OneToMany(mappedBy = "bulletin", fetch = FetchType.LAZY)
@@ -69,10 +65,9 @@ public class Bulletin {
 	 * @param id          identifiant
 	 * @param utilisateur stagiaire
 	 */
-	public Bulletin(Long id, Utilisateur utilisateur) {
+	public Bulletin(Long id) {
 		super();
 		this.id = id;
-		this.utilisateur = utilisateur;
 	}
 
 	/**
@@ -226,24 +221,6 @@ public class Bulletin {
 	 */
 	public void setBilans(Set<BilanStagiaire> bilans) {
 		this.bilans = bilans;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return the utilisateur
-	 */
-	public Utilisateur getUtilisateur() {
-		return utilisateur;
-	}
-
-	/**
-	 * Setter
-	 * 
-	 * @param utilisateur the utilisateur to set
-	 */
-	public void setUtilisateur(Utilisateur utilisateur) {
-		this.utilisateur = utilisateur;
 	}
 
 	/**

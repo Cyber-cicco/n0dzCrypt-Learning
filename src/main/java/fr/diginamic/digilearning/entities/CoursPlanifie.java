@@ -11,7 +11,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @Entity
 @Table(name = "COURS_PLANIFIE")
 public class CoursPlanifie extends CoursReel implements Evenement, PlanningElement {

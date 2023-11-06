@@ -37,7 +37,6 @@ public class Module {
 
 	/** Liste des cours du module */
 	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY)
-	@OrderBy("ordre")
 	private SortedSet<Cours> cours = new TreeSet<>();
 
 	/** Date de dernière mise à jour */

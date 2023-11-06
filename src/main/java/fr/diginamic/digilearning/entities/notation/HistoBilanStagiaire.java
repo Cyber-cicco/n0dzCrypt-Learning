@@ -78,11 +78,6 @@ public class HistoBilanStagiaire {
 			if (bilan.getBulletin().getSession() != null) {
 				this.nomSession = bilan.getBulletin().getSession().getNom();
 			}
-			if (bilan.getBulletin().getUtilisateur() != null) {
-				this.email = bilan.getBulletin().getUtilisateur().getEmail();
-				this.nomStagiaire = bilan.getBulletin().getUtilisateur().getNom();
-				this.prenomStagiaire = bilan.getBulletin().getUtilisateur().getPrenom();
-			}
 		}
 		this.numero = bilan.getNumero();
 	}

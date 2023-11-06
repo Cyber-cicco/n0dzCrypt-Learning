@@ -36,6 +36,8 @@ public class CompteVirtuel implements Ressource {
 	@Enumerated(EnumType.STRING)
 	private TypeLogiciel logiciel = TypeLogiciel.ADOBE_CONNECT_MEETING;
 
+	@OneToMany(mappedBy = "compteVirtuel")
+	private List<CoursPlanifie> coursPlannifies;
 	@Override
 	public TypeRessource getTypeRessource() {
 		return TypeRessource.COMPTE_CLASSE_VIRTUEL;

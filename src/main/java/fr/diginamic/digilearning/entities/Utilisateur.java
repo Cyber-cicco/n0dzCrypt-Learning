@@ -15,6 +15,7 @@ import java.util.*;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "UTILISATEUR")
 public class Utilisateur implements Comparable<Utilisateur> {
@@ -69,10 +70,6 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	private String prenom;
 
 	/** Téléphone */
-	@Column(nullable = true, length = 100)
-	private String adresse;
-
-	/** Téléphone */
 	@Column(nullable = true, length = 15)
 	private String telephone;
 	
@@ -112,6 +109,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	 */
 	@Column(name = "DATE_LOCKED")
 	private LocalDateTime dateLocked;
+
+	@OneToMany(mappedBy = "utilisateur")
+	private List<Connexion> connexions;
 
 	/**
 	 * Compteur du nombre de tentatives de connexion infructueuses successives. Ce
@@ -185,10 +185,38 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@Enumerated(EnumType.STRING)
 	private CodeResponsable codeResponsable;
 
+
+
 	/** dateAbandon */
 	@Transient
 	private LocalDate dateAbandon;
 
+	@ManyToMany
+	@JoinTable(name = "dl_utilisateur_session",
+			joinColumns = @JoinColumn(name = "utilisateur_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id")
+	)
+	private List<Session> sessionList;
+
+	@ManyToMany
+	@JoinTable(name = "ROLE_UTILISATEUR",
+			joinColumns = @JoinColumn(name = "ID_UTILISATEUR", referencedColumnName = "ID"),
+			inverseJoinColumns = @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID")
+	)
+	private List<Role> roleList;
+	@ManyToOne
+	@JoinColumn(name = "ds_adresse_id")
+	private Adresse adresse;
+	@ManyToMany
+	@JoinTable(name = "dl_utilisateur_conversation",
+			joinColumns = @JoinColumn(name = "utilisateur_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "conversation_id", referencedColumnName = "id")
+	)
+	private List<Conversation> conversationList;
+	@OneToMany(mappedBy = "emetteur")
+	private List<Post> postList;
+	@OneToMany(mappedBy = "emetteur")
+	private List<Message> messageList;
 	/**
 	 * Constructor
 	 * 
@@ -344,5 +372,53 @@ public class Utilisateur implements Comparable<Utilisateur> {
 			return opt.get();
 		}
 		return null;
+	}
+
+	public List<Session> getSessionList() {
+		return sessionList;
+	}
+
+	public void setSessionList(List<Session> sessionList) {
+		this.sessionList = sessionList;
+	}
+
+	public List<Role> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<Role> roleList) {
+		this.roleList = roleList;
+	}
+
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	public List<Conversation> getConversationList() {
+		return conversationList;
+	}
+
+	public void setConversationList(List<Conversation> conversationList) {
+		this.conversationList = conversationList;
+	}
+
+	public List<Post> getPostList() {
+		return postList;
+	}
+
+	public void setPostList(List<Post> postList) {
+		this.postList = postList;
+	}
+
+	public List<Message> getMessageList() {
+		return messageList;
+	}
+
+	public void setMessageList(List<Message> messageList) {
+		this.messageList = messageList;
 	}
 }

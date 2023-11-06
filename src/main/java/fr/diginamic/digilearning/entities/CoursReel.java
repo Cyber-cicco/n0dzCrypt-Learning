@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 @MappedSuperclass
 public abstract class CoursReel implements PlageDate {
 

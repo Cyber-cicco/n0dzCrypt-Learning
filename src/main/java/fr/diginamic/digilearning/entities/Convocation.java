@@ -26,11 +26,6 @@ public class Convocation {
 	@JoinColumn(name = "ID_CENTRE")
 	private Centre centre;
 
-	/** documentConvocation : DocumentDiginamic */
-	@OneToOne
-	@JoinColumn(name = "ID_DOC")
-	private DocumentDiginamic documentConvocation;
-
 	/** documents : List */
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "DOCUMENTS_PAR_CONVOCATION", joinColumns = @JoinColumn(name = "ID_CONVOC", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ID_DOC", referencedColumnName = "ID"))

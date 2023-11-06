@@ -89,6 +89,9 @@ public class Formation {
 	@Column(name = "ID_PREVIOUS")
 	private Long idPrevious;
 
+
+	@OneToMany(mappedBy = "formation")
+	private List<Cours> cours;
 	/**
 	 * Représente la version d'origine de la formation (celle pour laquelle id ==
 	 * idParent)

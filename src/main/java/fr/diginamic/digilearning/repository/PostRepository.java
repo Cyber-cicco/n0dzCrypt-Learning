@@ -1,9 +1,8 @@
 package fr.diginamic.digilearning.repository;
 
+import fr.diginamic.digilearning.entities.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import fr.diginamic.digilearning.entities.old.Post;
-
-public interface PostRepository extends JpaRepository<Post, Long>  {
+public interface PostRepository extends JpaRepository<Post, Long> {
 
 }

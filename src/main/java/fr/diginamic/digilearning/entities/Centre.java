@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -24,6 +26,8 @@ public class Centre {
 	 */
 	@Column(name = "NOM")
 	private String nom;
+	@OneToMany(mappedBy = "centre")
+	private List<Convocation> convocation;
 
 	/**
 	 * nom court: String

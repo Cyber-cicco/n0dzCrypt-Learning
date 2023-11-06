@@ -2,7 +2,6 @@ package fr.diginamic.digilearning.entities;
 
 import fr.diginamic.digilearning.entities.enums.*;
 import fr.diginamic.digilearning.entities.notation.BilanSession;
-import fr.diginamic.digilearning.entities.old.Post;
 import fr.diginamic.digilearning.entities.taches.ListeModele;
 import fr.diginamic.digilearning.entities.taches.Projet;
 import fr.diginamic.digilearning.utils.DateUtils;

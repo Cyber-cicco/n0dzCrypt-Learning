@@ -26,6 +26,9 @@ public class CoursRef {
 	@Column(name = "LIBELLE")
 	private String libelle;
 
+	@OneToMany(mappedBy = "coursRef")
+	private List<Cours> cours;
+
 	/** libelleCourt : String */
 	@Column(name = "LIBELLE_COURT")
 	private String libelleCourt;
