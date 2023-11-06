@@ -1,0 +1,13 @@
+<nav class="items-center p-1 w-fit gap-10 bg-grey h-full flex flex-col drop-shadow-xl z-10 shadow-black">
+    <div class="p-2">
+        <img class="rounded-full" th:src="@{/img/logo_nav.webp}" width="80">
+    </div>
+    <ol id="navbar" class="flex gap-5 p-2 flex-col h-full items-center" >
+        <li class="flex justify-center gap-5 flex-col w-full" th:each="linkGroup, iterStat : ${links}">
+            <div th:class="${iterStat.first} ? 'h-0 bg-black' : 'h-0.5 w-full bg-dark'"></div>
+            <div th:each="link : ${linkGroup.getNavLinks()}">
+                <div th:replace="~{components/nav-link :: nav_link(${link.getUrl()}, ${link.getIconSource()}, ${link.getLibelle()})}"></div>
+            </div>
+        </li>
+    </ol>
+</nav>
