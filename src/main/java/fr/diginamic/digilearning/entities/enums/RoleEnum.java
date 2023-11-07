@@ -8,8 +8,8 @@ public enum RoleEnum {
     ROLE_STAGIAIRE("Stagiaire", 4L),
     ROLE_VISITEUR("Visiteur", 5L),
     ROLE_VISITEUR_ADMIN("Visiteur admin", 6L),
-    ROLE_RESPONSABLE("Visiteur admin", 6L),
-    ROLE_CONTACT("Contact", 7L);
+    ROLE_CONTACT("Contact", 7L),
+    ROLE_RESPONSABLE("Responsable", 8L);
 
     private Long id;
 

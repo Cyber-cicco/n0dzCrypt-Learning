@@ -1,5 +1,6 @@
-package fr.diginamic.digilearning.entities;
+package fr.diginamic.digilearning.entities.old;
 
+import fr.diginamic.digilearning.entities.Utilisateur;
 import jakarta.persistence.*;
 import lombok.*;
 

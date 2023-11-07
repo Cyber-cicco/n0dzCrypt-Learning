@@ -1,17 +1,16 @@
 package fr.diginamic.digilearning.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Builder;
-import lombok.NoArgsConstructor;    
+import lombok.*;
+
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Entity
+@Getter
+@Setter
 @Builder
+@Entity
 @Table(name = "ds_adresse")
 public class Adresse {
 

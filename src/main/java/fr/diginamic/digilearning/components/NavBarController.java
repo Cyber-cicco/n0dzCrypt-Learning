@@ -4,6 +4,7 @@ import fr.diginamic.digilearning.components.elements.NavLink;
 import fr.diginamic.digilearning.components.elements.NavLinks;
 import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
+import fr.diginamic.digilearning.security.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,14 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class NavBarController {
 
     private final NavBarService navBarService;
+    private final AuthenticationService authenticationService;
 
     @GetMapping
     public String getNavBar(@CookieValue("AUTH-TOKEN") String token, Model model){
-        AuthenticationInfos userInfos = new AuthenticationInfos();
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         NavLinks links[] =  navBarService.getLinks(userInfos);
         model.addAttribute("links", links);
-        model.addAttribute("foo", "foo");
-        model.addAttribute("bar", "bar");
         return "components/navbar";
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -34,11 +35,15 @@ public class LoginController {
         model.addAttribute("title", "Me connecter");
         return "pages/login";
     }
+    @GetMapping("/api")
+    public void redirectToLogin(Model model, HttpServletResponse response) throws IOException {
+        response.sendRedirect("/login");
+    }
 
     @PostMapping
     public String login(@ModelAttribute LoginDto loginDto, Model model, HttpServletResponse response){
         utilisateurRepository.findByEmail(loginDto.getEmail())
-                .filter(utilisateur -> passwordEncoder.matches(loginDto.getPassword(), utilisateur.getMotDePasse()))
+                .filter(utilisateur -> passwordEncoder.matches(loginDto.getPassword(), utilisateur.getPassword()))
                 .ifPresentOrElse((utilisateur) ->{
                     response.setHeader(HttpHeaders.SET_COOKIE, jwtService.buildJWTCookie(utilisateur));
                     SecurityContextHolder.getContext().setAuthentication(
@@ -47,8 +52,8 @@ public class LoginController {
                                     null,
                                     utilisateurRepository.findByEmail(loginDto.getEmail())
                                     .orElseThrow(EntityNotFoundException::new)
-                                    .getRoleList().stream()
-                                    .map(role -> new SimpleGrantedAuthority(role.getTypeRole().getLibelle()))
+                                    .getRoles().stream()
+                                    .map(role -> new SimpleGrantedAuthority(role.getType().getLibelle()))
                                     .collect(Collectors.toList())
                             )
                     );

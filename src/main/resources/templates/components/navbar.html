@@ -9,5 +9,9 @@
                 <div th:replace="~{components/nav-link :: nav_link(${link.getUrl()}, ${link.getIconSource()}, ${link.getLibelle()})}"></div>
             </div>
         </li>
+        <a class="flex flex-col text-primary items-center hover:cursor-pointer" href="/login">
+            <img class="rounded-full hover:bg-accent text-white p-2 bg-white" src="/img/icons/logout.svg" width="50">
+            <div class="text-sm text-center">Se déconnecter</div>
+        </a>
     </ol>
 </nav>

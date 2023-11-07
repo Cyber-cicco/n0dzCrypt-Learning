@@ -1,5 +1,6 @@
-package fr.diginamic.digilearning.entities;
+package fr.diginamic.digilearning.entities.old;
 
+import fr.diginamic.digilearning.entities.Utilisateur;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,5 @@ public class Conversation {
     private String libelleGroupe;
     @OneToMany(mappedBy = "conversation")
     private List<Message> messageList;
-
 
 }

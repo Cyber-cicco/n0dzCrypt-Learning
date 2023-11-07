@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.diginamic.digilearning.entities.Role;
 import fr.diginamic.digilearning.entities.Utilisateur;
+import fr.diginamic.digilearning.entities.old.Utilisateur;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -63,7 +64,7 @@ public class JwtService {
         try {
             jetonJWT = Jwts.builder()
                     .setSubject(user.getEmail())
-                    .addClaims(Map.of("role",  objectMapper.writeValueAsString(user.getRoleList().stream()
+                    .addClaims(Map.of("role",  objectMapper.writeValueAsString(user.getRoles().stream()
                             .map(Role::getLibelle)
                             .toList())
                     ))

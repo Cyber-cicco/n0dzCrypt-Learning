@@ -26,6 +26,7 @@ public class HomePageController {
     }
     @GetMapping({"/", "", "home"})
     public String getHomePage(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         model.addAttribute("insert", "pages/home");
         homeService.irrigateModel(model);
         return "base";

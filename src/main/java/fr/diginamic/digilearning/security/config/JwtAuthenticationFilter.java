@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.diginamic.digilearning.security.service.JwtService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -32,10 +34,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
-        System.out.println(req.getRequestURI());
         if (req.getCookies() != null && Arrays.stream(req.getCookies()).anyMatch(cookie -> cookie.getName().equals(jwtService.getCookie()))) {
             Stream.of(req.getCookies())
-                    .filter(cookie -> cookie.getName().equals(jwtService.getCookie()))
+                    .filter(cookie -> cookie.getName().equals(jwtService.getCookie()) && !cookie.getValue().isBlank())
                     .map(Cookie::getValue)
                     .forEach(token -> {
                         try {
@@ -56,8 +57,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                             .toList()
                             );
                             SecurityContextHolder.getContext().setAuthentication(authentication);
-                        } catch (JsonProcessingException e) {
-                            throw new RuntimeException(e);
+                        } catch (JsonProcessingException | JwtException e) {
+                            res.addCookie(new Cookie("AUTH-TOKEN", null));
                         }
                     });
         }

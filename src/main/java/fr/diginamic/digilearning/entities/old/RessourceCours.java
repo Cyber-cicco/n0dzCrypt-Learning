@@ -1,4 +1,4 @@
-package fr.diginamic.digilearning.entities;
+package fr.diginamic.digilearning.entities.old;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

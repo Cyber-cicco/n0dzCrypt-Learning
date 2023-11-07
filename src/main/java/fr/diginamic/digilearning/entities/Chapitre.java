@@ -1,27 +1,33 @@
 package fr.diginamic.digilearning.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Builder;
-import lombok.NoArgsConstructor;    
+import lombok.*;
 
-@NoArgsConstructor
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Builder
 @Table(name = "CHAPITRE")
+@Cacheable
 public class Chapitre {
 
-    @Id()
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "LIBELLE")
-    private String libelle;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_COURS")
-    private Cours cours;
+	@Column(name = "LIBELLE")
+	private String libelle;
 
+	@OneToMany(mappedBy = "chapitre", fetch = FetchType.LAZY)
+	private List<DetailCours> details = new ArrayList<>();
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ID_COURS")
+	private Cours cours;
 }
