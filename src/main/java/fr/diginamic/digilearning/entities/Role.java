@@ -1,35 +1,35 @@
 package fr.diginamic.digilearning.entities;
 
-import fr.diginamic.digilearning.entities.enums.RoleEnum;
+import fr.diginamic.digilearning.entities.enums.TypeRole;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
-
-@NoArgsConstructor
+import org.springframework.security.core.GrantedAuthority;
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@Entity
 @Builder
+@Entity
 @Table(name = "ROLE")
-public class Role {
+@Cacheable(value = true)
+public class Role implements GrantedAuthority {
 
-    @Id()
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;      
-    @ManyToMany
-    @JoinTable(name = "ROLE_UTILISATEUR",
-            joinColumns = @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "ID_UTILISATEUR", referencedColumnName = "ID")
-    )
-    private List<Utilisateur> utilisateurList;
-    @Column(name = "LIBELLE")
-    private String libelle;
-    @Column(name = "TYPE")
-    @Enumerated(EnumType.STRING)
-    private RoleEnum typeRole;
+	/** serialVersionUID : long */
+	private static final long serialVersionUID = 5951377624122103098L;
 
+	/** identifiant */
+	@Id
+	private Long id;
 
+	/** type de rôle */
+	@Enumerated(EnumType.STRING)
+	private TypeRole type;
+
+	/** Libellé */
+	private String libelle;
+
+	@Override
+	public String getAuthority() {
+		return type.name();
+	}
 }
