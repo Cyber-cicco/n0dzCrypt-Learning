@@ -106,7 +106,7 @@ public class Calendrier {
                 semaines.add(new Semaine(DateUtils.getNumeroSemaine(date), cours, periodesFermees));
             }
             Semaine semaineCourante = getSemaineCourante();
-            semaineCourante.add(date);
+            //semaineCourante.add(date);
         }
     }
 

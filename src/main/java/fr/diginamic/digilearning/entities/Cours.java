@@ -95,8 +95,8 @@ public class Cours implements Comparable<Cours> {
 	private String userMaj;
 
 	/** criteres : List de CritereNotation */
-	@OneToMany(mappedBy = "cours", fetch = FetchType.LAZY)
-	private Set<CritereNotation> criteres = new HashSet<>();
+	//@OneToMany(mappedBy = "cours", fetch = FetchType.LAZY)
+	//private Set<CritereNotation> criteres = new HashSet<>();
 
 	/** ordre : Integer */
 	@Column(name = "ORDRE")
@@ -110,10 +110,10 @@ public class Cours implements Comparable<Cours> {
 	@Transient
 	private boolean modifiable;
 
-	/** modalité pédagogique à laquelle le cours appartient */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_MODALITE_PEDAGOGIQUE")
-	private ModalitePedagogique modalitePedagogique;
+	///** modalité pédagogique à laquelle le cours appartient */
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_MODALITE_PEDAGOGIQUE")
+	//private ModalitePedagogique modalitePedagogique;
 
 	/**
 	 * Lien vers la classe virtuelle dans le cas où la modalité est de type classe

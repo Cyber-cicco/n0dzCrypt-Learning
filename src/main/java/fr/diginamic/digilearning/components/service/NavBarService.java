@@ -29,8 +29,13 @@ public class NavBarService {
                                             .build(),
                                     NavLink.builder()
                                             .iconSource("conversation.svg")
-                                            .url("conversation")
+                                            .url("conversation/stagiaire")
                                             .libelle("Mon suivi")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("forum.svg")
+                                            .url("forum")
+                                            .libelle("Forum")
                                             .build(),
                             })
                             .build(),
@@ -63,6 +68,11 @@ public class NavBarService {
                                             .url("conversation")
                                             .libelle("Mon suivi")
                                             .build(),
+                                    NavLink.builder()
+                                            .iconSource("forum.svg")
+                                            .url("forum")
+                                            .libelle("Forum")
+                                            .build(),
                             })
                             .build(),
                     NavLinks.builder()
@@ -82,6 +92,11 @@ public class NavBarService {
                                             .iconSource("school.svg")
                                             .url("cours")
                                             .libelle("Gérer des cours")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("forum.svg")
+                                            .url("forum")
+                                            .libelle("Forum")
                                             .build(),
                             })
                             .build(),

@@ -1,6 +1,5 @@
 package fr.diginamic.digilearning.components;
 
-import fr.diginamic.digilearning.components.elements.NavLink;
 import fr.diginamic.digilearning.components.elements.NavLinks;
 import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;

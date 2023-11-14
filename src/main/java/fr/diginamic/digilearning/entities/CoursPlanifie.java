@@ -45,13 +45,13 @@ public class CoursPlanifie extends CoursReel implements Evenement, PlanningEleme
 	@Column(name = "COMMENTAIRES")
 	private String commentaires;
 
-	/**
-	 * Compte d'animation d'une classe virtuelle dans le cas où la modalité est de
-	 * type classe virtuelle
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_CPV")
-	private CompteVirtuel compteVirtuel;
+	///**
+	// * Compte d'animation d'une classe virtuelle dans le cas où la modalité est de
+	// * type classe virtuelle
+	// */
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_CPV")
+	//private CompteVirtuel compteVirtuel;
 
 	/** formateursDisponibles : List de Utilisateur */
 	@Transient
@@ -154,20 +154,20 @@ public class CoursPlanifie extends CoursReel implements Evenement, PlanningEleme
 		this.formateur = formateur;
 	}
 	
-	/** Retourne le TJM pour ce cours (dépend du formateur et de la modalité pédagogique).
-	 * @return float
-	 */
-	public float getTjm() {
-		if (this.formateur!=null) {
-			if (this.modalitePedagogique.isTjmPartiel()) {
-				return this.formateur.getSociete().getTjm(this.session.getDateDebut()).getValeurPartielle();
-			}
-			else {
-				return this.formateur.getSociete().getTjm(this.session.getDateDebut()).getValeur();
-			}
-		}
-		return 0.0f;
-	}
+	///** Retourne le TJM pour ce cours (dépend du formateur et de la modalité pédagogique).
+	// * @return float
+	// */
+	//public float getTjm() {
+	//	if (this.formateur!=null) {
+	//		if (this.modalitePedagogique.isTjmPartiel()) {
+	//			return this.formateur.getSociete().getTjm(this.session.getDateDebut()).getValeurPartielle();
+	//		}
+	//		else {
+	//			return this.formateur.getSociete().getTjm(this.session.getDateDebut()).getValeur();
+	//		}
+	//	}
+	//	return 0.0f;
+	//}
 
 	public boolean isSuivi() {
 		return true;
@@ -182,7 +182,7 @@ public class CoursPlanifie extends CoursReel implements Evenement, PlanningEleme
 	@Override
 	public String toString() {
 		return "CoursPlanifie [libelle=" + libelle + ", duree=" + duree + ", dateDebut=" + dateDebut + ", dateFin="
-				+ dateFin + ", formateur=" + formateur + ", salle=" + salle + "]";
+				+ dateFin + ", formateur=" + formateur;
 	}
 
 	@Override
@@ -195,10 +195,10 @@ public class CoursPlanifie extends CoursReel implements Evenement, PlanningEleme
 		return null;
 	}
 
-	@Override
-	public Centre getCentre() {
-		return salle.getCentre();
-	}
+	//@Override
+	//public Centre getCentre() {
+	//	return salle.getCentre();
+	//}
 
 	@Override
 	public TypeEvenement getType() {
@@ -230,12 +230,10 @@ public class CoursPlanifie extends CoursReel implements Evenement, PlanningEleme
 			coursPlanifie.setDateFin(origin.getDateFin());
 			coursPlanifie.setFormateur(origin.getFormateur());
 			coursPlanifie.setFormateurDispo(origin.isFormateurDispo());
-			coursPlanifie.setSalle(origin.getSalle());
 			coursPlanifie.setSalleDispo(origin.isSalleDispo());
 			coursPlanifie.setCours(origin.getCours());
 			coursPlanifie.setStatutValidation(origin.getStatutValidation());
 			coursPlanifie.setCommentaires(origin.getCommentaires());
-			coursPlanifie.setModalitePedagogique(origin.getModalitePedagogique());
 			coursPlanifie.setLienClasseVirtuelle(origin.getLienClasseVirtuelle());
 			return coursPlanifie;
 		}
@@ -245,19 +243,16 @@ public class CoursPlanifie extends CoursReel implements Evenement, PlanningEleme
 		 * d'un statut de validation
 		 * 
 		 * @param cours  cours
-		 * @param salle  salle
 		 * @param statut statut de validation
 		 * @return {@link CoursPlanifie}
 		 */
-		public static CoursPlanifie getInstance(Cours cours, Salle salle, StatusValidation statut) {
+		public static CoursPlanifie getInstance(Cours cours, StatusValidation statut) {
 			CoursPlanifie coursPlanifie = new CoursPlanifie();
-			coursPlanifie.setSalle(salle);
 			coursPlanifie.setLibelle(cours.getLibelle());
 			coursPlanifie.setCoefficient(cours.getCoefficient());
 			coursPlanifie.setDuree(cours.getDuree());
 			coursPlanifie.setCours(cours);
 			coursPlanifie.setStatutValidation(statut);
-			coursPlanifie.setModalitePedagogique(cours.getModalitePedagogique());
 			coursPlanifie.setLienClasseVirtuelle(cours.getLienClasseVirtuelle());
 			return coursPlanifie;
 		}

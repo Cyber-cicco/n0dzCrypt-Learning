@@ -48,69 +48,6 @@ public class Semaine {
     }
 
     /**
-     * La semaine est ouverte si au moins un jour de la semaine est ouvert et si le
-     * cours correspondant est en présentiel
-     *
-     * @return boolean
-     */
-    public boolean isOuverte() {
-
-        return jours.stream()
-                .filter(jour -> DateUtils.isOuvert(jour, fermes) && cours.stream()
-                        .anyMatch(c -> DateUtils.chevauchement(c, jour) && c.getModalitePedagogique().isPresentiel()))
-                .count() >= 1;
-    }
-
-    /**
-     * La semaine est ouverte si au moins un jour de la semaine est ouvert et si le
-     * cours correspondant est à émargement numérique à true
-     *
-     * @return boolean
-     */
-    public boolean isOuvertePourEmargementNumerique() {
-
-        return jours.stream()
-                .filter(jour -> DateUtils.isOuvert(jour, fermes) && cours.stream()
-                        .anyMatch(c -> DateUtils.chevauchement(c, jour) && c.getModalitePedagogique().isEmargement()))
-                .count() >= 1;
-    }
-
-    /**
-     * Ajoute une date à la semaine
-     *
-     * @param date date
-     */
-    public void add(LocalDate date) {
-
-        if (!isFull()) {
-
-            if (DateUtils.isOuvert(date, fermes)) {
-                boolean coursFound = false;
-                for (CoursPlanifie cc : cours) {
-                    if (DateUtils.chevauchement(cc, date)) {
-                        coursFound = true;
-                        if (cc.getModalitePedagogique().isBesoinFormateur() && cc.getFormateur() != null) {
-                            Jour jour = new Jour(date, cc.getLibelle(), true, cc.getFormateur().getSociete().getNom(),
-                                    cc.getFormateur().getPrenom().substring(0, 1) + ". " + cc.getFormateur().getNom(),
-                                    cc.getModalitePedagogique().getNom());
-                            jours.add(jour);
-
-                        } else {
-                            jours.add(new Jour(date, cc.getLibelle(), true, "", "", ""));
-                        }
-                    }
-                }
-                if (!coursFound) {
-                    jours.add(new Jour(date, "Non travaillé", false, "", "", ""));
-                }
-            } else {
-                jours.add(new Jour(date, "Fermeture Diginamic", false, "", "", ""));
-            }
-
-        }
-    }
-
-    /**
      * Retourne si oui ou non la semaine est complète. La semaine est pleine si le
      * dernier jour de la liste de jours est un vendredi.
      *

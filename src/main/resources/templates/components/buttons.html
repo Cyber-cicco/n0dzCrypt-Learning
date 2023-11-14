@@ -1,5 +1,10 @@
 <button
-        class="bg-accent py-2 text-primary rounded-md hover:font-bold hover:brightness-150"
+        class="bg-accent py-2 text-primary rounded-md hover:cursor-pointer hover:brightness-150"
         th:fragment="buttonAccent(buttonText)"
         th:text="${buttonText}">
 </button>
+<button
+        class="bg-primary p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+        th:fragment="buttonPrimary(buttonText)"
+        th:text="${buttonText}"
+></button>

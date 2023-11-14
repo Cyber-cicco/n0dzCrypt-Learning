@@ -51,14 +51,14 @@ public interface PlanningElement {
 		return new Utilisateur(0L, "", "", "");
 	}
 
-	/**
-	 * Retourne la modalité pédagogique
-	 * 
-	 * @return {@link ModalitePedagogique}
-	 */
-	default ModalitePedagogique getModalitePedagogique() {
-		return new ModalitePedagogique();
-	}
+	///**
+	// * Retourne la modalité pédagogique
+	// *
+	// * @return {@link ModalitePedagogique}
+	// */
+	//default ModalitePedagogique getModalitePedagogique() {
+	//	return new ModalitePedagogique();
+	//}
 
 	/**
 	 * Retourne un attribut à afficher dans le planning

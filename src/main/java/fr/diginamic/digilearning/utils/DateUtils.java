@@ -22,16 +22,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import fr.diginamic.digilearning.entities.CoursPlanifie;
 import fr.diginamic.digilearning.entities.Evenement;
 import fr.diginamic.digilearning.entities.PlageDate;
-import fr.diginamic.digilearning.entities.TjmSociete;
 import fr.diginamic.digilearning.entities.enums.TypeEvenement;
-import fr.diginamic.digilearning.entities.occupation.OccupationSalle;
 import fr.diginamic.digilearning.exception.DateException;
-import fr.diginamic.digilearning.utils.calendrier.Calendrier;
 import fr.diginamic.digilearning.utils.calendrier.Jour;
-import fr.diginamic.digilearning.utils.calendrier.Semaine;
 
 /**
  * Classe utilitaire qui fournit des méthodes de calcule de dates et de
@@ -582,28 +577,28 @@ public final class DateUtils {
         verifierEvenement(evenement.getDateDebut(), evenement.getDateFin());
     }
 
-    /**
-     * Retourne true si 2 occupations contenus dans la liste se chevauchent et false
-     * dans le cas contraire.
-     *
-     * @param liste1 liste d'évènements 1
-     * @param liste2 liste d'évènements 2
-     * @return boolean
-     */
-    public static boolean chevauchement(List<OccupationSalle> liste1, List<OccupationSalle> liste2) {
-        for (OccupationSalle evt1 : liste1) {
-            for (OccupationSalle evt2 : liste2) {
-                if (evt1.isBesoinSalle() && evt2.isBesoinSalle() && evt1.getSalle() != null && evt2.getSalle() != null
-                        && evt1.getSalle().equals(evt2.getSalle())) {
-                    boolean result = DateUtils.chevauchement(evt1, evt2);
-                    if (result) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+    ///**
+    // * Retourne true si 2 occupations contenus dans la liste se chevauchent et false
+    // * dans le cas contraire.
+    // *
+    // * @param liste1 liste d'évènements 1
+    // * @param liste2 liste d'évènements 2
+    // * @return boolean
+    // */
+    //public static boolean chevauchement(List<OccupationSalle> liste1, List<OccupationSalle> liste2) {
+    //    for (OccupationSalle evt1 : liste1) {
+    //        for (OccupationSalle evt2 : liste2) {
+    //            if (evt1.isBesoinSalle() && evt2.isBesoinSalle() && evt1.getSalle() != null && evt2.getSalle() != null
+    //                    && evt1.getSalle().equals(evt2.getSalle())) {
+    //                boolean result = DateUtils.chevauchement(evt1, evt2);
+    //                if (result) {
+    //                    return true;
+    //                }
+    //            }
+    //        }
+    //    }
+    //    return false;
+    //}
 
     /**
      * Retourne true si 2 évènements se chevauchent et false dans le cas contraire.
@@ -762,46 +757,46 @@ public final class DateUtils {
                 calendar.get(Calendar.SECOND));
     }
 
-    /**
-     * Méthode qui créée la semaine correspondant à une date donnée.
-     *
-     * @param cours     cours
-     * @param fermes    liste de période fermées
-     * @return {@link Semaine}
-     * @throws DateException en cas d'incohérence dans les dates
-     */
-    public static Semaine creerSemaine(LocalDate date, List<CoursPlanifie> cours, List<Evenement> fermes)
-            throws DateException {
+    ///**
+    // * Méthode qui créée la semaine correspondant à une date donnée.
+    // *
+    // * @param cours     cours
+    // * @param fermes    liste de période fermées
+    // * @return {@link Semaine}
+    // * @throws DateException en cas d'incohérence dans les dates
+    // */
+    //public static Semaine creerSemaine(LocalDate date, List<CoursPlanifie> cours, List<Evenement> fermes)
+    //        throws DateException {
 
-        LocalDate dateDebut = date.with(ChronoField.DAY_OF_WEEK, 1);
-        LocalDate dateFin = date.with(ChronoField.DAY_OF_WEEK, 5);
+    //    LocalDate dateDebut = date.with(ChronoField.DAY_OF_WEEK, 1);
+    //    LocalDate dateFin = date.with(ChronoField.DAY_OF_WEEK, 5);
 
-        Calendrier cal = new Calendrier(dateDebut, dateFin, cours, fermes);
-        return cal.getSemaines().get(0);
-    }
+    //    Calendrier cal = new Calendrier(dateDebut, dateFin, cours, fermes);
+    //    return cal.getSemaines().get(0);
+    //}
 
-    /**
-     * Méthode qui créée la liste des semaines entre 2 dates données. Attention les
-     * 2 dates doivents forcément être des jours ouvrés.
-     *
-     * @param dateDebut date de début
-     * @param dateFin   date de fin
-     * @param cours     cours
-     * @param fermes    liste de période fermées
-     * @return List de Semaine
-     * @throws DateException en cas d'incohérence dans les dates
-     */
-    public static List<Semaine> creerSemaines(LocalDate dateDebut, LocalDate dateFin, List<CoursPlanifie> cours,
-                                              List<Evenement> fermes) throws DateException {
+    ///**
+    // * Méthode qui créée la liste des semaines entre 2 dates données. Attention les
+    // * 2 dates doivents forcément être des jours ouvrés.
+    // *
+    // * @param dateDebut date de début
+    // * @param dateFin   date de fin
+    // * @param cours     cours
+    // * @param fermes    liste de période fermées
+    // * @return List de Semaine
+    // * @throws DateException en cas d'incohérence dans les dates
+    // */
+    //public static List<Semaine> creerSemaines(LocalDate dateDebut, LocalDate dateFin, List<CoursPlanifie> cours,
+    //                                          List<Evenement> fermes) throws DateException {
 
-        if (!isOuvert(dateDebut, fermes)) {
-            throw new DateException(
-                    "La date de début de la session n'est pas une date ouverte :" + DateUtils.toString(dateDebut));
-        }
+    //    if (!isOuvert(dateDebut, fermes)) {
+    //        throw new DateException(
+    //                "La date de début de la session n'est pas une date ouverte :" + DateUtils.toString(dateDebut));
+    //    }
 
-        Calendrier cal = new Calendrier(dateDebut, dateFin, cours, fermes);
-        return cal.getSemaines();
-    }
+    //    Calendrier cal = new Calendrier(dateDebut, dateFin, cours, fermes);
+    //    return cal.getSemaines();
+    //}
 
     /**
      * Retourne la liste des mois pour la plage de date passée en paramètre. Les
@@ -858,9 +853,9 @@ public final class DateUtils {
         return lib.substring(0, 1).toUpperCase()+lib.substring(1, 3);
     }
 
-    public static Boolean chevauchement(TjmSociete t, LocalDate date) {
-        return null;
-    }
+    //public static Boolean chevauchement(TjmSociete t, LocalDate date) {
+    //    return null;
+    //}
 
     /**
      * Représente un mois du calendrier

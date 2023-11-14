@@ -1,9 +1,6 @@
 package fr.diginamic.digilearning.entities;
 
 import fr.diginamic.digilearning.entities.enums.*;
-import fr.diginamic.digilearning.entities.notation.BilanSession;
-import fr.diginamic.digilearning.entities.taches.ListeModele;
-import fr.diginamic.digilearning.entities.taches.Projet;
 import fr.diginamic.digilearning.utils.DateUtils;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,7 +16,7 @@ import java.util.*;
 @Builder
 @Entity
 @Table(name = "SESSION")
-public class Session implements Evenement, Cloneable {
+public class Session {
 
 	/** identifiant */
 	@Id
@@ -28,18 +25,18 @@ public class Session implements Evenement, Cloneable {
 	private Long id;
 
 	/** centre : Centre */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_CENTRE")
-	private Centre centre;
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_CENTRE")
+	//private Centre centre;
 
 	/** societe : Societe */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_SOCIETE")
-	private Societe societe;
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_SOCIETE")
+	//private Societe societe;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_SOCIETE_BDC")
-	private EmetteurBon emetteurBDCParDefaut;
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_SOCIETE_BDC")
+	//private EmetteurBon emetteurBDCParDefaut;
 
 	/** Nom de la session */
 	@Column(name = "NOM")
@@ -62,18 +59,18 @@ public class Session implements Evenement, Cloneable {
 	@OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
 	private List<CoursPlanifie> cours = new ArrayList<>();
 
-	/** Liste des dates fermées spécifique pour cette session */
-	@OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
-	private Set<PeriodeFermeeSession> fermes = new HashSet<>();
+	///** Liste des dates fermées spécifique pour cette session */
+	//@OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
+	//private Set<PeriodeFermeeSession> fermes = new HashSet<>();
 
-	/** bilans : List de BilanSession */
-	@OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
-	private List<BilanSession> bilans = new ArrayList<>();
+	///** bilans : List de BilanSession */
+	//@OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
+	//private List<BilanSession> bilans = new ArrayList<>();
 
-	/** Salle d'informatique par défaut dans laquelle aura lieu la formation */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_SAL")
-	private Salle salle;
+	///** Salle d'informatique par défaut dans laquelle aura lieu la formation */
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_SAL")
+	//private Salle salle;
 
 	/** dateMaj : LocalDateTime */
 	@Column(name = "DATE_MAJ")
@@ -140,31 +137,18 @@ public class Session implements Evenement, Cloneable {
 	@Transient
 	private String calculMoyenneParBlocs;
 
-	/** responsablePedagogique */
-	@Column(name = "RESPONSABLE_PEDAGOGIQUE")
-	private String responsablePedagogique;
+	@OneToMany(mappedBy = "session")
+	private List<AdministrationSession> administrationSessions = new ArrayList<>();
 
-	/** responsableAdmin */
-	@Column(name = "RESPONSABLE_ADMIN")
-	private String responsableAdmin;
+	///** listeModele */
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_LISTE")
+	//private ListeModele listeModele;
 
-	/** Room Master 1 */
-	@Column(name = "ROOM_MASTER1")
-	private String roomMaster1;
-
-	/** Room Master 1 */
-	@Column(name = "ROOM_MASTER2")
-	private String roomMaster2;
-
-	/** listeModele */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_LISTE")
-	private ListeModele listeModele;
-
-	/** projet : Projet */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_PROJET")
-	private Projet projet;
+	///** projet : Projet */
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_PROJET")
+	//private Projet projet;
 
 	/** dureeFacturable */
 	@Column(name="DUREE_FACTURABLE")
@@ -267,32 +251,32 @@ public class Session implements Evenement, Cloneable {
 		return null;
 	}
 
-	/**
-	 * Retourne si oui ou non la session est affectée à la société passée en
-	 * paramètre (i.e. la session est commandée par la société ou un des stagiaires
-	 * est associée à la société)
-	 * 
-	 * @param societe société
-	 * @return boolean
-	 */
-	public boolean hasSociete(Societe societe) {
+	///**
+	// * Retourne si oui ou non la session est affectée à la société passée en
+	// * paramètre (i.e. la session est commandée par la société ou un des stagiaires
+	// * est associée à la société)
+	// *
+	// * @param societe société
+	// * @return boolean
+	// */
+	//public boolean hasSociete(Societe societe) {
 
-		return (this.societe != null && societe != null && (this.societe.equals(societe))) || (societe != null
-				&& stagiaires.stream().filter(s -> s.getSociete().equals(societe)).findAny().isPresent());
-	}
+	//	return (this.societe != null && societe != null && (this.societe.equals(societe))) || (societe != null
+	//			&& stagiaires.stream().filter(s -> s.getSociete().equals(societe)).findAny().isPresent());
+	//}
 
-	@Override
-	public TypeEvenement getType() {
-		return TypeEvenement.SESSION;
-	}
+	//@Override
+	//public TypeEvenement getType() {
+	//	return TypeEvenement.SESSION;
+	//}
 
-	@Override
-	public String getRessource() {
-		if (centre != null) {
-			return centre.getNom();
-		}
-		return "";
-	}
+	//@Override
+	//public String getRessource() {
+	//	if (centre != null) {
+	//		return centre.getNom();
+	//	}
+	//	return "";
+	//}
 
 	/**
 	 * Recherche d'un cours par date de début
@@ -348,23 +332,23 @@ public class Session implements Evenement, Cloneable {
 		this.nbBilans = nbBilans;
 	}
 
-	/**
-	 * Getter
-	 * 
-	 * @return the bilans
-	 */
-	public List<BilanSession> getBilans() {
-		return bilans;
-	}
+	///**
+	// * Getter
+	// *
+	// * @return the bilans
+	// */
+	//public List<BilanSession> getBilans() {
+	//	return bilans;
+	//}
 
-	/**
-	 * Setter
-	 * 
-	 * @param bilans the bilans to set
-	 */
-	public void setBilans(List<BilanSession> bilans) {
-		this.bilans = bilans;
-	}
+	///**
+	// * Setter
+	// *
+	// * @param bilans the bilans to set
+	// */
+	//public void setBilans(List<BilanSession> bilans) {
+	//	this.bilans = bilans;
+	//}
 
 	/**
 	 * Getter
@@ -528,113 +512,41 @@ public class Session implements Evenement, Cloneable {
 		this.typeEmargement = typeEmargement;
 	}
 
-	/**
-	 * Getter
-	 * 
-	 * @return the responsablePedagogique
-	 */
-	public String getResponsablePedagogique() {
-		return responsablePedagogique;
-	}
+	///**
+	// * Getter
+	// *
+	// * @return the listeModele
+	// */
+	//public ListeModele getListeModele() {
+	//	return listeModele;
+	//}
 
-	/**
-	 * Setter
-	 * 
-	 * @param responsablePedagogique the responsablePedagogique to set
-	 */
-	public void setResponsablePedagogique(String responsablePedagogique) {
-		this.responsablePedagogique = responsablePedagogique;
-	}
+	///**
+	// * Getter
+	// *
+	// * @return the projet
+	// */
+	//public Projet getProjet() {
+	//	return projet;
+	//}
 
-	/**
-	 * Getter
-	 * 
-	 * @return the roomMaster1
-	 */
-	public String getRoomMaster1() {
-		return roomMaster1;
-	}
+	///**
+	// * Setter
+	// *
+	// * @param listeModele the listeModele to set
+	// */
+	//public void setListeModele(ListeModele listeModele) {
+	//	this.listeModele = listeModele;
+	//}
 
-	/**
-	 * Setter
-	 * 
-	 * @param roomMaster1 the roomMaster1 to set
-	 */
-	public void setRoomMaster1(String roomMaster1) {
-		this.roomMaster1 = roomMaster1;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return the roomMaster2
-	 */
-	public String getRoomMaster2() {
-		return roomMaster2;
-	}
-
-	/**
-	 * Setter
-	 * 
-	 * @param roomMaster2 the roomMaster2 to set
-	 */
-	public void setRoomMaster2(String roomMaster2) {
-		this.roomMaster2 = roomMaster2;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return the listeModele
-	 */
-	public ListeModele getListeModele() {
-		return listeModele;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return the projet
-	 */
-	public Projet getProjet() {
-		return projet;
-	}
-
-	/**
-	 * Setter
-	 * 
-	 * @param listeModele the listeModele to set
-	 */
-	public void setListeModele(ListeModele listeModele) {
-		this.listeModele = listeModele;
-	}
-
-	/**
-	 * Setter
-	 * 
-	 * @param projet the projet to set
-	 */
-	public void setProjet(Projet projet) {
-		this.projet = projet;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return the responsableAdmin
-	 */
-	public String getResponsableAdmin() {
-		return responsableAdmin;
-	}
-
-	/**
-	 * Setter
-	 * 
-	 * @param responsableAdmin the responsableAdmin to set
-	 */
-	public void setResponsableAdmin(String responsableAdmin) {
-		this.responsableAdmin = responsableAdmin;
-	}
+	///**
+	// * Setter
+	// *
+	// * @param projet the projet to set
+	// */
+	//public void setProjet(Projet projet) {
+	//	this.projet = projet;
+	//}
 
 	/** Getter
 	 * @return the dureeFacturable

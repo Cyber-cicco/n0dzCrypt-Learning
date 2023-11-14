@@ -43,12 +43,12 @@ public interface Evenement extends Comparable<Evenement>, PlageDate {
 	 */
 	String getRessource();
 
-	/**
-	 * Retourne le centre associé à l'évènement
-	 * 
-	 * @return Centre
-	 */
-	Centre getCentre();
+	///**
+	// * Retourne le centre associé à l'évènement
+	// *
+	// * @return Centre
+	// */
+	//Centre getCentre();
 
 	/**
 	 * Retourne le type d'évènement

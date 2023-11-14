@@ -11,7 +11,8 @@ public enum TypeEmargement {
 	/** AM_PM : TypeEmargement */
 	AM_PM("Matin/Après-midi"),
 	/** TECHNIQUE_PRATIQUE : TypeCours */
-	CONN_DECO("Connexion/Déconnexion");
+	CONN_DECO("Connexion/Déconnexion"),
+	DECO_RECO("Déconnexion/Reconnexion");
 
 	/** libelle : String */
 	private String libelle;

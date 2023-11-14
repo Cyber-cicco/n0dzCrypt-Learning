@@ -1,1 +1,5 @@
-<div th:replace="~{components/title}"></div>
+<div class="flex flex-col h-full">
+    <header th:insert="~{components/title}"></header>
+    <div class="flex h-full w-full p-3" th:insert="~{components/containers/card :: cardFull(~{pages/fragments/conversation/main-card.fragment})}">
+    </div>
+</div>

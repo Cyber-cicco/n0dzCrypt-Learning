@@ -1,12 +1,10 @@
 package fr.diginamic.digilearning.entities;
 
+import fr.diginamic.digilearning.entities.enums.StatusAse;
 import fr.diginamic.digilearning.entities.enums.TypeRessource;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
-import fr.diginamic.digilearning.entities.personnalisation.LivretSession;
-import fr.diginamic.digilearning.entities.taches.CodeResponsable;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,15 +24,15 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@Column(name = "ID")
 	private Long id;
 
-	/** société (pour les profils: planificateur, formateur et visiteur) */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_SOCIETE")
-	private Societe societe;
+	///** société (pour les profils: planificateur, formateur et visiteur) */
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_SOCIETE")
+	//private Societe societe;
 
-	/** Centre de formation (facultatif) */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_CENTRE")
-	private Centre centre;
+	///** Centre de formation (facultatif) */
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_CENTRE")
+	//private Centre centre;
 
 	/** valideur : Utilisateur */
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -44,6 +42,12 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	/** Pour les formateurs, indique si le formateur est certifié */
 	@Column(name = "CERTIF_DGN", length = 3)
 	private String certifieDgn;
+
+	@Column(name = "ds_statusAse")
+	private StatusAse statusAse;
+
+	@OneToMany(mappedBy = "utilisateur")
+	private List<AdministrationSession> administrationSessions = new ArrayList<>();
 
 	/**
 	 * Type de profil: administrateur, planificateur, formateur, visiteur ou
@@ -110,15 +114,15 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@Column(name = "DATE_LOCKED")
 	private LocalDateTime dateLocked;
 
-	@OneToMany(mappedBy = "utilisateur")
-	private List<Connexion> connexions;
+	//@OneToMany(mappedBy = "utilisateur")
+	//private List<Connexion> connexions;
 
 	/**
 	 * Compteur du nombre de tentatives de connexion infructueuses successives. Ce
 	 * nb est remis à 0 si l'utilisateur se connecte correctement
 	 */
 	@Column(name = "NB_ESSAIS")
-	private int nbEssais;
+	private Integer nbEssais;
 
 	/** Date de dernière mise à jour */
 	@Column(name = "DATE_MAJ")
@@ -140,9 +144,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@JoinTable(name = "COURS_PAR_FORMATEUR", joinColumns = @JoinColumn(name = "ID_FRM", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ID_COU", referencedColumnName = "ID"))
 	private List<CoursRef> cours = new ArrayList<>();
 
-	/** indisponibilites : List de Indisponibilite */
-	@OneToMany(mappedBy = "utilisateur", fetch = FetchType.LAZY)
-	private Set<Indisponibilite> indisponibilites = new HashSet<>();
+	///** indisponibilites : List de Indisponibilite */
+	//@OneToMany(mappedBy = "utilisateur", fetch = FetchType.LAZY)
+	//private Set<Indisponibilite> indisponibilites = new HashSet<>();
 
 	/**
 	 * Uniquement pour un profil stagiaire: un stagiaire peut être rattaché à
@@ -167,36 +171,29 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "stagiaire")
 	private List<CoursPersonnalise> coursPersonnalises = new ArrayList<>();
 
-	/** personnalisations */
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "stagiaire")
-	private List<LivretSession> personnalisations = new ArrayList<>();
+	///** personnalisations */
+	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "stagiaire")
+	//private List<LivretSession> personnalisations = new ArrayList<>();
 
 	/** notifications */
-	@OneToMany(mappedBy = "destinataire")
-	@Where(clause = "lu='0'")
-	private List<Notification> notifications = new ArrayList<>();
+	//@OneToMany(mappedBy = "destinataire")
+	//@Where(clause = "lu='0'")
+	//private List<Notification> notifications = new ArrayList<>();
 
 	/** recevoirNotification */
 	@Column(name = "RECEVOIR_NOTIFICATIONS")
 	private boolean recevoirNotifications;
 
 	/** codeResponsable */
-	@Column(name = "CODE_RESPONSABLE", nullable = true)
-	@Enumerated(EnumType.STRING)
-	private CodeResponsable codeResponsable;
+	//@Column(name = "CODE_RESPONSABLE", nullable = true)
+	//@Enumerated(EnumType.STRING)
+	//private CodeResponsable codeResponsable;
 
 
 
 	/** dateAbandon */
 	@Transient
 	private LocalDate dateAbandon;
-
-	@ManyToMany
-	@JoinTable(name = "dl_utilisateur_session",
-			joinColumns = @JoinColumn(name = "utilisateur_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "session_id", referencedColumnName = "id")
-	)
-	private List<Session> sessionList;
 
 	@ManyToMany
 	@JoinTable(name = "ROLE_UTILISATEUR",
@@ -212,7 +209,7 @@ public class Utilisateur implements Comparable<Utilisateur> {
 			joinColumns = @JoinColumn(name = "utilisateur_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "conversation_id", referencedColumnName = "id")
 	)
-	private List<Conversation> conversationList;
+	private List<Conversation> conversationList = new ArrayList<>();
 	@OneToMany(mappedBy = "emetteur")
 	private List<Post> postList;
 	@OneToMany(mappedBy = "emetteur")
@@ -261,6 +258,10 @@ public class Utilisateur implements Comparable<Utilisateur> {
 
 	public String getValue() {
 		return this.email;
+	}
+
+	public Optional<Session> getSessionStagiaire(){
+		return sessionsStagiaire.stream().filter(session -> session.getDateFin().isAfter(LocalDate.now())).findFirst();
 	}
 
 	/**
@@ -359,28 +360,20 @@ public class Utilisateur implements Comparable<Utilisateur> {
 		return employeeNameComparator.compare(this, o);
 	}
 
-	/**
-	 * Recherche la personnalisation associée à une session donnée
-	 * 
-	 * @param session session
-	 * @return {@link }
-	 */
-	public LivretSession getPersonnalisation(Session session) {
-		Optional<LivretSession> opt = personnalisations.stream()
-				.filter(p -> p.getIdSessionParente().equals(session.getIdParent())).findFirst();
-		if (opt.isPresent()) {
-			return opt.get();
-		}
-		return null;
-	}
-
-	public List<Session> getSessionList() {
-		return sessionList;
-	}
-
-	public void setSessionList(List<Session> sessionList) {
-		this.sessionList = sessionList;
-	}
+	///**
+	// * Recherche la personnalisation associée à une session donnée
+	// *
+	// * @param session session
+	// * @return {@link }
+	// */
+	//public LivretSession getPersonnalisation(Session session) {
+	//	Optional<LivretSession> opt = personnalisations.stream()
+	//			.filter(p -> p.getIdSessionParente().equals(session.getIdParent())).findFirst();
+	//	if (opt.isPresent()) {
+	//		return opt.get();
+	//	}
+	//	return null;
+	//}
 
 	public List<Role> getRoleList() {
 		return roleList;

@@ -40,9 +40,9 @@ public abstract class CoursReel implements PlageDate {
 	protected int duree;
 
 	/** modalitePedagogique */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_MODALITE_PEDAGOGIQUE")
-	protected ModalitePedagogique modalitePedagogique;
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_MODALITE_PEDAGOGIQUE")
+	//protected ModalitePedagogique modalitePedagogique;
 
 	/** formateur */
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -53,9 +53,9 @@ public abstract class CoursReel implements PlageDate {
 	 * Salle d'informatique dans laquelle aura lieu le cours: par défaut c'est la
 	 * salle de la session.
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_SAL")
-	protected Salle salle;
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "ID_SAL")
+	//protected Salle salle;
 
 	/**
 	 * Lien vers la classe virtuelle dans le cas où la modalité est de type classe

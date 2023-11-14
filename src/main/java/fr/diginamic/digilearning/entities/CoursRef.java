@@ -58,10 +58,10 @@ public class CoursRef {
 	@Column(name = "OBJS_PEDAGOGIQUES")
 	private String objectifsPedagogiques;
 
-	@ManyToMany
-	@JoinTable(name = "COMPETENCE_COURS",
-			joinColumns = @JoinColumn(name = "ID_COURS", referencedColumnName = "ID"),
-			inverseJoinColumns = @JoinColumn(name = "ID_COMPETENCE", referencedColumnName = "ID")
-	)
-	private List<Competence> competences;
+	//@ManyToMany
+	//@JoinTable(name = "COMPETENCE_COURS",
+	//		joinColumns = @JoinColumn(name = "ID_COURS", referencedColumnName = "ID"),
+	//		inverseJoinColumns = @JoinColumn(name = "ID_COMPETENCE", referencedColumnName = "ID")
+	//)
+	//private List<Competence> competences;
 }

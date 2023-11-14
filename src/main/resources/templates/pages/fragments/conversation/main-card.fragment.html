@@ -1,0 +1,24 @@
+<section class="p-3">
+    <article class=" p-5 w-1/3 text-justify">
+        Une interrogation, un doute, besoin d'aide ou de soutien ? Vous pouvez à tout moment contacter l'un
+        des responsables de votre session, que ce soit le reponsable administratif, le responsable pédagogique
+        ou l'un des roommaster.
+    </article>
+    <ol class="flex flex-col w-1/3 p-5 text-center">
+        <h3 class="p-2">Ma conversation avec :</h3>
+        <li th:class=" ${iterStat.first} ?
+                'flex bg-lightPrimary hover:cursor-pointer hover:brightness-150 text-white flex-col rounded-t-lg w-full justify-start p-3 border-solid border-primary border-t-2 border-x-2' :
+                (${iterStat.last} ? 'flex hover:cursor-pointer hover:brightness-150 bg-lightPrimary text-white flex-col w-full justify-start p-3 rounded-b-lg border-solid border-primary border-2' :
+                'flex bg-lightPrimary hover:cursor-pointer hover:brightness-150 text-white flex-col w-full justify-start p-3 border-solid border-primary border-t-2 border-x-2')
+            " th:each="contact, iterStat : ${contacts}">
+            <div class="flex gap-4 text-lg font-poppins justify-center w-full">
+                <span th:text="${contact.nom()}"></span>
+                <span th:text="${contact.prenom()}"></span>
+            </div>
+            <div class="flex gap-4 justify-center text-sm">
+                <span th:text="${contact.email()}"></span>
+                <span th:text="${contact.status()}"></span>
+            </div>
+        </li>
+    </ol>
+</section>
