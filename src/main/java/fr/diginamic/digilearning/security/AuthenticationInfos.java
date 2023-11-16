@@ -16,4 +16,5 @@ public class AuthenticationInfos {
     private List<String> roles = new ArrayList<>();
     private String email;
     private String token;
+    private Long id;
 }

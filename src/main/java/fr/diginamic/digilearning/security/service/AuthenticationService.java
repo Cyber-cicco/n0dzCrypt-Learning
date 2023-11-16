@@ -5,6 +5,7 @@ import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.dto.LoginDto;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -25,9 +26,11 @@ public class AuthenticationService {
     private final UtilisateurRepository utilisateurRepository;
     private final JwtService jwtService;
     public AuthenticationInfos getAuthInfos(String token){
+        Claims claims = jwtService.extractAllClaims(token);
         return AuthenticationInfos.builder()
-                .email(jwtService.extractEmail(token))
-                .roles(jwtService.extractRoles(token))
+                .email(jwtService.extractEmail(claims))
+                .roles(jwtService.extractRoles(claims))
+                .id(jwtService.extractId(claims))
                 .token(token)
                 .build();
     }

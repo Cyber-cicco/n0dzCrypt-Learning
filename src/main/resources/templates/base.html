@@ -19,7 +19,7 @@
 <body class="flex w-full h-full">
     <div hx-get="/components/navbar" hx-target="this" hx-swap="outerHTML" hx-trigger="load"></div>
     <main id="router-outlet" class="w-full z-0 bg-secondary">
-        <div th:insert="${insert}" class="w-full h-full"></div>
+        <div th:insert="${insert}" class="w-full h-screen"></div>
     </main>
     <aside id="modal"></aside>
 </body>

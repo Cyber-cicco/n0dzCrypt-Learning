@@ -19,4 +19,14 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
             " where duc2.utilisateur_id = ?2 limit 1"
     )
     Optional<Conversation> getConversationForUserWithInterlocutor(Long idUtilisateur, Long idInterlocuteur);
+
+    @Query(nativeQuery = true,
+            value =
+                    "select c.* from " +
+                            "(select c.* from dl_conversation c " +
+                            "join dl_utilisateur_conversation duc on c.id = duc.conversation_id" +
+                            " where duc.utilisateur_id = ?1) as c" +
+                            " where c.id = ?2 limit 1"
+    )
+    Optional<Conversation> getConversationByIdAndUtilisateurConcerne(Long idUtilisateur, Long idConversation);
 }

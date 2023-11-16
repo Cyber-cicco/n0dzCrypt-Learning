@@ -1,0 +1,24 @@
+<div class="flex flex-col h-[70vh] justify-start ">
+    <div class="flex flex-col-reverse gap-2 overflow-y-auto h-full justify-start">
+        <div class="flex flex-col gap-2 w-full" th:each="message, iterStat : ${conversation.messages()}">
+            <div class="flex w-full justify-center items-center gap-2 text-s text-darker"
+                 th:if="${iterStat.last} or ${message.getJourEmission().isAfter(message.getPrevious().getJourEmission())} "
+            >
+                <div class="bg-dark h-[2px] w-20"></div>
+                <div th:text="${message.getJourEmission()}"></div>
+                <div class="bg-dark h-[2px] w-20"></div>
+
+            </div>
+            <div th:class="'flex w-full ' + (${message.getEmetteurId()} != ${idUtilisateur} ? 'justify-start' : 'justify-end')"
+                 th:if="${iterStat.last} or ${message.getEmetteurId()} ne ${message.getPrevious().getEmetteurId()}">
+                <div class="w-fit" th:text="${message.getEmetteur().getFullName()}"></div>
+            </div>
+            <div class="flex w-full justify-end break-words" th:if="${message.getEmetteurId()} == ${idUtilisateur}">
+                <div th:replace="pages/fragments/conversation/artifacts/message-bulle.fragment :: myBull(${message.getContenu()})"></div>
+            </div>
+            <div class="flex w-full justify-start break-words" th:if="${message.getEmetteurId()} != ${idUtilisateur}">
+                <div th:replace="pages/fragments/conversation/artifacts/message-bulle.fragment :: otherBull(${message.getContenu()})"></div>
+            </div>
+        </div>
+    </div>
+</div>

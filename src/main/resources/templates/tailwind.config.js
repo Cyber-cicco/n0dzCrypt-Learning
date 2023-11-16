@@ -15,6 +15,7 @@ module.exports = {
       warn2 : '#ca991c',
       grey : '#f2f2f2',
       dark : '#919191',
+      darker : '#666565',
       black : '#000000',
       white : '#ffffff',
       header : '#f6f8f9'

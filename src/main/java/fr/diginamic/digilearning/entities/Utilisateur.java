@@ -264,6 +264,10 @@ public class Utilisateur implements Comparable<Utilisateur> {
 		return sessionsStagiaire.stream().filter(session -> session.getDateFin().isAfter(LocalDate.now())).findFirst();
 	}
 
+	public String getFullName(){
+		return nom.toUpperCase() + " " + prenom;
+	}
+
 	/**
 	 * Retourne si oui ou non l'utilisateur a le type de rôle passé en paramètre
 	 * 

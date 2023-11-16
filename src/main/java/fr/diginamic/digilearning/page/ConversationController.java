@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.page;
 
+import fr.diginamic.digilearning.entities.Conversation;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.entities.enums.RoleEnum;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -11,15 +12,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("conversation")
+@RequestMapping("/conversation")
 public class ConversationController {
     private final ConversationService conversationService;
     private final AuthenticationService authenticationService;
@@ -42,14 +41,27 @@ public class ConversationController {
     private void irrigateBaseAttributesStagiaires(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
         authenticationService.mustBeOfRole(userInfos.getRoles(), RoleEnum.ROLE_STAGIAIRE, response);
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
+        irrigateBaseAttributesConversationStagiaire(utilisateur, model);
+    }
+
+    private void irrigateBaseAttributesConversationStagiaire(Utilisateur utilisateur, Model model){
         model.addAttribute("title", "Mon suivi");
+        model.addAttribute("idUtilisateur", utilisateur.getId());
         List<ConversationService.ContactInfos> contactInfos = conversationService.createContactList(utilisateur);
         if(contactInfos.get(0) != null) {
-            model.addAttribute("idConversateur", contactInfos.get(0).id());
-            model.addAttribute("conversation", conversationService.getConversation());
-        } else {
-            model.addAttribute("idConversateur", -1L);
+            model.addAttribute("interlocuteur", contactInfos.get(0));
+            model.addAttribute("conversation", conversationService.getConversation(utilisateur, contactInfos.get(0).utilisateur(), 0));
         }
         model.addAttribute("contacts", contactInfos);
+    }
+
+    @PostMapping("/message")
+    public String postNewMessage(@CookieValue("AUTH-TOKEN") String token, @ModelAttribute ConversationService.MessageModel message, @RequestParam("id") Long id, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+        Utilisateur emetteur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
+        Conversation conversation = conversationService.postNewMessage(emetteur, message, id);
+        model.addAttribute("idUtilisateur", emetteur.getId());
+        model.addAttribute("conversation", conversationService.getMessagesFromConversation(conversation, 0));
+        return "pages/fragments/conversation/chat.fragment";
     }
 }

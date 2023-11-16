@@ -94,6 +94,10 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public String extractEmail(Claims claims) {
+        return claims.getSubject();
+    }
+
     /**
      * Permet de récupérer le role stocké dans le jidoublevété
      * @param token le jwt
@@ -101,8 +105,12 @@ public class JwtService {
      */
     public List<String> extractRoles(String token){
         Claims tokenClaims = extractAllClaims(token);
+        return extractRoles(tokenClaims);
+    }
+
+    public List<String> extractRoles(Claims claims){
         ObjectMapper objectMapper = new ObjectMapper();
-        String rolesAsJson = tokenClaims.get("role", String.class);
+        String rolesAsJson = claims.get("role", String.class);
         try {
             return objectMapper.readValue(rolesAsJson, List.class);
         } catch (JsonProcessingException e) {
@@ -118,6 +126,10 @@ public class JwtService {
     public Long extractId(String token){
         Claims tokenClaims = extractAllClaims(token);
         return tokenClaims.get("id", Long.class);
+    }
+
+    public Long extractId(Claims claims){
+        return claims.get("id", Long.class);
     }
 
     /**
@@ -137,7 +149,7 @@ public class JwtService {
      * @param token le jydoubleuvétaient
      * @return toutes les claims
      */
-    private Claims extractAllClaims(String token){
+    public Claims extractAllClaims(String token){
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSecretKey())

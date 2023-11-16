@@ -1,7 +1,5 @@
 <section th:fragment="cardFull(content)" class="bg-grey overflow-hidden shadow-dark h-full w-full shadow-md rounded-md">
-    <div class="relative top-0 left-0 h-full">
-        <th:block th:replace="${content}"></th:block>
-    </div>
+    <th:block th:replace="${content}"></th:block>
 </section>
 <section th:fragment="card(content)" class="bg-grey overflow-hidden shadow-dark shadow-md rounded-md">
     <th:block th:replace="${content}"></th:block>
@@ -11,4 +9,7 @@
         <th:block th:replace="~{components/link :: link(${href}, ${content})}"></th:block>
     </div>
     <div class="text-sm" th:text="${description}"></div>
+</div>
+<div th:fragment="accentCard(description)" class="flex flex-col p-2 gap-1 bg-lightAccent rounded-md border-black border-sm border-2">
+    <div class="text-lg" th:text="${description}"></div>
 </div>
