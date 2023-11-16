@@ -6,6 +6,7 @@ import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.repository.ConversationRepository;
 import fr.diginamic.digilearning.repository.MessageRepository;
+import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,9 @@ public class ConversationService {
 
     private final ConversationRepository conversationRepository;
     private final MessageRepository messageRepository;
+    private final UtilisateurRepository utilisateurRepository;
     private int PAGE_SIZE = 20;
+
 
 
     public record MessageModel(String usermsg){}
@@ -37,6 +40,12 @@ public class ConversationService {
             List<Message> messages,
             String nomConversation
     ){}
+
+    public PartialConv getConversation(AuthenticationInfos utilisateur, Long idConversation, int page) {
+        Optional<Conversation> conversationOpt = conversationRepository.getConversationByUtilisateurConcerneAndId(utilisateur.getId(), idConversation);
+        Conversation conversation = conversationOpt.orElseThrow(EntityNotFoundException::new);
+        return getMessagesFromConversation(conversation, page);
+    }
     public PartialConv getConversation(Utilisateur utilisateur, Utilisateur interlocuteur, int page) {
         Optional<Conversation> conversationOpt = conversationRepository.getConversationForUserWithInterlocutor(utilisateur.getId(), interlocuteur.getId());
         Conversation conversation = conversationOpt.orElseGet(() ->
@@ -73,7 +82,7 @@ public class ConversationService {
     }
 
     public Conversation postNewMessage(Utilisateur emetteur, MessageModel messageModel, Long id) {
-        Conversation conversation = conversationRepository.getConversationByIdAndUtilisateurConcerne(emetteur.getId(), id)
+        Conversation conversation = conversationRepository.getConversationByUtilisateurConcerneAndId(emetteur.getId(), id)
                 .orElseThrow(EntityNotFoundException::new);
         Message message = Message.builder()
                 .contenu(messageModel.usermsg())

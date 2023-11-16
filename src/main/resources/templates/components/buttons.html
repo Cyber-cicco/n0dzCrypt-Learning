@@ -8,3 +8,8 @@
         th:fragment="buttonPrimary(buttonText)"
         th:text="${buttonText}"
 ></button>
+<button
+        th:fragment="buttonCircular(buttonText, color)"
+        th:class="${color} + 'p-2 text-black rounded-full hover:cursor-pointer hover:brightness-150'"
+        th:text="${buttonText}"
+></button>

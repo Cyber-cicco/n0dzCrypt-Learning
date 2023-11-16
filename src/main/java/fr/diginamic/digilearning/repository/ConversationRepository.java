@@ -28,5 +28,5 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
                             " where duc.utilisateur_id = ?1) as c" +
                             " where c.id = ?2 limit 1"
     )
-    Optional<Conversation> getConversationByIdAndUtilisateurConcerne(Long idUtilisateur, Long idConversation);
+    Optional<Conversation> getConversationByUtilisateurConcerneAndId(Long idUtilisateur, Long idConversation);
 }
