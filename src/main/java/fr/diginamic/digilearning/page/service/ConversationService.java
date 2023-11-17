@@ -28,7 +28,9 @@ public class ConversationService {
 
 
 
-    public record MessageModel(String usermsg){}
+    public record MessageModel(
+            String usermsg
+    ){}
 
     public record ContactInfos (
             Utilisateur utilisateur,

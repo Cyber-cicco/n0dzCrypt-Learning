@@ -1,8 +1,6 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
-import fr.diginamic.digilearning.page.service.HomeService;
-import fr.diginamic.digilearning.page.service.LoginService;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.dto.LoginDto;
 import fr.diginamic.digilearning.security.service.JwtService;
@@ -25,7 +23,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("login")
 public class LoginController {
-    private final LoginService loginService;
     private final UtilisateurRepository utilisateurRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;

@@ -1,5 +1,5 @@
 <div class="flex flex-col max-h-screen">
-    <header th:insert="~{components/title}"></header>
+    <header class="h-fit" th:insert="~{components/title :: header('Mon suivi')}"></header>
     <div class="flex h-full w-full p-3" th:insert="~{components/containers/card :: cardFull(~{pages/fragments/conversation/main-card.fragment})}">
     </div>
 </div>

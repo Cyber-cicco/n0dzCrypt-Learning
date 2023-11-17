@@ -214,6 +214,30 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	private List<Post> postList;
 	@OneToMany(mappedBy = "emetteur")
 	private List<Message> messageList;
+
+	@OneToMany(mappedBy = "auteur")
+	private List<PostForum> postSurForum;
+
+	@ManyToMany
+	@JoinTable(name = "whitelist",
+			joinColumns = @JoinColumn(name = "utilisateur_id", referencedColumnName = "ID"),
+			inverseJoinColumns = @JoinColumn(name = "salon_id", referencedColumnName = "id")
+	)
+	private List<Salon> salonsSurWhiteList;
+	@ManyToMany
+	@JoinTable(name = "blacklist",
+			inverseJoinColumns = @JoinColumn(name = "salon_id", referencedColumnName = "id"),
+			joinColumns = @JoinColumn(name = "utilisateur_id", referencedColumnName = "ID")
+	)
+	private List<Salon> salonsSurBlacklist;
+
+	@ManyToMany
+	@JoinTable(name = "salon_moderateurs",
+			inverseJoinColumns = @JoinColumn(name = "salon_id", referencedColumnName = "id"),
+			joinColumns = @JoinColumn(name = "moderateur_id", referencedColumnName = "id")
+	)
+	private List<Salon> salonsModeres;
+
 	/**
 	 * Constructor
 	 * 

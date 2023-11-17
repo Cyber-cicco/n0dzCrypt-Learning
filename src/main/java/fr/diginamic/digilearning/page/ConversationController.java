@@ -83,7 +83,6 @@ public class ConversationController {
         Conversation conversation;
         Optional<String> errorMessage = messageValidator.validateMessage(message.usermsg());
         if(errorMessage.isPresent()){
-            System.out.println("caca");
             conversation = conversationRepository.getConversationByUtilisateurConcerneAndId(userInfos.getId(), id).orElseThrow(EntityNotFoundException::new);
             model.addAttribute("error", errorMessage.get());
         } else {

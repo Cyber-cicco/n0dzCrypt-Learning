@@ -1,0 +1,47 @@
+
+@keyframes rotateMenuButton {
+    from {
+        transform: none;
+    }
+    to {
+        transform: rotateZ(180deg);
+    }
+}
+
+@keyframes rotateBackward {
+    from {
+        transform: rotateZ(180deg);
+    }
+    to {
+        transform: none;
+    }
+}
+
+
+.wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s ease-out
+}
+
+.sub-menu {
+    overflow: hidden;
+}
+
+.display-menu {
+    grid-template-rows: 1fr;
+}
+
+.rotatingButton {
+    animation-name: rotateMenuButton;
+    animation-duration: 0.75s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease;
+}
+
+.reverseRotationButton {
+    animation-name: rotateBackward;
+    animation-duration: 0.75s;
+    animation-fill-mode: backwards;
+    animation-timing-function: ease;
+}

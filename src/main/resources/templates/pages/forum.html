@@ -1,0 +1,27 @@
+<div class="flex flex-col max-h-screen h-full">
+    <header class="h-fit" th:insert="~{components/title :: header('Forum de discussion')}"></header>
+    <div class="flex h-full">
+        <section class="flex flex-col font-poppins bg-primary text-white w-1/5 h-full">
+            <div id="sujet" th:each="sujet, iterStat : ${sujets}">
+                <div class="flex justify-between w-full items-center p-2 shadow-md">
+                    <div class="w-3/4 p-2" th:text="${sujet.getLibelle()}"></div>
+                    <img
+                            class="hover:cursor-pointer"
+                            width="24"
+                            data-rotatable
+                            src="/img/icons/simple-arrow.svg"
+                    >
+                </div>
+                <div class="wrapper">
+                    <div class="sub-menu">
+                        <div class="bg-lightPrimary hover:cursor-pointer p-2 hover:brightness-150">oui</div>
+                        <div class="bg-lightPrimary hover:cursor-pointer p-2 hover:brightness-150">oui</div>
+                        <div class="bg-lightPrimary hover:cursor-pointer p-2 hover:brightness-150">oui</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="flex p-3 flex-grow" th:insert="~{components/containers/card :: cardFull(~{pages/fragments/forum/presentation.forum})}"></div>
+    </div>
+</div>
+<script src="/js/animations.forum.js"></script>
