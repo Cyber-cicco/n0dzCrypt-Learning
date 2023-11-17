@@ -1,6 +1,5 @@
 package fr.diginamic.digilearning.page;
 
-import fr.diginamic.digilearning.page.service.CoursService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class CoursController {
 
-    private final CoursService coursService;
     private final AuthenticationService authenticationService;
 
     @GetMapping("/api")

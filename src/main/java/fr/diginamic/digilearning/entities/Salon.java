@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public class Salon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;      
     private String titre;
+    @Enumerated
     private StatusForum statusForum;
     @ManyToMany
     @JoinTable(name = "whitelist",
@@ -44,5 +46,16 @@ public class Salon {
     @OneToMany(mappedBy = "salon")
     private List<FilDiscussion> filDiscussionList;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Salon salon = (Salon) o;
+        return Objects.equals(id, salon.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
