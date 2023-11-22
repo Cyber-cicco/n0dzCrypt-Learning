@@ -1,7 +1,7 @@
 document.querySelectorAll("#sujet").forEach(el => {
     const rotateButton = el.querySelector('[data-rotatable]')
     const subMenu = el.querySelector(".wrapper")
-    rotateButton.addEventListener("click", (e) => {
+    const openMenu = (e) => {
         if(rotateButton.classList.contains("rotatingButton")){
             rotateButton.classList.remove("rotatingButton")
             rotateButton.classList.add("reverseRotationButton")
@@ -13,5 +13,10 @@ document.querySelectorAll("#sujet").forEach(el => {
         rotateButton.classList.add("rotatingButton")
         subMenu.classList.remove("collapse-menu")
         subMenu.classList.add("display-menu")
-    })
+        for (let i = 0; i < subMenu.children.length; i++) {
+            subMenu.children.item(i).setAttribute("tabindex", "1");
+        }
+    }
+    rotateButton.addEventListener("click", openMenu)
+    rotateButton.addEventListener("keypress", (e) => {if(e.key === "Enter") openMenu(e)})
 })

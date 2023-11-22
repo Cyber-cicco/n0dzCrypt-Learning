@@ -1,0 +1,62 @@
+<section id="forum-canvas" class="h-full flex flex-col" xmlns="http://www.w3.org/1999/html">
+    <h2 class="text-white bg-primary text-center text-2xl p-2" th:text="${salon.getTitre()}"></h2>
+    <div class="flex flex-col h-full">
+        <div class="flex flex-col flex-grow">
+            <div
+                    class="flex justify-between bg-greyDeep border-primary hover:bg-white hover:cursor-pointer p-2 items-center border-y-2"
+                    th:hx-get="'/forum/regles/api?id=' + ${salon.getId()}"
+                    th:hx-push-url="'/forum/regles?id=' + ${salon.getId()}"
+                    hx-target="#forum-canvas"
+                    hx-swap="outerHTML"
+            >
+                <div class="flex flex-grow gap-5">
+                    <img src="/img/icons/pin.svg">
+                    <div class="text-black text-sm truncate" th:text="${regles.getTitre()}"></div>
+                </div>
+                <div class="flex gap-5 w-1/4">
+                    <div
+                            class="text-sm truncate w-fit"
+                            th:text="${regles.getDateCreationString()}"
+                    >
+                    </div>
+                    <div
+                            class="text-sm truncate w-fit"
+                            th:text="${regles.getAuteur().getNom().toUpperCase() +' ' + regles.getAuteur().getPrenom()}"
+                    >
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between bg-greyDeep border-primary hover:bg-white hover:cursor-pointer p-2 items-center border-b-2"
+                 th:each="fil, iterStat : ${discussions}"
+                 th:hx-get="'/forum/fil/api?id='+${fil.getId()}"
+                 th:hx-push-url="'/forum/fil?id='+${fil.getId()}"
+                 hx-target="#forum-canvas"
+                 hx-swap="outerHTML"
+            >
+                <div class="flex flex-grow gap-5">
+                    <img th:src="${fil.getEpingle()} ? '/img/icons/pin.svg' : '/img/icons/fil-discussion.svg'">
+                    <div class="text-black text-sm truncate" th:text="${fil.getTitre()}"></div>
+                </div>
+                <div class="flex gap-5 w-1/4 h-5">
+                    <div
+                            class="text-sm truncate"
+                            th:text="${fil.getDateCreationString()}"
+                    >
+                    </div>
+                    <div
+                            class="text-sm truncate"
+                            th:text="${fil.getAuteur().getFullName()}"
+                    >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer
+                class="bg-white self-end gap-3 flex p-2 flex justify-center w-full shadow-[0px_-7px_10px_2px_#00000024] left-0"
+        >
+            <div class="bg-lightAccent p-2 w-1/4">
+                Postez ici un sujet qu'il vous parait pertinent de discuter avec vos congénères, en lien avec le thème de ce salon.
+            </div>
+        </footer>
+    </div>
+</section>

@@ -1,15 +1,35 @@
 <button
-        class="bg-accent py-2 text-primary rounded-md hover:cursor-pointer hover:brightness-150"
+        class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
         th:fragment="buttonAccent(buttonText)"
         th:text="${buttonText}">
 </button>
 <button
-        class="bg-primary p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+        class="bg-accent p-2 text-primary disabled:bg-lightAccent rounded-md hover:cursor-pointer hover:disabled:cursor-auto hover:disabled:brightness-100 hover:brightness-150"
+        th:fragment="buttonAccentDis(buttonText, disabled)"
+        th:disabled="${disabled}"
+        th:text="${buttonText}"
+></button>
+
+<button
+        class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
         th:fragment="buttonPrimary(buttonText)"
         th:text="${buttonText}"
 ></button>
 <button
+        class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+        th:fragment="buttonPrimaryDis(buttonText, disabled)"
+        th:text="${buttonText}"
+        th:disabled="${disabled}"
+></button>
+
+<button
         th:fragment="buttonCircular(buttonText, color)"
         th:class="${color} + 'p-2 text-black rounded-full hover:cursor-pointer hover:brightness-150'"
         th:text="${buttonText}"
+></button>
+<button
+        th:fragment="buttonCircularDis(buttonText, color, disabled)"
+        th:class="${color} + 'p-2 text-black rounded-full hover:cursor-pointer hover:brightness-150'"
+        th:text="${buttonText}"
+        th:disabled="${disabled}"
 ></button>

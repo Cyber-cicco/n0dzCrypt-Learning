@@ -1,9 +1,22 @@
 package fr.diginamic.digilearning.repository;
 
+import fr.diginamic.digilearning.dto.MessageForumDto;
+import jakarta.persistence.SqlResultSetMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import fr.diginamic.digilearning.entities.PostForum;
+import org.springframework.data.jpa.repository.Query;
+
+import java.sql.ResultSet;
+import java.util.List;
 
 public interface PostForumRepository extends JpaRepository<PostForum, Long>  {
 
+    @Query(nativeQuery = true, value =
+"""
+select p.id, p.contenu, p.dateEmission, p.reponseA_id, U.PRENOM, U.NOM from dl_post_forum p
+join UTILISATEUR U on p.auteur_id = U.ID
+where p.fil_discussion_id = ?1
+""")
+    List<String[]> getPostInfosFromFil(Long idFil);
 }
