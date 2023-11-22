@@ -701,6 +701,26 @@ video {
   right: 0px;
 }
 
+.right-\[-400px\] {
+  right: -400px;
+}
+
+.right-\[-100px\] {
+  right: -100px;
+}
+
+.right-\[-0px\] {
+  right: -0px;
+}
+
+.right-\[0px\] {
+  right: 0px;
+}
+
+.right-\[-800px\] {
+  right: -800px;
+}
+
 .isolate {
   isolation: isolate;
 }
@@ -715,6 +735,14 @@ video {
 
 .z-10 {
   z-index: 10;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+.z-40 {
+  z-index: 40;
 }
 
 .float-right {
@@ -956,6 +984,14 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-\[500px\] {
+  width: 500px;
+}
+
+.w-\[800px\] {
+  width: 800px;
 }
 
 .max-w-md {
@@ -2032,6 +2068,15 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-light {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 236 179 / var(--tw-bg-opacity));
+}
+
+.bg-opacity-25 {
+  --tw-bg-opacity: 0.25;
+}
+
 .decoration-slice {
   -webkit-box-decoration-break: slice;
           box-decoration-break: slice;
@@ -2427,6 +2472,10 @@ video {
   -moz-osx-font-smoothing: auto;
 }
 
+.opacity-25 {
+  opacity: 0.25;
+}
+
 .bg-blend-normal {
   background-blend-mode: normal;
 }
@@ -2592,6 +2641,24 @@ video {
 .shadow-xl {
   --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-\[0px_-7px_9px_2px_\#00000024\] {
+  --tw-shadow: 0px -7px 9px 2px #00000024;
+  --tw-shadow-colored: 0px -7px 9px 2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-\[0px_-7px_8px_2px_\#00000024\] {
+  --tw-shadow: 0px -7px 8px 2px #00000024;
+  --tw-shadow-colored: 0px -7px 8px 2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-\[0px_-8px_8px_2px_\#00000024\] {
+  --tw-shadow: 0px -8px 8px 2px #00000024;
+  --tw-shadow-colored: 0px -8px 8px 2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
@@ -2866,6 +2933,12 @@ video {
 
   .md\:w-2\/3 {
     width: 66.666667%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:w-\[800px\] {
+    width: 800px;
   }
 }
 

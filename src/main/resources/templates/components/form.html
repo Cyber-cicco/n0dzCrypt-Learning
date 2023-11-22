@@ -6,6 +6,10 @@
     <label th:for="${id}" th:text="${label}"></label>
     <input th:id="${id}" th:name="${id}" class="rounded-sm p-2 text-black w-full" type="password">
 </div>
+<div class="flex flex-col gap-2 w-full" th:fragment="textArea(label, id)">
+    <label th:for="${id}" th:text="${label}"></label>
+    <textarea th:id="${id}" th:name="${id}" class="rounded-sm p-2 text-black w-full"></textarea>
+</div>
 <form class="flex flex-col w-4/5 gap-5 p-10" th:fragment="form(inputs, buttonText, target)" th:hx-post="${target}" hx-boost="true" hx-swap="outerHTML" hx-target="#error">
     <th:block th:replace="${inputs}"/>
     <span id="error" class="text-error"></span>

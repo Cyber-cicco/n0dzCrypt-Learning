@@ -15,13 +15,19 @@
     <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/styles/output.css}">
     <link rel="stylesheet" th:href="@{/styles/animations.css}">
+    <link rel="stylesheet" th:href="@{/styles/modal.css}">
     <title>Digi-Learning</title>
 </head>
-<body class="flex w-full h-full">
+<body class="flex w-full h-full overflow-hidden">
     <div hx-get="/components/navbar" hx-target="this" hx-swap="outerHTML" hx-trigger="load"></div>
     <main id="router-outlet" class="w-full z-0 bg-secondary">
         <div th:insert="${insert}" class="w-full h-screen"></div>
     </main>
-    <aside id="modal" class="absolute left-0 top-0">CACACACACA</aside>
+    <div hidden id="modal-bg" class="absolute top-0 left-0 z-40 h-full bg-accent w-full bg-opacity-25"></div>
+    <aside id="modal" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] lg:w-[800px]">
+        <button onclick="closeModal()">close</button>
+    </aside>
+    <script src="/js/animation.post-forum.js"></script>
+    <script src="/js/form-checking.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.page;
 
 
+import fr.diginamic.digilearning.dto.PostForumDto;
 import fr.diginamic.digilearning.entities.FilDiscussion;
 
 import fr.diginamic.digilearning.entities.Salon;
@@ -14,10 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -73,10 +71,10 @@ public class ForumController {
     }
 
     @GetMapping("/fil")
-    public String getBaseFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idFil, Model model, HttpServletResponse response){
+    public String getBaseFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idFil, @RequestParam Long page, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseTemplate(userInfos, model, response);
-        irrigateFilAttribute(userInfos, model, response, idFil);
+        irrigateFilAttribute(userInfos, model, response, idFil, page);
         model.addAttribute("insert", "pages/forum");
         model.addAttribute("cardInsert", "pages/fragments/forum/fil.forum");
         return "base";
@@ -96,24 +94,24 @@ public class ForumController {
 
 
     @GetMapping("/fil/api")
-    public String getFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idFil, Model model, HttpServletResponse response){
+    public String getFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idFil, @RequestParam Long page, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateFilAttribute(userInfos, model, response, idFil);
+        irrigateFilAttribute(userInfos, model, response, idFil, page);
         return "pages/fragments/forum/fil.forum";
     }
 
-    private void irrigateFilAttribute(AuthenticationInfos userInfos, Model model, HttpServletResponse response, Long idFil) {
+    private void irrigateFilAttribute(AuthenticationInfos userInfos, Model model, HttpServletResponse response, Long idFil, Long page) {
         forumService.verifyIfUserIsAllowed(userInfos, idFil, response);
         FilDiscussion fil = forumService.getFilDiscussion(idFil);
         model.addAttribute("id", fil.getSalon().getId());
         model.addAttribute("fil", fil);
-        model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil));
+        model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil, page));
     }
 
     @GetMapping("/regles/api")
     public String getRegles(@RequestParam Long id, Model model){
         Long idFil = forumService.getRegles().getId();
-        model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil));
+        model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil, 1L));
         model.addAttribute("fil", forumService.getFilDiscussion(idFil));
         model.addAttribute("id", id);
         return "pages/fragments/forum/fil.forum";
@@ -123,11 +121,20 @@ public class ForumController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseTemplate(userInfos, model, response);
         Long idFil = forumService.getRegles().getId();
-        model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil));
+        model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil, 1L));
         model.addAttribute("fil", forumService.getFilDiscussion(idFil));
         model.addAttribute("id", id);
         model.addAttribute("insert", "pages/forum");
         model.addAttribute("cardInsert", "pages/fragments/forum/fil.forum");
         return "base";
+    }
+
+    @PostMapping("/message")
+    public String postNewMessage(@CookieValue("AUTH-TOKEN") String token, @RequestParam Long id, @RequestParam Long page, @ModelAttribute PostForumDto postForumDto, Model model, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+        forumService.saveNewMessage(userInfos, id, postForumDto);
+        forumService.verifyIfUserIsAllowed(userInfos, id, response);
+        irrigateFilAttribute(userInfos, model, response, id, page);
+        return "pages/fragments/forum/fil.forum";
     }
 }

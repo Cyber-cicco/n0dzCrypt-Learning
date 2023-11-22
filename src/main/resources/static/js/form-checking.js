@@ -7,4 +7,3 @@ function submitOnEnter(event) {
         event.preventDefault();
     }
 }
-document.getElementById("usermsg").addEventListener("keydown", submitOnEnter);

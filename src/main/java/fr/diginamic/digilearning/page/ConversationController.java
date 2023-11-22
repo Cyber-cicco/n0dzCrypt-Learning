@@ -3,6 +3,7 @@ package fr.diginamic.digilearning.page;
 import fr.diginamic.digilearning.entities.Conversation;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.entities.enums.RoleEnum;
+import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.page.service.ConversationService;
 import fr.diginamic.digilearning.page.validators.MessageValidator;
@@ -81,13 +82,13 @@ public class ConversationController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         Utilisateur emetteur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
         Conversation conversation;
-        Optional<String> errorMessage = messageValidator.validateMessage(message.usermsg());
-        if(errorMessage.isPresent()){
-            conversation = conversationRepository.getConversationByUtilisateurConcerneAndId(userInfos.getId(), id).orElseThrow(EntityNotFoundException::new);
-            model.addAttribute("error", errorMessage.get());
-        } else {
+        try {
+            messageValidator.validateMessage(message.usermsg());
             conversation = conversationService.postNewMessage(emetteur, message, id);
             model.addAttribute("error", "");
+        } catch (BrokenRuleException ex) {
+            conversation = conversationRepository.getConversationByUtilisateurConcerneAndId(userInfos.getId(), id).orElseThrow(EntityNotFoundException::new);
+            model.addAttribute("error", ex.getMessage());
         }
         model.addAttribute("idUtilisateur", emetteur.getId());
         model.addAttribute("conversation", conversationService.getMessagesFromConversation(conversation, 0));

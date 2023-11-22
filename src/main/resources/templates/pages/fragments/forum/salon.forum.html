@@ -28,8 +28,8 @@
             </div>
             <div class="flex justify-between bg-greyDeep border-primary hover:bg-white hover:cursor-pointer p-2 items-center border-b-2"
                  th:each="fil, iterStat : ${discussions}"
-                 th:hx-get="'/forum/fil/api?id='+${fil.getId()}"
-                 th:hx-push-url="'/forum/fil?id='+${fil.getId()}"
+                 th:hx-get="'/forum/fil/api?id='+${fil.getId()} + '&page=1'"
+                 th:hx-push-url="'/forum/fil?id='+${fil.getId()} + '&page=1'"
                  hx-target="#forum-canvas"
                  hx-swap="outerHTML"
             >
