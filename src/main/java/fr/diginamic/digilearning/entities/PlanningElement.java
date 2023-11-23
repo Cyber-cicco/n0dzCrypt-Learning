@@ -1,7 +1,5 @@
 package fr.diginamic.digilearning.entities;
 
-import fr.diginamic.digilearning.utils.DateUtils;
-
 import java.time.LocalDate;
 
 
@@ -25,15 +23,6 @@ public interface PlanningElement {
 	 * @return LocalDate
 	 */
 	LocalDate getDateFin();
-
-	/**
-	 * Retourne la durée
-	 * 
-	 * @return int
-	 */
-	default int getDuree() {
-		return DateUtils.getDureeOuvree(getDateDebut(), getDateFin());
-	}
 
 	/**
 	 * Retourne le libellé

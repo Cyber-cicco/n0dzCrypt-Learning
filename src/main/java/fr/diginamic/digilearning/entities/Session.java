@@ -1,7 +1,6 @@
 package fr.diginamic.digilearning.entities;
 
 import fr.diginamic.digilearning.entities.enums.*;
-import fr.diginamic.digilearning.utils.DateUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,10 +53,6 @@ public class Session {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_FOR")
 	private Formation formation;
-
-	/** Liste des cours */
-	@OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
-	private List<CoursPlanifie> cours = new ArrayList<>();
 
 	///** Liste des dates fermées spécifique pour cette session */
 	//@OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
@@ -162,15 +157,6 @@ public class Session {
 	private List<Post> postList;
 
 	@Override
-	public String toString() {
-		return nom + " - du " + DateUtils.toString(dateDebut) + " au " + DateUtils.toString(dateFin);
-	}
-
-	public int calculerDuree() {
-		return cours.stream().mapToInt(c -> c.getDuree()).sum();
-	}
-
-	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
@@ -184,35 +170,6 @@ public class Session {
 	}
 
 	/**
-	 * Retourne les cours planifiés correspondant au cours passé en paramètre.
-	 * Attention, on peut en effet avoir plusieurs cours planifiés pour un même
-	 * cours.<br>
-	 * Exemple: le projet de fin de formation qui est coupé en 2 avec un formateur
-	 * en 1ère semaine et un autre formateur en 2ème semaine.
-	 *
-	 * @param cc cours
-	 * @return {@link CoursPlanifie}
-	 */
-	public List<CoursPlanifie> getCoursPlanifie(Cours cc) {
-		return cours.stream().filter(c -> c.getCours().equals(cc)).toList();
-	}
-
-	/**
-	 * Retourne le cours planifié dont l'identifiant est passé en paraètre
-	 *
-	 * @param id identifiant recherché
-	 * @return {@link CoursPlanifie}
-	 */
-	public CoursPlanifie getCoursPlanifie(Long id) {
-		for (CoursPlanifie courant : cours) {
-			if (courant.getId() != null && courant.getId().equals(id)) {
-				return courant;
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Retourne si oui ou non la personne dont l'email est passé en paramètre est
 	 * planificateur sur la session.
 	 *
@@ -223,18 +180,6 @@ public class Session {
 
 		return !email.isEmpty() && !planificateurs.isEmpty()
 				&& planificateurs.stream().anyMatch(p -> p.getEmail().equals(email));
-	}
-
-	/**
-	 * Retourne si oui ou non la personne dont l'email est passé en paramètre est
-	 * formateur sur la session.
-	 * 
-	 * @param email email du planificateur
-	 * @return boolean
-	 */
-	public boolean hasFormateur(String email) {
-		return !email.isEmpty() && !cours.isEmpty()
-				&& cours.stream().anyMatch(c -> c.getFormateur() != null && c.getFormateur().getEmail().equals(email));
 	}
 
 	/**
@@ -277,25 +222,6 @@ public class Session {
 	//	}
 	//	return "";
 	//}
-
-	/**
-	 * Recherche d'un cours par date de début
-	 * 
-	 * @param dateDebut date de début
-	 * @return {@link CoursPlanifie}
-	 */
-	public CoursPlanifie extraireCoursParDateDebut(LocalDate dateDebut) {
-		if (cours.isEmpty()) {
-			return null;
-		}
-		for (CoursPlanifie cc : cours) {
-			if (cc.getDateDebut() != null && cc.getDateDebut().equals(dateDebut)) {
-				return cc;
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * Getter
 	 * 

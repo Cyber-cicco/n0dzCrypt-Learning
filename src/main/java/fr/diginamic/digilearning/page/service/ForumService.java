@@ -1,26 +1,20 @@
 package fr.diginamic.digilearning.page.service;
 
 import fr.diginamic.digilearning.dto.MessageForumDto;
+import fr.diginamic.digilearning.dto.PostFilDto;
 import fr.diginamic.digilearning.dto.PostForumDto;
-import fr.diginamic.digilearning.entities.FilDiscussion;
-import fr.diginamic.digilearning.entities.PostForum;
-import fr.diginamic.digilearning.entities.Salon;
-import fr.diginamic.digilearning.entities.Utilisateur;
+import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.FunctionalException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
-import fr.diginamic.digilearning.repository.FilDiscussionRepository;
-import fr.diginamic.digilearning.repository.PostForumRepository;
-import fr.diginamic.digilearning.repository.SalonRepository;
-import fr.diginamic.digilearning.repository.UtilisateurRepository;
+import fr.diginamic.digilearning.repository.*;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -82,6 +76,22 @@ public class ForumService {
     }
 
     public Integer getNbPages(FilDiscussion filDiscussion) {
-        return (int) Math.ceil(filDiscussionRepository.countMessagesOfFil(filDiscussion.getId()) / Double.parseDouble(TAILLE_PAGE.toString()));
+        int nbPages = (int) Math.ceil(filDiscussionRepository.countMessagesOfFil(filDiscussion.getId()) / Double.parseDouble(TAILLE_PAGE.toString()));
+        return (nbPages == 0) ? 1 : nbPages;
+    }
+
+    public void saveNewFil(AuthenticationInfos userInfos, Long id, PostFilDto postFilDto) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
+        Salon salon = salonRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        filDiscussionRepository.save(FilDiscussion.builder()
+                .titre(postFilDto.getTitre())
+                .description(postFilDto.getDescription())
+                .supprime(false)
+                .ferme(false)
+                .salon(salon)
+                .auteur(utilisateur)
+                .dateCreation(LocalDateTime.now())
+                .epingle(false)
+                .build());
     }
 }

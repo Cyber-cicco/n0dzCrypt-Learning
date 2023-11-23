@@ -139,11 +139,6 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@JoinTable(name = "ROLE_UTILISATEUR", joinColumns = @JoinColumn(name = "ID_UTILISATEUR", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID"))
 	private Set<Role> roles = new HashSet<>();
 
-	/** Liste des cours qu'un formateur est capable de donner */
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "COURS_PAR_FORMATEUR", joinColumns = @JoinColumn(name = "ID_FRM", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ID_COU", referencedColumnName = "ID"))
-	private List<CoursRef> cours = new ArrayList<>();
-
 	///** indisponibilites : List de Indisponibilite */
 	//@OneToMany(mappedBy = "utilisateur", fetch = FetchType.LAZY)
 	//private Set<Indisponibilite> indisponibilites = new HashSet<>();
@@ -166,10 +161,6 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	/** supprimable : boolean */
 	@Transient
 	private boolean supprimable;
-
-	/** Liste des cours personnalisés du stagiaire */
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "stagiaire")
-	private List<CoursPersonnalise> coursPersonnalises = new ArrayList<>();
 
 	///** personnalisations */
 	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "stagiaire")

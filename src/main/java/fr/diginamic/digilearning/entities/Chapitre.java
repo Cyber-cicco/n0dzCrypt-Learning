@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.entities;
 
+import fr.diginamic.digilearning.entities.enums.StatusChapitre;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,22 +13,18 @@ import java.util.List;
 @Setter
 @Entity
 @Builder
-@Table(name = "CHAPITRE")
-@Cacheable
+@Table(name = "dl_chapitre")
 public class Chapitre {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID")
 	private Long id;
-
-	@Column(name = "LIBELLE")
 	private String libelle;
-
-	@OneToMany(mappedBy = "chapitre", fetch = FetchType.LAZY)
-	private List<DetailCours> details = new ArrayList<>();
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_COURS")
+	@Column(columnDefinition = "LONGTEXT")
+	private String contenu;
+	@Enumerated
+	private StatusChapitre statusChapitre;
+	@ManyToOne
+	@JoinColumn(name = "cours_id")
 	private Cours cours;
 }

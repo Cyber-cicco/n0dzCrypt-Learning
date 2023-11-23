@@ -12,20 +12,17 @@ import java.util.List;
 @Setter
 @Builder
 @Entity
-@Table(name = "dl_cours")
-public class Cours {
+@Table(name = "dl_sous_module")
+public class SousModule {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "sousModule")
+    private List<Cours> cours = new ArrayList<>();
     @ManyToOne
-    @JoinColumn(name = "sous_module_id")
-    private SousModule sousModule;
+    @JoinColumn(name = "module_id")
+    private Module module;
 
-    @ManyToOne
-    @JoinColumn(name = "formation_id")
-    private Formation formation;
-
-    @OneToMany(mappedBy = "cours")
-    private List<Chapitre> chapitres = new ArrayList<>();
 }

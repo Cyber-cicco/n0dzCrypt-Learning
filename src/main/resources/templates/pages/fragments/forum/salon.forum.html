@@ -52,11 +52,19 @@
             </div>
         </div>
         <footer
-                class="bg-white self-end gap-3 flex p-2 flex justify-center w-full shadow-[0px_-7px_10px_2px_#00000024] left-0"
+                class="bg-grey self-end gap-3 flex p-2 flex justify-center w-full shadow-[0px_-7px_10px_2px_#00000024] left-0"
         >
-            <div class="bg-lightAccent p-2 w-1/4">
-                Postez ici un sujet qu'il vous parait pertinent de discuter avec vos congénères, en lien avec le thème de ce salon.
-            </div>
+            <form class="flex w-full gap-2" th:hx-post="'/forum/fil?id=' + ${salon.getId()}">
+                <div class="flex flex-col w-3/4 gap-2">
+                    <th:block th:replace="~{components/form :: textInput('Titre', 'titre', 'Votre titre')}"></th:block>
+                    <th:block th:replace="~{components/form :: textArea('Description', 'description')}"></th:block>
+                </div>
+                <div class="bg-lightAccent flex flex-col p-2 w-1/4 justify-between">
+                    Postez ici un sujet qu'il vous parait pertinent de discuter avec vos congénères, en lien avec le
+                    thème de ce salon.
+                    <th:block th:replace="~{components/buttons :: buttonPrimary('Nouveau fil')}"></th:block>
+                </div>
+            </form>
         </footer>
     </div>
 </section>

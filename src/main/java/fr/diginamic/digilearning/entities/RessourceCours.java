@@ -17,9 +17,6 @@ public class RessourceCours {
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;      
-    @ManyToOne
-    @JoinColumn(name = "coursRef_id")
-    private CoursRef coursRef;
     private String libelleAffiche;
     private String libelle;
     private String typeRessource;

@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.page;
 
 
+import fr.diginamic.digilearning.dto.PostFilDto;
 import fr.diginamic.digilearning.dto.PostForumDto;
 import fr.diginamic.digilearning.entities.FilDiscussion;
 
@@ -141,5 +142,13 @@ public class ForumController {
         forumService.verifyIfUserIsAllowed(userInfos, id, response);
         irrigateFilAttribute(userInfos, model, response, id, page);
         return "pages/fragments/forum/fil.forum";
+    }
+    @PostMapping("/fil")
+    public String postNewFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam Long id, @ModelAttribute PostFilDto postFilDto, Model model, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+        Salon salon = forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), id);
+        forumService.saveNewFil(userInfos, id, postFilDto);
+        irrigateSalonAttribute(userInfos, model, response, id);
+        return "pages/fragments/forum/salon.forum";
     }
 }

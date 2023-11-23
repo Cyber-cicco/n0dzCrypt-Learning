@@ -9,23 +9,20 @@ import lombok.*;
 @Setter
 @Builder
 @Entity
-@Table(name = "DETAIL_COURS")
-@Cacheable(value = true)
+@Table(name = "dl_detail_cours")
 public class DetailCours {
 
 	/** identifiant */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID")
 	private Long id;
 
 	/** libelle : String */
-	@Column(name = "LIBELLE")
 	private String libelle;
 
 	/** chapitre : Chapitre */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_CHAPITRE")
+	@JoinColumn(name = "chapitre_id")
 	private Chapitre chapitre;
 
 }
