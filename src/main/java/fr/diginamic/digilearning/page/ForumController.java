@@ -103,6 +103,8 @@ public class ForumController {
     private void irrigateFilAttribute(AuthenticationInfos userInfos, Model model, HttpServletResponse response, Long idFil, Long page) {
         forumService.verifyIfUserIsAllowed(userInfos, idFil, response);
         FilDiscussion fil = forumService.getFilDiscussion(idFil);
+        model.addAttribute("page", page);
+        model.addAttribute("nbPages", forumService.getNbPages(fil));
         model.addAttribute("id", fil.getSalon().getId());
         model.addAttribute("fil", fil);
         model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil, page));
@@ -110,23 +112,26 @@ public class ForumController {
 
     @GetMapping("/regles/api")
     public String getRegles(@RequestParam Long id, Model model){
-        Long idFil = forumService.getRegles().getId();
-        model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil, 1L));
-        model.addAttribute("fil", forumService.getFilDiscussion(idFil));
-        model.addAttribute("id", id);
+        irrigateRegles(model, id);
         return "pages/fragments/forum/fil.forum";
     }
     @GetMapping("/regles")
     public String getBaseRegles(@RequestParam Long id, @CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseTemplate(userInfos, model, response);
-        Long idFil = forumService.getRegles().getId();
-        model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil, 1L));
-        model.addAttribute("fil", forumService.getFilDiscussion(idFil));
-        model.addAttribute("id", id);
+        irrigateRegles(model, id);
         model.addAttribute("insert", "pages/forum");
         model.addAttribute("cardInsert", "pages/fragments/forum/fil.forum");
         return "base";
+    }
+
+    private void irrigateRegles(Model model, Long id){
+        Long idFil = forumService.getRegles().getId();
+        model.addAttribute("page", 1);
+        model.addAttribute("nbPages", 1);
+        model.addAttribute("messages", forumService.getMessageFromFilDiscussion(idFil, 1L));
+        model.addAttribute("fil", forumService.getFilDiscussion(idFil));
+        model.addAttribute("id", id);
     }
 
     @PostMapping("/message")

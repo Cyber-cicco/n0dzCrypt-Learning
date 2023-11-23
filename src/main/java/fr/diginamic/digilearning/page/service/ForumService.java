@@ -80,4 +80,8 @@ public class ForumService {
                 .filDiscussion(filDiscussion)
                 .build());
     }
+
+    public Integer getNbPages(FilDiscussion filDiscussion) {
+        return (int) Math.ceil(filDiscussionRepository.countMessagesOfFil(filDiscussion.getId()) / Double.parseDouble(TAILLE_PAGE.toString()));
+    }
 }

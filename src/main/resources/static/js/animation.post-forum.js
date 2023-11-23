@@ -1,5 +1,7 @@
 function openPost(){
-    document.querySelector("#post-new").removeAttribute("hidden")
+    const newPost =  document.querySelector("#post-new");
+    newPost.removeAttribute("hidden");
+    document.getElementById("message").focus();
 }
 
 function closePost(){

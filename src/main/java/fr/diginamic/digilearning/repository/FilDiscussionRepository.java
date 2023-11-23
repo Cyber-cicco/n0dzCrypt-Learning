@@ -21,4 +21,11 @@ order by epingle desc, dateCreation desc
 """
     )
     List<FilDiscussion> findDiscussion(Long id);
+
+    @Query(nativeQuery = true, value =
+            """
+select count(id) from dl_post_forum
+where fil_discussion_id = ?1 
+""")
+    Integer countMessagesOfFil(Long id);
 }
