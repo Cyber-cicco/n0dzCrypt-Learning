@@ -5,10 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -59,8 +56,12 @@ public class Formation {
 	 * Liste des modules (une formation sans module a malgré tout un unique module,
 	 * masqué à l'affichage, qui s'appelle Default)
 	 */
-	@OneToMany(mappedBy = "formation", fetch = FetchType.LAZY)
-	private Set<Module> modules = new HashSet<>();
+	@ManyToMany
+	@JoinTable(name = "dl_module_formation",
+			joinColumns = @JoinColumn(name = "id_formation", referencedColumnName = "ID"),
+			inverseJoinColumns = @JoinColumn(name = "id_module", referencedColumnName = "id")
+	)
+	private List<Module> modules = new ArrayList<>();
 
 	/** Date de dernière mise à jour */
 	@Column(name = "DATE_MAJ")
@@ -89,9 +90,6 @@ public class Formation {
 	@Column(name = "ID_PREVIOUS")
 	private Long idPrevious;
 
-
-	@OneToMany(mappedBy = "formation")
-	private List<Cours> cours;
 	/**
 	 * Représente la version d'origine de la formation (celle pour laquelle id ==
 	 * idParent)

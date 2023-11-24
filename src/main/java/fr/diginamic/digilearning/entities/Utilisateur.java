@@ -157,6 +157,12 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	 */
 	@Transient
 	private List<Session> sessions = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name = "dl_utilisateur_cours",
+			inverseJoinColumns = @JoinColumn(name = "id_cours", referencedColumnName = "id"),
+			joinColumns = @JoinColumn(name = "id_utilisateur", referencedColumnName = "ID")
+	)
+	private List<Cours> coursPrepares;
 
 	/** supprimable : boolean */
 	@Transient

@@ -8,6 +8,8 @@ import fr.diginamic.digilearning.entities.FilDiscussion;
 import fr.diginamic.digilearning.entities.Salon;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.page.service.ForumService;
+import fr.diginamic.digilearning.page.validators.FilValidator;
+import fr.diginamic.digilearning.page.validators.PostForumValidator;
 import fr.diginamic.digilearning.repository.SujetRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
@@ -26,6 +28,8 @@ import java.util.List;
 public class ForumController {
 
     private final AuthenticationService authenticationService;
+    private final PostForumValidator postForumValidator;
+    private final FilValidator filValidator;
     private final ForumService forumService;
     private final UtilisateurRepository utilisateurRepository;
     private final SujetRepository sujetRepository;
@@ -138,6 +142,7 @@ public class ForumController {
     @PostMapping("/message")
     public String postNewMessage(@CookieValue("AUTH-TOKEN") String token, @RequestParam Long id, @RequestParam Long page, @ModelAttribute PostForumDto postForumDto, Model model, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+        postForumValidator.validatePostForum(postForumDto);
         forumService.saveNewMessage(userInfos, id, postForumDto);
         forumService.verifyIfUserIsAllowed(userInfos, id, response);
         irrigateFilAttribute(userInfos, model, response, id, page);
@@ -146,7 +151,8 @@ public class ForumController {
     @PostMapping("/fil")
     public String postNewFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam Long id, @ModelAttribute PostFilDto postFilDto, Model model, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        Salon salon = forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), id);
+        filValidator.validateFil(postFilDto);
+        forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), id);
         forumService.saveNewFil(userInfos, id, postFilDto);
         irrigateSalonAttribute(userInfos, model, response, id);
         return "pages/fragments/forum/salon.forum";

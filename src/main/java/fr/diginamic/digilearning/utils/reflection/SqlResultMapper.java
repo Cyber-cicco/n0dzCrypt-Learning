@@ -9,28 +9,32 @@ import java.time.format.DateTimeFormatter;
 
 public class SqlResultMapper {
 
-    public static <T> T mapToObject(Class<T> _class, String results[]) throws InstantiationException, IllegalAccessException {
-        Field[] fields = _class.getDeclaredFields();
-        T newInstance = _class.newInstance();
-        if(fields.length != results.length){
-            throw new FunctionalException("La conversion entre les résultats et les objets de la classe n'est pas possible");
-        }
-        for (int i = 0; i < results.length; i++) {
-            Field field = fields[i];
-            field.setAccessible(true);
-            if(results[i] == null){
-                continue;
+    public static <T> T mapToObject(Class<T> _class, String results[]) {
+        try{
+            Field[] fields = _class.getDeclaredFields();
+            T newInstance = _class.newInstance();
+            if(fields.length != results.length){
+                throw new FunctionalException("La conversion entre les résultats et les objets de la classe n'est pas possible");
             }
-            if (field.getType().equals(String.class)) {
-                field.set(newInstance, results[i]);
-            } else if (field.getType().equals(LocalDateTime.class)) {
-                field.set(
-                        newInstance,
-                        LocalDateTime.parse(results[i].substring(0, results[i].lastIndexOf(".")), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            } else if (field.getType().equals(Long.class)){
-                field.set(newInstance, Long.parseLong(results[i]));
+            for (int i = 0; i < results.length; i++) {
+                Field field = fields[i];
+                field.setAccessible(true);
+                if(results[i] == null){
+                    continue;
+                }
+                if (field.getType().equals(String.class)) {
+                    field.set(newInstance, results[i]);
+                } else if (field.getType().equals(LocalDateTime.class)) {
+                    field.set(
+                            newInstance,
+                            LocalDateTime.parse(results[i].substring(0, results[i].lastIndexOf(".")), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                } else if (field.getType().equals(Long.class)){
+                    field.set(newInstance, Long.parseLong(results[i]));
+                }
             }
+            return newInstance;
+        } catch (InstantiationException | IllegalAccessException e){
+            throw new FunctionalException();
         }
-        return newInstance;
     }
 }

@@ -7,6 +7,14 @@
         transform: rotateZ(180deg);
     }
 }
+@keyframes up {
+    from {
+    }
+    to {
+        transform: translateY(-5px);
+        scale: 101%;
+    }
+}
 
 @keyframes rotateBackward {
     from {
@@ -22,6 +30,13 @@
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.5s ease-out
+}
+
+.hoverzoom:hover {
+    animation-name: up;
+    animation-duration: 0.75s;
+    animation-fill-mode: both;
+    animation-timing-function: ease;
 }
 
 .sub-menu {

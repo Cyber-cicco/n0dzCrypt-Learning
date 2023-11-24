@@ -49,15 +49,8 @@ public class ForumService {
 
     public List<MessageForumDto> getMessageFromFilDiscussion(Long idFil, Long page) {
         return postForumRepository.getPostInfosFromFil(idFil, (page-1) * TAILLE_PAGE, TAILLE_PAGE).stream()
-                .map(resultRow ->
-                        {
-                            try {
-                                return SqlResultMapper.mapToObject(MessageForumDto.class, resultRow);
-                            } catch (InstantiationException | IllegalAccessException e) {
-                                throw new FunctionalException(e.getMessage());
-                            }
-                        }
-                ).toList();
+                .map(resultRow -> SqlResultMapper.mapToObject(MessageForumDto.class, resultRow))
+                .toList();
     }
 
     public FilDiscussion getFilDiscussion(Long idFil) {
