@@ -16,6 +16,23 @@
     }
 }
 
+@keyframes carousel-left {
+    from {
+
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+@keyframes decarousel-left {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+}
+
 @keyframes rotateBackward {
     from {
         transform: rotateZ(180deg);
@@ -36,6 +53,23 @@
     animation-name: up;
     animation-duration: 0.5s;
     animation-fill-mode: both;
+    animation-timing-function: ease;
+}
+
+.translate100 {
+    transform: translateX(100%);
+}
+
+.decarouseled {
+    animation-name: decarousel-left;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease;
+}
+.carouseled {
+    animation-name: carousel-left;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
     animation-timing-function: ease;
 }
 

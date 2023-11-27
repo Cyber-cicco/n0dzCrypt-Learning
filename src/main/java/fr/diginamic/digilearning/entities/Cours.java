@@ -5,7 +5,9 @@ import lombok.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,4 +38,17 @@ public class Cours {
 
     @OneToMany(mappedBy = "cours")
     private List<FlagCours> flagCours = new ArrayList<>();
+
+    public List<Chapitre> getChapitres() {
+        return chapitres.stream().sorted(Comparator.comparing(Chapitre::getOrdre)).toList();
+    }
+
+    public Chapitre getChapitrePrecedent(Integer ordre) {
+        Optional<Chapitre> chapitre = chapitres.stream().filter(c -> c.getOrdre().equals(ordre - 1)).findFirst();
+        return chapitre.orElse(null);
+    }
+    public Chapitre getChapitreSuivant(Integer ordre) {
+        Optional<Chapitre> chapitre = chapitres.stream().filter(c -> c.getOrdre().equals(ordre + 1)).findFirst();
+        return chapitre.orElse(null);
+    }
 }

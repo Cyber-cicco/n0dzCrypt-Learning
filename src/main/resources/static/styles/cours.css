@@ -1,4 +1,4 @@
-#cours-canvas > section >article > h1 {
+#markdown > h1 {
     color: #003452;
     font-size: 1.875rem;
     line-height: 2.25rem;
@@ -6,7 +6,7 @@
     flex-direction: column;
 }
 
-#cours-canvas > section >article > h2 {
+#markdown > h2 {
     color: #003452;
     font-size: 1.5rem;
     line-height: 2rem;
@@ -14,7 +14,7 @@
     display: flex;
     flex-direction: column;
 }
-#cours-canvas > section >article > h1::after {
+#markdown > h1::after {
     height: 2px;
     margin-block: 1rem;
     width: 100%;
@@ -22,53 +22,53 @@
     background-color: #666565;
 }
 
-#cours-canvas > section >article {
+#markdown {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
 }
 
-#cours-canvas > section >article ul {
+#markdown ul {
     display: flex;
     flex-direction: column;
     padding-left: 2rem;
 }
 
-#cours-canvas > section >article ol {
+#markdown ol {
     display: flex;
     flex-direction: column;
     padding-left: 2rem;
 }
 
-#cours-canvas > section >article li {
+#markdown li {
     display: flex;
     align-items: start;
     padding: 0.5rem;
 }
 
-#cours-canvas > section >article strong {
+#markdown strong {
     padding-inline: 0.4rem;
     color: #003452;
 }
 
-#cours-canvas > section >article blockquote {
+#markdown blockquote {
     background-color: #f5d26c;
     padding: 0.5rem;
     border-radius: 0.5rem;
 }
-#cours-canvas > section >article a {
+#markdown a {
     color: #0067a3;
     text-underline: #0067a3;
     text-decoration: underline;
 }
-#cours-canvas > section >article code {
+#markdown code {
     background-color: #dedede;
     color: #444444;
     font-family: "JetBrains Mono", serif;
     padding: 0.5rem;
     border-radius: 0.5rem;
 }
-#cours-canvas > section >article pre {
+#markdown pre {
     background-color: #dedede;
     color: #444444;
     padding: 0.5rem;

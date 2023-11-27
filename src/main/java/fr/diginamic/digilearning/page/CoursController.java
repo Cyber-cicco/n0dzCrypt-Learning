@@ -100,18 +100,18 @@ public class CoursController {
     }
 
     @GetMapping("/sommaire/api")
-    public String getSommaireApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, @RequestParam("id") Long idSModule, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
+    public String getSommaireApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, @RequestParam("smodule") Long idSModule, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateSommaire(userInfos, id, idSModule, idModule, model, response);
-        return "pages/sommaire.cours";
+        return "pages/visualiser.cours";
     }
 
 
     @GetMapping("/sommaire")
-    public String getSommaire(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, @RequestParam("id") Long idSModule, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
+    public String getSommaire(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, @RequestParam("smodule") Long idSModule, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateSommaire(userInfos, id, idSModule, idModule, model, response);
-        model.addAttribute("insert", "pages/sommaire.cours");
+        model.addAttribute("insert", "pages/visualiser.cours");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
@@ -120,31 +120,35 @@ public class CoursController {
         model.addAttribute("cours", coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new));
         model.addAttribute("idSModule", idSModule);
         model.addAttribute("idModuleOrigine", idModule);
+        model.addAttribute("slide", "pages/sommaire.cours.main");
     }
 
     @GetMapping("/chapitre/api")
-    public String getChapitreApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, @RequestParam("id") Long idSModule, @RequestParam("cours") Long idCours, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
+    public String getChapitreApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Integer id, @RequestParam("id") Long idSModule, @RequestParam("cours") Long idCours, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateChapitre(userInfos, id, idCours, idSModule, idModule, model, response);
-        return "pages/chapitre.cours";
+        return "pages/visualiser.cours";
     }
 
     @GetMapping("/chapitre")
-    public String getChapitre(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, @RequestParam("id") Long idSModule, @RequestParam("cours") Long idCours, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
+    public String getChapitre(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Integer id, @RequestParam("id") Long idSModule, @RequestParam("cours") Long idCours, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateChapitre(userInfos, id, idCours, idSModule, idModule, model, response);
-        model.addAttribute("insert", "pages/chapitre.cours");
+        model.addAttribute("insert", "pages/visualiser.cours");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
-    private void irrigateChapitre(AuthenticationInfos userInfos, Long idChapitre, Long idCours, Long idSModule, Long idModule, Model model, HttpServletResponse response) {
+    private void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Long idSModule, Long idModule, Model model, HttpServletResponse response) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
-        Chapitre chapitre = cours.getChapitres().stream().peek(System.out::println).filter(chapitre1 -> chapitre1.getId().equals(idChapitre)).findFirst().orElseThrow(EntityNotFoundException::new);
+        Chapitre chapitre = cours.getChapitres().stream().filter(chapitre1 -> chapitre1.getOrdre().equals(idChapitre)).findFirst().orElseThrow(EntityNotFoundException::new);
         model.addAttribute("contenu", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenu()));
+        model.addAttribute("chapitre", chapitre);
+        model.addAttribute("cours", cours);
         model.addAttribute("idCours", idCours);
         model.addAttribute("idSModule", idSModule);
         model.addAttribute("idModuleOrigine", idModule);
+        model.addAttribute("slide", "pages/chapitre.main.cours");
     }
     @PatchMapping("/bookmark")
     public String patchBookmark(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idCours, Model model, HttpServletResponse response) {

@@ -60,6 +60,16 @@
                                 th:style="${c.getFinished()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
                         >
                     </div>
+                    <div
+                            class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                            th:hx-get="'/cours/document?id=' + ${c.getId()}"
+                    >
+                        <img
+                                class="min-w-[30px] min-h-[30px]"
+                                width="30"
+                                src="/img/icons/download.svg"
+                        >
+                    </div>
                 </div>
             </div>
         </div>

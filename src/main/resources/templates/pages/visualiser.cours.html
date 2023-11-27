@@ -1,0 +1,41 @@
+<div class="flex justify-center gap-2 p-5 h-screen overflow-y-scroll">
+    <th:block th:replace="~{${slide}}"></th:block>
+    <aside class="flex flex-col h-full bg-grey overflow-hidden shadow-dark w-1/5 bg-primary text-white shadow-md rounded-md">
+        <div class="p-5 font-poppins">Chapitres : </div>
+        <div
+                class="p-2 w-full bg-lightPrimary hover:brightness-150 hover:cursor-pointer"
+                th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
+                th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
+                hx-target="#chapitre-cours"
+                hx-swap="outerHTML"
+                hx-select="#chapitre-cours"
+        >Sommaire</div>
+        <div
+                th:each="c, iterStat : ${cours.getChapitres()}"
+                class="p-2 w-full bg-lightPrimary hover:brightness-150 hover:cursor-pointer"
+                th:text="${c.getLibelle()}"
+                th:hx-get="'/cours/chapitre/api?id='
+                            + ${c.getOrdre()}
+                            + '&cours=' + ${cours.getId()}
+                            + '&smodule=' + ${idSModule}
+                            + '&module=' + ${idModuleOrigine}"
+                th:hx-push-url="'/cours/chapitre?id='
+                            + ${c.getOrdre()}
+                            + '&cours=' + ${cours.getId()}
+                            + '&smodule=' + ${idSModule}
+                            + '&module=' + ${idModuleOrigine}"
+                hx-target="#chapitre-cours"
+                hx-swap="outerHTML"
+                hx-select="#chapitre-cours"
+        ></div>
+        <div class="grow"></div>
+        <div class="p-5">
+            <button
+                    onclick="carousel()"
+                    class="justify-self-end bg-accent p-2 m-5 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+            >Afficher / cacher les questions - réponses
+            </button>
+        </div>
+        <div class="p-5 font-poppins hover:cursor-pointer" ></div>
+    </aside>
+</div>
