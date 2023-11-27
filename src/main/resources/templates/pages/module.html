@@ -6,7 +6,7 @@
                 hx-get="/cours/api"
                 hx-push-url="/cours"
                 hx-target="#module"
-                hx-swap="outerHTML"
+                hx-swap="outerHTML transition:true"
         >
         <div class="flex-grow text-center" th:text="${titre}"></div>
         <th:block th:replace="/pages/fragments/cours/cours.hamb"></th:block>

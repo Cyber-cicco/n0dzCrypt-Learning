@@ -18,7 +18,8 @@ public enum TypeRole {
 	/** ROLE_ADMIN_VISITEUR : TypeRole */
 	ROLE_VISITEUR_ADMIN("Visiteur admin", 6L),
 	/** ROLE_CONTACT : TypeRole */
-	ROLE_CONTACT("Contact", 7L);
+	ROLE_CONTACT("Contact", 7L),
+	ROLE_RESPONSABLE("Responsable", 8L);
 
 	/** id : Long */
 	private Long id;

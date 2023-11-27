@@ -8,7 +8,7 @@
                     th:hx-get="'/forum/salon/api?id=' + ${id}"
                     th:hx-push-url="'/forum/salon?id=' + ${id}"
                     hx-target="#forum-canvas"
-                    hx-swap="outerHTML"
+                    hx-swap="outerHTML transition:true"
             >
                 <th:block
                         th:replace="~{components/buttons :: buttonPrimary('Retour à la liste des sujets')}"></th:block>

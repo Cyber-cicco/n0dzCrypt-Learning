@@ -3,7 +3,7 @@ package fr.diginamic.digilearning.page;
 import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.entities.Conversation;
 import fr.diginamic.digilearning.entities.Utilisateur;
-import fr.diginamic.digilearning.entities.enums.RoleEnum;
+import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.page.service.ConversationService;
@@ -63,7 +63,7 @@ public class ConversationController {
     }
 
     private void irrigateBaseAttributesStagiaires(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
-        authenticationService.mustBeOfRole(userInfos.getRoles(), RoleEnum.ROLE_STAGIAIRE, response);
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_STAGIAIRE, response);
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
         irrigateBaseAttributesConversationStagiaire(utilisateur, model);
     }

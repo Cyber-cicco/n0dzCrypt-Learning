@@ -144,6 +144,7 @@ public class CoursController {
         Chapitre chapitre = cours.getChapitres().stream().filter(chapitre1 -> chapitre1.getOrdre().equals(idChapitre)).findFirst().orElseThrow(EntityNotFoundException::new);
         model.addAttribute("contenu", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenu()));
         model.addAttribute("chapitre", chapitre);
+        model.addAttribute("questions", chapitre.getQuestionsNonSuppr());
         model.addAttribute("cours", cours);
         model.addAttribute("idCours", idCours);
         model.addAttribute("idSModule", idSModule);

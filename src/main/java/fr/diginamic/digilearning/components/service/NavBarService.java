@@ -2,7 +2,7 @@ package fr.diginamic.digilearning.components.service;
 
 import fr.diginamic.digilearning.components.elements.NavLink;
 import fr.diginamic.digilearning.components.elements.NavLinks;
-import fr.diginamic.digilearning.entities.enums.RoleEnum;
+import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class NavBarService {
 
     public NavLinks[] getLinks(AuthenticationInfos userInfos) {
-        if(userInfos.getRoles().contains(RoleEnum.ROLE_STAGIAIRE.getLibelle())){
+        if(userInfos.getRoles().contains(TypeRole.ROLE_STAGIAIRE.getLibelle())){
             return new NavLinks[]{
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
@@ -48,7 +48,7 @@ public class NavBarService {
                             })
                             .build(),
             };
-        } else if(userInfos.getRoles().contains(RoleEnum.ROLE_FORMATEUR.getLibelle())) {
+        } else if(userInfos.getRoles().contains(TypeRole.ROLE_FORMATEUR.getLibelle())) {
             return new NavLinks[]{
                     NavLinks.builder()
                             .navLinks(new NavLink[]{

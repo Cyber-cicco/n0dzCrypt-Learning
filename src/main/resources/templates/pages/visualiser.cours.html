@@ -7,7 +7,7 @@
                 th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
                 th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
                 hx-target="#chapitre-cours"
-                hx-swap="outerHTML"
+                hx-swap="outerHTML transition:true"
                 hx-select="#chapitre-cours"
         >Sommaire</div>
         <div
@@ -25,17 +25,10 @@
                             + '&smodule=' + ${idSModule}
                             + '&module=' + ${idModuleOrigine}"
                 hx-target="#chapitre-cours"
-                hx-swap="outerHTML"
+                hx-swap="outerHTML transition:true"
                 hx-select="#chapitre-cours"
         ></div>
         <div class="grow"></div>
-        <div class="p-5">
-            <button
-                    onclick="carousel()"
-                    class="justify-self-end bg-accent p-2 m-5 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
-            >Afficher / cacher les questions - réponses
-            </button>
-        </div>
         <div class="p-5 font-poppins hover:cursor-pointer" ></div>
     </aside>
 </div>

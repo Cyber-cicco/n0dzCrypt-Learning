@@ -6,7 +6,7 @@
             th:text="${i}"
             th:hx-get="'/forum/fil/api?id=' + ${fil.getId()} + '&page=' + ${i}"
             th:hx-push-url="'/forum/fil?id=' + ${fil.getId()} + '&page=' + ${i}"
-            hx-swap="outerHTML"
+            hx-swap="outerHTML transition:true"
             hx-target="#forum-canvas"
     ></div>
 </div>

@@ -22,7 +22,7 @@
                              th:hx-get="'/forum/salon/api?id=' + ${salon.getId()}"
                              th:hx-push-url="'/forum/salon?id=' + ${salon.getId()}"
                              hx-target="#forum-canvas"
-                             hx-swap="outerHTML"
+                             hx-swap="outerHTML transition:true"
                         ></div>
                     </div>
                 </div>

@@ -210,6 +210,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@OneToMany(mappedBy = "stagiaire")
 	private List<FlagCours> flagCours;
 
+	@OneToMany(mappedBy = "auteur")
+	private List<Question> questions;
+
 	/**
 	 * Constructor
 	 * 

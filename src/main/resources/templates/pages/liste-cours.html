@@ -6,7 +6,7 @@
                 th:hx-get="'/cours/module/api?id=' + ${idModuleOrigine}"
                 th:hx-push-url="'/cours/module?id=' + ${idModuleOrigine}"
                 hx-target="#liste-cours"
-                hx-swap="outerHTML"
+                hx-swap="outerHTML transition:true"
                 hx-preserve="#hamb"
         >
         <div class="flex-grow text-center" th:text="${smodule.getTitre()}"></div>
@@ -22,7 +22,7 @@
                             th:hx-get="'/cours/sommaire/api?id=' + ${c.getId()} + '&smodule=' + ${smodule.getId()} + '&module=' + ${idModuleOrigine}"
                             th:hx-push-url="'/cours/sommaire?id=' + ${c.getId()} + '&smodule=' + ${smodule.getId()} + '&module=' + ${idModuleOrigine}"
                             hx-target="#liste-cours"
-                            hx-swap="outerHTML"
+                            hx-swap="outerHTML transition:true"
                     ></a>
                     <div class="flex w-[300px] justify-between">
                         <p>Difficulté : </p>

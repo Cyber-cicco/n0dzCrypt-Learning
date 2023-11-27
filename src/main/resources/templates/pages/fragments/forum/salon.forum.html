@@ -7,7 +7,7 @@
                     th:hx-get="'/forum/regles/api?id=' + ${salon.getId()}"
                     th:hx-push-url="'/forum/regles?id=' + ${salon.getId()}"
                     hx-target="#forum-canvas"
-                    hx-swap="outerHTML"
+                    hx-swap="outerHTML transition:true"
             >
                 <div class="flex flex-grow gap-5">
                     <img width="24" height="24" src="/img/icons/pin.svg">
@@ -31,7 +31,7 @@
                  th:hx-get="'/forum/fil/api?id='+${fil.getId()} + '&page=1'"
                  th:hx-push-url="'/forum/fil?id='+${fil.getId()} + '&page=1'"
                  hx-target="#forum-canvas"
-                 hx-swap="outerHTML"
+                 hx-swap="outerHTML transition:true"
             >
                 <div class="flex flex-grow gap-5">
                     <img width="24" height="24" th:src="${fil.getEpingle()} ? '/img/icons/pin.svg' : '/img/icons/fil-discussion.svg'">

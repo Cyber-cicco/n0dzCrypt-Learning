@@ -13,6 +13,7 @@ document.querySelectorAll("#sujet").forEach(el => {
         rotateButton.classList.add("rotatingButton")
         subMenu.classList.remove("collapse-menu")
         subMenu.classList.add("display-menu")
+        console.log("caca")
         for (let i = 0; i < subMenu.children.length; i++) {
             subMenu.children.item(i).setAttribute("tabindex", "1");
         }

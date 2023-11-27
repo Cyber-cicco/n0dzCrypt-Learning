@@ -26,6 +26,8 @@ public class Chapitre {
 	private Integer ordre;
 	@Enumerated
 	private StatusChapitre statusChapitre;
+	@OneToMany(mappedBy = "chapitre")
+	private List<Question> questions;
 	@ManyToOne
 	@JoinColumn(name = "cours_id")
 	private Cours cours;
@@ -33,5 +35,9 @@ public class Chapitre {
 	@Override
 	public String toString() {
 		return libelle + "\n";
+	}
+
+	public List<Question> getQuestionsNonSuppr() {
+		return questions.stream().filter(question -> !question.getSupprimee()).toList();
 	}
 }

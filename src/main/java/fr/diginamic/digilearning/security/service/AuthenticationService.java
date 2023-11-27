@@ -1,19 +1,14 @@
 package fr.diginamic.digilearning.security.service;
 
-import fr.diginamic.digilearning.entities.enums.RoleEnum;
+import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
-import fr.diginamic.digilearning.security.dto.LoginDto;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,7 +30,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public void mustBeOfRole(List<String> currentRoles, RoleEnum expectedRole, HttpServletResponse response) {
+    public void mustBeOfRole(List<String> currentRoles, TypeRole expectedRole, HttpServletResponse response) {
         if(!currentRoles.contains(expectedRole.getLibelle())) {
             try {
                 response.sendRedirect("/login");

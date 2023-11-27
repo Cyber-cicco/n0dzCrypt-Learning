@@ -8,7 +8,7 @@
                 th:hx-get="'/cours/liste/api?id=' + ${smodule.getId()} + '&module=' + ${id}"
                 th:hx-push-url="'/cours/liste?id=' + ${smodule.getId()} + '&module=' + ${id}"
                 hx-target="#module"
-                hx-swap="outerHTML"
+                hx-swap="outerHTML transition:true"
                 hx-preserve="#hamb"
         >
             <div class="flex flex-col min-h-[400px] p-5 gap-2">
