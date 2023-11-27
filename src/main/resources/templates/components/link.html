@@ -1,1 +1,11 @@
-<a class="underline hover:text-primary" th:fragment="link(href, content)" th:href="${href}" th:text="${content}">caca</a>
+<a
+        class="underline hover:text-primary"
+        th:fragment="link(href, content)"
+        th:hx-get="${href} + '/api'"
+        hx-target="#router-outlet"
+        hx-swap="innerHTML"
+        th:hx-push-url="${href}"
+        th:text="${content}"
+>
+    caca
+</a>

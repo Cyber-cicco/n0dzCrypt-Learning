@@ -4,9 +4,7 @@ import fr.diginamic.digilearning.dto.MessageForumDto;
 import fr.diginamic.digilearning.dto.PostFilDto;
 import fr.diginamic.digilearning.dto.PostForumDto;
 import fr.diginamic.digilearning.entities.*;
-import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
-import fr.diginamic.digilearning.exception.FunctionalException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
 import fr.diginamic.digilearning.repository.*;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
@@ -87,4 +85,5 @@ public class ForumService {
                 .epingle(false)
                 .build());
     }
+
 }

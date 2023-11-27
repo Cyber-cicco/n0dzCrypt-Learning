@@ -24,16 +24,6 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@Column(name = "ID")
 	private Long id;
 
-	///** société (pour les profils: planificateur, formateur et visiteur) */
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "ID_SOCIETE")
-	//private Societe societe;
-
-	///** Centre de formation (facultatif) */
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "ID_CENTRE")
-	//private Centre centre;
-
 	/** valideur : Utilisateur */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_VALIDEUR")
@@ -114,9 +104,6 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@Column(name = "DATE_LOCKED")
 	private LocalDateTime dateLocked;
 
-	//@OneToMany(mappedBy = "utilisateur")
-	//private List<Connexion> connexions;
-
 	/**
 	 * Compteur du nombre de tentatives de connexion infructueuses successives. Ce
 	 * nb est remis à 0 si l'utilisateur se connecte correctement
@@ -168,24 +155,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@Transient
 	private boolean supprimable;
 
-	///** personnalisations */
-	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "stagiaire")
-	//private List<LivretSession> personnalisations = new ArrayList<>();
-
-	/** notifications */
-	//@OneToMany(mappedBy = "destinataire")
-	//@Where(clause = "lu='0'")
-	//private List<Notification> notifications = new ArrayList<>();
-
 	/** recevoirNotification */
 	@Column(name = "RECEVOIR_NOTIFICATIONS")
 	private boolean recevoirNotifications;
-
-	/** codeResponsable */
-	//@Column(name = "CODE_RESPONSABLE", nullable = true)
-	//@Enumerated(EnumType.STRING)
-	//private CodeResponsable codeResponsable;
-
 
 
 	/** dateAbandon */
@@ -234,6 +206,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 			joinColumns = @JoinColumn(name = "moderateur_id", referencedColumnName = "id")
 	)
 	private List<Salon> salonsModeres;
+
+	@OneToMany(mappedBy = "stagiaire")
+	private List<FlagCours> flagCours;
 
 	/**
 	 * Constructor
@@ -383,60 +358,5 @@ public class Utilisateur implements Comparable<Utilisateur> {
 		Comparator<Utilisateur> employeeNameComparator = Comparator.comparing(Utilisateur::getNom)
 				.thenComparing(Utilisateur::getPrenom);
 		return employeeNameComparator.compare(this, o);
-	}
-
-	///**
-	// * Recherche la personnalisation associée à une session donnée
-	// *
-	// * @param session session
-	// * @return {@link }
-	// */
-	//public LivretSession getPersonnalisation(Session session) {
-	//	Optional<LivretSession> opt = personnalisations.stream()
-	//			.filter(p -> p.getIdSessionParente().equals(session.getIdParent())).findFirst();
-	//	if (opt.isPresent()) {
-	//		return opt.get();
-	//	}
-	//	return null;
-	//}
-
-	public List<Role> getRoleList() {
-		return roleList;
-	}
-
-	public void setRoleList(List<Role> roleList) {
-		this.roleList = roleList;
-	}
-
-	public Adresse getAdresse() {
-		return adresse;
-	}
-
-	public void setAdresse(Adresse adresse) {
-		this.adresse = adresse;
-	}
-
-	public List<Conversation> getConversationList() {
-		return conversationList;
-	}
-
-	public void setConversationList(List<Conversation> conversationList) {
-		this.conversationList = conversationList;
-	}
-
-	public List<Post> getPostList() {
-		return postList;
-	}
-
-	public void setPostList(List<Post> postList) {
-		this.postList = postList;
-	}
-
-	public List<Message> getMessageList() {
-		return messageList;
-	}
-
-	public void setMessageList(List<Message> messageList) {
-		this.messageList = messageList;
 	}
 }

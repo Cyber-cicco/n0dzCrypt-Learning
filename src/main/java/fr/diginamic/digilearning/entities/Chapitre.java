@@ -27,4 +27,9 @@ public class Chapitre {
 	@ManyToOne
 	@JoinColumn(name = "cours_id")
 	private Cours cours;
+
+	@Override
+	public String toString() {
+		return libelle + "\n";
+	}
 }

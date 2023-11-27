@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.page;
 
+import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.entities.Conversation;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.entities.enums.RoleEnum;
@@ -29,6 +30,7 @@ public class ConversationController {
     private final AuthenticationService authenticationService;
     private final UtilisateurRepository utilisateurRepository;
     private final ConversationRepository conversationRepository;
+    private final NavBarService navBarService;
 
     @GetMapping("/stagiaire/api")
     public String getConversationApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
@@ -41,6 +43,7 @@ public class ConversationController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseAttributesStagiaires(userInfos, model, response);
         model.addAttribute("insert", "pages/conversation");
+        model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 

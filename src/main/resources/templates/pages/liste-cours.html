@@ -1,0 +1,68 @@
+<div id="liste-cours" class="flex flex-col h-screen">
+    <div class="flex justify-center gap-5 font-poppins text-5xl bg-grey text-primary p-5" >
+        <img
+                class="w-[50px] hover:cursor-pointer"
+                src="/img/icons/back.svg"
+                th:hx-get="'/cours/module/api?id=' + ${idModuleOrigine}"
+                th:hx-push-url="'/cours/module?id=' + ${idModuleOrigine}"
+                hx-target="#liste-cours"
+                hx-swap="outerHTML"
+                hx-preserve="#hamb"
+        >
+        <div class="flex-grow text-center" th:text="${smodule.getTitre()}"></div>
+        <th:block th:replace="/pages/fragments/cours/cours.hamb"></th:block>
+    </div>
+    <section class="flex flex-col h-full gap-5 p-5 overflow-y-scroll">
+        <div class="bg-white p-5 shadow-dark shadow-md rounded-md" th:each="c, iterStat : ${cours}">
+            <div class="flex flex-col gap-2">
+                <div class="flex justify-between">
+                    <a
+                            class="text-primary font-poppins hover:underline hover:cursor-pointer"
+                            th:text="${c.getTitre()}"
+                            th:hx-get="'/cours/sommaire/api?id=' + ${c.getId()} + '&smodule=' + ${smodule.getId()} + '&module=' + ${idModuleOrigine}"
+                            th:hx-push-url="'/cours/sommaire?id=' + ${c.getId()} + '&smodule=' + ${smodule.getId()} + '&module=' + ${idModuleOrigine}"
+                            hx-target="#liste-cours"
+                            hx-swap="outerHTML"
+                    ></a>
+                    <div class="flex w-[300px] justify-between">
+                        <p>Difficulté : </p>
+                        <div class="flex">
+                            <img th:each="i: ${#numbers.sequence(1, c.getDifficulte())}" src="/img/icons/star.svg">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <div
+                            class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                            th:hx-patch="'/cours/bookmark?id=' + ${c.getId()}"
+                            th:hx-target="'#bookmarked-' + ${c.getId()}"
+                            hx-swap="outerHTML"
+                    >
+                        <img
+                                class="min-w-[30px] min-h-[30px]"
+                                th:id="'bookmarked-' + ${c.getId()}"
+                                width="30"
+                                src="/img/icons/bookmark.svg"
+                                th:style="${c.getBoomarked()} ? 'filter: invert(73%) sepia(83%) saturate(1960%) hue-rotate(3deg) brightness(99%) contrast(108%);' : _"
+                        >
+                    </div>
+                    <div
+                            class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                            th:hx-patch="'/cours/finished?id=' + ${c.getId()}"
+                            th:hx-target="'#finished-' + ${c.getId()}"
+                            hx-swap="outerHTML"
+                    >
+                        <img
+                                class="min-w-[30px] min-h-[30px]"
+                                th:id="'finished-' + ${c.getId()}"
+                                width="30"
+                                src="/img/icons/check.svg"
+                                th:style="${c.getFinished()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<th:block th:replace="pages/fragments/cours/modal.cours"></th:block>

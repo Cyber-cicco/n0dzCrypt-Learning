@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.page;
 
+import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.dto.LoginDto;
@@ -7,7 +8,6 @@ import fr.diginamic.digilearning.security.service.JwtService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;

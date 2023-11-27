@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 public class NavBarService {
 
     public NavLinks[] getLinks(AuthenticationInfos userInfos) {
-        System.out.println(userInfos.getRoles());
         if(userInfos.getRoles().contains(RoleEnum.ROLE_STAGIAIRE.getLibelle())){
             return new NavLinks[]{
                     NavLinks.builder()

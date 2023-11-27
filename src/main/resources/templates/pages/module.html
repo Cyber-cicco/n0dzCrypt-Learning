@@ -1,4 +1,16 @@
-<div id="cours-canvas" class="flex flex-col h-screen">
-    <div class="text-center font-poppins text-5xl rounded-md bg-grey text-primary p-5" th:text="${titre}"></div>
+<div id="module" class="flex flex-col h-screen">
+    <div class="flex justify-center gap-5 font-poppins text-5xl bg-grey text-primary p-5" >
+        <img
+                class="w-[50px] hover:cursor-pointer"
+                src="/img/icons/back.svg"
+                hx-get="/cours/api"
+                hx-push-url="/cours"
+                hx-target="#module"
+                hx-swap="outerHTML"
+        >
+        <div class="flex-grow text-center" th:text="${titre}"></div>
+        <th:block th:replace="/pages/fragments/cours/cours.hamb"></th:block>
+    </div>
     <th:block th:replace="~{pages/fragments/module/module.main}"></th:block>
 </div>
+<th:block th:replace="pages/fragments/cours/modal.cours"></th:block>

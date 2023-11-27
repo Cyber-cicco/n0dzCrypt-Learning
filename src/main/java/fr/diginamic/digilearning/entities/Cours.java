@@ -19,6 +19,7 @@ public class Cours {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titre;
+    private String description;
     private Integer difficulte;
     private Integer ordre;
     @ManyToMany
@@ -32,4 +33,7 @@ public class Cours {
     private SousModule sousModule;
     @OneToMany(mappedBy = "cours")
     private List<Chapitre> chapitres = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cours")
+    private List<FlagCours> flagCours = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.page;
 
+import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.page.service.HomeService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomePageController {
     private final HomeService homeService;
     private final AuthenticationService authenticationService;
+    private final NavBarService navBarService;
 
     @GetMapping({"api", "home/api"})
     public String getHomePageApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
@@ -29,6 +31,7 @@ public class HomePageController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         model.addAttribute("insert", "pages/home");
         homeService.irrigateModel(model);
+        model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 }

@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.page;
 
 
+import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.dto.PostFilDto;
 import fr.diginamic.digilearning.dto.PostForumDto;
 import fr.diginamic.digilearning.entities.FilDiscussion;
@@ -30,6 +31,7 @@ public class ForumController {
     private final AuthenticationService authenticationService;
     private final PostForumValidator postForumValidator;
     private final FilValidator filValidator;
+    private final NavBarService navBarService;
     private final ForumService forumService;
     private final UtilisateurRepository utilisateurRepository;
     private final SujetRepository sujetRepository;
@@ -53,6 +55,7 @@ public class ForumController {
         model.addAttribute("cardInsert", "pages/fragments/forum/presentation.forum");
         model.addAttribute("insert", "pages/forum");
         irrigateBaseTemplate(userInfos, model, response);
+        model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
@@ -63,6 +66,7 @@ public class ForumController {
         irrigateSalonAttribute(userInfos, model, response, idSalon);
         model.addAttribute("cardInsert", "pages/fragments/forum/salon.forum");
         model.addAttribute("insert", "pages/forum");
+        model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
@@ -82,6 +86,7 @@ public class ForumController {
         irrigateFilAttribute(userInfos, model, response, idFil, page);
         model.addAttribute("insert", "pages/forum");
         model.addAttribute("cardInsert", "pages/fragments/forum/fil.forum");
+        model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
@@ -127,6 +132,7 @@ public class ForumController {
         irrigateRegles(model, id);
         model.addAttribute("insert", "pages/forum");
         model.addAttribute("cardInsert", "pages/fragments/forum/fil.forum");
+        model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 

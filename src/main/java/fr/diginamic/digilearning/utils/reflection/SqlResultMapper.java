@@ -30,6 +30,10 @@ public class SqlResultMapper {
                             LocalDateTime.parse(results[i].substring(0, results[i].lastIndexOf(".")), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 } else if (field.getType().equals(Long.class)){
                     field.set(newInstance, Long.parseLong(results[i]));
+                } else if (field.getType().equals(Integer.class)){
+                    field.set(newInstance, Integer.parseInt(results[i]));
+                } else if (field.getType().equals(Boolean.class)) {
+                    field.set(newInstance, Boolean.parseBoolean(results[i]));
                 }
             }
             return newInstance;

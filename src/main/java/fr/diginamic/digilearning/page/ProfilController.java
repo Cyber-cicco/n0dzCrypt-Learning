@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.page;
 
+import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.entities.Session;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -23,6 +24,7 @@ import java.io.IOException;
 public class ProfilController {
 
     private final AuthenticationService authenticationService;
+    private final NavBarService navBarService;
     private final UtilisateurRepository utilisateurRepository;
     private final UtilisateurService utilisateurService;
 
@@ -41,6 +43,7 @@ public class ProfilController {
     private void irrigateBaseAttributes(String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("links", navBarService.getLinks(userInfos));
         model.addAttribute("presentation", utilisateur.getNom().toUpperCase() + " " + utilisateur.getPrenom());
         model.addAttribute("email", utilisateur.getEmail());
         model.addAttribute("telephone", utilisateur.getTelephone());

@@ -12,7 +12,7 @@
     }
     to {
         transform: translateY(-5px);
-        scale: 101%;
+        scale: 102%;
     }
 }
 
@@ -34,7 +34,7 @@
 
 .hoverzoom:hover {
     animation-name: up;
-    animation-duration: 0.75s;
+    animation-duration: 0.5s;
     animation-fill-mode: both;
     animation-timing-function: ease;
 }

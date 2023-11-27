@@ -1,0 +1,75 @@
+#cours-canvas > section >article > h1 {
+    color: #003452;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#cours-canvas > section >article > h2 {
+    color: #003452;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+#cours-canvas > section >article > h1::after {
+    height: 2px;
+    margin-block: 1rem;
+    width: 100%;
+    content: '';
+    background-color: #666565;
+}
+
+#cours-canvas > section >article {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+#cours-canvas > section >article ul {
+    display: flex;
+    flex-direction: column;
+    padding-left: 2rem;
+}
+
+#cours-canvas > section >article ol {
+    display: flex;
+    flex-direction: column;
+    padding-left: 2rem;
+}
+
+#cours-canvas > section >article li {
+    display: flex;
+    align-items: start;
+    padding: 0.5rem;
+}
+
+#cours-canvas > section >article strong {
+    padding-inline: 0.4rem;
+    color: #003452;
+}
+
+#cours-canvas > section >article blockquote {
+    background-color: #f5d26c;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+#cours-canvas > section >article a {
+    color: #0067a3;
+    text-underline: #0067a3;
+    text-decoration: underline;
+}
+#cours-canvas > section >article code {
+    background-color: #dedede;
+    color: #444444;
+    font-family: "JetBrains Mono", serif;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+#cours-canvas > section >article pre {
+    background-color: #dedede;
+    color: #444444;
+    padding: 0.5rem;
+}
