@@ -1,0 +1,26 @@
+<!--/*@thymesVar id="question" type="fr.diginamic.digilearning.entities.Question"*/-->
+<!--/*@thymesVar id="idUtilisateur" type="java.lang.Long"*/-->
+<div
+        class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+        th:fragment="rating(question)"
+>
+    <img src="/img/icons/like.svg"
+         th:style="${question.isLiked(idUtilisateur)} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
+         class="min-w-[30px] min-h-[30px]"
+         th:hx-patch="'/chapitre/question/like?id=' + ${question.getId()}"
+         th:hx-target="'#rating-' + ${question.getId()}"
+         hx-swap="innerHTML"
+    >
+</div>
+<div th:text="${question.getLikes()}"></div>
+<div
+        class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1">
+    <img src="/img/icons/dislike.svg"
+         th:style="${question.isDisliked(idUtilisateur)} ? 'filter: invert(41%) sepia(26%) saturate(3076%) hue-rotate(326deg) brightness(98%) contrast(86%);' : ''"
+         class="min-w-[30px] min-h-[30px]"
+         th:hx-patch="'/chapitre/question/dislike?id=' + ${question.getId()}"
+         th:hx-target="'#rating-' + ${question.getId()}"
+         hx-swap="innerHTML"
+    >
+</div>
+<div th:text="${question.getDislikes()}"></div>

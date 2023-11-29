@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "dl_relation_question")
 public class RelationQuestion {
     @Id

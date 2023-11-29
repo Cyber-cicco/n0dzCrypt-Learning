@@ -142,6 +142,7 @@ public class CoursController {
     private void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Long idSModule, Long idModule, Model model, HttpServletResponse response) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
         Chapitre chapitre = cours.getChapitres().stream().filter(chapitre1 -> chapitre1.getOrdre().equals(idChapitre)).findFirst().orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("idUtilisateur", userInfos.getId());
         model.addAttribute("contenu", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenu()));
         model.addAttribute("chapitre", chapitre);
         model.addAttribute("questions", chapitre.getQuestionsNonSuppr());

@@ -1,5 +1,7 @@
 package fr.diginamic.digilearning.page.service;
 
+import fr.diginamic.digilearning.entities.*;
+import fr.diginamic.digilearning.repository.*;
 import org.commonmark.Extension;
 import org.commonmark.ext.front.matter.YamlFrontMatterExtension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -9,16 +11,8 @@ import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import fr.diginamic.digilearning.dto.CoursDto;
-import fr.diginamic.digilearning.entities.Cours;
-import fr.diginamic.digilearning.entities.FlagCours;
-import fr.diginamic.digilearning.entities.SousModule;
-import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
-import fr.diginamic.digilearning.repository.CoursRepository;
-import fr.diginamic.digilearning.repository.FlagCoursRepository;
-import fr.diginamic.digilearning.repository.SousModuleRepository;
-import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class CoursService {
     private final SousModuleRepository sousModuleRepository;
     private final CoursRepository coursRepository;
     private final UtilisateurRepository utilisateurRepository;
-
+    private final RelationQuestionRepository repository;
     public List<SousModule> findModulesByUtilisateur(String email, Long idModule){
         List<SousModule> sousModules = sousModuleRepository.findModulesByUtilisateur(email, idModule);
         if(sousModules.isEmpty()){
@@ -43,6 +40,35 @@ public class CoursService {
         return sousModules;
     }
 
+    public void likeQuestionPushed(Question question, Long idUtilisateur){
+        getRelationForUtilisateur(question, idUtilisateur, (relationQuestion) -> {
+                    relationQuestion.setLiked(!relationQuestion.getLiked());
+                    relationQuestion.setDisliked(false);
+                    repository.save(relationQuestion);
+                },
+                () -> repository.insertRelationQuestion(false, true, question.getId(), idUtilisateur));
+    }
+
+    public void dislikeQuestionPushed(Question question, Long idUtilisateur){
+        getRelationForUtilisateur(question, idUtilisateur, (relationQuestion) -> {
+                    relationQuestion.setDisliked(!relationQuestion.getDisliked());
+                    relationQuestion.setLiked(false);
+                    repository.save(relationQuestion);
+                },
+                () -> repository.insertRelationQuestion(true, false, question.getId(), idUtilisateur));
+    }
+
+    private void getRelationForUtilisateur(
+            Question question,
+            Long idUtilisateur,
+            Consumer<RelationQuestion> saver,
+            Runnable orElseAction
+    ){
+        question.getRelationQuestions().stream()
+                .filter(relationQuestion -> relationQuestion.getUtilisateur().getId().equals(idUtilisateur))
+                .findFirst()
+                .ifPresentOrElse(saver , orElseAction);
+    }
     public List<CoursDto> getCours(AuthenticationInfos userInfos, Long idSModule) {
         List<String[]> cours = coursRepository.findByUserAndSousModule(userInfos.getId(), idSModule);
         if(cours.isEmpty()){

@@ -3,6 +3,7 @@
 <!--/*@thymesVar id="idSModule" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="idModuleOrigine" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="question" type="fr.diginamic.digilearning.entities.Question"*/-->
+<!--/*@thymesVar id="idUtilisateur" type="java.lang.Long"*/-->
 <section id="chapitre-cours" class="flex flex-col gap-5 bg-grey overflow-hidden shadow-dark h-full w-full lg:w-2/3 p-5 shadow-md rounded-md"
 >
     <header class="flex justify-center p-2 max-h-[150px] min-h-[150px] rounded-md text-white bg-primary items-center gap-3">
@@ -92,9 +93,8 @@
                                 src="/img/icons/simple-arrow-primary.svg"
                         >
                     </div>
-                    <div class="flex gap-2">
-                        <img src="/img/icons/like.svg">
-                        <img src="/img/icons/dislike.svg">
+                    <div th:id="'rating-' + ${question.getId()}" class="flex items-center gap-2">
+                        <th:block th:replace="~{pages/fragments/cours/cours.rating}"></th:block>
                     </div>
                     <div class="wrapper">
                         <div class="sub-menu">
