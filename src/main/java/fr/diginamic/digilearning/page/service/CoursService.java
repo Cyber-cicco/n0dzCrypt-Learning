@@ -46,7 +46,14 @@ public class CoursService {
                     relationQuestion.setDisliked(false);
                     repository.save(relationQuestion);
                 },
-                () -> repository.insertRelationQuestion(false, true, question.getId(), idUtilisateur));
+                () -> question.getRelationQuestions().add(repository.save(RelationQuestion.builder()
+                            .utilisateur(utilisateurRepository.findById(idUtilisateur)
+                                    .orElseThrow(EntityNotFoundException::new))
+                            .question(question)
+                            .disliked(false)
+                            .liked(true)
+                            .build()))
+        );
     }
 
     public void dislikeQuestionPushed(Question question, Long idUtilisateur){
@@ -55,7 +62,14 @@ public class CoursService {
                     relationQuestion.setLiked(false);
                     repository.save(relationQuestion);
                 },
-                () -> repository.insertRelationQuestion(true, false, question.getId(), idUtilisateur));
+                () -> question.getRelationQuestions().add(repository.save(RelationQuestion.builder()
+                        .utilisateur(utilisateurRepository.findById(idUtilisateur)
+                                .orElseThrow(EntityNotFoundException::new))
+                        .question(question)
+                        .disliked(true)
+                        .liked(false)
+                        .build()))
+        );
     }
 
     private void getRelationForUtilisateur(

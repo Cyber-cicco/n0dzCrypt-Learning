@@ -19,7 +19,17 @@ public class RelationQuestion {
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
+
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
+
+    @Override
+    public String toString() {
+        return "RelationQuestion{" +
+                "id=" + id +
+                ", liked=" + liked +
+                ", disliked=" + disliked +
+                '}';
+    }
 }

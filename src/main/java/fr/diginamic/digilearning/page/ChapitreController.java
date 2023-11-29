@@ -26,6 +26,7 @@ public class ChapitreController {
                 .findByIdAndUtilisateurId(idQuestion, userInfos.getId())
                 .orElseThrow(EntityNotFoundException::new);
         coursService.likeQuestionPushed(question, userInfos.getId());
+        System.out.println(question.getRelationQuestions());
         model.addAttribute("question", question);
         model.addAttribute("idUtilisateur", userInfos.getId());
         return "pages/fragments/cours/cours.rating";
