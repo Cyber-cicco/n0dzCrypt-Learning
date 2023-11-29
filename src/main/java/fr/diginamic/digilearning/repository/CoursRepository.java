@@ -21,11 +21,9 @@ join FORMATION F on dmf.id_formation = F.ID
 join SESSION S on F.ID = S.ID_FOR
 join SESSION_STAGIAIRE SS on S.ID = SS.ID_SES
 join UTILISATEUR U on SS.ID_STAG = U.ID
-left outer join dl_flag_cours fc on c.id = fc.cours_id 
+left outer join dl_flag_cours fc on c.id = fc.cours_id and fc.stagiaire_id = ?1
 where U.ID = ?1
 and sm.id = ?2
-and (fc.stagiaire_id = ?1
-or fc.stagiaire_id IS NULL)
 """)
     List<String[]> findByUserAndSousModule(Long idUtilisateur, Long idSModule);
 
