@@ -32,7 +32,7 @@
                     th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
                     th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
                     hx-target="#chapitre-cours"
-                    hx-swap="outerHTML transition:true"
+                    hx-swap="outerHTML"
                     hx-select="#chapitre-cours"
             >Sommaire</a>
         </div>
@@ -63,7 +63,7 @@
                     th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
                     th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
                     hx-target="#chapitre-cours"
-                    hx-swap="outerHTML transition:true"
+                    hx-swap="outerHTML"
                     hx-select="#chapitre-cours"
             >Sommaire</a>
         </div>

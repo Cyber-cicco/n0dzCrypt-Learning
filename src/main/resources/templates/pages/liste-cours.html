@@ -22,7 +22,7 @@
                             th:hx-get="'/cours/sommaire/api?id=' + ${c.getId()} + '&smodule=' + ${smodule.getId()} + '&module=' + ${idModuleOrigine}"
                             th:hx-push-url="'/cours/sommaire?id=' + ${c.getId()} + '&smodule=' + ${smodule.getId()} + '&module=' + ${idModuleOrigine}"
                             hx-target="#liste-cours"
-                            hx-swap="outerHTML transition:true"
+                            hx-swap="outerHTML"
                     ></a>
                     <div class="flex w-[300px] justify-between">
                         <p>Difficulté : </p>

@@ -46,7 +46,7 @@
 .wrapper {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.5s ease-out
+    transition: grid-template-rows 0.5s ease-out;
 }
 
 .hoverzoom:hover {
