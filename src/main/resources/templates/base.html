@@ -21,8 +21,9 @@
 <body class="flex w-full h-full overflow-hidden">
     <th:block th:replace="~{components/navbar}"></th:block>
     <main id="router-outlet" class="w-full bg-secondary">
-        <div th:insert="${insert}" class="w-full h-screen"></div>
+        <div id="insert" th:insert="${insert}" class="w-full h-screen"></div>
     </main>
+    <th:block th:replace="pages/fragments/cours/dialogs/modal.cours"></th:block>
     <script src="/js/animation.post-forum.js"></script>
     <script src="/js/form-checking.js"></script>
     <script src="/js/animation.cours.js"></script>

@@ -1,7 +1,5 @@
 <!--/*@thymesVar id="cours" type="fr.diginamic.digilearning.entities.Cours"*/-->
 <!--/*@thymesVar id="chapitre" type="fr.diginamic.digilearning.entities.Chapitre"*/-->
-<!--/*@thymesVar id="idSModule" type="java.lang.Integer"*/-->
-<!--/*@thymesVar id="idModuleOrigine" type="java.lang.Integer"*/-->
 <!--/*@thymesvar id="question" type="fr.diginamic.digilearning.entities.question"*/-->
 <!--/*@thymesVar id="idUtilisateur" type="java.lang.Long"*/-->
 <section id="chapitre-cours" class="flex flex-col gap-5 bg-grey overflow-hidden shadow-dark h-full w-full lg:w-2/3 p-5 shadow-md rounded-md"
@@ -14,14 +12,10 @@
                     th:text="${cours.getChapitrePrecedent(chapitre.getOrdre()).getLibelle()}"
                     th:hx-get="'/cours/chapitre/api?id='
                             + ${cours.getChapitrePrecedent(chapitre.getOrdre()).getOrdre()}
-                            + '&cours=' + ${cours.getId()}
-                            + '&smodule=' + ${idSModule}
-                            + '&module=' + ${idModuleOrigine}"
+                            + '&cours=' + ${cours.getId()}"
                     th:hx-push-url="'/cours/chapitre?id='
                             + ${cours.getChapitrePrecedent(chapitre.getOrdre()).getOrdre()}
-                            + '&cours=' + ${cours.getId()}
-                            + '&smodule=' + ${idSModule}
-                            + '&module=' + ${idModuleOrigine}"
+                            + '&cours=' + ${cours.getId()}"
                     hx-target="#chapitre-cours"
                     hx-swap="outerHTML transition:true"
                     hx-select="#chapitre-cours"
@@ -30,8 +24,8 @@
         <div class="flex flex-col w-1/6 text-center" th:unless="${cours.getChapitrePrecedent(chapitre.getOrdre())}">
             <a
                     class="underline hover:cursor-pointer"
-                    th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
-                    th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
+                    th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()}"
+                    th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()}"
                     hx-target="#chapitre-cours"
                     hx-swap="outerHTML"
                     hx-select="#chapitre-cours"
@@ -45,14 +39,10 @@
                     th:text="${cours.getChapitreSuivant(chapitre.getOrdre()).getLibelle()}"
                     th:hx-get="'/cours/chapitre/api?id='
                             + ${cours.getChapitreSuivant(chapitre.getOrdre()).getOrdre()}
-                            + '&cours=' + ${cours.getId()}
-                            + '&smodule=' + ${idSModule}
-                            + '&module=' + ${idModuleOrigine}"
+                            + '&cours=' + ${cours.getId()}"
                     th:hx-push-url="'/cours/chapitre?id='
                             + ${cours.getChapitreSuivant(chapitre.getOrdre()).getOrdre()}
-                            + '&cours=' + ${cours.getId()}
-                            + '&smodule=' + ${idSModule}
-                            + '&module=' + ${idModuleOrigine}"
+                            + '&cours=' + ${cours.getId()}"
                     hx-target="#chapitre-cours"
                     hx-swap="outerHTML transition:true"
                     hx-select="#chapitre-cours"
@@ -61,8 +51,8 @@
         <div class="flex flex-col w-1/6 text-center" th:unless="${cours.getChapitreSuivant(chapitre.getOrdre())}">
             <a
                     class="underline hover:cursor-pointer"
-                    th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
-                    th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()} + '&smodule=' + ${idSModule} + '&module=' + ${idModuleOrigine}"
+                    th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()}"
+                    th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()}"
                     hx-target="#chapitre-cours"
                     hx-swap="outerHTML"
                     hx-select="#chapitre-cours"

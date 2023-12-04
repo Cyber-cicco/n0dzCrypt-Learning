@@ -43,4 +43,28 @@ where U.ID = ?1
 and c.id = ?2
 """)
     Optional<Cours> findByUserAndId(Long idUtilisateur, Long idCours);
+
+    @Query(nativeQuery = true, value = """
+
+select c.*
+from dl_cours c
+join dl_flag_cours dfc on c.id = dfc.cours_id
+where dfc.stagiaire_id = ?1
+and dfc.boomarked = true
+""")
+    List<Cours> getBookMarked(Long idUtilisateur);
+    @Query(nativeQuery = true, value = """
+select c.*
+from dl_cours c
+join dl_sous_module dsm on c.sous_module_id = dsm.id
+join dl_module_smodule dms on dsm.id = dms.id_smodule
+join dl_module dm on dms.id_module = dm.id
+join dl_module_formation dmf on dm.id = dmf.id_module
+join FORMATION F on dmf.id_formation = F.ID
+join SESSION S on F.ID = S.ID_FOR
+join SESSION_STAGIAIRE SS on S.ID = SS.ID_SES
+where SS.ID_STAG = ?1
+order by dm.libelle, dsm.titre
+""")
+    List<Cours> getAllCoursForUser(Long idUtilisateur);
 }

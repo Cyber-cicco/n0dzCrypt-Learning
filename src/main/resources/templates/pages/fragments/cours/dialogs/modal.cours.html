@@ -3,8 +3,10 @@
     <div class="flex justify-end w-full">
         <img class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeModal()">
     </div>
-    <section>
-        <div class="text-primary">Mes marques pages</div>
-        <div class="text-primary">Mes cours du jour</div>
+    <section class="flex flex-col gap-2">
+        <div class="text-primary text-xl font-poppins">Mes marques pages</div>
+        <div id="bookmarks" class="flex flex-col gap-2 max-h-[500px] shadow-light overflow-y-scroll">
+        </div>
+        <div class="text-primary text-lg font-poppins">Mes cours du jour</div>
     </section>
 </aside>

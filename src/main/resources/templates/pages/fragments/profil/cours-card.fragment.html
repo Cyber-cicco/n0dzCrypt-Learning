@@ -1,13 +1,68 @@
 <section class="w-full">
     <div class="bg-primary p-3 text-white" th:insert="components/secondary-title :: h2('Mes cours')"></div>
     <div class="flex flex-col gap-5 p-3 w-full">
-        <div class="flex justify-between items-center">
-            <h3 class="w-1/5"> Mon progrès :</h3>
-            <progress class="w-4/5 rounded-md" value="50" max="100" th:value="${progresCours}" ></progress>
+        <div class="w-full flex flex-col gap-2">
+            <div class="flex gap-2">
+                <div 
+                    class="flex flex-col p-2 gap-2 bg-lightAccent rounded-md border-black border-sm border-2"
+                    >
+                    <h2 class="text-lg text-black">
+                        <a
+                            class="hover:cursor-pointer hover:text-primary"
+                            hx-get="/cours/api"
+                            hx-target="#insert"
+                            hx-swap="innerHTML"
+                            hx-push-url="cours"
+                            >
+                            Mes ressources e-learning
+                        </a>
+                    <article class="text-sm text-black">
+                        Retrouvez ici la retranscription des cours sous format PDF, ainsi que des exercices et leurs
+                        corrigés.
+                        Vous pouvez indiquer votre progression dans les cours, demander des clarifications, et même proposer
+                        des ressources supplémentaires !
+                    </article>
+                    </h2>
+                </div>
+                <div 
+                    class="flex flex-col p-2 gap-2 bg-lightAccent rounded-md border-black border-sm border-2"
+                    >
+                    <h2 class="text-lg text-black">
+                        <div
+                            class="text-lg hover:cursor-pointer text-black hover:text-primary"
+                            data-openModal
+                            hx-get="/cours/bookmarked"
+                            hx-swap="innerHTML"
+                            hx-target="#bookmarks"
+                            >
+                            Marques pages et cours du jour
+                        </div>
+                    </h2>
+                    <article class="text-sm text-black">
+                        Retrouvez ici tous les cours que vous avez décidé d'ajouter à vos favoris, ainsi que les cours
+                        que vous avez prévu de faire pour la journée.
+                    </article>
+                </div>
+                <div 
+                    class="flex flex-col p-2 gap-2 bg-lightAccent rounded-md border-black border-sm border-2"
+                    >
+                    <h2 class="text-lg text-primary">
+                        <div
+                            class="text-lg hover:cursor-pointer text-black hover:text-primary"
+                            hx-get="/agenda/api"
+                            hx-target="#insert"
+                            hx-swap="innerHTML"
+                            hx-push-url="agenda"
+                            >
+                            Mon agenda
+                        </div>
+                    </h2>
+                    <article class="text-sm text-black">
+                        Retrouvez ici un calendrier sur lequel vous pouvez organiser votre emploi du temps et l'état de votre
+                        progression.
+                    </article>
+                </div>
+                <script src="/js/animation.modal.js"></script>
+            </div>
         </div>
-        <div class="w-full">
-            <th:block th:replace="~{components/containers/card :: linkCard('/cours', 'Mes ressources e-learning',
-         'Retrouvez ici la retranscription des cours sous format PDF, ainsi que des exercices et leurs corrigés. Vous pouvez indiquer votre progression dans les cours, demander des clarifications, et même proposer des ressources supplémentaires !')}"></th:block>
-        </div>
-    </div>
 </section>

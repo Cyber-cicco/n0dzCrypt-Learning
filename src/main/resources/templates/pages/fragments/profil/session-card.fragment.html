@@ -4,7 +4,7 @@
         <div th:text="${nomSession}"></div>
         <div class="flex gap-2">
             <div class="w-1/3">
-                <th:block th:replace="~{components/containers/card :: linkCard('/forum/apprenants/' + ${nomSession}, 'Forum des apprenants',
+                <th:block th:replace="~{components/containers/card :: linkCard('/forum', 'Forum des apprenants',
          'Discutez, posez vos questions et partagez vos opinions avec vos camarades sur le forum')}"></th:block>
             </div>
             <div class="w-1/3">

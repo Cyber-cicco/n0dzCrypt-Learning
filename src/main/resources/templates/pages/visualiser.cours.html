@@ -16,14 +16,10 @@
                 th:text="${c.getLibelle()}"
                 th:hx-get="'/cours/chapitre/api?id='
                             + ${c.getOrdre()}
-                            + '&cours=' + ${cours.getId()}
-                            + '&smodule=' + ${idSModule}
-                            + '&module=' + ${idModuleOrigine}"
+                            + '&cours=' + ${cours.getId()}"
                 th:hx-push-url="'/cours/chapitre?id='
                             + ${c.getOrdre()}
-                            + '&cours=' + ${cours.getId()}
-                            + '&smodule=' + ${idSModule}
-                            + '&module=' + ${idModuleOrigine}"
+                            + '&cours=' + ${cours.getId()}"
                 hx-target="#chapitre-cours"
                 hx-swap="outerHTML transition:true"
                 hx-select="#chapitre-cours"

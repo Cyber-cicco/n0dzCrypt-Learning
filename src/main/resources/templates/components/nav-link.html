@@ -4,7 +4,7 @@
         th:hx-get="'/' + ${url + '/api'}"
         th:hx-push-url="(url == '') ? '/' : '/' + ${url}"
         hx-swap="innerHTML transition:true"
-        hx-target="#router-outlet"
+        hx-target="#insert"
         hx-boost="true"
 >
     <div class="rounded-full overflow-hidden">
