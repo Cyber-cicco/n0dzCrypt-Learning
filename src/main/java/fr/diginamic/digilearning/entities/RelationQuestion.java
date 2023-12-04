@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @Builder
 @Table(name = "dl_relation_question")
-public class RelationQuestion {
+public class RelationQuestion implements RelationLiked {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

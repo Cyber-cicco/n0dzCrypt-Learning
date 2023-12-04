@@ -1,0 +1,31 @@
+<!--/*@thymesVar id="reponse" type="fr.diginamic.digilearning.entities.Reponse"*/-->
+<!--/*@thymesVar id="idUtilisateur" type="java.lang.Long"*/-->
+<div class="flex" th:id="'rating-reponse-' + ${reponse.getId()}">
+    <div
+            class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+            th:hx-patch="'/chapitre/reponse/like?id=' + ${reponse.getId()}"
+            th:hx-target="'#rating-reponse-' + ${reponse.getId()}"
+            hx-swap="innerHTML"
+    >
+        <img src="/img/icons/like.svg"
+             th:style="${reponse.isLiked(idUtilisateur)} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
+             width="20"
+             height="20"
+             class="min-w-[20px] min-h-[20px]"
+        >
+    </div>
+    <div th:text="${reponse.getLikes()}"></div>
+    <div
+            th:hx-patch="'/chapitre/reponse/dislike?id=' + ${reponse.getId()}"
+            th:hx-target="'#rating-reponse-' + ${reponse.getId()}"
+            hx-swap="innerHTML"
+            class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1">
+        <img src="/img/icons/dislike.svg"
+             th:style="${reponse.isDisliked(idUtilisateur)} ? 'filter: invert(41%) sepia(26%) saturate(3076%) hue-rotate(326deg) brightness(98%) contrast(86%);' : ''"
+             width="20"
+             height="20"
+             class="min-w-[20px] min-h-[20px]"
+        >
+    </div>
+    <div th:text="${reponse.getDislikes()}"></div>
+</div>

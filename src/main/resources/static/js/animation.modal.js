@@ -14,3 +14,12 @@ function closeModal(){
     document.querySelector('#modal').classList.remove("modal");
     document.querySelector('#modal-bg').setAttribute("hidden", "true")
 }
+
+function openModalBot() {
+    document.querySelector('#modal').classList.add("modal-bot");
+    document.querySelector('#modal-bg').removeAttribute("hidden")
+}
+function closeModalBot(){
+    document.querySelector('#modal').classList.remove("modal-bot");
+    document.querySelector('#modal-bg').setAttribute("hidden", "true")
+}

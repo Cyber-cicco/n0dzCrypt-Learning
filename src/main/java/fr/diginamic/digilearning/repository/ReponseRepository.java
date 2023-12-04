@@ -1,16 +1,19 @@
 package fr.diginamic.digilearning.repository;
 
-import fr.diginamic.digilearning.entities.Chapitre;
+import fr.diginamic.digilearning.entities.Question;
+import fr.diginamic.digilearning.entities.Reponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
+public interface ReponseRepository extends JpaRepository<Reponse,Long>{
 
-public interface ChapitreRepository extends JpaRepository<Chapitre, Long>  {
     @Query(nativeQuery = true, value = """
-    select ch.* 
-    from dl_chapitre ch
+    select r.* 
+    from dl_reponse r
+    join dl_question q on r.question_id = q.id
+    join dl_chapitre ch on ch.id = q.chapitre_id
     join dl_cours co on ch.cours_id = co.id
     join dl_sous_module sm on co.sous_module_id = sm.id
     join dl_module_smodule dms on sm.id = dms.id_smodule
@@ -20,8 +23,8 @@ public interface ChapitreRepository extends JpaRepository<Chapitre, Long>  {
     join SESSION S on F.ID = S.ID_FOR
     join SESSION_STAGIAIRE SS on S.ID = SS.ID_SES
     join UTILISATEUR U on SS.ID_STAG = U.ID
-    where ch.id = ?1
+    where r.id = ?1
     and U.ID = ?2
     """)
-    Optional<Chapitre> findByIdAndUtilisateurId(Long idChapitre, Long idUtilisateur);
+    Optional<Reponse> findByIdAndUtilisateurId(Long idReponse, Long idUtilisateur);
 }

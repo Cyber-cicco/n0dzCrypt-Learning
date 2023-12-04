@@ -3,25 +3,32 @@ package fr.diginamic.digilearning.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "dl_reponse")
-public class Reponse implements Rated {
+public class Reponse implements Rated<RelationReponse> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String contenu;
+    @ManyToOne
+    @JoinColumn(name = "auteur_id")
+    private Utilisateur auteur;
     private Boolean supprimee;
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
     @OneToMany(mappedBy = "reponse")
-    private List<RelationReponse> relationReponses;
+    @Builder.Default
+    private List<RelationReponse> relationReponses = new ArrayList<>();
 
     @Override
     public Boolean isLiked(Long idUtilisateur) {
@@ -49,5 +56,10 @@ public class Reponse implements Rated {
     @Override
     public int getDislikes() {
         return relationReponses.stream().filter(RelationReponse::getDisliked).toList().size();
+    }
+
+    @Override
+    public List<RelationReponse> getRelations() {
+        return relationReponses;
     }
 }

@@ -2,7 +2,7 @@
 <!--/*@thymesVar id="chapitre" type="fr.diginamic.digilearning.entities.Chapitre"*/-->
 <!--/*@thymesVar id="idSModule" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="idModuleOrigine" type="java.lang.Integer"*/-->
-<!--/*@thymesVar id="question" type="fr.diginamic.digilearning.entities.Question"*/-->
+<!--/*@thymesvar id="question" type="fr.diginamic.digilearning.entities.question"*/-->
 <!--/*@thymesVar id="idUtilisateur" type="java.lang.Long"*/-->
 <section id="chapitre-cours" class="flex flex-col gap-5 bg-grey overflow-hidden shadow-dark h-full w-full lg:w-2/3 p-5 shadow-md rounded-md"
 >
@@ -69,7 +69,7 @@
             >Sommaire</a>
         </div>
     </header>
-    <div class="flex flex-col overflow-auto">
+    <div class="flex flex-col overflow-y-scroll">
         <!--/*@thymesVar id="contenu" type="java.lang.String"*/-->
         <div class="flex overflow-x-hidden w-full">
             <div class="flex min-w-full flex-col w-full overflow-y-scroll">
@@ -80,38 +80,16 @@
                          th:utext="${chapitre.getLienVideo()}"></div>
                 </div>
             </div>
-            <div id="question-answer" class="flex flex-col gap-2 min-w-full">
-                <div class="flex flex-col gap-2 w-full bg-greyDeep p-3 border-darker rounded-md border-2" id="sujet" th:each="question, iterStat : ${questions}">
-                    <div class="flex justify-between w-full">
-                        <h2 class="text-xl text-primary font-poppins"
-                                          th:text="${question.getContenu()}"></h2>
-                        <img
-                                class="hover:cursor-pointer"
-                                width="24"
-                                data-rotatable
-                                tabindex="1"
-                                src="/img/icons/simple-arrow-primary.svg"
-                        >
-                    </div>
-                    <div th:id="'rating-' + ${question.getId()}" class="flex items-center gap-2">
-                        <th:block th:replace="~{pages/fragments/cours/cours.rating}"></th:block>
-                    </div>
-                    <div class="wrapper">
-                        <div class="sub-menu">
-                            <div class="flex flex-col gap-1">
-                                <div th:each="reponse, iterStat : ${question.getReponses()}">
-                                    <h3 class="bg-grey p-2" th:text="${reponse.getContenu()}"></h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <th:block th:replace="pages/fragments/cours/chapitre.questions"></th:block>
         </div>
         <button
                 onclick="carousel()"
                 class="justify-self-end bg-accent p-2 text-primary disabled:brightness-75 hover:cursor-pointer hover:brightness-150"
         >Afficher / cacher les questions - réponses</button>
     </div>
-    <script src="/js/animations.forum.js"></script>
+    <div id="modal-bg" class="fixed top-0 left-0 w-screen h-screen bg-accent bg-opacity-25 z-40" hidden="true">
+        <section id="modal" class="absolute bottom-0 bg-grey rounded-md p-1 w-full ">
+        </section>
+    </div>
+    <script src="/js/animation.modal.js"></script>
 </section>

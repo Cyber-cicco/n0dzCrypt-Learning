@@ -1,18 +1,16 @@
 package fr.diginamic.digilearning.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "dl_relation_reponse")
-public class RelationReponse {
+public class RelationReponse implements RelationLiked {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

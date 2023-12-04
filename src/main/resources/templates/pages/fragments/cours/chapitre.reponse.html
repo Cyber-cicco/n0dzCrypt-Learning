@@ -1,0 +1,13 @@
+<!--/*@thymesVar id="question" type="fr.diginamic.digilearning.entities.Question"*/-->
+<div th:each="reponse, iterStat : ${question.getReponses()}">
+    <div class="flex items-center gap-1">
+        <div class="flex flex-col grow bg-grey gap-2 p-2">
+
+            <div class="flex justify-between">
+                <p class="text-primary text-sm" th:text="${reponse.getAuteur().getFullName()} + ' : '"></p>
+                <th:block th:replace="~{pages/fragments/cours/cours.reponse.rating}"></th:block>
+            </div>
+            <h3  th:text="${reponse.getContenu()}"></h3>
+        </div>
+    </div>
+</div>

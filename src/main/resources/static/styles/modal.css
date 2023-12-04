@@ -6,8 +6,25 @@
         right: 0;
     }
 }
+
+@keyframes showModalBot {
+    from{
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+
 .modal{
     animation-name: showModal;
+    animation-duration: 0.30s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+}
+
+.modal-bot {
+    animation-name: showModalBot;
     animation-duration: 0.30s;
     animation-fill-mode: forwards;
     animation-timing-function: ease-in-out;

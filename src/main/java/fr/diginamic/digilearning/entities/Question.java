@@ -4,15 +4,18 @@ import fr.diginamic.digilearning.repository.RelationQuestionRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "dl_question")
-public class Question implements Rated {
+public class Question implements Rated<RelationQuestion> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,12 +25,14 @@ public class Question implements Rated {
     private Utilisateur auteur;
     private Boolean supprimee;
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
-    private List<Reponse> reponses;
+    @Builder.Default
+    private List<Reponse> reponses = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "chapitre_id")
     private Chapitre chapitre;
     @OneToMany(mappedBy = "question")
-    private List<RelationQuestion> relationQuestions;
+    @Builder.Default
+    private List<RelationQuestion> relationQuestions = new ArrayList<>();
 
     public List<Reponse> getReponses() {
         return reponses.stream().filter(reponse -> !reponse.getSupprimee()).toList();
@@ -58,5 +63,14 @@ public class Question implements Rated {
     @Override
     public int getDislikes() {
         return relationQuestions.stream().filter(RelationQuestion::getDisliked).toList().size();
+    }
+
+    @Override
+    public List<RelationQuestion> getRelations() {
+        return relationQuestions;
+    }
+
+    public void addReponse(Reponse reponse) {
+        reponses.add(reponse);
     }
 }

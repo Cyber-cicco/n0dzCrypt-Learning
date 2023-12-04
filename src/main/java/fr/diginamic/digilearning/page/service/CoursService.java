@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.page.service;
 
+import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.repository.*;
 import org.commonmark.Extension;
@@ -20,9 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +29,9 @@ public class CoursService {
     private final SousModuleRepository sousModuleRepository;
     private final CoursRepository coursRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final QuestionRepository questionRepository;
+    private final ReponseRepository reponseRepository;
+    private final ChapitreRepository chapitreRepository;
     private final RelationQuestionRepository repository;
     public List<SousModule> findModulesByUtilisateur(String email, Long idModule){
         List<SousModule> sousModules = sousModuleRepository.findModulesByUtilisateur(email, idModule);
@@ -38,50 +39,6 @@ public class CoursService {
             throw new UnauthorizedException();
         }
         return sousModules;
-    }
-
-    public void likeQuestionPushed(Question question, Long idUtilisateur){
-        getRelationForUtilisateur(question, idUtilisateur, (relationQuestion) -> {
-                    relationQuestion.setLiked(!relationQuestion.getLiked());
-                    relationQuestion.setDisliked(false);
-                    repository.save(relationQuestion);
-                },
-                () -> question.getRelationQuestions().add(repository.save(RelationQuestion.builder()
-                            .utilisateur(utilisateurRepository.findById(idUtilisateur)
-                                    .orElseThrow(EntityNotFoundException::new))
-                            .question(question)
-                            .disliked(false)
-                            .liked(true)
-                            .build()))
-        );
-    }
-
-    public void dislikeQuestionPushed(Question question, Long idUtilisateur){
-        getRelationForUtilisateur(question, idUtilisateur, (relationQuestion) -> {
-                    relationQuestion.setDisliked(!relationQuestion.getDisliked());
-                    relationQuestion.setLiked(false);
-                    repository.save(relationQuestion);
-                },
-                () -> question.getRelationQuestions().add(repository.save(RelationQuestion.builder()
-                        .utilisateur(utilisateurRepository.findById(idUtilisateur)
-                                .orElseThrow(EntityNotFoundException::new))
-                        .question(question)
-                        .disliked(true)
-                        .liked(false)
-                        .build()))
-        );
-    }
-
-    private void getRelationForUtilisateur(
-            Question question,
-            Long idUtilisateur,
-            Consumer<RelationQuestion> saver,
-            Runnable orElseAction
-    ){
-        question.getRelationQuestions().stream()
-                .filter(relationQuestion -> relationQuestion.getUtilisateur().getId().equals(idUtilisateur))
-                .findFirst()
-                .ifPresentOrElse(saver , orElseAction);
     }
     public List<CoursDto> getCours(AuthenticationInfos userInfos, Long idSModule) {
         List<String[]> cours = coursRepository.findByUserAndSousModule(userInfos.getId(), idSModule);
@@ -130,5 +87,36 @@ public class CoursService {
                 .build();
         Node document = parser.parse(contenu);
         return renderer.render(document);
+    }
+
+    public Question saveReponse(Long id, Long idQuestion, MessageDto reponseDto) {
+        Question question = questionRepository.findByIdAndUtilisateurId(idQuestion, id)
+                .orElseThrow(EntityNotFoundException::new);
+        Utilisateur utilisateur = utilisateurRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Reponse reponse = Reponse.builder()
+                .auteur(utilisateur)
+                .contenu(reponseDto.getMessage())
+                .supprimee(false)
+                .question(question)
+                .build();
+        question.addReponse(reponse);
+        reponseRepository.save(reponse);
+        return question;
+    }
+
+    public Chapitre saveQuestion(Long id, Long idChapitre, MessageDto questionDto) {
+        Chapitre chapitre = chapitreRepository.findByIdAndUtilisateurId(idChapitre, id)
+                .orElseThrow(EntityNotFoundException::new);
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+        Question question = Question.builder()
+                .auteur(utilisateur)
+                .chapitre(chapitre)
+                .contenu(questionDto.getMessage())
+                .supprimee(false)
+                .build();
+        chapitre.getQuestions().add(question);
+        questionRepository.save(question);
+        return chapitre;
     }
 }
