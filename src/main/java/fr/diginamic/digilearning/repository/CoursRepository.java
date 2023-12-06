@@ -64,7 +64,7 @@ join FORMATION F on dmf.id_formation = F.ID
 join SESSION S on F.ID = S.ID_FOR
 join SESSION_STAGIAIRE SS on S.ID = SS.ID_SES
 where SS.ID_STAG = ?1
-order by dm.libelle, dsm.titre
+order by dm.libelle, dsm.titre, c.ordre
 """)
     List<Cours> getAllCoursForUser(Long idUtilisateur);
 }

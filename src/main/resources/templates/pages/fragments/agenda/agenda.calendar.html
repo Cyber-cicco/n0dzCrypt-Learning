@@ -1,0 +1,43 @@
+<div id="calendar" class="flex flex-col bg-white gap-2 grow h-full w-full">
+    <div class="flex flex-col grow">
+        <div class="flex items-center justify-between">
+            <form class="flex p-2"  onsubmit="return false;">
+                <div class="flex gap-2 w-full items-center">
+                    <label for="semaine">Semaine :</label>
+                    <input 
+                    name="semaine" 
+                    id="semaine"
+                    th:value="${dateValue}"
+                    class="p-2 text-black w-[200px] border-primary border-2 rounded-md"
+                    type="date"
+                    hx-get="/agenda/date"
+                    hx-push-url="true"
+                    hx-select="#calendar"
+                    hx-target="#calendar"
+                    hx-vals="*"
+                    >
+                </div>
+            </form>
+            <div th:text="${cal.month()}"></div>
+        </div>
+    </div>
+    <table class="overflow-y-scroll grow flex-col h-full">
+        <thead class="flex w-full gap-1">
+            <tr class="flex w-full gap-1">
+                <th class="px-5 py-2 w-[100px]  bg-lightAccent"></th>
+                <th 
+                    class="px-5 py-2 w-1/5 bg-lightAccent text-center"
+                    th:each="w, iterStat : ${week}"
+                    th:text="${w.weekDay()}  + ' ' + ${w.dateNumber()}"
+                    >
+                </th>
+            </tr>
+        </thead>
+        <tbody class="flex flex-col py-2 h-[700px] overflow-y-scroll">
+            <tr class="flex h-10" th:each="h, iterStat : ${hours}">
+                <td class="px-5 h-10 py-2 w-[100px]" th:text="${h} + 'h'"></td>
+                <td th:class="(${i} % 2 == 0) ? 'px-5 border-t-grey border-t-4 h-10 py-2 w-1/5 bg-white' : 'px-5 border-t-white border-t-4 h-10 py-2 w-1/5 bg-grey'"  th:each="i: ${#numbers.sequence(1, week.size())}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
