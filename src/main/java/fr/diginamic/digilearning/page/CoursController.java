@@ -1,13 +1,12 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
-import fr.diginamic.digilearning.entities.Chapitre;
-import fr.diginamic.digilearning.entities.Cours;
+import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.Module;
-import fr.diginamic.digilearning.entities.SousModule;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.page.service.CoursService;
 import fr.diginamic.digilearning.repository.CoursRepository;
+import fr.diginamic.digilearning.repository.FlagCoursRepository;
 import fr.diginamic.digilearning.repository.ModuleRepository;
 import fr.diginamic.digilearning.repository.SousModuleRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
@@ -31,6 +30,7 @@ public class CoursController {
     private final CoursService coursService;
     private final CoursRepository coursRepository;
     private final SousModuleRepository sousModuleRepository;
+    private final FlagCoursRepository flagCoursRepository;
 
     @GetMapping("/api")
     public String getCoursApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
@@ -120,7 +120,15 @@ public class CoursController {
     }
 
     private void irrigateSommaire(AuthenticationInfos userInfos, Long idCours, Model model, HttpServletResponse response) {
-        model.addAttribute("cours", coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new));
+        Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
+        FlagCours flagCours = flagCoursRepository.findByCoursAndStagiaire_Id(cours, userInfos.getId())
+                .orElseGet(() -> FlagCours.builder()
+                        .liked(false)
+                        .boomarked(false)
+                        .finished(false)
+                        .build());
+        model.addAttribute("cours", cours);
+        model.addAttribute("flags", flagCours);
         model.addAttribute("slide", "pages/sommaire.cours.main");
     }
 
@@ -142,12 +150,19 @@ public class CoursController {
 
     private void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Model model, HttpServletResponse response) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
+        FlagCours flagCours = flagCoursRepository.findByCoursAndStagiaire_Id(cours, userInfos.getId())
+                .orElseGet(() -> FlagCours.builder()
+                        .liked(false)
+                        .boomarked(false)
+                        .finished(false)
+                        .build());
         Chapitre chapitre = cours.getChapitres().stream().filter(chapitre1 -> chapitre1.getOrdre().equals(idChapitre)).findFirst().orElseThrow(EntityNotFoundException::new);
         model.addAttribute("idUtilisateur", userInfos.getId());
         model.addAttribute("contenu", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenu()));
         model.addAttribute("chapitre", chapitre);
         model.addAttribute("questions", chapitre.getQuestionsNonSuppr());
         model.addAttribute("cours", cours);
+        model.addAttribute("flags", flagCours);
         model.addAttribute("idCours", idCours);
         model.addAttribute("slide", "pages/chapitre.main.cours");
     }

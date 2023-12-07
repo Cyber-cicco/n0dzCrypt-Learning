@@ -27,6 +27,11 @@ public class NavBarService {
                                             .libelle("Mes cours")
                                             .build(),
                                     NavLink.builder()
+                                            .iconSource("calendar.svg")
+                                            .url("agenda")
+                                            .libelle("Mon agenda")
+                                            .build(),
+                                    NavLink.builder()
                                             .iconSource("conversation.svg")
                                             .url("conversation/stagiaire")
                                             .libelle("Mon suivi")

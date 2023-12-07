@@ -1,5 +1,9 @@
+/*Variable contenant les éléments pouvant se drag and drop*/
 let drake = undefined;
+
+/*Permet d'initialiser les éléments pouvant se drag and drop*/
 function reInit() {
+
     setTimeout(() => {
         if(drake) drake.destroy();
         const newDragabble1 = Array.prototype.slice.call(document.querySelectorAll("[data-draggable1]"))
@@ -8,8 +12,12 @@ function reInit() {
         drakeListen(drake);
     }, 100)
 }
+
+/*Définie les appels AJAX effectués par HTMX lors du drop*/
 function drakeListen(drake) {
+
         drake.on("drop", (el, target, source, sibling) => {
+
             if(target.getAttribute("data-draggable2")) {
                 const date = target.getAttribute("data-draggable2");
                 const id = el.getAttribute("id");
@@ -18,8 +26,7 @@ function drakeListen(drake) {
                     return;
                 });
             }
-            console.log(target.getAttribute("data-draggable1"))
-            console.log(el.getAttribute("data-dragged"))
+
             if(target.getAttribute("data-draggable1") && el.getAttribute("data-dragged")) {
                 const date = el.getAttribute("data-dragged");
                 const id = el.getAttribute("id");
