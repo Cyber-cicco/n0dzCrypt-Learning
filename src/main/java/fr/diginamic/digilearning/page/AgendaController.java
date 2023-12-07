@@ -88,6 +88,6 @@ public class AgendaController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         agendaService.putCoursInDate(userInfos, temps, coursId);
         irrigateBaseModel(userInfos, model, temps.toLocalDate());
-        return "pages/fragments/agenda/agenda.calendar";
+        return "pages/agenda";
     }
 }

@@ -67,12 +67,42 @@
                     <section 
                         th:id="${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getId()}"
                         th:if="${hourMap.containsKey(dateUtil.getLdt(w.dateJour(), h.time()))}"
-                        th:class="'relative hover:cursor-move flex flex-col bg-lightPrimary text-white shadow-dark w-full overflow-y-visible shadow-md rounded-md h-[' + ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getDureeEstimee()} + '00%]'"
+                        th:class="'relative hover:cursor-move flex bg-lightPrimary text-white shadow-dark w-full overflow-y-visible shadow-md rounded-md h-[' + ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getDureeEstimee()} + '00%]'"
                         >
-                        <div class="p-2" th:text="${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getTitre()}"></div>
+                        <a 
+                            class="p-2 hover:cursor-pointer grow overflow-hidden"
+                            th:with="c=${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time()))}"
+                            th:text="${c.getTitre()}"
+                            th:hx-get="'/cours/sommaire/api?id=' + ${c.getId()}"
+                            th:hx-push-url="'/cours/sommaire?id=' + ${c.getId()}"
+                            hx-target="#insert"
+                            hx-swap="innerHTML"
+                            ></a><span class="flex">
+                        <img
+                            th:with="c=${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time()))}"
+                            class="min-w-[30px] self-start m-1 min-h-[30px]"
+                            th:id="'finished-' + ${c.getId()}"
+                            width="30"
+                            src="/img/icons/check.svg"
+                            th:style="${c.getFinished()} ? 
+                                'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : '' "
+                        >
+                        <svg 
+                            th:with="c=${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time()))}"
+                            class="min-w-[24px] self-start m-1 min-h-[24px]"
+                            th:id="'finished-' + ${c.getId()}"
+                            fill="#003452"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24" viewBox="0 -960 960 960"
+                            width="24"
+                            ><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                        </span>
                 </section>
                 </td>
             </tr>
         </tbody>
     </table>
+    <script>
+        reInit();
+    </script>
 </div>
