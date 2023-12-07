@@ -1,8 +1,13 @@
-<section class="flex p-2 bg-white h-full">
-    <div class="flex flex-col w-1/4 h-full overflow-y-scroll">
-        <div th:each="c, iterStat : ${cours}">
-            <div th:text="${c.getTitre()}"></div>
+<section class="flex p-2 bg-white h-full gap-1">
+    <div class="flex flex-col bg-primary text-white rounded-md w-1/5 h-full shadow-dark shadow-md ">
+        <h1 class="text-2xl font-poppins text-center py-2">Mon agenda</h1>
+        <div data-draggable1 class="flex overflow-y-scroll flex-col px-1 gap-1">
+            <div th:id="${c.getId()}" class="relative text-white bg-lightPrimary w-full rounded-md z-50 hover:cursor-move hover:brightness-150 drag-peasant" th:each="c, iterStat : ${cours}">
+                <div class="p-2" th:text="${c.getTitre()}"></div>
+            </div>
         </div>
     </div>
     <th:block th:replace="pages/fragments/agenda/agenda.calendar"></th:block>
+    <script src="/js/dragula.js"></script>
+    <script src="/js/calendar.js"></script>
 </section>

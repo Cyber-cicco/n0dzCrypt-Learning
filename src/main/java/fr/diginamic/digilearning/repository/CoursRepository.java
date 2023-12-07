@@ -11,7 +11,7 @@ public interface CoursRepository extends JpaRepository<Cours, Long>  {
 
     @Query(nativeQuery = true, value = """
 
-select c.id, c.titre, c.difficulte, c.ordre, fc.boomarked, fc.finished, fc.liked
+select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, fc.boomarked, fc.finished, fc.liked, fc.datePrevue
 from dl_cours c
 join dl_sous_module sm on c.sous_module_id = sm.id
 join dl_module_smodule dms on sm.id = dms.id_smodule
@@ -67,4 +67,13 @@ where SS.ID_STAG = ?1
 order by dm.libelle, dsm.titre, c.ordre
 """)
     List<Cours> getAllCoursForUser(Long idUtilisateur);
+
+    @Query(nativeQuery = true, value = """
+select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, fc.boomarked, fc.finished, fc.liked, fc.datePrevue
+from dl_cours c
+join dl_flag_cours fc on c.id = fc.cours_id
+where fc.stagiaire_id = ?1
+and fc.datePrevue IS NOT NULL
+""")
+    List<String[]> getCoursPrevus(Long idUtilisateur);
 }

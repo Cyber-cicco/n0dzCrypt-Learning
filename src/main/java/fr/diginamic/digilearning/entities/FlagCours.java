@@ -3,6 +3,8 @@ package fr.diginamic.digilearning.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,6 +19,7 @@ public class FlagCours {
     private Boolean liked;
     private Boolean boomarked;
     private Boolean finished;
+    private LocalDateTime datePrevue;
     @ManyToOne
     @JoinColumn(name = "stagiaire_id")
     private Utilisateur stagiaire;

@@ -1,11 +1,25 @@
 package fr.diginamic.digilearning.page.service;
 
 import fr.diginamic.digilearning.dto.CalendarInfos;
+import fr.diginamic.digilearning.dto.CoursDto;
 import fr.diginamic.digilearning.dto.DayInfos;
+import fr.diginamic.digilearning.dto.HourInfos;
+import fr.diginamic.digilearning.entities.Cours;
+import fr.diginamic.digilearning.entities.FlagCours;
+import fr.diginamic.digilearning.entities.Utilisateur;
+import fr.diginamic.digilearning.exception.EntityNotFoundException;
+import fr.diginamic.digilearning.exception.UnauthorizedException;
 import fr.diginamic.digilearning.page.service.enums.DateOption;
+import fr.diginamic.digilearning.repository.CoursRepository;
+import fr.diginamic.digilearning.repository.FlagCoursRepository;
+import fr.diginamic.digilearning.repository.UtilisateurRepository;
+import fr.diginamic.digilearning.security.AuthenticationInfos;
+import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -13,8 +27,15 @@ public class AgendaService {
 
     private final Map<String, String> englishWeekDayToFr = new HashMap<>();
     private final Map<String, String> englishMonthToFr = new HashMap<>();
+    private final CoursRepository coursRepository;
+    private final UtilisateurRepository utilisateurRepository;
+    private final FlagCoursRepository flagCoursRepository;
 
-    public AgendaService() {
+    public AgendaService(
+            CoursRepository coursRepository,
+            UtilisateurRepository utilisateurRepository,
+            FlagCoursRepository flagCoursRepository
+    ) {
         englishWeekDayToFr.put("MONDAY", "Lundi");
         englishWeekDayToFr.put("TUESDAY", "Mardi");
         englishWeekDayToFr.put("WEDNESDAY", "Mercredi");
@@ -35,12 +56,20 @@ public class AgendaService {
         englishMonthToFr.put("OCTOBER", "Octobre");
         englishMonthToFr.put("NOVEMBER", "Novembre");
         englishMonthToFr.put("DECEMBER", "Décembre");
+        this.coursRepository = coursRepository;
+        this.utilisateurRepository = utilisateurRepository;
+        this.flagCoursRepository = flagCoursRepository;
     }
 
-    public List<String> getHeuresJournee() {
-        List<String> heures = new ArrayList<>(24);
-        for (int i = 0; i < 24; i++) {
-            heures.add(String.valueOf((i < 10) ? "0" + i : i));
+    public List<HourInfos> getHeuresJournee() {
+        List<HourInfos> heures = new ArrayList<>(24);
+        for (int i = 8; i < 24; i++) {
+            heures.add(
+                    new HourInfos(
+                            String.valueOf((i < 10) ? "0" + i : i),
+                            LocalTime.of(i, 0)
+                    )
+            );
         }
         return heures;
     }
@@ -57,11 +86,52 @@ public class AgendaService {
         date = date.minusDays(date.getDayOfWeek().getValue() - 1);
         while (date.getDayOfWeek().getValue() != 6){
             dayInfos.add(new DayInfos(
+                    date,
                     date.getDayOfMonth(),
                     englishWeekDayToFr.get(date.getDayOfWeek().toString())
             ));
             date = date.plusDays(1);
         }
         return dayInfos;
+    }
+
+    public List<CoursDto> getCoursPrevus(Long id) {
+        List<String[]> cours = coursRepository.getCoursPrevus(id);
+        return cours.stream().map(c -> SqlResultMapper.mapToObject(CoursDto.class, c)).toList();
+    }
+
+    public Map<LocalDateTime, CoursDto> getHourMap(List<CoursDto> coursPrevus) {
+        Map<LocalDateTime, CoursDto> mapDateToCours = new HashMap<>();
+        coursPrevus.forEach(coursDto -> mapDateToCours.put(coursDto.getDatePrevue(), coursDto));
+        return mapDateToCours;
+    }
+
+    public void putCoursInDate(AuthenticationInfos userInfos, LocalDateTime datePrevue, Long coursId) {
+        Utilisateur utilisateur = utilisateurRepository.findById(userInfos.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        Cours cours = coursRepository.findByUserAndId(utilisateur.getId(), coursId)
+                .orElseThrow(UnauthorizedException::new);
+        FlagCours flagCours = flagCoursRepository.findByCoursAndStagiaire(cours, utilisateur).orElseGet(() -> FlagCours.builder()
+                .finished(false)
+                .boomarked(false)
+                .stagiaire(utilisateur)
+                .cours(cours)
+                .liked(false)
+                .datePrevue(datePrevue)
+                .build());
+        flagCours.setDatePrevue(datePrevue);
+        List<FlagCours> coursPrevusCeJour = flagCoursRepository
+                .findByDatePrevueBetween(
+                        LocalDateTime.of(datePrevue.getYear(), datePrevue.getMonth(), datePrevue.getDayOfMonth(), 0, 0, 0),
+                        LocalDateTime.of(datePrevue.getYear(), datePrevue.getMonth(), datePrevue.getDayOfMonth(), 23, 0, 0));
+        for (FlagCours flagCours1 : coursPrevusCeJour) {
+            if(
+                    (datePrevue.isEqual(flagCours1.getDatePrevue())
+                            || (datePrevue.isBefore(flagCours1.getDatePrevue()) && datePrevue.plusHours(cours.getDureeEstimee()).isAfter(flagCours1.getDatePrevue()))
+                            || (datePrevue.isAfter(flagCours1.getDatePrevue()) && flagCours1.getDatePrevue().plusHours(flagCours1.getCours().getDureeEstimee()).isAfter(datePrevue)))
+                            && !flagCours1.getId().equals(flagCours.getId())
+            ) return;
+        }
+        flagCoursRepository.save(flagCours);
     }
 }

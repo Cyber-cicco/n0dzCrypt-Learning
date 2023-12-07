@@ -876,10 +876,6 @@ video {
   height: 0.125rem;
 }
 
-.h-10 {
-  height: 2.5rem;
-}
-
 .h-12 {
   height: 3rem;
 }
@@ -896,6 +892,10 @@ video {
   height: 100vh;
 }
 
+.h-\[150px\] {
+  height: 150px;
+}
+
 .h-\[200px\] {
   height: 200px;
 }
@@ -908,12 +908,20 @@ video {
   height: 460px;
 }
 
+.h-\[50px\] {
+  height: 50px;
+}
+
 .h-\[65vh\] {
   height: 65vh;
 }
 
 .h-\[75vh\] {
   height: 75vh;
+}
+
+.h-\[85vh\] {
+  height: 85vh;
 }
 
 .h-fit {
@@ -929,32 +937,12 @@ video {
   height: 100vh;
 }
 
-.h-\[80\%\] {
-  height: 80%;
+.h-\[250px\] {
+  height: 250px;
 }
 
-.h-\[800px\] {
-  height: 800px;
-}
-
-.h-4\/5 {
-  height: 80%;
-}
-
-.h-3\/5 {
-  height: 60%;
-}
-
-.h-3\/4 {
-  height: 75%;
-}
-
-.h-\[700px\] {
-  height: 700px;
-}
-
-.h-1\/5 {
-  height: 20%;
+.h-\[75px\] {
+  height: 75px;
 }
 
 .max-h-\[150px\] {
@@ -1033,6 +1021,10 @@ video {
   width: 100px;
 }
 
+.w-\[200px\] {
+  width: 200px;
+}
+
 .w-\[300px\] {
   width: 300px;
 }
@@ -1054,10 +1046,6 @@ video {
   width: 100vw;
 }
 
-.w-\[200px\] {
-  width: 200px;
-}
-
 .min-w-\[20px\] {
   min-width: 20px;
 }
@@ -1076,6 +1064,10 @@ video {
 
 .max-w-md {
   max-width: 28rem;
+}
+
+.max-w-full {
+  max-width: 100%;
 }
 
 .flex-shrink {
@@ -1116,6 +1108,16 @@ video {
 
 .border-separate {
   border-collapse: separate;
+}
+
+.-rotate-90 {
+  --tw-rotate: -90deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.rotate-90 {
+  --tw-rotate: 90deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .\!transform {
@@ -2049,10 +2051,6 @@ video {
   border-top-width: 1px;
 }
 
-.border-t-2 {
-  border-top-width: 2px;
-}
-
 .border-t-4 {
   border-top-width: 4px;
 }
@@ -2313,6 +2311,16 @@ video {
   padding: 1.25rem;
 }
 
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
 .px-5 {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
@@ -2321,6 +2329,11 @@ video {
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .py-2 {
@@ -2933,6 +2946,10 @@ video {
       max-width: 1536px;
     }
   }
+}
+
+.hover\:cursor-move:hover {
+  cursor: move;
 }
 
 .hover\:cursor-pointer:hover {

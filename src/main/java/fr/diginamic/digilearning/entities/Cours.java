@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,6 +25,7 @@ public class Cours {
     private String description;
     private Integer difficulte;
     private Integer ordre;
+    private Integer dureeEstimee;
     @ManyToMany
     @JoinTable(name = "dl_utilisateur_cours",
             joinColumns = @JoinColumn(name = "id_cours", referencedColumnName = "id"),

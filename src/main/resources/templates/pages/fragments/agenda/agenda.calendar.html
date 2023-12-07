@@ -1,27 +1,50 @@
-<div id="calendar" class="flex flex-col bg-white gap-2 grow h-full w-full">
-    <div class="flex flex-col grow">
+<div id="calendar" class="flex flex-col bg-white gap-2 h-full w-full">
+    <div class="flex flex-col h-full justify-center">
         <div class="flex items-center justify-between">
-            <form class="flex p-2"  onsubmit="return false;">
-                <div class="flex gap-2 w-full items-center">
-                    <label for="semaine">Semaine :</label>
-                    <input 
-                    name="semaine" 
-                    id="semaine"
-                    th:value="${dateValue}"
-                    class="p-2 text-black w-[200px] border-primary border-2 rounded-md"
-                    type="date"
-                    hx-get="/agenda/date"
-                    hx-push-url="true"
-                    hx-select="#calendar"
-                    hx-target="#calendar"
-                    hx-vals="*"
+            <div class="flex gap-1">
+                <form class="flex p-2"  onsubmit="return false;">
+                    <div class="flex gap-2 w-full items-center">
+                        <label for="semaine">Semaine :</label>
+                        <input 
+                        name="semaine" 
+                        id="semaine"
+                        th:value="${dateValue}"
+                        class="p-2 text-black w-[200px] border-primary border-2 rounded-md"
+                        type="date"
+                        hx-on::after-request="reInit()"
+                        hx-get="/agenda/date"
+                        hx-push-url="true"
+                        hx-select="#calendar"
+                        hx-target="#calendar"
+                        hx-vals="*"
+                        >
+                    </div>
+                </form>
+                <div class="flex items-center py-2">
+                    <img
+                        src="/img/icons/simple-arrow-primary.svg"
+                        class="rotate-90 hover:cursor-pointer px-3 py-1 rounded-md hover:bg-lightAccent"
+                        th:hx-get="'/agenda/date?semaine=' + ${prev}"
+                        hx-push-url="true"
+                        hx-on::before-request="reInit()"
+                        hx-select="#calendar"
+                        hx-target="#calendar"
+                    >
+                    <img
+                        src="/img/icons/simple-arrow-primary.svg"
+                        class="-rotate-90 hover:cursor-pointer px-3 py-1 rounded-md hover:bg-lightAccent"
+                        th:hx-get="'/agenda/date?semaine=' + ${next}"
+                        hx-on::before-request="reInit()"
+                        hx-push-url="true"
+                        hx-select="#calendar"
+                        hx-target="#calendar"
                     >
                 </div>
-            </form>
+            </div>
             <div th:text="${cal.month()}"></div>
         </div>
     </div>
-    <table class="overflow-y-scroll grow flex-col h-full">
+    <table class="flex-col grow">
         <thead class="flex w-full gap-1">
             <tr class="flex w-full gap-1">
                 <th class="px-5 py-2 w-[100px]  bg-lightAccent"></th>
@@ -33,10 +56,22 @@
                 </th>
             </tr>
         </thead>
-        <tbody class="flex flex-col py-2 h-[700px] overflow-y-scroll">
-            <tr class="flex h-10" th:each="h, iterStat : ${hours}">
-                <td class="px-5 h-10 py-2 w-[100px]" th:text="${h} + 'h'"></td>
-                <td th:class="(${i} % 2 == 0) ? 'px-5 border-t-grey border-t-4 h-10 py-2 w-1/5 bg-white' : 'px-5 border-t-white border-t-4 h-10 py-2 w-1/5 bg-grey'"  th:each="i: ${#numbers.sequence(1, week.size())}"></td>
+        <tbody class="flex flex-col py-2 h-[85vh] overflow-y-scroll">
+            <tr class="flex h-[75px]" th:each="h, hiterStat : ${hours}">
+                <td class="px-5 h-[50px] py-2 w-[100px]" th:text="${h.hour()} + 'h'"></td>
+                <td 
+                    th:id="${dateUtil.getId(w.dateJour(), h.time()).toString()}"
+                    th:class="(${iterStat.index} % 2 == 1) ? 'px-5 border-t-grey border-t-4 h-[50px] max-w-1/5 w-1/5 bg-white' : 'px-5 max-w-1/5 border-t-white border-t-4 h-[50px] w-1/5 bg-grey'"
+                    th:data-draggable2="${dateUtil.getLdt(w.dateJour(), h.time()).toString()}"
+                    th:each="w, iterStat: ${week}" >
+                    <section 
+                        th:id="${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getId()}"
+                        th:if="${hourMap.containsKey(dateUtil.getLdt(w.dateJour(), h.time()))}"
+                        th:class="'relative hover:cursor-move flex flex-col bg-lightPrimary text-white shadow-dark w-full overflow-y-visible shadow-md rounded-md h-[' + ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getDureeEstimee()} + '00%]'"
+                        >
+                        <div class="p-2" th:text="${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getTitre()}"></div>
+                </section>
+                </td>
             </tr>
         </tbody>
     </table>

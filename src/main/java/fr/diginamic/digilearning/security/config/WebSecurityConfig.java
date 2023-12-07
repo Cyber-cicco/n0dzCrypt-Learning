@@ -37,6 +37,7 @@ public class WebSecurityConfig {
                         .requestMatchers(mvc.pattern("login" )).permitAll()
                         .requestMatchers(mvc.pattern("/" )).permitAll()
                         .requestMatchers(mvc.pattern("img/**")).permitAll()
+                        .requestMatchers(mvc.pattern("js/**")).permitAll()
                         .requestMatchers(mvc.pattern("styles/**")).permitAll()
                         .anyRequest().authenticated()
                 )

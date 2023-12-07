@@ -15,7 +15,9 @@
     <link rel="stylesheet" th:href="@{/styles/output.css}">
     <link rel="stylesheet" th:href="@{/styles/animations.css}">
     <link rel="stylesheet" th:href="@{/styles/modal.css}">
+    <link rel="stylesheet" th:href="@{/styles/dragula.css}">
     <link rel="stylesheet" th:href="@{/styles/cours.css}">
+    <link rel="stylesheet" th:href="@{/styles/addons.css}">
     <title>Digi-Learning</title>
 </head>
 <body class="flex w-full h-full overflow-hidden">
@@ -26,6 +28,6 @@
     <th:block th:replace="pages/fragments/cours/dialogs/modal.cours"></th:block>
     <script src="/js/animation.post-forum.js"></script>
     <script src="/js/form-checking.js"></script>
-    <script src="/js/animation.cours.js"></script>
+    <script src="/js/animation.cours.js" type="module"></script>
 </body>
 </html>
