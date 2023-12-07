@@ -11,5 +11,5 @@ import java.util.Optional;
 
 public interface FlagCoursRepository extends JpaRepository<FlagCours,Long>{
     Optional<FlagCours> findByCoursAndStagiaire(Cours cours, Utilisateur stagiaire);
-    List<FlagCours> findByDatePrevueBetween(LocalDateTime ldt1, LocalDateTime ldt2);
+    List<FlagCours> findByDatePrevueBetweenAndStagiaire_Id(LocalDateTime ldt1, LocalDateTime ldt2, Long id);
 }

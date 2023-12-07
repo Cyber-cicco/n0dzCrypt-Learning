@@ -90,4 +90,17 @@ public class AgendaController {
         irrigateBaseModel(userInfos, model, temps.toLocalDate());
         return "pages/agenda";
     }
+
+    @DeleteMapping("/cours")
+    public String removeCoursFromAgenda(
+            @CookieValue("AUTH-TOKEN") String token,
+            Model model,
+            @RequestParam("date") LocalDateTime temps,
+            @RequestParam("id") Long coursId
+    ) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+        agendaService.removeCoursFromAgenda(userInfos, coursId);
+        irrigateBaseModel(userInfos, model, temps.toLocalDate());
+        return "pages/agenda";
+    }
 }

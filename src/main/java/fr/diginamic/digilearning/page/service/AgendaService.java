@@ -121,9 +121,10 @@ public class AgendaService {
                 .build());
         flagCours.setDatePrevue(datePrevue);
         List<FlagCours> coursPrevusCeJour = flagCoursRepository
-                .findByDatePrevueBetween(
+                .findByDatePrevueBetweenAndStagiaire_Id(
                         LocalDateTime.of(datePrevue.getYear(), datePrevue.getMonth(), datePrevue.getDayOfMonth(), 0, 0, 0),
-                        LocalDateTime.of(datePrevue.getYear(), datePrevue.getMonth(), datePrevue.getDayOfMonth(), 23, 0, 0));
+                        LocalDateTime.of(datePrevue.getYear(), datePrevue.getMonth(), datePrevue.getDayOfMonth(), 23, 0, 0),
+                        utilisateur.getId());
         for (FlagCours flagCours1 : coursPrevusCeJour) {
             if(
                     (datePrevue.isEqual(flagCours1.getDatePrevue())
@@ -132,6 +133,16 @@ public class AgendaService {
                             && !flagCours1.getId().equals(flagCours.getId())
             ) return;
         }
+        flagCoursRepository.save(flagCours);
+    }
+
+    public void removeCoursFromAgenda(AuthenticationInfos userInfos, Long coursId) {
+        Utilisateur utilisateur = utilisateurRepository.findById(userInfos.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        Cours cours = coursRepository.findByUserAndId(utilisateur.getId(), coursId)
+                .orElseThrow(UnauthorizedException::new);
+        FlagCours flagCours = flagCoursRepository.findByCoursAndStagiaire(cours, utilisateur).orElseThrow(UnauthorizedException::new);
+        flagCours.setDatePrevue(null);
         flagCoursRepository.save(flagCours);
     }
 }
