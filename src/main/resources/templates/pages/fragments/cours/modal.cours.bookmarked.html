@@ -14,13 +14,12 @@
                 <div
                     class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
                     th:hx-patch="'/cours/bookmark?id=' + ${cours.getId()}"
-                    th:hx-target="'#bookmarked-modal-' + ${cours.getId()}"
-                    th:hx-select-oob="'#bookmarked-' + ${cours.getId()}"
+                    th:hx-target="'#bookmarked-' + ${cours.getId()}"
                     hx-swap="outerHTML"
                     >
                     <img
                     class="min-w-[30px] min-h-[30px]"
-                    th:id="'bookmarked-modal-' + ${cours.getId()}"
+                    th:id="'bookmarked-' + ${cours.getId()}"
                     width="30"
                     src="/img/icons/bookmark.svg"
                     style="filter: invert(73%) sepia(83%) saturate(1960%) hue-rotate(3deg) brightness(99%) contrast(108%);"

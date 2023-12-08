@@ -58,7 +58,7 @@
             >
             <div class="text-xl text-primary font-poppins">Consulter mon agenda</div>
             <img width="462" height="240" src="/img/home/calendar.png">
-            <div class="w-[462px]">
+            <div class="">
                 <article class="text-primary italic text-justify ">L'agenda est là pour vous permettre de gérer vos cours et vous assurer de garder le tout au long de votre formation !
                     Glissez-déposez vos cours à a date souhaitée pour organiser votre emploi du temps et vous assurer d'avoir toujours un coup d'avance !
                 </article>
@@ -73,7 +73,7 @@
             >
             <div class="text-xl text-center text-primary font-poppins">Prendre contact avec un(e) responsable de ma session</div>
             <img height="240" class="h-[240px]" src="/img/home/ricardo.webp">
-            <div class="w-[462px]">
+            <div class="">
                 <article class="text-primary italic text-justify ">Si vous avez la moindre question concernant la formation, cette section vous permet de prendre contact directement avec l'un des reponsables de votre session. Vous pouvez ainsi poser des questions sur le parcours à votre reponsable de formation, faire des retours au Room Master, ou poser des questions au responsable administratif.
                 </article>
             </div>
@@ -87,7 +87,7 @@
             >
             <div class="text-xl text-primary font-poppins">Participer au forum</div>
             <img class="h-[240px]" height="240" src="/img/home/forum.jpg">
-            <div class="w-[462px]">
+            <div class="">
                 <article class="text-primary italic text-justify ">
                     Si vous souhaitez échanger avec vos camarades sur divers sujets, le forum est là pour vous !
                     Que ce soit pour de la veille technologique, des échanges sur les cours, ou tout simplement
@@ -96,4 +96,38 @@
             </div>
         </section>
     </div>
-</div>
+    <div class="flex p-2 gap-2 w-full">
+        <section th:if="${bookmarked.size()} > 0" class="w-full bg-grey p-5 text-lg rounded-md shadow-dark shadow-md flex flex-col items-center">
+            <div class="text-lightPrimary text-2xl p-5 font-poppins"> Mes favoris : </div>
+            <div class="flex flex-col gap-2 w-full px-3">
+                <div class="flex justify-between text-primary w-full rounded-md p-2 bg-white" th:each="cours, iterStat : ${bookmarked}" >
+                    <div class="p-2 bg-white items-center w-full rounded-md flex justify-between">
+                        <a
+                            class="hover:cursor-pointer hover:underline"
+                            th:text="${cours.getSousModule().getTitre()} + ' : ' + ${cours.getTitre()}"
+                            th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()}"
+                            th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()}"
+                            hx-target="#insert"
+                            hx-swap="innerHTML"
+                            hx-on::after-request="closeModal()"
+                            >
+                        </a>
+                            <div
+                                class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                                th:hx-patch="'/cours/bookmark?id=' + ${cours.getId()}"
+                                th:hx-target="'#bookmarked-' + ${cours.getId()}"
+                                hx-swap="outerHTML"
+                                >
+                                <img
+                                class="min-w-[30px] min-h-[30px]"
+                                th:id="'bookmarked-' + ${cours.getId()}"
+                                width="30"
+                                src="/img/icons/bookmark.svg"
+                                style="filter: invert(73%) sepia(83%) saturate(1960%) hue-rotate(3deg) brightness(99%) contrast(108%);"
+                                >
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>

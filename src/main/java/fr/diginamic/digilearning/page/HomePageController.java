@@ -2,6 +2,7 @@ package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.page.service.CoursService;
+import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomePageController {
     private final UtilisateurRepository utilisateurRepository;
     private final AuthenticationService authenticationService;
+    private final CoursRepository coursRepository;
     private final CoursService coursService;
     private final DateUtil dateUtil;
     private final NavBarService navBarService;
@@ -43,6 +45,7 @@ public class HomePageController {
         model.addAttribute("utilisateur", utilisateurRepository.findById(userInfos.getId())
                 .orElseThrow(EntityNotFoundException::new));
         model.addAttribute("schedueled", coursService.getCoursCeJour(userInfos.getId()));
+        model.addAttribute("bookmarked", coursRepository.getBookMarked(userInfos.getId()));
         model.addAttribute("dateUtil", dateUtil);
     }
 }

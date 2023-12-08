@@ -11,6 +11,7 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+    <meta name="htmx-config" content='{"historyCacheSize":10}'>
     <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/styles/output.css}">
     <link rel="stylesheet" th:href="@{/styles/animations.css}">
@@ -24,12 +25,14 @@
 </head>
 <body class="flex w-full h-full overflow-hidden">
     <th:block th:replace="~{components/navbar}"></th:block>
-    <main id="router-outlet" class="w-full bg-secondary">
+    <main hx-history="false" id="router-outlet" class="w-full bg-secondary">
         <div id="insert" th:insert="${insert}" class="w-full h-screen"></div>
     </main>
     <th:block th:replace="pages/fragments/cours/dialogs/modal.cours"></th:block>
     <script src="/js/animation.post-forum.js"></script>
     <script src="/js/form-checking.js"></script>
     <script src="/js/animation.cours.js" type="module"></script>
+    <script>
+    </script>
 </body>
 </html>
