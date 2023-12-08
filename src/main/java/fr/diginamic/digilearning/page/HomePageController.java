@@ -1,10 +1,12 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
-import fr.diginamic.digilearning.page.service.HomeService;
+import fr.diginamic.digilearning.page.service.CoursService;
+import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
-import jakarta.servlet.http.HttpServletResponse;
+import fr.diginamic.digilearning.utils.DateUtil;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,22 +18,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 @RequiredArgsConstructor
 public class HomePageController {
-    private final HomeService homeService;
+    private final UtilisateurRepository utilisateurRepository;
     private final AuthenticationService authenticationService;
+    private final CoursService coursService;
+    private final DateUtil dateUtil;
     private final NavBarService navBarService;
 
     @GetMapping({"api", "home/api"})
-    public String getHomePageApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
+    public String getHomePageApi(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        homeService.irrigateModel(model);
+        irrigateModel(model, userInfos);
         return "pages/home";
     }
     @GetMapping({"/", "", "home"})
-    public String getHomePage(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
+    public String getHomePage(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         model.addAttribute("insert", "pages/home");
-        homeService.irrigateModel(model);
         model.addAttribute("links", navBarService.getLinks(userInfos));
+        irrigateModel(model, userInfos);
         return "base";
+    }
+
+    private void irrigateModel(Model model, AuthenticationInfos userInfos) {
+        model.addAttribute("utilisateur", utilisateurRepository.findById(userInfos.getId())
+                .orElseThrow(EntityNotFoundException::new));
+        model.addAttribute("schedueled", coursService.getCoursCeJour(userInfos.getId()));
+        model.addAttribute("dateUtil", dateUtil);
     }
 }

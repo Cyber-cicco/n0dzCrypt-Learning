@@ -19,6 +19,7 @@ import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +33,6 @@ public class CoursService {
     private final QuestionRepository questionRepository;
     private final ReponseRepository reponseRepository;
     private final ChapitreRepository chapitreRepository;
-    private final RelationQuestionRepository repository;
     public List<SousModule> findModulesByUtilisateur(String email, Long idModule){
         List<SousModule> sousModules = sousModuleRepository.findModulesByUtilisateur(email, idModule);
         if(sousModules.isEmpty()){
@@ -118,5 +118,12 @@ public class CoursService {
         chapitre.getQuestions().add(question);
         questionRepository.save(question);
         return chapitre;
+    }
+
+    public List<CoursDto> getCoursCeJour(Long id) {
+        return coursRepository.getPrevusCeJour(id, LocalDate.now())
+                .stream()
+                .map(c -> SqlResultMapper.mapToObject(CoursDto.class, c))
+                .toList();
     }
 }

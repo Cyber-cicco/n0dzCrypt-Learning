@@ -11,7 +11,6 @@ import fr.diginamic.digilearning.repository.ModuleRepository;
 import fr.diginamic.digilearning.repository.SousModuleRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,42 +32,42 @@ public class CoursController {
     private final FlagCoursRepository flagCoursRepository;
 
     @GetMapping("/api")
-    public String getCoursApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
+    public String getCoursApi(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateBaseModel(userInfos, model, response);
+        irrigateBaseModel(userInfos, model);
         return "pages/cours";
     }
     @GetMapping
-    public String getCours(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
+    public String getCours(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateBaseModel(userInfos, model, response);
+        irrigateBaseModel(userInfos, model);
         model.addAttribute("insert", "pages/cours");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
-    private void irrigateBaseModel(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
+    private void irrigateBaseModel(AuthenticationInfos userInfos, Model model){
         model.addAttribute("subinsert", "pages/fragments/cours/cours.main.html");
         model.addAttribute("modules", moduleRepository.findModulesByUtilisateur(userInfos.getEmail()));
         model.addAttribute("bookmarked", coursRepository.getBookMarked(userInfos.getId()));
     }
 
     @GetMapping("/module/api")
-    public String getModuleApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idModule, Model model, HttpServletResponse response){
+    public String getModuleApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateModule(userInfos, idModule, model, response);
+        irrigateModule(userInfos, idModule, model);
         return "pages/module";
     }
     @GetMapping("/module")
-    public String getModule(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idModule, Model model, HttpServletResponse response){
+    public String getModule(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateModule(userInfos, idModule, model, response);
+        irrigateModule(userInfos, idModule, model);
         model.addAttribute("insert", "pages/module");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
-    private void irrigateModule(AuthenticationInfos userInfos, Long idModule, Model model, HttpServletResponse response){
+    private void irrigateModule(AuthenticationInfos userInfos, Long idModule, Model model){
         List<SousModule> sousModuleInfosDtos = coursService.findModulesByUtilisateur(userInfos.getEmail(), idModule);
         Module module = moduleRepository.findById(idModule).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("titre", module.getLibelle());
@@ -78,23 +77,23 @@ public class CoursController {
     }
 
     @GetMapping("/liste/api")
-    public String getListCoursApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idSModule, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
+    public String getListCoursApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idSModule, @RequestParam("module") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateListeCours(userInfos, idSModule, idModule, model, response);
+        irrigateListeCours(userInfos, idSModule, idModule, model);
         return "pages/liste-cours";
     }
 
 
     @GetMapping("/liste")
-    public String getListeCours(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idSModule, @RequestParam("module") Long idModule, Model model, HttpServletResponse response){
+    public String getListeCours(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idSModule, @RequestParam("module") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateListeCours(userInfos, idSModule, idModule, model, response);
+        irrigateListeCours(userInfos, idSModule, idModule, model);
         model.addAttribute("insert", "pages/liste-cours");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
-    private void irrigateListeCours(AuthenticationInfos userInfos, Long idSModule, Long idModule, Model model, HttpServletResponse response) {
+    private void irrigateListeCours(AuthenticationInfos userInfos, Long idSModule, Long idModule, Model model) {
         model.addAttribute("cours", coursService.getCours(userInfos, idSModule));
         SousModule sousModule = sousModuleRepository.findById(idSModule).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("smodule", sousModule);
@@ -103,23 +102,23 @@ public class CoursController {
     }
 
     @GetMapping("/sommaire/api")
-    public String getSommaireApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, Model model, HttpServletResponse response){
+    public String getSommaireApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateSommaire(userInfos, id, model, response);
+        irrigateSommaire(userInfos, id, model);
         return "pages/visualiser.cours";
     }
 
 
     @GetMapping("/sommaire")
-    public String getSommaire(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, Model model, HttpServletResponse response){
+    public String getSommaire(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateSommaire(userInfos, id, model, response);
+        irrigateSommaire(userInfos, id, model);
         model.addAttribute("insert", "pages/visualiser.cours");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
-    private void irrigateSommaire(AuthenticationInfos userInfos, Long idCours, Model model, HttpServletResponse response) {
+    private void irrigateSommaire(AuthenticationInfos userInfos, Long idCours, Model model) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
         FlagCours flagCours = flagCoursRepository.findByCoursAndStagiaire_Id(cours, userInfos.getId())
                 .orElseGet(() -> FlagCours.builder()
@@ -133,22 +132,22 @@ public class CoursController {
     }
 
     @GetMapping("/chapitre/api")
-    public String getChapitreApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model, HttpServletResponse response){
+    public String getChapitreApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateChapitre(userInfos, id, idCours, model, response);
+        irrigateChapitre(userInfos, id, idCours, model);
         return "pages/visualiser.cours";
     }
 
     @GetMapping("/chapitre")
-    public String getChapitre(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model, HttpServletResponse response){
+    public String getChapitre(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateChapitre(userInfos, id, idCours, model, response);
+        irrigateChapitre(userInfos, id, idCours, model);
         model.addAttribute("insert", "pages/visualiser.cours");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
-    private void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Model model, HttpServletResponse response) {
+    private void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Model model) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
         FlagCours flagCours = flagCoursRepository.findByCoursAndStagiaire_Id(cours, userInfos.getId())
                 .orElseGet(() -> FlagCours.builder()
@@ -171,10 +170,11 @@ public class CoursController {
     public String getBookMarks(@CookieValue("AUTH-TOKEN") String token, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         model.addAttribute("bookmarked", coursRepository.getBookMarked(userInfos.getId()));
+        model.addAttribute("schedueled", coursService.getCoursCeJour(userInfos.getId()));
         return "pages/fragments/cours/modal.cours.bookmarked";
     }
     @PatchMapping("/bookmark")
-    public String patchBookmark(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idCours, Model model, HttpServletResponse response) {
+    public String patchBookmark(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idCours, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         boolean bookmarked = coursService.patchBookmark(userInfos, idCours);
         model.addAttribute("style", (bookmarked)
@@ -186,7 +186,7 @@ public class CoursController {
     }
 
     @PatchMapping("/finished")
-    public String patchFinished(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idCours, Model model, HttpServletResponse response) {
+    public String patchFinished(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idCours, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         boolean finished = coursService.patchFinished(userInfos, idCours);
         model.addAttribute("style", (finished)

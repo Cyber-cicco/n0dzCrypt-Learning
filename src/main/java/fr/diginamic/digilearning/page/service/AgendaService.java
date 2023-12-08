@@ -96,8 +96,10 @@ public class AgendaService {
     }
 
     public List<CoursDto> getCoursPrevus(Long id) {
-        List<String[]> cours = coursRepository.getCoursPrevus(id);
-        return cours.stream().map(c -> SqlResultMapper.mapToObject(CoursDto.class, c)).toList();
+        return coursRepository.getCoursPrevus(id)
+                .stream()
+                .map(c -> SqlResultMapper.mapToObject(CoursDto.class, c))
+                .toList();
     }
 
     public Map<LocalDateTime, CoursDto> getHourMap(List<CoursDto> coursPrevus) {
@@ -144,5 +146,13 @@ public class AgendaService {
         FlagCours flagCours = flagCoursRepository.findByCoursAndStagiaire(cours, utilisateur).orElseThrow(UnauthorizedException::new);
         flagCours.setDatePrevue(null);
         flagCoursRepository.save(flagCours);
+    }
+
+    public List<CoursDto> getCoursForAgenda(Long id) {
+        return coursRepository.getAllCoursForUser(id)
+                .stream()
+                .map(c -> SqlResultMapper.mapToObject(CoursDto.class, c))
+                .sorted(Comparator.comparing(CoursDto::getDatePrevue, Comparator.nullsFirst(Comparator.naturalOrder())))
+                .toList();
     }
 }

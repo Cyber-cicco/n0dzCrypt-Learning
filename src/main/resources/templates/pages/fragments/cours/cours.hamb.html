@@ -1,4 +1,5 @@
 <img
+        alt="ouverture du menu"
         id="hamb"
         hx-preserve
         class="hover:cursor-pointer min-w-[24px] min-h-[24px]"
@@ -6,7 +7,9 @@
         src="/img/icons/hamb.svg"
         data-openModal
         hx-get="/cours/bookmarked"
-        hx-swap="innerHTML"
+        hx-swap="outerHTML"
         hx-target="#bookmarks"
+        hx-select="#bookmarks"
+        hx-select-oob="#schedueled"
 >
 <script src="/js/animation.modal.js"></script>

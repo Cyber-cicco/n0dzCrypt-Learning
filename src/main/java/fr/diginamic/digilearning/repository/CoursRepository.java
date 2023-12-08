@@ -4,6 +4,7 @@ import fr.diginamic.digilearning.entities.Cours;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,8 +55,9 @@ and dfc.boomarked = true
 """)
     List<Cours> getBookMarked(Long idUtilisateur);
     @Query(nativeQuery = true, value = """
-select c.*
+select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, fc.boomarked, fc.finished, fc.liked, fc.datePrevue
 from dl_cours c
+left outer join dl_flag_cours fc on c.id = fc.cours_id and fc.stagiaire_id = ?1
 join dl_sous_module dsm on c.sous_module_id = dsm.id
 join dl_module_smodule dms on dsm.id = dms.id_smodule
 join dl_module dm on dms.id_module = dm.id
@@ -66,7 +68,7 @@ join SESSION_STAGIAIRE SS on S.ID = SS.ID_SES
 where SS.ID_STAG = ?1
 order by dm.libelle, dsm.titre, c.ordre
 """)
-    List<Cours> getAllCoursForUser(Long idUtilisateur);
+    List<String[]> getAllCoursForUser(Long idUtilisateur);
 
     @Query(nativeQuery = true, value = """
 select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, fc.boomarked, fc.finished, fc.liked, fc.datePrevue
@@ -76,4 +78,15 @@ where fc.stagiaire_id = ?1
 and fc.datePrevue IS NOT NULL
 """)
     List<String[]> getCoursPrevus(Long idUtilisateur);
+
+    @Query(nativeQuery = true, value = """
+select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, fc.boomarked, fc.finished, fc.liked, fc.datePrevue, dsm.titre
+from dl_cours c
+join dl_flag_cours fc on c.id = fc.cours_id
+join dl_sous_module dsm on c.sous_module_id = dsm.id
+where fc.stagiaire_id = ?1
+and DATE(fc.datePrevue) = CURDATE()
+order by fc.datePrevue
+""")
+    List<String[]> getPrevusCeJour(Long id, LocalDate now);
 }

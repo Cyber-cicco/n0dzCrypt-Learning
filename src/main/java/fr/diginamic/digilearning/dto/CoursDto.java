@@ -21,6 +21,7 @@ public class CoursDto {
     private Boolean finished;
     private Boolean liked;
     private LocalDateTime datePrevue;
+    private String titreSousModule;
 
     public boolean isAtDatePrevue(HourInfos hourInfos, DayInfos dayInfos) {
         return datePrevue.equals(LocalDateTime.of(dayInfos.dateJour(), hourInfos.time()));

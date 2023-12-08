@@ -32,8 +32,10 @@
                             class="text-lg hover:cursor-pointer text-black hover:text-primary"
                             data-openModal
                             hx-get="/cours/bookmarked"
-                            hx-swap="innerHTML"
+                            hx-swap="outerHTML"
                             hx-target="#bookmarks"
+                            hx-select="#bookmarks"
+                            hx-select-oob="#schedueled"
                             >
                             Marques pages et cours du jour
                         </div>

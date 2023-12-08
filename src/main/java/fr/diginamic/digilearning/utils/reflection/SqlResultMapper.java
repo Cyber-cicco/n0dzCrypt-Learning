@@ -12,7 +12,7 @@ public class SqlResultMapper {
         try{
             Field[] fields = _class.getDeclaredFields();
             T newInstance = _class.newInstance();
-            if(fields.length != results.length){
+            if(fields.length < results.length){
                 throw new FunctionalException("La conversion entre les résultats et les objets de la classe n'est pas possible");
             }
             for (int i = 0; i < results.length; i++) {
