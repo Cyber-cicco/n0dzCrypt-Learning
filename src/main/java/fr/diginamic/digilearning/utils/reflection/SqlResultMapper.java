@@ -31,6 +31,8 @@ public class SqlResultMapper {
                     field.set(newInstance, Long.parseLong(results[i]));
                 } else if (field.getType().equals(Integer.class)){
                     field.set(newInstance, Integer.parseInt(results[i]));
+                } else if (field.getType().equals(Double.class)){
+                    field.set(newInstance, Double.parseDouble(results[i]));
                 } else if (field.getType().equals(Boolean.class)) {
                     field.set(newInstance, Boolean.parseBoolean(results[i]));
                 }

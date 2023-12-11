@@ -7,7 +7,7 @@ spring:
     jpa:
         show-sql: false
         database: mysql
-        generate-ddl: true
+        generate-ddl: false
         hibernate:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -27,6 +27,6 @@ jwt:
     secret: "3dDsYHtBkTz0gAoPmPMwL2ksjVfVyR2Js0OsaVTx3RobUGI6YGM3gWJRFhPG"
 logging:
     level:
-      org.springframework: DEBUG
+      org.springframework: WARN
 server:
     port: 8081

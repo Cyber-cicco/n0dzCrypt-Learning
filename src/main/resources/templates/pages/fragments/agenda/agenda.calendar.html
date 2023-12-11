@@ -1,3 +1,12 @@
+<!--/*@thymesVar id="cal" type="fr.diginamic.digilearning.dto.CalendarInfos"*/-->
+<!--/*@thymesVar id="week" type="java.util.List<fr.diginamic.digilearning.dto.DayInfos>"*/-->
+<!--/*@thymesVar id="dateValue" type="java.lang.String"*/-->
+<!--/*@thymesVar id="prev" type="java.lang.String"*/-->
+<!--/*@thymesVar id="next" type="java.lang.String"*/-->
+<!--/*@thymesVar id="hours" type="java.util.List<fr.diginamic.digilearning.dto.HourInfos>"*/-->
+<!--/*@thymesVar id="hourMap" type="java.util.Map<java.time.LocalDateTime, fr.diginamic.digilearning.dto.CoursDto>"*/-->
+<!--/*@thymesVar id="dateUtil" type="fr.diginamic.digilearning.utils.DateUtil"*/-->
+<!--/*@thymesVar id="coursPrevus" type="java.util.List<fr.diginamic.digilearning.dto.CoursDto>"*/-->
 <div id="calendar" class="flex flex-col overflow-x-auto bg-white gap-2 w-full h-full max-w-full">
     <div class="flex flex-col w-full h-full justify-center">
         <div class="flex items-center w-full">
@@ -104,6 +113,6 @@
         </tbody>
     </table>
     <script>
-        reInit();
+        reInit()
     </script>
 </div>

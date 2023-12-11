@@ -33,3 +33,11 @@
         th:text="${buttonText}"
         th:disabled="${disabled}"
 ></button>
+
+<div
+        class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+        th:fragment="testButton(button)"
+    >
+    <button th:replace="${button}">
+    </button>
+</div>

@@ -16,7 +16,7 @@
     </div>
     <div class="flex p-2 gap-2 w-full">
         <section th:if="${schedueled.size()} > 0" class="w-full bg-grey p-5 text-lg rounded-md shadow-dark shadow-md flex flex-col items-center">
-            <div class="text-lightPrimary text-2xl p-5 font-poppins"> Mes cours du jours : </div>
+            <div class="text-lightPrimary text-2xl p-5 font-poppins"> Mes cours du jour : </div>
             <div class="flex flex-col gap-2 w-full px-3">
                 <div class="flex justify-between text-primary w-full rounded-md p-2 bg-white" th:each="c, iterStat : ${schedueled}" >
                     <a 
@@ -25,7 +25,7 @@
                         th:hx-get="'/cours/sommaire/api?id=' + ${c.getId()}"
                         th:hx-push-url="'/cours/sommaire?id=' + ${c.getId()}"
                         hx-target="#insert"
-                        hx-swap="innerHTML"
+                        hx-swap="innerHTML transition:true"
                         ></a>
                     <div class="flex items-center gap-1">
                         <div th:text="'Prévu à ' + ${dateUtil.getHeure(c.getDatePrevue())}"></div>
@@ -43,6 +43,41 @@
                             th:style="${c.getFinished()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
                             >
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="flex p-2 gap-2 w-full">
+        <section th:if="${bookmarked.size()} > 0" class="w-full bg-grey p-5 text-lg rounded-md shadow-dark shadow-md flex flex-col items-center">
+            <div class="text-lightPrimary text-2xl p-5 font-poppins"> Mes favoris : </div>
+            <div class="flex flex-col gap-2 w-full px-3">
+                <div class="flex justify-between text-primary w-full rounded-md p-2 bg-white" th:each="cours, iterStat : ${bookmarked}" >
+                    <div class="p-2 bg-white items-center w-full rounded-md flex justify-between">
+                        <a
+                            class="hover:cursor-pointer hover:underline"
+                            th:text="${cours.getSousModule().getTitre()} + ' : ' + ${cours.getTitre()}"
+                            th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()}"
+                            th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()}"
+                            hx-target="#insert"
+                            hx-swap="innerHTML transition:true"
+                            hx-on::after-request="closeModal()"
+                            >
+                        </a>
+                            <div
+                                class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                                th:hx-patch="'/cours/bookmark?id=' + ${cours.getId()}"
+                                th:hx-target="'#bookmarked-' + ${cours.getId()}"
+                                hx-swap="outerHTML"
+                                >
+                                <img
+                                class="min-w-[30px] min-h-[30px]"
+                                th:id="'bookmarked-' + ${cours.getId()}"
+                                width="30"
+                                src="/img/icons/bookmark.svg"
+                                style="filter: invert(73%) sepia(83%) saturate(1960%) hue-rotate(3deg) brightness(99%) contrast(108%);"
+                                >
+                            </div>
                     </div>
                 </div>
             </div>
@@ -101,39 +136,4 @@
                 </div>
             </section>
         </div>
-    </div>
-    <div class="flex p-2 gap-2 w-full">
-        <section th:if="${bookmarked.size()} > 0" class="w-full bg-grey p-5 text-lg rounded-md shadow-dark shadow-md flex flex-col items-center">
-            <div class="text-lightPrimary text-2xl p-5 font-poppins"> Mes favoris : </div>
-            <div class="flex flex-col gap-2 w-full px-3">
-                <div class="flex justify-between text-primary w-full rounded-md p-2 bg-white" th:each="cours, iterStat : ${bookmarked}" >
-                    <div class="p-2 bg-white items-center w-full rounded-md flex justify-between">
-                        <a
-                            class="hover:cursor-pointer hover:underline"
-                            th:text="${cours.getSousModule().getTitre()} + ' : ' + ${cours.getTitre()}"
-                            th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()}"
-                            th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()}"
-                            hx-target="#insert"
-                            hx-swap="innerHTML"
-                            hx-on::after-request="closeModal()"
-                            >
-                        </a>
-                            <div
-                                class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
-                                th:hx-patch="'/cours/bookmark?id=' + ${cours.getId()}"
-                                th:hx-target="'#bookmarked-' + ${cours.getId()}"
-                                hx-swap="outerHTML"
-                                >
-                                <img
-                                class="min-w-[30px] min-h-[30px]"
-                                th:id="'bookmarked-' + ${cours.getId()}"
-                                width="30"
-                                src="/img/icons/bookmark.svg"
-                                style="filter: invert(73%) sepia(83%) saturate(1960%) hue-rotate(3deg) brightness(99%) contrast(108%);"
-                                >
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </div>

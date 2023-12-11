@@ -89,4 +89,13 @@ and DATE(fc.datePrevue) = CURDATE()
 order by fc.datePrevue
 """)
     List<String[]> getPrevusCeJour(Long id, LocalDate now);
+
+    @Query(nativeQuery = true, value = """
+select count(distinct c.id)
+from dl_cours c
+join dl_sous_module dsm on c.sous_module_id = dsm.id
+where fc.stagiaire_id = ?1
+order by fc.datePrevue
+""")
+    Double getPourcentageCompletionModule(Long idUtilisateur, Long idModule);
 }

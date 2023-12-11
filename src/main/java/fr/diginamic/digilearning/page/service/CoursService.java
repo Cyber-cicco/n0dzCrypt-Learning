@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.page.service;
 
 import fr.diginamic.digilearning.dto.MessageDto;
+import fr.diginamic.digilearning.dto.ModuleDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.repository.*;
 import org.commonmark.Extension;
@@ -29,11 +30,12 @@ public class CoursService {
     private final FlagCoursRepository flagCoursRepository;
     private final SousModuleRepository sousModuleRepository;
     private final CoursRepository coursRepository;
+    private final ModuleRepository moduleRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final QuestionRepository questionRepository;
     private final ReponseRepository reponseRepository;
     private final ChapitreRepository chapitreRepository;
-    public List<SousModule> findModulesByUtilisateur(String email, Long idModule){
+    public List<SousModule> findSModulesByUtilisateur(String email, Long idModule){
         List<SousModule> sousModules = sousModuleRepository.findModulesByUtilisateur(email, idModule);
         if(sousModules.isEmpty()){
             throw new UnauthorizedException();
@@ -124,6 +126,29 @@ public class CoursService {
         return coursRepository.getPrevusCeJour(id, LocalDate.now())
                 .stream()
                 .map(c -> SqlResultMapper.mapToObject(CoursDto.class, c))
+                .toList();
+    }
+
+    public FlagCours getFlagByCoursAndStagiaire(Cours cours, AuthenticationInfos userInfos) {
+        return flagCoursRepository.findByCoursAndStagiaire_Id(cours, userInfos.getId())
+                .orElseGet(() -> FlagCours.builder()
+                        .liked(false)
+                        .boomarked(false)
+                        .finished(false)
+                        .build());
+    }
+
+    public Chapitre getChapitreIfExistsElseThrow(Cours cours, Integer idChapitre) {
+        return cours.getChapitres()
+                .stream()
+                .filter(chapitre1 -> chapitre1.getOrdre().equals(idChapitre))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    public List<ModuleDto> findModulesByUtilisateur(Long id) {
+        return moduleRepository.findModulesByUtilisateur(id)
+                .stream().map(mod -> SqlResultMapper.mapToObject(ModuleDto.class, mod))
                 .toList();
     }
 }

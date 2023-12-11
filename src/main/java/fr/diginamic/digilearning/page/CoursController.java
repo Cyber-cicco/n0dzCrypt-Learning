@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
+import fr.diginamic.digilearning.dto.CoursDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -48,8 +49,7 @@ public class CoursController {
 
     private void irrigateBaseModel(AuthenticationInfos userInfos, Model model){
         model.addAttribute("subinsert", "pages/fragments/cours/cours.main.html");
-        model.addAttribute("modules", moduleRepository.findModulesByUtilisateur(userInfos.getEmail()));
-        model.addAttribute("bookmarked", coursRepository.getBookMarked(userInfos.getId()));
+        model.addAttribute("modules", coursService.findModulesByUtilisateur(userInfos.getId()));
     }
 
     @GetMapping("/module/api")
@@ -68,7 +68,7 @@ public class CoursController {
     }
 
     private void irrigateModule(AuthenticationInfos userInfos, Long idModule, Model model){
-        List<SousModule> sousModuleInfosDtos = coursService.findModulesByUtilisateur(userInfos.getEmail(), idModule);
+        List<SousModule> sousModuleInfosDtos = coursService.findSModulesByUtilisateur(userInfos.getEmail(), idModule);
         Module module = moduleRepository.findById(idModule).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("titre", module.getLibelle());
         model.addAttribute("id", module.getId());
@@ -94,11 +94,12 @@ public class CoursController {
     }
 
     private void irrigateListeCours(AuthenticationInfos userInfos, Long idSModule, Long idModule, Model model) {
-        model.addAttribute("cours", coursService.getCours(userInfos, idSModule));
+        List<CoursDto> coursDtos = coursService.getCours(userInfos, idSModule);
+        model.addAttribute("cours", coursDtos);
         SousModule sousModule = sousModuleRepository.findById(idSModule).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("smodule", sousModule);
         model.addAttribute("idModuleOrigine", idModule);
-        model.addAttribute("bookmarked", coursRepository.getBookMarked(userInfos.getId()));
+        model.addAttribute("bookmarked", coursDtos.stream().filter(CoursDto::getBoomarked).toList());
     }
 
     @GetMapping("/sommaire/api")
@@ -120,12 +121,7 @@ public class CoursController {
 
     private void irrigateSommaire(AuthenticationInfos userInfos, Long idCours, Model model) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
-        FlagCours flagCours = flagCoursRepository.findByCoursAndStagiaire_Id(cours, userInfos.getId())
-                .orElseGet(() -> FlagCours.builder()
-                        .liked(false)
-                        .boomarked(false)
-                        .finished(false)
-                        .build());
+        FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
         model.addAttribute("cours", cours);
         model.addAttribute("flags", flagCours);
         model.addAttribute("slide", "pages/sommaire.cours.main");
@@ -149,13 +145,8 @@ public class CoursController {
 
     private void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Model model) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
-        FlagCours flagCours = flagCoursRepository.findByCoursAndStagiaire_Id(cours, userInfos.getId())
-                .orElseGet(() -> FlagCours.builder()
-                        .liked(false)
-                        .boomarked(false)
-                        .finished(false)
-                        .build());
-        Chapitre chapitre = cours.getChapitres().stream().filter(chapitre1 -> chapitre1.getOrdre().equals(idChapitre)).findFirst().orElseThrow(EntityNotFoundException::new);
+        FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
+        Chapitre chapitre = coursService.getChapitreIfExistsElseThrow(cours, idChapitre);
         model.addAttribute("idUtilisateur", userInfos.getId());
         model.addAttribute("contenu", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenu()));
         model.addAttribute("chapitre", chapitre);
