@@ -35,8 +35,11 @@ public class CoursService {
     private final QuestionRepository questionRepository;
     private final ReponseRepository reponseRepository;
     private final ChapitreRepository chapitreRepository;
-    public List<SousModule> findSModulesByUtilisateur(String email, Long idModule){
-        List<SousModule> sousModules = sousModuleRepository.findModulesByUtilisateur(email, idModule);
+    public List<ModuleDto> findSModulesByUtilisateur(Long id, Long idModule){
+        List<ModuleDto> sousModules = sousModuleRepository.findModulesByUtilisateur(id, idModule)
+                .stream()
+                .map(res -> SqlResultMapper.mapToObject(ModuleDto.class, res))
+                .toList();
         if(sousModules.isEmpty()){
             throw new UnauthorizedException();
         }
@@ -47,7 +50,12 @@ public class CoursService {
         if(cours.isEmpty()){
             throw new UnauthorizedException();
         }
-        return cours.stream().map(c -> SqlResultMapper.mapToObject(CoursDto.class, c)).toList();
+        return cours
+                .stream()
+                .peek(System.out::println)
+                .map(c -> SqlResultMapper.mapToObject(CoursDto.class, c))
+                .peek(System.out::println)
+                .toList();
     }
 
     public boolean patchBookmark(AuthenticationInfos userInfos, Long idCours) {

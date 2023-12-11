@@ -12,8 +12,10 @@
                 hx-preserve="#hamb"
         >
             <div class="flex flex-col min-h-[400px] p-5 gap-2">
-                <div class="text-center text-primary font-poppins" th:text="${smodule.getTitre()}"></div>
+                <div class="text-center text-primary font-poppins" th:text="${smodule.getLibelle()}"></div>
                 <img height="400" width="400" src="/img/smodules/htmx.jpg">
+                <div class="grow"></div>
+                <th:block th:replace="~{components/progress-bar :: progress(${smodule.getPourcentageCompletion()})}"></th:block>
             </div>
         </div>
     </div>

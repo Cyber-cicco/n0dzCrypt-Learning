@@ -2,6 +2,7 @@ package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.dto.CoursDto;
+import fr.diginamic.digilearning.dto.ModuleDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -68,11 +69,10 @@ public class CoursController {
     }
 
     private void irrigateModule(AuthenticationInfos userInfos, Long idModule, Model model){
-        List<SousModule> sousModuleInfosDtos = coursService.findSModulesByUtilisateur(userInfos.getEmail(), idModule);
         Module module = moduleRepository.findById(idModule).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("titre", module.getLibelle());
         model.addAttribute("id", module.getId());
-        model.addAttribute("smodules", sousModuleInfosDtos);
+        model.addAttribute("smodules", coursService.findSModulesByUtilisateur(userInfos.getId(), idModule));
         model.addAttribute("bookmarked", coursRepository.getBookMarked(userInfos.getId()));
     }
 
@@ -99,7 +99,6 @@ public class CoursController {
         SousModule sousModule = sousModuleRepository.findById(idSModule).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("smodule", sousModule);
         model.addAttribute("idModuleOrigine", idModule);
-        model.addAttribute("bookmarked", coursDtos.stream().filter(CoursDto::getBoomarked).toList());
     }
 
     @GetMapping("/sommaire/api")

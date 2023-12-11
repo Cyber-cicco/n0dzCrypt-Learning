@@ -15,15 +15,7 @@
                 <div class="text-center text-lg text-primary font-poppins" th:text="${m.getLibelle()}"></div>
                 <img class="" width="600" height="600" th:src="'/img/malediction/' + ${m.getPhoto()}">
                 <div class="grow"></div>
-                <div class="flex flex-col">
-                    <h3 class="font-poppins text-primary p-1 text-center">Progression : <span th:text="${m.getPourcentageCompletion()}"></span>%</h3>
-                    <div class="w-full bg-dark min-h-[15px] rounded-full flex">
-                        <div 
-                            class="relative top-0 min-h-fit bg-primary rounded-full"
-                            th:style="'width:' + ${m.getPourcentageCompletion()} + '%;'"
-                            ></div>
-                    </div>
-                </div>
+                <th:block th:replace="~{components/progress-bar :: progress(${m.getPourcentageCompletion()})}"></th:block>
             </div>
         </div>
     </div>
