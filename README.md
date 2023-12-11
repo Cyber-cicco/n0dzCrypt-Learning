@@ -60,5 +60,24 @@ Il est possible de changer la date prévue d'un cours, en le glissant d'une date
 
 ### Mes cours
 
-Mes cours sont organisés selon différents modules et sous modules.
+Les cours sont organisés selon différents modules et sous modules. Par défaut, une formation a plusieurs modules, un module a plusieurs sous-modules, un sous-module a plusieurs cours, et un cours a plusieurs chapitres et des exercices.
+
+![module](img/module.png)
+![sous module](img/smodule.png)
+![liste des cours](img/liste-cours.png)
+
+Sur la liste de cours, on peut télécharger, marquer comme favoris ou marquer comme terminé chaque cours.
+
+La visionneuse de cours propose tout d'abord un sommaire résumant tous les chapitres. A coté de cette visionneuse, on peut trouver une barre de navigation permettant de se déplacer entre les chapitres. On peut également ajouter un cours dans ses favoris ou le marquer comme terminé à partir de cet écran.
+
+![sommaire](img/sommaire.png)
+
+Lorsque l'on navigue sur un chapitre, le cours du chapitre est affiché au centre de l'écran.
+A la fin du chapitre, il y a éventuellement un lien vers une vidéo d'explication pour ce cours.
+A tout moment, l'utilisateur peut cliquer sur question en bas pour consulter les questions posées sur ce cours, proposer ses réponses, et poser ses propres questions.
+
+![cours](img/cours.png)
+![cours](img/q-r.png)
+
+Il est également possible de like et dislike les différentes questions et réponses. Si ce n'est pas encore implémenté, il pourrait être intéressant de trier les questions et réponses par popularité.
 
