@@ -2,21 +2,23 @@
 
 ## Qu'est-ce que Digilearing ?
 
-Digilearning est la pateforme de e-learning de Diginamic. C'est ici que les formateurs peuvent mettre en ligne des cours au format markdown, partager des pdfs, des exercices pour les journées de e-learning des stagiaires Diginamic, et des vidéos d'explication pour les cours.
+Digilearning est la pateforme de e-learning de Diginamic. C'est ici que les formateurs peuvent mettre en ligne des cours. Ils peuvent téléverser des cours au format markdown, partager des pdfs, des exercices, et des vidéos d'explication pour les cours.
 
 Coté stagiaire, c'est ici qu'il va pouvoir avoir accès aux cours e-learning de Diginamic. Il pourra en avoir imposé par sa formation, mais il pourra également y avoir accès en dehors des cours obligatoires. 
 
-Il pourra également sur ce site discuter avec d'autres membres de la session, mais également de la formation, pourra prendre contact avec son responsable pédagogique, pourra poser des questions spécifiquement sur certains et consulter les questions et réponses que d'autres apprenants ont pu apportés lors de la formation.
+Il pourra également sur ce site discuter avec d'autres membres de la session, pourra prendre contact avec son responsable pédagogique, pourra poser des questions spécifiquement sur certains suejts et consulter les questions et réponses que d'autres apprenants ont pu apportés lors de la formation.
 
 On peut également imaginer qu'une personne qui ne soit pas inscrite à Diginamic ait également accès à ce site pour consulter des cours d'introduction à la programmation.
 
 ## Pourquoi Digilearning ?
 
-L'idée initiale vient d'un feedbakc que tout le monde m'a fait sur les journées de e-learning : linkedin learning, c'est vraiment très mauvais. Le fait que Diginamic soit dépendant de cela pour certaines journées de cours écorne également l'image du centre de formation, qui pourtant se démarque en temps normal de la concurrence par la qualité des cours dispensés.
+L'idée initiale vient d'un feedbackk que tout le monde m'a fait sur les journées de e-learning : linkedin learning, c'est vraiment très mauvais. Le fait que Diginamic soit dépendant de cela pour certaines journées de cours écorne l'image du centre de formation, qui pourtant se démarque en temps normal de la concurrence par la qualité des cours dispensés.
 
 Ainsi, si ce feedback est donné par les élèves, ce n'est pas un membre de Diginamic ou Tecken qui fera la demande de création de cette application. Raison pour laquelle j'ai décidé de proposer cette idée.
 
-De plus, même les plateformes spécialisées dans le e-learning comme Studi, centre de formation auquel j'ai pu travaillé, souffrent d'une qualité de site assez mauvaise, avec un front en AngularJS qui doit être une horreur à maintenir, vu le nombre de bugs et d'inconsistances que l'on peut y rencontrer.
+D'un autre coté, si Diginamic et Tecken souhaitent pouvoir recruter / vendre leurs alternants, il est important que ces entreprises aient des moyens de prouver que ses élèves / alternants ont des compétences dans le développement web. Et rien de mieux que d'exposer ce travail au grand public pour prouver sa qualité. Si nous utilisons les alternants de Tecken simplement pour l'informatique interne de Diginamic, nous n'aurons aucun moyen d'exposer la qualité de l'enseignement reçu et des talents disponibles de l'entreprise. De plus, l'informatique interne étant externalisée à Ypareo, nous avons toute l'occasion de commencer à créer des sites pouvant servir de vitrine à Diginamic et Tecken.
+
+Même les plateformes spécialisées dans le e-learning comme Studi, centre de formation auquel j'ai pu travaillé, souffrent d'une qualité de site assez mauvaise, avec un front en AngularJS qui doit être une horreur à maintenir, vu le nombre de bugs et d'inconsistances que l'on peut y rencontrer.
 
 Permettre à Diginamic de pouvoir proposer un site internet de formation un niveau au dessus de la concurrence, et potentiellement pouvoir mettre en libre accès quelques cours d'introduction à la programmation pour des personnes extérieures au centre de formation permettrait à Diginamic de se démarquer de la concurrence. Diginamic dispensant des cours de qualité, mais ayant surtout du mal à se faire reconnaitre, proposer ce genre de vitrine permettrait au centre de se faire reconnaitre.
 
@@ -66,18 +68,41 @@ Les cours sont organisés selon différents modules et sous modules. Par défaut
 ![sous module](img/smodule.png)
 ![liste des cours](img/liste-cours.png)
 
-Sur la liste de cours, on peut télécharger, marquer comme favoris ou marquer comme terminé chaque cours.
+Sur ma liste de cours, je peux télécharger, marquer comme favoris ou marquer comme terminé chaque cours.
 
-La visionneuse de cours propose tout d'abord un sommaire résumant tous les chapitres. A coté de cette visionneuse, on peut trouver une barre de navigation permettant de se déplacer entre les chapitres. On peut également ajouter un cours dans ses favoris ou le marquer comme terminé à partir de cet écran.
+La visionneuse de cours propose tout d'abord un sommaire résumant tous les chapitres. A coté de cette visionneuse, on peut trouver une barre de navigation me permettant de me déplacer entre les chapitres. Je peux également ajouter un cours dans mes favoris ou le marquer comme terminé à partir de cet écran.
 
 ![sommaire](img/sommaire.png)
 
 Lorsque l'on navigue sur un chapitre, le cours du chapitre est affiché au centre de l'écran.
 A la fin du chapitre, il y a éventuellement un lien vers une vidéo d'explication pour ce cours.
-A tout moment, l'utilisateur peut cliquer sur question en bas pour consulter les questions posées sur ce cours, proposer ses réponses, et poser ses propres questions.
+A tout moment, je peux cliquer sur "Afficher / cacher les questions - réponses" en bas pour consulter les questions posées sur ce cours, proposer des réponses, et poser mes propres questions.
 
 ![cours](img/cours.png)
 ![cours](img/q-r.png)
 
-Il est également possible de like et dislike les différentes questions et réponses. Si ce n'est pas encore implémenté, il pourrait être intéressant de trier les questions et réponses par popularité.
+Il est également possible de like et dislike les différentes questions et réponses. Ce n'est pas encore implémenté, mais il pourrait être intéressant de trier les questions et réponses par popularité.
+
+### Ma messagerie
+
+Si ce n'est pas la partie la plus intéressante ni la plus obligatoire à implémenter, il y a également la possibilité de chater avec différents reponsables de la session, à savoir le reponsable administratif, le responsable pédagogique et les rooms master.
+
+*note : cette partie n'est pas forcément la plus utile, je l'ai créée à l'origine pour tester les limites de HTMX. L'implémentation du back pour les messages est peut être problématique ou à retravailler*
+
+![messages](img/messages.png)
+
+### Le forum des apprenants
+
+Ici, je dispose de plusieurs salons, regroupés selon différents sujets. Je peux consulter des fils des discussion en rapport avec le thème du salon, répondre à ces discussions, et créer de nouveaux fils. Je n'ai accès qu'aux fils de discussion sur lesquels je suis whitelisté, ou non blacklistés pour les salons généraux.
+
+![messages](img/forum.png)
+![messages](img/fil-discussion.png)
+
+Certains fils de discussion peuvent être fermés, d'autres vont être épinglés.
+
+### Mon profil
+
+Enfin, je peux consulter différentes informations sur mon profil. Je peux y voir mes informations personnelles, des informations sur ma progression, et je peux me connecter sur les différents services proposés aux apprenants pour Diginamic, comme Digicap.
+
+![messages](img/profil.png)
 

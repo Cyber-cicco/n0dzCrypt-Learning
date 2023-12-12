@@ -1,13 +1,25 @@
-
-<div 
+<div
     class="flex flex-col"
     th:fragment="progress(pourcentCompletion)"
     >
     <h3 class="font-poppins text-primary p-1 text-center">Progression : <span th:text="${pourcentCompletion}"></span>%</h3>
-    <div class="w-full bg-dark min-h-[15px] rounded-full flex">
-        <div 
-            class="relative top-0 min-h-fit bg-primary rounded-full"
-            th:style="'width:' + ${pourcentCompletion} + '%;'"
-            ></div>
-    </div>
+    <th:block th:replace=":: progressStyle(${pourcentCompletion})"></th:block>
+</div>
+<div
+    class="flex w-full flex-col"
+    th:fragment="progresTitle(pourcentCompletion, titre)"
+    >
+    <h3 class="font-poppins text-primary p-1 text-center">
+        <span th:text="${titre}"></span>
+        <span th:text="${pourcentCompletion} + '%'"></span>
+    </h3>
+    <th:block th:replace=":: progressStyle(${pourcentCompletion})"></th:block>
+</div>
+<div 
+    th:fragment="progressStyle(pourcentCompletion)"
+    class="w-full bg-primary min-h-[15px] rounded-full flex">
+    <div
+        class="relative top-0 min-h-fit bg-lightPrimary rounded-full"
+        th:style="'width:' + ${pourcentCompletion} + '%;'"
+        ></div>
 </div>

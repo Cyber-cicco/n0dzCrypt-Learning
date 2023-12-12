@@ -131,7 +131,7 @@ public class CoursService {
     }
 
     public List<CoursDto> getCoursCeJour(Long id) {
-        return coursRepository.getPrevusCeJour(id, LocalDate.now())
+        return coursRepository.getPrevusCeJour(id)
                 .stream()
                 .map(c -> SqlResultMapper.mapToObject(CoursDto.class, c))
                 .toList();

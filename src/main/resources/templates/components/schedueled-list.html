@@ -1,0 +1,34 @@
+<div class="flex p-2 gap-2 w-full">
+    <section th:if="${schedueled.size()} > 0" class="w-full bg-grey p-5 text-lg rounded-md shadow-dark shadow-md flex flex-col items-center">
+        <div class="text-lightPrimary text-2xl p-5 font-poppins"> Mes cours du jour : </div>
+        <div class="flex flex-col gap-2 w-full px-3">
+            <div class="flex justify-between text-primary w-full rounded-md p-2 bg-white" th:each="c, iterStat : ${schedueled}" >
+                <a 
+                    class="hover:cursor-pointer"
+                    th:text="${c.getTitre()}"
+                    th:hx-get="'/cours/sommaire/api?id=' + ${c.getId()}"
+                    th:hx-push-url="'/cours/sommaire?id=' + ${c.getId()}"
+                    hx-target="#insert"
+                    hx-swap="innerHTML transition:true"
+                    ></a>
+                <div class="flex items-center gap-1">
+                    <div th:text="'Prévu à ' + ${dateUtil.getHeure(c.getDatePrevue())}"></div>
+                    <div
+                        class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                        th:hx-patch="'/cours/finished?id=' + ${c.getId()}"
+                        th:hx-target="'#finished-' + ${c.getId()}"
+                        hx-swap="outerHTML"
+                        >
+                        <img
+                        class="min-w-[30px] min-h-[30px]"
+                        th:id="'finished-' + ${c.getId()}"
+                        width="30"
+                        src="/img/icons/check.svg"
+                        th:style="${c.getFinished()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

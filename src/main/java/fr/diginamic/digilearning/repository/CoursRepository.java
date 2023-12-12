@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.repository;
 
 import fr.diginamic.digilearning.entities.Cours;
+import fr.diginamic.digilearning.entities.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -88,7 +89,7 @@ where fc.stagiaire_id = ?1
 and DATE(fc.datePrevue) = CURDATE()
 order by fc.datePrevue
 """)
-    List<String[]> getPrevusCeJour(Long id, LocalDate now);
+    List<String[]> getPrevusCeJour(Long id);
 
     @Query(nativeQuery = true, value = """
 select count(distinct c.id)
@@ -98,4 +99,37 @@ where fc.stagiaire_id = ?1
 order by fc.datePrevue
 """)
     Double getPourcentageCompletionModule(Long idUtilisateur, Long idModule);
+
+    @Query(nativeQuery = true, value = """
+select count(dc.id), count(dfc.id)
+from dl_module m  
+join dl_module_formation dmf on m.id = dmf.id_module
+join FORMATION F on dmf.id_formation = F.ID
+join SESSION S on F.ID = S.ID_FOR
+join SESSION_STAGIAIRE SS on S.ID = SS.ID_SES
+join UTILISATEUR U on SS.ID_STAG = U.ID
+join dl_module_smodule on m.id = dl_module_smodule.id_module
+left outer join dl_sous_module on dl_module_smodule.id_smodule = dl_sous_module.id
+left outer join dl_cours dc on dl_sous_module.id = dc.sous_module_id
+left outer join dl_flag_cours dfc on dc.id = dfc.cours_id 
+and dfc.stagiaire_id = ?1 
+and dfc.finished = true
+where U.ID = ?1
+""")
+    List<String[]> getProgression(Long id);
+
+    @Query(nativeQuery = true, value = """
+select count(dc.id)
+from dl_module m  
+join dl_module_formation dmf on m.id = dmf.id_module
+join FORMATION F on dmf.id_formation = F.ID
+join SESSION S on F.ID = S.ID_FOR
+join SESSION_STAGIAIRE SS on S.ID = SS.ID_SES
+join UTILISATEUR U on SS.ID_STAG = U.ID
+join dl_module_smodule on m.id = dl_module_smodule.id_module
+left outer join dl_sous_module on dl_module_smodule.id_smodule = dl_sous_module.id
+left outer join dl_cours dc on dl_sous_module.id = dc.sous_module_id
+where U.ID = ?1
+""")
+    Integer getNbCours(Utilisateur utilisateur);
 }

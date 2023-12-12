@@ -2,11 +2,11 @@ package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
 import fr.diginamic.digilearning.dto.CoursDto;
-import fr.diginamic.digilearning.dto.ModuleDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.page.service.CoursService;
+import fr.diginamic.digilearning.page.service.UtilisateurService;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.repository.FlagCoursRepository;
 import fr.diginamic.digilearning.repository.ModuleRepository;
@@ -29,6 +29,7 @@ public class CoursController {
     private final NavBarService navBarService;
     private final ModuleRepository moduleRepository;
     private final CoursService coursService;
+    private final UtilisateurService utilisateurService;
     private final CoursRepository coursRepository;
     private final SousModuleRepository sousModuleRepository;
     private final FlagCoursRepository flagCoursRepository;
@@ -185,5 +186,18 @@ public class CoursController {
         );
         model.addAttribute("id", idCours);
         return "pages/fragments/cours/cours.finished";
+    }
+    @PatchMapping("/finished/progress")
+    public String patchFinishedWithProgress(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idCours, Model model) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+        boolean finished = coursService.patchFinished(userInfos, idCours);
+        model.addAttribute("style", (finished)
+                ? "filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);"
+                : ""
+        );
+        model.addAttribute("progresCours", utilisateurService.getProgression(userInfos.getId()));
+        model.addAttribute("progresJour", utilisateurService.getProgressionJournee(userInfos.getId()));
+        model.addAttribute("id", idCours);
+        return "pages/fragments/profil/finished-progress.fragment";
     }
 }
