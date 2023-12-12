@@ -107,6 +107,7 @@ public class ConversationController {
         model.addAttribute("error", "");
         model.addAttribute("conversation", conversation);
         model.addAttribute("page", page);
+        System.out.println(page);
         return "pages/fragments/conversation/chat.fragment";
     }
 }

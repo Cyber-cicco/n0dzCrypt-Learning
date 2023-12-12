@@ -1,5 +1,5 @@
 <div id="liste-cours" class="flex flex-col h-screen">
-    <div class="flex justify-center gap-5 font-poppins text-5xl bg-grey text-primary p-5" >
+    <div class="flex justify-center gap-5 font-poppins text-3xl lg:text-5xl bg-grey text-primary p-5" >
         <img
                 class="w-[50px] hover:cursor-pointer"
                 src="/img/icons/back.svg"
@@ -24,8 +24,8 @@
                             hx-target="#liste-cours"
                             hx-swap="outerHTML"
                     ></a>
-                    <div class="flex w-[300px] justify-between">
-                        <p>Difficulté : </p>
+                    <div class="flex lg:w-[300px] justify-between">
+                        <p class="hidden lg:flex">Difficulté : </p>
                         <div class="flex">
                             <img th:each="i: ${#numbers.sequence(1, c.getDifficulte())}" src="/img/icons/star.svg">
                         </div>

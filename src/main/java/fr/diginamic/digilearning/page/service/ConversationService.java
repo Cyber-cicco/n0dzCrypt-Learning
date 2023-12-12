@@ -9,6 +9,7 @@ import fr.diginamic.digilearning.repository.MessageRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 

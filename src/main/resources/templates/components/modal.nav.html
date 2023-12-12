@@ -1,0 +1,26 @@
+<div hidden id="modal-bg" class="absolute top-0 left-0 z-40 h-full bg-accent w-full bg-opacity-25"></div>
+<aside id="modal-right" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
+    <div class="flex justify-end w-full">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeModal()">
+    </div>
+    <section class="flex flex-col gap-2">
+        <li class="flex justify-center gap-5 flex-col w-full" th:each="linkGroup, iterStat : ${links}">
+            <div th:each="link : ${linkGroup.getNavLinks()}">
+                <div class="flex p-3 w-full justify-center rounded-md hover:bg-white">
+                    <a 
+                        class="flex  flex-col text-primary items-center hover:cursor-pointer"
+                        th:fragment="nav_link(url, icon, libelle)"
+                        th:hx-get="'/' + ${link.getUrl()} + '/api'"
+                        th:hx-push-url="'/' + ${link.getUrl()}"
+                        th:href="'/' + ${link.getUrl()}"
+                        hx-swap="innerHTML transition:true"
+                        hx-target="#insert"
+                        th:text="${link.getLibelle()}"
+                        hx-on::after-request="closeModal()"
+                        >
+                    </a>
+                </div>
+            </div>
+        </li>
+    </section>
+</aside>

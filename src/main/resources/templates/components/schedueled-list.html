@@ -1,6 +1,6 @@
-<div class="flex p-2 gap-2 w-full">
+<div class="flex p-1 lg:p-2 gap-2 w-full">
     <section th:if="${schedueled.size()} > 0" class="w-full bg-grey p-5 text-lg rounded-md shadow-dark shadow-md flex flex-col items-center">
-        <div class="text-lightPrimary text-2xl p-5 font-poppins"> Mes cours du jour : </div>
+        <div class="text-lightPrimary text-2xl p-2 lg:p-5 font-poppins"> Mes cours du jour : </div>
         <div class="flex flex-col gap-2 w-full px-3">
             <div class="flex justify-between text-primary w-full rounded-md p-2 bg-white" th:each="c, iterStat : ${schedueled}" >
                 <a 
@@ -12,7 +12,7 @@
                     hx-swap="innerHTML transition:true"
                     ></a>
                 <div class="flex items-center gap-1">
-                    <div th:text="'Prévu à ' + ${dateUtil.getHeure(c.getDatePrevue())}"></div>
+                    <div ><span class="hidden lg:flex">Prévu à : </span><span th:text="${dateUtil.getHeure(c.getDatePrevue())}"></span></div>
                     <div
                         class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
                         th:hx-patch="'/cours/finished?id=' + ${c.getId()}"

@@ -23,12 +23,12 @@
     <script src="/js/calendar.js"></script>
     <title>Digi-Learning</title>
 </head>
-<body class="flex w-full h-full overflow-hidden">
+<body class="flex flex-col xl:flex-row w-full h-full overflow-hidden">
     <th:block th:replace="~{components/navbar}"></th:block>
     <main hx-history="false" id="router-outlet" class="w-full bg-secondary">
         <div id="insert" th:insert="${insert}" class="w-full h-screen"></div>
     </main>
-    <th:block th:replace="pages/fragments/cours/dialogs/modal.cours"></th:block>
+    <th:block th:replace="components/modal.nav"></th:block>
     <script src="/js/animation.post-forum.js"></script>
     <script src="/js/form-checking.js"></script>
     <script src="/js/animation.cours.js" type="module"></script>

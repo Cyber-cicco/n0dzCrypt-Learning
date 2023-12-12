@@ -9,10 +9,11 @@
 <!--/*@thymesVar id="coursPrevus" type="java.util.List<fr.diginamic.digilearning.dto.CoursDto>"*/-->
 <div id="calendar" class="flex flex-col overflow-x-auto bg-white gap-2 w-full h-full max-w-full">
     <div class="flex flex-col w-full h-full justify-center">
-        <div class="flex items-center w-full">
-            <div class="flex gap-1">
-                <form class="flex p-2"  onsubmit="return false;">
-                    <div class="flex gap-2 w-full items-center">
+        <div class="flex flex-col-reverse md:flex-row items-center w-full">
+            <div class="block text-primary w-full md:w-1/4 text-center bg-grey m-1 p-2 rounded-md lg:hidden">Veuillez vous connecter sur la version PC pour organiser votre emploi du temps</div>
+            <div class="flex flex-col md:flex-row gap-1">
+                <form class="flex flex-col md:flex-row p-2"  onsubmit="return false;">
+                    <div class="flex flex-col md:flex-row gap-2 w-full items-center">
                         <label for="semaine">Semaine :</label>
                         <input 
                         name="semaine" 
@@ -29,7 +30,7 @@
                         >
                     </div>
                 </form>
-                <div class="flex items-center py-2">
+                <div class="flex w-full md:w-fit items-center justify-center py-2">
                     <img
                     src="/img/icons/simple-arrow-primary.svg"
                     class="rotate-90 hover:cursor-pointer px-3 py-1 rounded-md hover:bg-lightAccent"

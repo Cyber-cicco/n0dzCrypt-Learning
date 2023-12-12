@@ -17,7 +17,7 @@
                         src="/img/icons/reply.svg"
                         hx-on::before-request="openModalBot()"
                         th:hx-get="'/chapitre/reponse/modal?id=' + ${question.getId()}"
-                        hx-target="#modal"
+                        hx-target="#modal-bot"
                         hx-swap="innerHTML"
                 >
                 <img
@@ -44,7 +44,7 @@
             class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
             hx-on::before-request="openModalBot()"
             th:hx-get="'/chapitre/question/modal?id=' + ${chapitre.getId()}"
-            hx-target="#modal"
+            hx-target="#modal-bot"
             hx-swap="innerHTML"
     >
         Nouvelle question

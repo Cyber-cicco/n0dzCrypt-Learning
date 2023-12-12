@@ -1,0 +1,4 @@
+<div th:fragment="entete(titre)" class="flex xl:hidden text-center font-poppins text-3xl bg-grey text-primary p-5">
+    <div class="flex-grow" th:text="${titre}"></div>
+    <th:block th:replace="/pages/fragments/cours/cours.hamb"></th:block>
+</div>
