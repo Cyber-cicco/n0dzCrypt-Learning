@@ -36,7 +36,7 @@ public class ChapitreController {
     }
 
     @PatchMapping("/reponse/like")
-    public String changeLikeReponse(@CookieValue("AUTH-TOKEN") String token, Model model, @RequestParam("idReponse") Long idReponse){
+    public String changeLikeReponse(@CookieValue("AUTH-TOKEN") String token, Model model, @RequestParam("id") Long idReponse){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         Reponse reponse = chapitreIrrigator.irrigateReponse(model, userInfos, idReponse);
         chapitreService.likeReponse(reponse, userInfos.getId());

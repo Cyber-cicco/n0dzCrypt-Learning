@@ -12,7 +12,7 @@
                     id="progres"
                     class="flex flex-col w-full gap-2 p-2"
                     >
-                    <th:block th:replace="~{components/progress-bar :: progresTitle(${progresCours}, 'Progrès général : ')}"></th:block>
+                    <th:block th:replace="~{components/progress-bar :: progresTitle({progresCours}, 'Progrès général : ')}"></th:block>
                     <th:block th:replace="~{components/progress-bar :: progresTitle(${progresJour}, 'Progrès du jour : ')}"></th:block>
                 </div>
                 </section>
