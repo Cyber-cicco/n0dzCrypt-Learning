@@ -5,6 +5,7 @@ import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.Session;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
+import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.page.service.CoursService;
 import fr.diginamic.digilearning.page.service.UtilisateurService;
 import fr.diginamic.digilearning.repository.CoursRepository;
@@ -36,21 +37,22 @@ public class ProfilController {
 
     @GetMapping("/api")
     public String getProfilApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
-        irrigateBaseAttributes(token, model, response);
-        return "pages/profil/profil";
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+        irrigateBaseAttributes(userInfos, model, response);
+        return Routes.ADR_PROFIL;
     }
     @GetMapping
     public String getProfil(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
-        irrigateBaseAttributes(token, model, response);
-        model.addAttribute("insert", "pages/profil/profil");
-        return "layout/base";
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+        irrigateBaseAttributes(userInfos, model, response);
+        model.addAttribute("insert", Routes.ADR_PROFIL);
+        model.addAttribute("links", navBarService.getLinks(userInfos));
+        return Routes.ADR_BASE_LAYOUT;
     }
 
-    private void irrigateBaseAttributes(String token, Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+    private void irrigateBaseAttributes(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
         List<Cours> bookmarked = coursRepository.getBookMarked(userInfos.getId());
-        model.addAttribute("links", navBarService.getLinks(userInfos));
         model.addAttribute("presentation", utilisateur.getNom().toUpperCase() + " " + utilisateur.getPrenom());
         model.addAttribute("email", utilisateur.getEmail());
         model.addAttribute("telephone", utilisateur.getTelephone());
@@ -60,22 +62,6 @@ public class ProfilController {
         model.addAttribute("progresCours", utilisateurService.getProgression(utilisateur.getId()));
         model.addAttribute("progresJour", utilisateurService.getProgressionJournee(utilisateur.getId()));
         model.addAttribute("dateUtil", dateUtil);
-        model.addAttribute("nomSession", utilisateur.getSessionsStagiaire().stream().findFirst().orElseGet(() -> {
-            try {
-                response.sendRedirect("/error/utilisateur");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return new Session();
-        }).getNom());
-        String placement = "Vous n'êtes pas actullement en recherche d'entreprise";
-        if(utilisateur.getStatusAse() != null){
-            switch (utilisateur.getStatusAse()){
-                case A_PLACE -> placement = "Vous êtes encore en recherche d'entreprise. Courage !";
-                case PLACEMENT_EN_COURS -> placement = "Vous avez trouvé une entreprise, plus que quelques détails à régler.";
-            }
-        }
-        model.addAttribute("placement", placement);
         model.addAttribute("title", "Mon Compte");
     }
 
@@ -90,6 +76,6 @@ public class ProfilController {
         model.addAttribute("progresCours", utilisateurService.getProgression(userInfos.getId()));
         model.addAttribute("progresJour", utilisateurService.getProgressionJournee(userInfos.getId()));
         model.addAttribute("id", idCours);
-        return "pages/profil/fragments/profil.progress";
+        return Routes.ADR_PROFIL_PROGRES;
     }
 }

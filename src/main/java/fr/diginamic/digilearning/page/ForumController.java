@@ -8,6 +8,7 @@ import fr.diginamic.digilearning.entities.FilDiscussion;
 
 import fr.diginamic.digilearning.entities.Salon;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
+import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.page.service.ForumService;
 import fr.diginamic.digilearning.page.validators.FilValidator;
 import fr.diginamic.digilearning.page.validators.PostForumValidator;
@@ -38,25 +39,19 @@ public class ForumController {
     @GetMapping("/api")
     public String getForumApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        model.addAttribute("cardInsert", "pages/forum/fragments/forum.presentation");
+        model.addAttribute("cardInsert", Routes.ADR_FORUM_PRESENTATION);
         irrigateBaseTemplate(userInfos, model, response);
-        return "pages/forum/forum";
-    }
-
-
-    @GetMapping("/error")
-    public String getForumError() {
-        return "pages/forum/fragments/forum.presentation";
+        return Routes.ADR_FORUM;
     }
 
     @GetMapping
     public String getForum(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        model.addAttribute("cardInsert", "pages/forum/fragments/forum.presentation");
-        model.addAttribute("insert", "pages/forum/forum");
+        model.addAttribute("cardInsert", Routes.ADR_FORUM_PRESENTATION);
+        model.addAttribute("insert", Routes.ADR_FORUM);
         irrigateBaseTemplate(userInfos, model, response);
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "layout/base";
+        return Routes.ADR_BASE_LAYOUT;
     }
 
     @GetMapping("/salon")
@@ -64,10 +59,10 @@ public class ForumController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseTemplate(userInfos, model, response);
         irrigateSalonAttribute(userInfos, model, response, idSalon);
-        model.addAttribute("cardInsert", "pages/forum/fragments/forum.salon");
-        model.addAttribute("insert", "pages/forum/forum");
+        model.addAttribute("cardInsert",Routes.ADR_FORUM_SALON);
+        model.addAttribute("insert", Routes.ADR_FORUM);
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "layout/base";
+        return Routes.ADR_BASE_LAYOUT;
     }
 
     private void irrigateSalonAttribute(AuthenticationInfos userInfos, Model model, HttpServletResponse response, Long idSalon) {
@@ -84,17 +79,17 @@ public class ForumController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseTemplate(userInfos, model, response);
         irrigateFilAttribute(userInfos, model, response, idFil, page);
-        model.addAttribute("insert", "pages/forum/forum");
-        model.addAttribute("cardInsert", "pages/forum/fragments/forum.fil");
+        model.addAttribute("insert", Routes.ADR_FORUM);
+        model.addAttribute("cardInsert", Routes.ADR_FORUM_FIL);
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "layout/base";
+        return Routes.ADR_BASE_LAYOUT;
     }
 
     @GetMapping("/salon/api")
     public String getSalonById(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idSalon, Model model, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateSalonAttribute(userInfos, model, response, idSalon);
-        return "pages/forum/fragments/forum.salon";
+        return Routes.ADR_FORUM_SALON;
     }
 
     private void irrigateBaseTemplate(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
@@ -107,7 +102,7 @@ public class ForumController {
     public String getFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idFil, @RequestParam Long page, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateFilAttribute(userInfos, model, response, idFil, page);
-        return "pages/forum/fragments/forum.fil";
+        return Routes.ADR_FORUM_FIL;
     }
 
     private void irrigateFilAttribute(AuthenticationInfos userInfos, Model model, HttpServletResponse response, Long idFil, Long page) {
@@ -123,17 +118,17 @@ public class ForumController {
     @GetMapping("/regles/api")
     public String getRegles(@RequestParam Long id, Model model){
         irrigateRegles(model, id);
-        return "pages/forum/fragments/forum.fil";
+        return Routes.ADR_FORUM_FIL;
     }
     @GetMapping("/regles")
     public String getBaseRegles(@RequestParam Long id, @CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseTemplate(userInfos, model, response);
         irrigateRegles(model, id);
-        model.addAttribute("insert", "pages/forum/forum");
-        model.addAttribute("cardInsert", "pages/forum/fragments/forum.fil");
+        model.addAttribute("insert", Routes.ADR_FORUM);
+        model.addAttribute("cardInsert", Routes.ADR_FORUM_FIL);
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "layout/base";
+        return Routes.ADR_BASE_LAYOUT;
     }
 
     private void irrigateRegles(Model model, Long id){
@@ -152,7 +147,7 @@ public class ForumController {
         forumService.saveNewMessage(userInfos, id, postForumDto);
         forumService.verifyIfUserIsAllowed(userInfos, id, response);
         irrigateFilAttribute(userInfos, model, response, id, page);
-        return "pages/forum/fragments/forum.fil";
+        return Routes.ADR_FORUM_FIL;
     }
     @PostMapping("/fil")
     public String postNewFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam Long id, @ModelAttribute PostFilDto postFilDto, Model model, HttpServletResponse response) {
@@ -161,6 +156,6 @@ public class ForumController {
         forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), id);
         forumService.saveNewFil(userInfos, id, postFilDto);
         irrigateSalonAttribute(userInfos, model, response, id);
-        return "pages/forum/fragments/forum.salon";
+        return Routes.ADR_FORUM_SALON;
     }
 }

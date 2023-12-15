@@ -1,0 +1,62 @@
+package fr.diginamic.digilearning.page.irrigator;
+
+import fr.diginamic.digilearning.dto.CoursDto;
+import fr.diginamic.digilearning.page.AgendaController;
+import fr.diginamic.digilearning.page.Routes;
+import fr.diginamic.digilearning.page.service.AgendaService;
+import fr.diginamic.digilearning.security.AuthenticationInfos;
+import fr.diginamic.digilearning.utils.DateUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class AgendaIrrigator {
+    private final AgendaService agendaService;
+    private final DateUtil dateUtil;
+
+    /***
+     * Irrigue le model avec les informations nécessaires à la construction de la page de l'agenda et de ses fragments
+     * Donne les liens de la navbar en fonction.
+     * Donne les cours de l'utilisateur triées pour sa liste de cours
+     * Irrigue la partie spécifique au calendrier
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param date représentation de la date à laquelle l'utilisateur veut voir le calendrire de la semaine
+     */
+    public void irrigateBaseModel(AuthenticationInfos userInfos, Model model, LocalDate date) {
+        model.addAttribute("cours", agendaService.getCoursForAgenda(userInfos.getId()));
+        model.addAttribute("calendar", Routes.ADR_AGENDA_BODY);
+        irrigateCalendar(model, date, userInfos);
+    }
+    /**
+     * Irrigue le model avec les informations nécessaires au fait de créer le calendrier
+     * Donne le mois courant
+     * Donne les informations nécessaires au fait d'afficher chaque jour de la semaine pour la date donnée
+     * Donne la date sélectionnée
+     * Donne les heures de la journée
+     * Donne les cours prévus associés aux heures de la journée
+     * Donne un utilitaire permettant de gérer les dates dans le template
+     * Donne une date pour la semaine précédente
+     * Donne une date pour la semaine suivante
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param date représentation de la date à laquelle l'utilisateur veut voir le calendrire de la semaine
+     */
+    private void irrigateCalendar(Model model, LocalDate date, AuthenticationInfos userInfos){
+        List<CoursDto> coursPrevus = agendaService.getCoursPrevus(userInfos.getId());
+        model.addAttribute("cal", agendaService.getCalendarInfos(date));
+        model.addAttribute("week", agendaService.getDayInfosForWeek(date));
+        model.addAttribute("dateValue", date.toString());
+        model.addAttribute("hours", agendaService.getHeuresJournee());
+        model.addAttribute("hourMap", agendaService.getHourMap(coursPrevus));
+        model.addAttribute("dateUtil", dateUtil);
+        model.addAttribute("coursPrevus", coursPrevus);
+        model.addAttribute("prev", date.minusWeeks(1).toString());
+        model.addAttribute("next", date.plusWeeks(1).toString());
+    }
+}

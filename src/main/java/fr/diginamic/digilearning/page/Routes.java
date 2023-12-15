@@ -1,0 +1,45 @@
+package fr.diginamic.digilearning.page;
+
+/**
+ * Classe ayant pour but de définir les adresses des templates
+ * NE PAS Y INSÉRER DE MÉTHODES NI AUTRE CHOSE QUE DES ADRESSES,
+ * LA CLASSE A POUR VOCATION DE SE FAIRE ÉCRIRE PAR UN PROCESSUS
+ * DE GÉNÉRATION DE CODE EN FONCTION DU NOM DES DIFFÉRENTS
+ * FICHIERS DANS LE FRONT
+ * */
+public class Routes {
+
+    public static final String ADR_BASE_LAYOUT = "layout/base";
+    public static final String ADR_CONVERSATION_BODY ="pages/conversation/conversation";
+    public static final String ADR_OUTER_CHAT ="pages/conversation/fragments/conversation.outer-chat";
+    public static final  String ADR_INNER_CHAT = "pages/conversation/fragments/conversation.inner-chat";
+    public static final String ADR_AGENDA_BODY = "pages/agenda/agenda.main";
+    public static final String ADR_COURS_QUESTION_RATING = "pages/cours/visionneuse/fragments/cours.question.rating";
+    public static final String ADR_COURS_REPONSE_RATING = "pages/cours/visionneuse/fragments/cours.reponse.rating";
+    public static final String ADR_MODAL_COURS_REPONSE = "/components/modal/modal.cours.reponse";
+    public static final String ADR_MODAL_COURS_QUESTION = "/components/modal/modal.cours.question";
+    public static final String ADR_CHAPITRE = "pages/cours/visionneuse/fragments/cours.chapitre";
+    public static final String ADR_COURS_VISIONNEUSE = "pages/cours/visionneuse/cours.visionneuse";
+    public static final String ADR_SOUS_MODULE = "pages/cours/sous-modules/cours.sous-modules";
+    public static final String ADR_COURS_SOMMAIRE = "pages/cours/visionneuse/fragments/cours.sommaire";
+    public static final String ADR_LISTE_QUESTIONS = "pages/cours/visionneuse/fragments/chapitre.questions";
+    public static final String ADR_LISTE_REPONSES = "pages/cours/visionneuse/fragments/chapitre.reponses";
+    public static final String ADR_LISTE_COURS = "pages/cours/liste/cours.liste";
+    public static final String ADR_VISIONNEUSE_COURS = "pages/cours/visionneuse/cours.visionneuse";
+    public static final String ADR_BOOKMARK_ICON = "components/flag-icons/bookmark";
+    public static final String ADR_FINISHED_ICON = "components/flag-icons/finished";
+    public static final String ADR_UTILISATEUR_ERROR = "pages/errors/utilisateur.error";
+    public static final String ADR_FORM_ERROR = "components/reponses/form.error";
+    public static final String ADR_FORUM = "pages/forum/forum";
+    public static final String ADR_FORUM_FIL = "pages/forum/fragments/forum.fil";
+    public static final String ADR_FORUM_PRESENTATION = "pages/forum/fragments/forum.presentation";
+    public static final String ADR_FORUM_SALON = "pages/forum/fragments/forum.salon";
+    public static final String ADR_HOME = "pages/home/home";
+    public static final String ADR_LOGIN = "pages/login/login";
+    public static final String ADR_PROFIL = "pages/profil/profil";
+    public static final String ADR_PROFIL_PROGRES = "pages/profil/fragments/profil.progress";
+    public static final String ADR_COURS_MODULE = "pages/cours/modules/cours.modules";
+    public static final String ADR_COURS_MODULE_BODY = "pages/cours/modules/fragments/cours.modules.body";
+
+    private Routes(){}
+}

@@ -19,6 +19,6 @@ public class ErrorController {
     @GetMapping("/utilisateur")
     public String getCours(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        return "pages/errors/utilisateur.error";
+        return Routes.ADR_UTILISATEUR_ERROR;
     }
 }

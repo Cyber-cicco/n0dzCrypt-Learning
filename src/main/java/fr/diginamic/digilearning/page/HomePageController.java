@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
+import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.page.service.CoursService;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
@@ -30,15 +31,15 @@ public class HomePageController {
     public String getHomePageApi(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateModel(model, userInfos);
-        return "pages/home/home";
+        return Routes.ADR_HOME;
     }
     @GetMapping({"/", "", "home"})
     public String getHomePage(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        model.addAttribute("insert", "pages/home/home");
+        model.addAttribute("insert", Routes.ADR_HOME);
         model.addAttribute("links", navBarService.getLinks(userInfos));
         irrigateModel(model, userInfos);
-        return "layout/base";
+        return Routes.ADR_BASE_LAYOUT;
     }
 
     private void irrigateModel(Model model, AuthenticationInfos userInfos) {

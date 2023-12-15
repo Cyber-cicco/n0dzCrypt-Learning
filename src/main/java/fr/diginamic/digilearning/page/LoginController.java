@@ -30,7 +30,7 @@ public class LoginController {
     @GetMapping
     public String getloginPage(Model model, HttpServletResponse response){
         model.addAttribute("title", "Me connecter");
-        return "pages/login/login";
+        return Routes.ADR_LOGIN;
     }
     @GetMapping("/api")
     public void redirectToLogin(Model model, HttpServletResponse response) throws IOException {
@@ -58,6 +58,6 @@ public class LoginController {
                 }, () -> {
                     model.addAttribute("error", "Votre adresse e-mail ou mot de passe est invalide");
                 });
-        return "components/reponses/form.error";
+        return Routes.ADR_FORM_ERROR;
     }
 }
