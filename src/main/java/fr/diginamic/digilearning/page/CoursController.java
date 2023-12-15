@@ -177,19 +177,6 @@ public class CoursController {
                 : ""
         );
         model.addAttribute("id", idCours);
-        return "pages/fragments/cours/cours.finished";
-    }
-    @PatchMapping("/finished/progress")
-    public String patchFinishedWithProgress(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idCours, Model model) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        boolean finished = coursService.patchFinished(userInfos, idCours);
-        model.addAttribute("style", (finished)
-                ? "filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);"
-                : ""
-        );
-        model.addAttribute("progresCours", utilisateurService.getProgression(userInfos.getId()));
-        model.addAttribute("progresJour", utilisateurService.getProgressionJournee(userInfos.getId()));
-        model.addAttribute("id", idCours);
-        return "pages/fragments/profil/finished-progress.fragment";
+        return "components/flag-icons/finished";
     }
 }

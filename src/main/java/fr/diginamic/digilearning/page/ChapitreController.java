@@ -80,13 +80,13 @@ public class ChapitreController {
     @GetMapping("/reponse/modal")
     public String getReponseModal(Model model, @RequestParam("id") Long idQuestion) {
         model.addAttribute("idQuestion", idQuestion);
-        return "pages/fragments/cours/dialogs/reponse.dialog";
+        return "/components/modal/modal.cours.reponse";
     }
 
     @GetMapping("/question/modal")
     public String getQuestionModal(Model model, @RequestParam("id") Long idChapitre) {
         model.addAttribute("idChapitre", idChapitre);
-        return "pages/fragments/cours/dialogs/question.dialog";
+        return "/components/modal/modal.cours.question";
     }
 
     @PostMapping("/question")

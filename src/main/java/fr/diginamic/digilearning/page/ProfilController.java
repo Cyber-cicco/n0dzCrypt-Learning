@@ -16,9 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,12 +37,12 @@ public class ProfilController {
     @GetMapping("/api")
     public String getProfilApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         irrigateBaseAttributes(token, model, response);
-        return "pages/profil";
+        return "pages/profil/profil";
     }
     @GetMapping
     public String getProfil(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         irrigateBaseAttributes(token, model, response);
-        model.addAttribute("insert", "pages/profil");
+        model.addAttribute("insert", "pages/profil/profil");
         return "base";
     }
 
@@ -79,5 +77,19 @@ public class ProfilController {
         }
         model.addAttribute("placement", placement);
         model.addAttribute("title", "Mon Compte");
+    }
+
+    @PatchMapping("/finished/progress")
+    public String patchFinishedWithProgress(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idCours, Model model) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+        boolean finished = coursService.patchFinished(userInfos, idCours);
+        model.addAttribute("style", (finished)
+                ? "filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);"
+                : ""
+        );
+        model.addAttribute("progresCours", utilisateurService.getProgression(userInfos.getId()));
+        model.addAttribute("progresJour", utilisateurService.getProgressionJournee(userInfos.getId()));
+        model.addAttribute("id", idCours);
+        return "pages/profil/fragments/profil.progress";
     }
 }

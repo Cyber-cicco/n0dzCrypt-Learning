@@ -9,7 +9,7 @@
                 hx-swap="outerHTML transition:true"
         >
         <div class="flex-grow text-center" th:text="${titre}"></div>
-        <th:block th:replace="/pages/fragments/cours/cours.hamb"></th:block>
+        <th:block th:replace="/components/nav-elements/nav.hamb"></th:block>
     </div>
     <th:block th:replace="~{pages/cours/sous-modules/fragments/cours.sous-modules.body}"></th:block>
 </div>

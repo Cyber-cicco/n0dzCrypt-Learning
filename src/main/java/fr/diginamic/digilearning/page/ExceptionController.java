@@ -15,12 +15,12 @@ public class ExceptionController {
     public String sendBrokenRuleException(HttpServletRequest request, Model model, HttpServletResponse response, BrokenRuleException e) {
         model.addAttribute("error", e.getMessage());
         response.setHeader("HX-Retarget", "#error");
-        return "reponses/form.error";
+        return "components/reponses/form.error";
     }
     @ExceptionHandler(UnauthorizedException.class)
     public String sendUnauthorizedException(HttpServletRequest request, Model model, HttpServletResponse response, UnauthorizedException e){
         model.addAttribute("error", e.getMessage());
         response.setHeader("HX-Retarget", "#error");
-        return "reponses/form.error";
+        return "components/reponses/form.error";
     }
 }

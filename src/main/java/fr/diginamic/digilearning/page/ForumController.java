@@ -38,22 +38,22 @@ public class ForumController {
     @GetMapping("/api")
     public String getForumApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        model.addAttribute("cardInsert", "pages/fragments/forum/presentation.forum");
+        model.addAttribute("cardInsert", "pages/forum/fragments/forum.presentation");
         irrigateBaseTemplate(userInfos, model, response);
-        return "pages/forum";
+        return "pages/forum/forum";
     }
 
 
     @GetMapping("/error")
     public String getForumError() {
-        return "pages/fragments/forum/presentation.forum";
+        return "pages/forum/fragments/forum.presentation";
     }
 
     @GetMapping
     public String getForum(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        model.addAttribute("cardInsert", "pages/fragments/forum/presentation.forum");
-        model.addAttribute("insert", "pages/forum");
+        model.addAttribute("cardInsert", "pages/forum/fragments/forum.presentation");
+        model.addAttribute("insert", "pages/forum/forum");
         irrigateBaseTemplate(userInfos, model, response);
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
@@ -64,8 +64,8 @@ public class ForumController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseTemplate(userInfos, model, response);
         irrigateSalonAttribute(userInfos, model, response, idSalon);
-        model.addAttribute("cardInsert", "pages/fragments/forum/salon.forum");
-        model.addAttribute("insert", "pages/forum");
+        model.addAttribute("cardInsert", "pages/forum/fragments/forum.salon");
+        model.addAttribute("insert", "pages/forum/forum");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
@@ -84,8 +84,8 @@ public class ForumController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseTemplate(userInfos, model, response);
         irrigateFilAttribute(userInfos, model, response, idFil, page);
-        model.addAttribute("insert", "pages/forum");
-        model.addAttribute("cardInsert", "pages/fragments/forum/fil.forum");
+        model.addAttribute("insert", "pages/forum/forum");
+        model.addAttribute("cardInsert", "pages/forum/fragments/forum.fil");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
@@ -94,7 +94,7 @@ public class ForumController {
     public String getSalonById(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idSalon, Model model, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateSalonAttribute(userInfos, model, response, idSalon);
-        return "pages/fragments/forum/salon.forum";
+        return "pages/forum/fragments/forum.salon";
     }
 
     private void irrigateBaseTemplate(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
@@ -107,7 +107,7 @@ public class ForumController {
     public String getFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idFil, @RequestParam Long page, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateFilAttribute(userInfos, model, response, idFil, page);
-        return "pages/fragments/forum/fil.forum";
+        return "pages/forum/fragments/forum.fil";
     }
 
     private void irrigateFilAttribute(AuthenticationInfos userInfos, Model model, HttpServletResponse response, Long idFil, Long page) {
@@ -123,15 +123,15 @@ public class ForumController {
     @GetMapping("/regles/api")
     public String getRegles(@RequestParam Long id, Model model){
         irrigateRegles(model, id);
-        return "pages/fragments/forum/fil.forum";
+        return "pages/forum/fragments/forum.fil";
     }
     @GetMapping("/regles")
     public String getBaseRegles(@RequestParam Long id, @CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseTemplate(userInfos, model, response);
         irrigateRegles(model, id);
-        model.addAttribute("insert", "pages/forum");
-        model.addAttribute("cardInsert", "pages/fragments/forum/fil.forum");
+        model.addAttribute("insert", "pages/forum/forum");
+        model.addAttribute("cardInsert", "pages/forum/fragments/forum.fil");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
@@ -152,7 +152,7 @@ public class ForumController {
         forumService.saveNewMessage(userInfos, id, postForumDto);
         forumService.verifyIfUserIsAllowed(userInfos, id, response);
         irrigateFilAttribute(userInfos, model, response, id, page);
-        return "pages/fragments/forum/fil.forum";
+        return "pages/forum/fragments/forum.fil";
     }
     @PostMapping("/fil")
     public String postNewFil(@CookieValue("AUTH-TOKEN") String token, @RequestParam Long id, @ModelAttribute PostFilDto postFilDto, Model model, HttpServletResponse response) {
@@ -161,6 +161,6 @@ public class ForumController {
         forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), id);
         forumService.saveNewFil(userInfos, id, postFilDto);
         irrigateSalonAttribute(userInfos, model, response, id);
-        return "pages/fragments/forum/salon.forum";
+        return "pages/forum/fragments/forum.salon";
     }
 }

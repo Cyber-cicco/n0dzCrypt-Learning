@@ -30,12 +30,12 @@ public class HomePageController {
     public String getHomePageApi(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateModel(model, userInfos);
-        return "pages/home";
+        return "pages/home/home";
     }
     @GetMapping({"/", "", "home"})
     public String getHomePage(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        model.addAttribute("insert", "pages/home");
+        model.addAttribute("insert", "pages/home/home");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         irrigateModel(model, userInfos);
         return "base";

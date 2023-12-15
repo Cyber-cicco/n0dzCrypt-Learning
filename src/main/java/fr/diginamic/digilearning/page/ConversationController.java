@@ -36,13 +36,13 @@ public class ConversationController {
     public String getConversationApi(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseAttributesStagiaires(userInfos, model, response);
-        return "pages/conversation";
+        return "pages/conversation/conversation";
     }
     @GetMapping("/stagiaire")
     public String getConversation(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseAttributesStagiaires(userInfos, model, response);
-        model.addAttribute("insert", "pages/conversation");
+        model.addAttribute("insert", "pages/conversation/conversation");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
@@ -59,7 +59,7 @@ public class ConversationController {
         model.addAttribute("error", "");
         model.addAttribute("interlocuteur", interlocuteurInfos);
         model.addAttribute("page", 0);
-        return "pages/fragments/conversation/outer-chat.fragment";
+        return "pages/conversation/fragments/conversation.outer-chat";
     }
 
     private void irrigateBaseAttributesStagiaires(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
@@ -96,7 +96,7 @@ public class ConversationController {
         model.addAttribute("idUtilisateur", emetteur.getId());
         model.addAttribute("conversation", conversationService.getMessagesFromConversation(conversation, 0));
         model.addAttribute("page", 0);
-        return "pages/fragments/conversation/chat.fragment";
+        return "pages/conversation/fragments/cours.inner-chat";
     }
 
     @GetMapping("messages/refresh")
@@ -107,7 +107,6 @@ public class ConversationController {
         model.addAttribute("error", "");
         model.addAttribute("conversation", conversation);
         model.addAttribute("page", page);
-        System.out.println(page);
-        return "pages/fragments/conversation/chat.fragment";
+        return "pages/conversation/fragments/cours.inner-chat";
     }
 }
