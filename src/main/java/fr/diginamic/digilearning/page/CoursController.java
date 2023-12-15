@@ -46,7 +46,7 @@ public class CoursController {
         irrigateBaseModel(userInfos, model);
         model.addAttribute("insert", "pages/cours/modules/cours.modules");
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     private void irrigateBaseModel(AuthenticationInfos userInfos, Model model){
@@ -66,7 +66,7 @@ public class CoursController {
         irrigateModule(userInfos, idModule, model);
         model.addAttribute("insert", "pages/cours/sous-modules/cours.sous-modules");
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     private void irrigateModule(AuthenticationInfos userInfos, Long idModule, Model model){
@@ -91,7 +91,7 @@ public class CoursController {
         irrigateListeCours(userInfos, idSModule, idModule, model);
         model.addAttribute("insert", "pages/cours/liste/cours.liste");
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     private void irrigateListeCours(AuthenticationInfos userInfos, Long idSModule, Long idModule, Model model) {
@@ -116,7 +116,7 @@ public class CoursController {
         irrigateSommaire(userInfos, id, model);
         model.addAttribute("insert", "pages/cours/visionneuse/cours.visionneuse");
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     private void irrigateSommaire(AuthenticationInfos userInfos, Long idCours, Model model) {
@@ -140,7 +140,7 @@ public class CoursController {
         irrigateChapitre(userInfos, id, idCours, model);
         model.addAttribute("insert", "pages/cours/visionneuse/cours.visionneuse");
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     private void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Model model) {

@@ -38,7 +38,7 @@ public class HomePageController {
         model.addAttribute("insert", "pages/home/home");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         irrigateModel(model, userInfos);
-        return "base";
+        return "layout/base";
     }
 
     private void irrigateModel(Model model, AuthenticationInfos userInfos) {

@@ -44,7 +44,7 @@ public class ConversationController {
         irrigateBaseAttributesStagiaires(userInfos, model, response);
         model.addAttribute("insert", "pages/conversation/conversation");
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     @GetMapping("/interlocuteur")

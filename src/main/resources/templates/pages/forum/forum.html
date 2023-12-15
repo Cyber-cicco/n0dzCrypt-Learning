@@ -1,0 +1,35 @@
+<!--/*@thymesVar id="sujets" type="java.util.List<fr.diginamic.digilearning.entities.Sujet>"*/-->
+<!--/*@thymesVar id="utilisateur" type="java.util.List<fr.diginamic.digilearning.entities.Utilisateur>"*/-->
+<div class="flex flex-col gap-2 h-full">
+    <th:block th:replace="~{components/entete.nav :: entete('Forum')}"></th:block>
+    <div class="flex h-full">
+        <section class="hidden lg:flex h-full relative top-0 left-0 overflow-y-scroll flex-col font-poppins bg-primary text-white w-1/5">
+            <div id="sujet" th:each="sujet, iterStat : ${sujets}">
+                <div class="flex p-2 justify-between w-full items-center shadow-md">
+                    <div class="w-3/4 p-2" th:text="${sujet.getLibelle()}"></div>
+                    <img
+                            class="hover:cursor-pointer"
+                            width="24"
+                            data-rotatable
+                            tabindex="1"
+                            src="/img/icons/simple-arrow.svg"
+                    >
+                </div>
+                <div class="wrapper">
+                    <div class="sub-menu">
+                        <div class="bg-lightPrimary hover:cursor-pointer p-2 hover:brightness-150"
+                             th:each="salon, iterStat : ${sujet.getSalons(utilisateur)}"
+                             th:text="${salon.getTitre()}"
+                             th:hx-get="'/forum/salon/api?id=' + ${salon.getId()}"
+                             th:hx-push-url="'/forum/salon?id=' + ${salon.getId()}"
+                             hx-target="#forum-canvas"
+                             hx-swap="outerHTML transition:true"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="flex flex-col h-full p-3 w-full lg:w-4/5" th:insert="~{components/containers/card :: cardFull(${cardInsert})}"></div>
+    </div>
+</div>
+<script src="/js/animations.forum.js"></script>

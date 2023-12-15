@@ -1,0 +1,47 @@
+<section class="h-full" id="forum-canvas">
+    <section class="hidden lg:flex flex-col justify-start gap-10 bg-grey h-full w-full p-5">
+        <h2 class="text-5xl pt-5 font-poppins text-center text-primary">Bienvenu sur le forum de diginamic !</h2>
+        <h3 class="text-2xl text-lightPrimary text-center">
+            Échanger, S'informer, Communiquer, Partager
+        </h3>
+        <div class="flex flex-col justify-center items-center">
+            <blockquote class="p-5 italic w-1/2 h-full">
+                “Tout groupe humain prend sa richesse dans la communication, l’entraide et la solidarité visant à un but
+                commun : l’épanouissement de chacun dans le respect des différences.”
+            </blockquote>
+            <div class=""> De Françoise Dolto</div>
+        </div>
+        <div class="text-lg w-3/5 self-center m-t-10 text-lightPrimary text-justify">
+            Retrouvez-ici des discussions sur des sujets divers et variés, allant de l'entrée
+            en formation à la veille technologique en passant par des sujets plus personnels. Échangez avec les membres de votre session, partagez
+            vos centres d'intérêts, vos découvertps, débattez dans le respect de vos camarades de formation.<br>
+            N'oubliez pas que la réussite d'un parcours ne se construit jamais seul, mais accompagnée de nos camarades !
+        </div>
+    </section>
+    <section class="flex lg:hidden h-full relative top-0 left-0 overflow-y-scroll flex-col font-poppins bg-primary text-white w-full">
+        <div id="sujet" th:each="sujet, iterStat : ${sujets}">
+            <div class="flex p-2 justify-between w-full items-center shadow-md">
+                <div class="w-3/4 p-2" th:text="${sujet.getLibelle()}"></div>
+                <img
+                class="hover:cursor-pointer"
+                width="24"
+                data-rotatable
+                tabindex="1"
+                src="/img/icons/simple-arrow.svg"
+                >
+            </div>
+                <div class="wrapper">
+                    <div class="sub-menu">
+                        <div class="bg-lightPrimary hover:cursor-pointer p-2 hover:brightness-150"
+                            th:each="salon, iterStat : ${sujet.getSalons(utilisateur)}"
+                            th:text="${salon.getTitre()}"
+                            th:hx-get="'/forum/salon/api?id=' + ${salon.getId()}"
+                            th:hx-push-url="'/forum/salon?id=' + ${salon.getId()}"
+                            hx-target="#forum-canvas"
+                            hx-swap="outerHTML transition:true"
+                            ></div>
+                    </div>
+                </div>
+        </div>
+    </section>
+</section>

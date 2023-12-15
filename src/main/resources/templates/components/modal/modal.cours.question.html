@@ -1,0 +1,18 @@
+<!--/*@thymesVar id="idChapitre" type="java.lang.Long"*/-->
+<div class="flex justify-end w-full" method="dialog">
+    <button onclick="closeModalBot()"><img src="/img/icons/close.svg"></button>
+</div>
+<div>
+    <form class="flex flex-col gap-5 items-center text-white justify-center w-full p-5 bg-primary rounded-md">
+        <th:block th:replace="/components/form :: textArea('Votre question', 'message')"></th:block>
+        <button
+                th:hx-post="'/chapitre/question?id=' + ${idChapitre}"
+                hx-target="#question-answer"
+                hx-on::after-request="closeModalBot()"
+                hx-swap="innerHTML"
+                class="bg-accent w-1/2 p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">
+            Poster
+        </button>
+        <span id="error" class="text-error"></span>
+    </form>
+</div>

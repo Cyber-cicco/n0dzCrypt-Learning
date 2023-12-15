@@ -1,0 +1,12 @@
+<div th:each="i: ${#numbers.sequence(1, nbPages)}">
+    <div
+            class=""
+            th:class="'rounded-sm p-1 text-white text-sm hover:cursor-pointer ' +
+            (${page} == ${i} ? ' bg-accent' : ' bg-primary hover:bg-lightPrimary')"
+            th:text="${i}"
+            th:hx-get="'/forum/fil/api?id=' + ${fil.getId()} + '&page=' + ${i}"
+            th:hx-push-url="'/forum/fil?id=' + ${fil.getId()} + '&page=' + ${i}"
+            hx-swap="outerHTML transition:true"
+            hx-target="#forum-canvas"
+    ></div>
+</div>

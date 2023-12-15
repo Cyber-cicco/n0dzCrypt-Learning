@@ -53,7 +53,7 @@ public class AgendaController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseModel(userInfos, model, LocalDate.now());
         model.addAttribute("insert", "pages/agenda/agenda.main");
-        return "base";
+        return "layout/base";
     }
 
     /**
@@ -68,7 +68,7 @@ public class AgendaController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseModel(userInfos, model, semaine);
         model.addAttribute("insert", "pages/agenda/agenda.main");
-        return "base";
+        return "layout/base";
     }
 
     /***

@@ -56,7 +56,7 @@ public class ForumController {
         model.addAttribute("insert", "pages/forum/forum");
         irrigateBaseTemplate(userInfos, model, response);
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     @GetMapping("/salon")
@@ -67,7 +67,7 @@ public class ForumController {
         model.addAttribute("cardInsert", "pages/forum/fragments/forum.salon");
         model.addAttribute("insert", "pages/forum/forum");
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     private void irrigateSalonAttribute(AuthenticationInfos userInfos, Model model, HttpServletResponse response, Long idSalon) {
@@ -87,7 +87,7 @@ public class ForumController {
         model.addAttribute("insert", "pages/forum/forum");
         model.addAttribute("cardInsert", "pages/forum/fragments/forum.fil");
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     @GetMapping("/salon/api")
@@ -133,7 +133,7 @@ public class ForumController {
         model.addAttribute("insert", "pages/forum/forum");
         model.addAttribute("cardInsert", "pages/forum/fragments/forum.fil");
         model.addAttribute("links", navBarService.getLinks(userInfos));
-        return "base";
+        return "layout/base";
     }
 
     private void irrigateRegles(Model model, Long id){

@@ -43,7 +43,7 @@ public class ProfilController {
     public String getProfil(@CookieValue("AUTH-TOKEN") String token, Model model, HttpServletResponse response){
         irrigateBaseAttributes(token, model, response);
         model.addAttribute("insert", "pages/profil/profil");
-        return "base";
+        return "layout/base";
     }
 
     private void irrigateBaseAttributes(String token, Model model, HttpServletResponse response){
