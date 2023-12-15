@@ -1,4 +1,90 @@
-insert into dl_post(contenu, emetteur_id) values
-('Bonjour. Bienvenu dans digiSuivi. Je suis vi. Comme digi. Et bien non. En fait c\'est digilearning', 2000);
-INSERT INTO ADMINISTRATION_SESSION(ID, ID_SESSION, ID_UTILISATEUR, STATUS_RESPONSABLE_SESSION) VALUES
-(1, 1001, 1, 0)
+INSERT INTO FORMATION(ID, AVEC_MODULE, DATE_FIN, DATE_MAJ, NOM, NOM_COURT, REFERENCE, DUREE, DUREE_FACTURABLE, REFERENCE_EXAMEN, EDITEUR_CERTIFICATION, NOM_CERTIF, SCORE_OBTENTION_CERTIF, NB_CERTIFS_BLANCHES, INFOS_CERTIF, TITRE, USER_MAJ, ID_NEXT, ID_PARENT, ID_PREVIOUS, VERSION, OBJS_PEDAGOGIQUES, PROJET_FIN, EVAL_AMONT, PRE_REQUIS, INTRO_SYLLABUS, NOM_LOGO_CERTIF) VALUES
+(1, null, null, null, 'JAVA_ANGULAR', 'JA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null),
+(2, null, null, null, 'COBOL_JQUERY', 'JA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null),
+(3, null, null, null, 'PYTHON_HTMX', 'JA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+
+INSERT INTO `SESSION`(DATE_DEB, DATE_FIN, DATE_MAJ, NOM, DUREE_FACTURABLE, STATUT_VALIDATION, USER_MAJ, ID_CENTRE, ID_FOR, ID_NEXT, ID_PARENT, ID_PREVIOUS, ID_SAL, ID_SOCIETE, ID_LISTE, ID_PROJET, SANS_CONFLIT, COMMENTAIRES, RESPONSABLE_PEDAGOGIQUE, RESPONSABLE_ADMIN, ROOM_MASTER1, ROOM_MASTER2, LIEU_PASSAGE_CERTIFICATION, NB_BILANS, SYNTHESE, STATUT_PREPARATION, TYPE_EMARGEMENT, ID_SOCIETE_BDC)  VALUES
+('2023-07-01', '2024-05-22', null, '2023-M03-JAVA_FULLSTACK', 0, 0, null, null, 1, null, null, null, null, null, null, null, 0, 0, null, null, null, null, null, 0,  null, 0, 'DECO_RECO', null),
+('2023-09-01', '2024-07-22', null, '2023-M01-COBOL_FULLSTACK', 0, 0, null, null, 2, null, null, null, null, null, null, null, 0, 0, null, null, null, null, null, 0,  null, 0, 'DECO_RECO', null),
+('2024-02-10', '2025-02-10', null, '2024-M05-PYTHON_HTMX', 0, 0, null, null, 3, null, null, null, null, null, null, null, 0, 0, null, null, null, null, null, 0,  null, 0, 'DECO_RECO', null);
+
+INSERT INTO dl_module(id, libelle, photo) VALUES
+(1, 'Backend Java', 'java-back.png'),
+(2, 'Frontend Angular', 'front-angular.png'),
+(3, 'Backend Cobol', 'cobol-back.png'),
+(4, 'Backend Python', 'python-back.png'),
+(5, 'Frontend React', 'front-react.png'),
+(6, 'Frontend HTMX', 'front-htmx.png'),
+(7, 'Frontend JQUERY', 'front-jquery.png'),
+(8, 'Introduction à la programmation', 'intro.png');
+
+INSERT INTO `dl_sous_module` VALUES
+(1,'Introduction HTML CSS','html-css.png'),
+(2,'Introduction à javascript','javascript.png'),
+(3,'Javascript avancé','javascript-avance.png'),
+(4,'L\'écosystème React','react.png'),
+(5,'L\'écosystème Angular','angular.png'),
+(6,'Introduction à HTMX','htmx.png'),
+(7,'HTMX et Thymeleaf','htmx-thymeleaf.png'),
+(8,'Gestion de version avec Git et Github','git-github.png'),
+(9,'CSS avancé','css-avance.png'),
+(10,'L\'écosystème Vue.js','vue.js.png'),
+(11,'Fonctionnement du web','fonct-web.png'),
+(12,'Les structures de données','struct-donnee.png'),
+(13,'Introduction à la programmation','intro-prog.png'),
+(14,'Mathématiques pour la programmation','maths-prog.png'),
+(15,'Fonctionnement d\'un ordinateur','fonct-ordi.png'),
+(16,'Les bases de données','bdd.png'),
+(17,'La modélisation d\'une application','modelisation.png'),
+(18,'Le maquettage d\'une application web','maquettage.png'),
+(19,'Introduction à java','intro-java.png'),
+(24,'La programmation orientée objet avec Java','java-objet.png'),
+(25,'Le framework Spring et Spring boot','spring.png'),
+(26,'Déploiment et intégration continue','devops.png'),
+(27,'Optimisation d\'une base de données','optimisation-bdd.png'),
+(28,'Culture du développeur','culture.png'),
+(29,'Apprendre à apprendre','apprendre.png'),
+(30,'Introduction au développement d\'applications', 'intro-dev.png');
+
+INSERT INTO dl_module_smodule(id_smodule, id_module) VALUES
+(1, 2),
+(1, 5),
+(1, 6),
+(1, 7),
+(2, 2),
+(2, 5),
+(2, 6),
+(2, 7),
+(3, 2),
+(3, 5),
+(3, 6),
+(3, 7),
+(4, 2),
+(4, 5),
+(4, 6),
+(4, 7),
+(5, 2),
+(6, 6),
+(7, 6),
+(8, 1),
+(8, 3),
+(8, 4),
+(9, 2),
+(9, 5),
+(9, 6),
+(9, 7),
+(11, 8),
+(12, 8),
+(13, 8),
+(14, 8),
+
+INSERT INTO dl_module_formation(id_module, id_formation) VALUES
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 3),
+(6, 1),
+(6, 3),
+(7, 3),
+(7, 2);
+

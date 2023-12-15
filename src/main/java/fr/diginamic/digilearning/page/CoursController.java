@@ -38,19 +38,19 @@ public class CoursController {
     public String getCoursApi(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseModel(userInfos, model);
-        return "pages/cours";
+        return "pages/cours/modules/cours.modules";
     }
     @GetMapping
     public String getCours(@CookieValue("AUTH-TOKEN") String token, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateBaseModel(userInfos, model);
-        model.addAttribute("insert", "pages/cours");
+        model.addAttribute("insert", "pages/cours/modules/cours.modules");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
 
     private void irrigateBaseModel(AuthenticationInfos userInfos, Model model){
-        model.addAttribute("subinsert", "pages/fragments/cours/cours.main.html");
+        model.addAttribute("subinsert", "pages/cours/modules/fragments/cours.modules.body");
         model.addAttribute("modules", coursService.findModulesByUtilisateur(userInfos.getId()));
     }
 
@@ -58,13 +58,13 @@ public class CoursController {
     public String getModuleApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateModule(userInfos, idModule, model);
-        return "pages/module";
+        return "pages/cours/sous-modules/cours.sous-modules";
     }
     @GetMapping("/module")
     public String getModule(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateModule(userInfos, idModule, model);
-        model.addAttribute("insert", "pages/module");
+        model.addAttribute("insert", "pages/cours/sous-modules/cours.sous-modules");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
@@ -81,7 +81,7 @@ public class CoursController {
     public String getListCoursApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idSModule, @RequestParam("module") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateListeCours(userInfos, idSModule, idModule, model);
-        return "pages/liste-cours";
+        return "pages/cours/liste/cours.liste";
     }
 
 
@@ -89,7 +89,7 @@ public class CoursController {
     public String getListeCours(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idSModule, @RequestParam("module") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateListeCours(userInfos, idSModule, idModule, model);
-        model.addAttribute("insert", "pages/liste-cours");
+        model.addAttribute("insert", "pages/cours/liste/cours.liste");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
@@ -106,7 +106,7 @@ public class CoursController {
     public String getSommaireApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateSommaire(userInfos, id, model);
-        return "pages/visualiser.cours";
+        return "pages/cours/visionneuse/cours.visionneuse";
     }
 
 
@@ -114,7 +114,7 @@ public class CoursController {
     public String getSommaire(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long id, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateSommaire(userInfos, id, model);
-        model.addAttribute("insert", "pages/visualiser.cours");
+        model.addAttribute("insert", "pages/cours/visionneuse/cours.visionneuse");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
@@ -124,21 +124,21 @@ public class CoursController {
         FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
         model.addAttribute("cours", cours);
         model.addAttribute("flags", flagCours);
-        model.addAttribute("slide", "pages/sommaire.cours.main");
+        model.addAttribute("slide", "pages/cours/visionneuse/fragments/cours.sommaire");
     }
 
     @GetMapping("/chapitre/api")
     public String getChapitreApi(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateChapitre(userInfos, id, idCours, model);
-        return "pages/visualiser.cours";
+        return "pages/cours/visionneuse/cours.visionneuse";
     }
 
     @GetMapping("/chapitre")
     public String getChapitre(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
         irrigateChapitre(userInfos, id, idCours, model);
-        model.addAttribute("insert", "pages/visualiser.cours");
+        model.addAttribute("insert", "pages/cours/visionneuse/cours.visionneuse");
         model.addAttribute("links", navBarService.getLinks(userInfos));
         return "base";
     }
@@ -154,15 +154,7 @@ public class CoursController {
         model.addAttribute("cours", cours);
         model.addAttribute("flags", flagCours);
         model.addAttribute("idCours", idCours);
-        model.addAttribute("slide", "pages/chapitre.main.cours");
-    }
-
-    @GetMapping("/bookmarked")
-    public String getBookMarks(@CookieValue("AUTH-TOKEN") String token, Model model) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        model.addAttribute("bookmarked", coursRepository.getBookMarked(userInfos.getId()));
-        model.addAttribute("schedueled", coursService.getCoursCeJour(userInfos.getId()));
-        return "pages/fragments/cours/modal.cours.bookmarked";
+        model.addAttribute("slide", "pages/cours/visionneuse/fragments/cours.chapitre");
     }
     @PatchMapping("/bookmark")
     public String patchBookmark(@CookieValue("AUTH-TOKEN") String token, @RequestParam("id") Long idCours, Model model) {
@@ -173,7 +165,7 @@ public class CoursController {
                 : ""
         );
         model.addAttribute("id", idCours);
-        return "pages/fragments/cours/cours.bookmark";
+        return "components/flag-icons/bookmark";
     }
 
     @PatchMapping("/finished")

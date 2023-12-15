@@ -30,12 +30,12 @@
             </div>
         </div>
         <div class="text-primary" th:text="'Par ' + ${question.getAuteur().getFullName()}"></div>
-        <th:block th:replace="~{pages/fragments/cours/cours.rating}"></th:block>
+        <th:block th:replace="~{pages/cours/visionneuse/fragments/cours.question.rating}"></th:block>
         <div class="wrapper">
             <div class="sub-menu">
                 <div th:id="'reponses-' + ${question.getId()}"
                      class="flex flex-col gap-1"
-                     th:insert="~{/pages/fragments/cours/chapitre.reponse}"
+                     th:insert="~{pages/cours/visionneuse/fragments/chapitre.reponses}"
                 ></div>
             </div>
         </div>

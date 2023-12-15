@@ -41,7 +41,7 @@ public class ChapitreController {
         likeQuestion(question, userInfos.getId());
         model.addAttribute("question", question);
         model.addAttribute("idUtilisateur", userInfos.getId());
-        return "pages/fragments/cours/cours.rating";
+        return "pages/cours/visionneuse/fragments/cours.question.rating";
     }
     @PatchMapping("/question/dislike")
     public String changeDislikeQuestion(@CookieValue("AUTH-TOKEN") String token, Model model, @RequestParam("id") Long idQuestion){
@@ -50,7 +50,7 @@ public class ChapitreController {
         dislikeQuestion(question, userInfos.getId());
         model.addAttribute("question", question);
         model.addAttribute("idUtilisateur", userInfos.getId());
-        return "pages/fragments/cours/cours.rating";
+        return "pages/cours/visionneuse/fragments/cours.question.rating";
     }
 
     @PatchMapping("/reponse/like")
@@ -62,7 +62,7 @@ public class ChapitreController {
         likeReponse(reponse, userInfos.getId());
         model.addAttribute("reponse", reponse);
         model.addAttribute("idUtilisateur", userInfos.getId());
-        return "pages/fragments/cours/cours.reponse.rating";
+        return "pages/cours/visionneuse/fragments/cours.reponse.rating";
     }
 
     @PatchMapping("/reponse/dislike")
@@ -74,7 +74,7 @@ public class ChapitreController {
         dislikeReponse(reponse, userInfos.getId());
         model.addAttribute("reponse", reponse);
         model.addAttribute("idUtilisateur", userInfos.getId());
-        return "pages/fragments/cours/cours.reponse.rating";
+        return "pages/cours/visionneuse/fragments/cours.reponse.rating";
     }
 
     @GetMapping("/reponse/modal")
@@ -96,7 +96,7 @@ public class ChapitreController {
         Chapitre chapitre = coursService.saveQuestion(userInfos.getId(), idChapitre, questionDto);
         model.addAttribute("chapitre", chapitre);
         model.addAttribute("questions", chapitre.getQuestions());
-        return "pages/fragments/cours/chapitre.questions";
+        return "pages/cours/visionneuse/fragments/chapitre.questions";
 
     }
     @PostMapping("/reponse")
@@ -106,7 +106,7 @@ public class ChapitreController {
         Question updatedQuestion = coursService.saveReponse(userInfos.getId(), idQuestion, reponseDto);
         model.addAttribute("question", updatedQuestion);
         model.addAttribute("idUtilisateur", userInfos.getId());
-        return "pages/fragments/cours/chapitre.reponse";
+        return "pages/cours/visionneuse/fragments/chapitre.reponses";
 
     }
     private void likeReponse(Reponse reponse, Long idUtilisateur) {

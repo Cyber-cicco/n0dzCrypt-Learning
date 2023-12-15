@@ -5,7 +5,7 @@
 
             <div class="flex justify-between">
                 <p class="text-primary text-sm" th:text="${reponse.getAuteur().getFullName()} + ' : '"></p>
-                <th:block th:replace="~{pages/fragments/cours/cours.reponse.rating}"></th:block>
+                <th:block th:replace="~{pages/cours/visionneuse/fragments/cours.reponse.rating}"></th:block>
             </div>
             <h3  th:text="${reponse.getContenu()}"></h3>
         </div>

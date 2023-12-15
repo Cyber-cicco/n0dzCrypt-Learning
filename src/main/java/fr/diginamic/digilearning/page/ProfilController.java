@@ -1,7 +1,6 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
-import fr.diginamic.digilearning.dto.CoursDto;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.Session;
 import fr.diginamic.digilearning.entities.Utilisateur;
