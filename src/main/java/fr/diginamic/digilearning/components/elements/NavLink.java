@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Représente le contenu d'un lien de la barre de navigation
+ */
 @Data
 @AllArgsConstructor
 @Builder

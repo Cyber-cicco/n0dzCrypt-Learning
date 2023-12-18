@@ -3,6 +3,11 @@ package fr.diginamic.digilearning.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Réprésente des informations à propos d'un bareme
+ *
+ * @author DIGINAMIC
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

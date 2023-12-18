@@ -10,6 +10,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Représente un cours e-learning
+ *
+ * @author Abel Ciccoli
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

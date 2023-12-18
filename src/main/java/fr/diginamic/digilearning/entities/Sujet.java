@@ -1,14 +1,18 @@
 package fr.diginamic.digilearning.entities;
 
 import fr.diginamic.digilearning.entities.enums.StatusForum;
-import fr.diginamic.digilearning.repository.SalonRepository;
-import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Réprésente le sujet d'un forum dans lequel on peut regrouper des
+ * salons
+ *
+ * @author Abel Ciccoli
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -23,6 +27,12 @@ public class Sujet {
     @OneToMany(mappedBy = "sujetForum")
     private List<Salon> salonList;
 
+    /**
+     * Permet de récupérer une liste des salons d'un sujet auxquels l'utilisateur à
+     * le droit d'accéder
+     * @param utilisateur l'utilistateur
+     * @return une liste des salons
+     */
     public List<Salon> getSalons(Utilisateur utilisateur){
         List<Salon> salonsUtilisateur = new ArrayList<>();
         for (Salon salon : salonList) {

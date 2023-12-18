@@ -7,6 +7,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Représente une formation délivrée par Diginamic
+ *
+ * @author DIGINAMIC
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

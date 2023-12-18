@@ -15,6 +15,10 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 
+/**
+ * Irrigateur du modèle donnée par le controlleur
+ * HyperMédia du forum
+ */
 @Service
 @RequiredArgsConstructor
 public class ForumIrrigator {

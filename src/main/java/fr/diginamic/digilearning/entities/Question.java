@@ -1,13 +1,18 @@
 package fr.diginamic.digilearning.entities;
 
-import fr.diginamic.digilearning.repository.RelationQuestionRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Représente une question posée sur un chapitre
+ * Implémente une interface signifiant que l'entité peut etre like ou dislike par un
+ * utilisateur
+ *
+ * @author Abel Ciccoli
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +42,12 @@ public class Question implements Rated<RelationQuestion> {
     public List<Reponse> getReponses() {
         return reponses.stream().filter(reponse -> !reponse.getSupprimee()).toList();
     }
+
+    /**
+     * Permet de si une question a été like par un utilisateur donné
+     * @param idUtilisateur l'identifiant de l'utilisateur
+     * @return true si l'utilisateur a liké la question
+     */
     @Override
     public Boolean isLiked(Long idUtilisateur){
         return relationQuestions.stream()
@@ -45,6 +56,11 @@ public class Question implements Rated<RelationQuestion> {
                 .findFirst()
                 .orElse(false);
     }
+    /**
+     * Permet de si une question a été dislike par un utilisateur donné
+     * @param idUtilisateur l'identifiant de l'utilisateur
+     * @return true si l'utilisateur a disliké la question
+     */
     @Override
     public Boolean isDisliked(Long idUtilisateur){
         return relationQuestions.stream()
@@ -55,16 +71,28 @@ public class Question implements Rated<RelationQuestion> {
     }
 
 
+    /**
+     * Permet de récupérer le nombre de likes de la question
+     * @return le nombre de likes de la question
+     */
     @Override
     public int getLikes() {
         return relationQuestions.stream().filter(RelationQuestion::getLiked).toList().size();
     }
 
+    /**
+     * Permet de récupérer le nombre de dislikes de la question
+     * @return le nombre de likes de la question
+     */
     @Override
     public int getDislikes() {
         return relationQuestions.stream().filter(RelationQuestion::getDisliked).toList().size();
     }
 
+    /**
+     * Getter de relationsQuestions
+     * @return les relations à la question
+     */
     @Override
     public List<RelationQuestion> getRelations() {
         return relationQuestions;

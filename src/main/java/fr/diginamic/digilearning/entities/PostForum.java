@@ -7,6 +7,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Représente le post d'un utilisateur dans le fil de discussion d'un forum
+ *
+ * @author Abel Ciccoli
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

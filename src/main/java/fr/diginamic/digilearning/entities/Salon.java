@@ -7,6 +7,11 @@ import lombok.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Représente le salon d'un forum.
+ *
+ * @author Abel Ciccoli
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

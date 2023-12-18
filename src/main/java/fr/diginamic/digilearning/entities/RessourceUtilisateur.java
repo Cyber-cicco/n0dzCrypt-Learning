@@ -5,6 +5,11 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+/**
+ * Représente une ressource de l'utilisateur
+ *
+ * @author digiCAP
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

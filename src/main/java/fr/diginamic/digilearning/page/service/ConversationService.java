@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.page.service;
 
+import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Conversation;
 import fr.diginamic.digilearning.entities.Message;
 import fr.diginamic.digilearning.entities.Utilisateur;
@@ -9,7 +10,6 @@ import fr.diginamic.digilearning.repository.MessageRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -84,11 +84,11 @@ public class ConversationService {
                 .toList()).orElseGet(ArrayList::new);
     }
 
-    public Conversation postNewMessage(Utilisateur emetteur, MessageModel messageModel, Long id) {
+    public Conversation postNewMessage(Utilisateur emetteur, MessageDto messageModel, Long id) {
         Conversation conversation = conversationRepository.getConversationByUtilisateurConcerneAndId(emetteur.getId(), id)
                 .orElseThrow(EntityNotFoundException::new);
         Message message = Message.builder()
-                .contenu(messageModel.usermsg())
+                .contenu(messageModel.getMessage())
                 .conversation(conversation)
                 .emetteur(emetteur)
                 .emetteurId(emetteur.getId())

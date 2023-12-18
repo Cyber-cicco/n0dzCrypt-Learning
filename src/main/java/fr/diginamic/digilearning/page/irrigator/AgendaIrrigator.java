@@ -13,6 +13,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Irrigateur du modèle donnée par le controlleur
+ * HyperMédia de l'agenda
+ */
 @Service
 @RequiredArgsConstructor
 public class AgendaIrrigator {

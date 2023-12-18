@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.page.validators;
 
-import fr.diginamic.digilearning.dto.PostForumDto;
+import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ public class PostForumValidator {
     public static String[] BAN_WORDS = {
             "chocolatine",
     };
-    public void validatePostForum(PostForumDto post) {
+    public void validatePostForum(MessageDto post) {
         if(post.getMessage() == null || post.getMessage().isBlank()) {
             throw new BrokenRuleException("Le message ne peut pas être vide");
         }

@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Agrégat de liens de la navbar
+ */
 @Builder
 @AllArgsConstructor
 @Getter

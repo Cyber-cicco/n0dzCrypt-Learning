@@ -1,8 +1,8 @@
 package fr.diginamic.digilearning.page.service;
 
+import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.dto.MessageForumDto;
 import fr.diginamic.digilearning.dto.PostFilDto;
-import fr.diginamic.digilearning.dto.PostForumDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
@@ -55,7 +55,7 @@ public class ForumService {
         return filDiscussionRepository.findById(idFil).orElseThrow(EntityNotFoundException::new);
     }
 
-    public void saveNewMessage(AuthenticationInfos userInfos, Long id, PostForumDto postForumDto) {
+    public void saveNewMessage(AuthenticationInfos userInfos, Long id, MessageDto postForumDto) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
         FilDiscussion filDiscussion = filDiscussionRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         postForumRepository.save(PostForum.builder()

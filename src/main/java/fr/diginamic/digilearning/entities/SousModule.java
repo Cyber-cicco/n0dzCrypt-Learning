@@ -6,6 +6,12 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Réprésente le sous-module répertoriant une liste de cours donnée
+ * Plusieurs modules peuvent partager un meme sous module
+ *
+ * @author Abel Ciccoli
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

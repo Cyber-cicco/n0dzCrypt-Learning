@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Représente un bareme de notation pour une session
+ *
+ * @author diginamic
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

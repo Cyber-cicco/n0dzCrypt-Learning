@@ -7,6 +7,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Représente le fil de discussion d'un forum
+ *
+ * @author Abel Ciccoli
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

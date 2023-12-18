@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.page;
 
+import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.page.irrigator.ConversationIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.page.service.ConversationService;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.context.ThemeSource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +23,12 @@ public class ConversationController {
     private final ConversationIrrigator conversationIrrigator;
     private final LayoutIrrigator layoutIrrigator;
 
+    /**
+     *
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param response la réponse envoyée à l'utilisateur
+     * @return l'adresse du corps de la conversation
+     */
     @GetMapping("/stagiaire/api")
     public String getConversationApi( Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -43,7 +51,7 @@ public class ConversationController {
     }
 
     @PostMapping("/message")
-    public String postNewMessage( @ModelAttribute ConversationService.MessageModel message, @RequestParam("id") Long id, Model model, HttpServletResponse response){
+    public String postNewMessage(@ModelAttribute MessageDto message, @RequestParam("id") Long id, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         conversationIrrigator.irrigateConvWithNewMessage(model, userInfos, message, id);
         return Routes.ADR_INNER_CHAT ;

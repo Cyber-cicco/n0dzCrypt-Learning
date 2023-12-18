@@ -16,6 +16,10 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 
+/**
+ * Irrigateur du model donné par le controlleur
+ * HyperMédia du profil
+ */
 @Service
 @RequiredArgsConstructor
 public class ProfilIrrigator {

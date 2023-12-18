@@ -10,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+/**
+ * Irrigateur du modèle donnée par le controlleur
+ * HyperMédia de la page d'accueil
+ */
 @Service
 @RequiredArgsConstructor
 public class HomePageIrrigator {

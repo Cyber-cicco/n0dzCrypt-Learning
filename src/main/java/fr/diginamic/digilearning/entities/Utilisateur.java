@@ -10,6 +10,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Représente une utilisateur de l'application
+ *
+ * @author DIGINAMIC
+ */
 @Getter
 @Setter
 @Builder

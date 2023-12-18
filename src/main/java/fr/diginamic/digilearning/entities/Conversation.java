@@ -7,6 +7,12 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;    
 import java.util.List;
 
+/**
+ * Représente une conversation entre un stagiaire et un membre de
+ * l'administration de la session / le chatbot
+ *
+ * @author Abel Ciccoli
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

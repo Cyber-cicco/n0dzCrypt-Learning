@@ -1,11 +1,8 @@
 package fr.diginamic.digilearning.page;
 
 
+import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.dto.PostFilDto;
-import fr.diginamic.digilearning.dto.PostForumDto;
-
-import fr.diginamic.digilearning.entities.enums.TypeRole;
-import fr.diginamic.digilearning.exception.UnauthorizedException;
 import fr.diginamic.digilearning.page.irrigator.ForumIrrigator;
 import fr.diginamic.digilearning.page.service.ForumService;
 import fr.diginamic.digilearning.page.validators.FilValidator;
@@ -95,7 +92,7 @@ public class ForumController {
 
 
     @PostMapping("/message")
-    public String postNewMessage(@RequestParam Long id, @RequestParam Long page, @ModelAttribute PostForumDto postForumDto, Model model, HttpServletResponse response) {
+    public String postNewMessage(@RequestParam Long id, @RequestParam Long page, @ModelAttribute MessageDto postForumDto, Model model, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         postForumValidator.validatePostForum(postForumDto);
         forumService.saveNewMessage(userInfos, id, postForumDto);

@@ -6,6 +6,12 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Représente le message d'un fil de discussion entre un stagiaire
+ * et un responsable de la session
+ *
+ * @author Abel Ciccoli
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

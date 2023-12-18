@@ -32,7 +32,6 @@ public class AgendaController {
 
     /**
      * Récupère un fragment de la page principale de l'agenda
-     * @param token le token d'authentification
      * @param model un objet permettant d'irriguer le template thymeleaf
      * @return l'agenda
      * */
@@ -45,7 +44,6 @@ public class AgendaController {
 
     /**
      * Récupère la page principale de l'agenda
-     * @param token le token d'authentification
      * @param model un objet permettant d'irriguer le template thymeleaf
      * @return l'agenda
      * */
@@ -59,7 +57,6 @@ public class AgendaController {
 
     /**
      * Récupère la page principale de l'agenda à la date précisée.
-     * @param token le token d'authentification
      * @param model un objet permettant d'irriguer le template thymeleaf
      * @param semaine représentation de la date à laquelle l'utilisateur veut voir le calendrire de la semaine
      * @return un template de l'agenda à la date demandée
@@ -75,7 +72,6 @@ public class AgendaController {
 
     /**
      * Permet d'ajouter un cours à une date donnée
-     * @param token le token d'authentification
      * @param model un objet permettant d'irriguer le template thymeleaf
      * @param temps la date et l'heure choisie pour le cours
      * @param coursId l'identifiant du cours
@@ -103,7 +99,6 @@ public class AgendaController {
 
     /**
      * Permet d'ajouter un cours à une date donnée
-     * @param token le token d'authentification
      * @param model un objet permettant d'irriguer le template thymeleaf
      * @param temps la date et l'heure choisie pour le cours
      * @param coursId l'identifiant du cours

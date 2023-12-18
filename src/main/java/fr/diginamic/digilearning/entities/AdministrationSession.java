@@ -5,6 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.TypeBinderType;
 
+/**
+ * Entité servant de relation entre un utilisateur
+ * et une session pour déterminer son role au sein de
+ * celle-ci
+ *
+ * @author Abel Ciccoli
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

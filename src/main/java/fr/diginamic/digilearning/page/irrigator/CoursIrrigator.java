@@ -16,6 +16,10 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 
+/**
+ * Irrigateur du modèle donnée par le controlleur
+ * HyperMédia du cours
+ */
 @Service
 @RequiredArgsConstructor
 public class CoursIrrigator {
@@ -23,11 +27,23 @@ public class CoursIrrigator {
     private final CoursService coursService;
     private final CoursRepository coursRepository;
     private final SousModuleRepository sousModuleRepository;
+
+    /**
+     * Permet d'irriguer la page des modules
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     */
     public void irrigateBaseModel(AuthenticationInfos userInfos, Model model){
         model.addAttribute("subinsert", Routes.ADR_COURS_MODULE_BODY);
         model.addAttribute("modules", coursService.findModulesByUtilisateur(userInfos.getId()));
     }
 
+    /**
+     * Permet d'irriguer la page des sous-modules d'un module donné
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param idModule l'identifiant du module dont sont tirés les sous modules.
+     */
     public void irrigateModule(AuthenticationInfos userInfos, Long idModule, Model model){
         Module module = moduleRepository.findById(idModule).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("titre", module.getLibelle());
@@ -36,6 +52,13 @@ public class CoursIrrigator {
         model.addAttribute("bookmarked", coursRepository.getBookMarked(userInfos.getId()));
     }
 
+    /**
+     * Permet d'irriguer la vue avec la liste de cours.
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param idSModule l'identifiant du sous module.
+     * @param idModule l'identifiant du module dont il est tiré.
+     */
     public void irrigateListeCours(AuthenticationInfos userInfos, Long idSModule, Long idModule, Model model) {
         List<CoursDto> coursDtos = coursService.getCours(userInfos, idSModule);
         model.addAttribute("cours", coursDtos);
@@ -44,6 +67,12 @@ public class CoursIrrigator {
         model.addAttribute("idModuleOrigine", idModule);
     }
 
+    /**
+     * Permet d'irriguer la page de sommaire
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param idCours l'identifiant du cours dont on veut le sommaire.
+     */
     public void irrigateSommaire(AuthenticationInfos userInfos, Long idCours, Model model) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
         FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
@@ -52,6 +81,20 @@ public class CoursIrrigator {
         model.addAttribute("slide", Routes.ADR_COURS_SOMMAIRE);
     }
 
+    /**
+     * Permet d'irriguer le modèle de la page de chapitre
+     * Ajoute une entité chapitre
+     * Ajoute l'id de l'utilisateur
+     * Ajoute le contenu au format HTML
+     * Ajoute une liste des questions
+     * Ajoute une entité cours
+     * Ajoute les flags du cours
+     * Ajoute l'adresse d'un autre template correpondant au chapitre du cours
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param idChapitre l'identifiant du chapitre
+     * @param idCours l'identifiant du cours
+     */
     public void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Model model) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
         FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
@@ -66,6 +109,12 @@ public class CoursIrrigator {
         model.addAttribute("slide", Routes.ADR_CHAPITRE);
     }
 
+    /**
+     * Irrigue un model contenant juste une checkmark pour dire si un cours est fini
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param idCours l'identifiant du cours
+     */
     public void irrigateFinished(Model model, AuthenticationInfos userInfos, Long idCours) {
         boolean finished = coursService.patchFinished(userInfos, idCours);
         model.addAttribute("style", (finished)
@@ -74,6 +123,12 @@ public class CoursIrrigator {
         );
         model.addAttribute("id", idCours);
     }
+    /**
+     * Irrigue un model contenant juste une icone pour signifier l'ajout dans un favori
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param idCours l'identifiant du cours
+     */
     public void irrigateBookmarked(Model model, AuthenticationInfos userInfos, Long idCours) {
         boolean bookmarked = coursService.patchBookmark(userInfos, idCours);
         model.addAttribute("style", (bookmarked)
@@ -84,6 +139,7 @@ public class CoursIrrigator {
     }
 
     public void irrigateAdminPanel(AuthenticationInfos userInfos, Model model) {
+        model.addAttribute("user", userInfos);
         model.addAttribute("coursCrees", coursRepository.getCoursCrees(userInfos.getId()));
     }
 }

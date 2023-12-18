@@ -3,6 +3,11 @@ package fr.diginamic.digilearning.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * ???
+ *
+ * @author Abel Ciccoli
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

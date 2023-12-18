@@ -6,6 +6,11 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Représente un module d'une formation e-learning (ex. Backend Java)
+ *
+ * @author Abel Ciccoli
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

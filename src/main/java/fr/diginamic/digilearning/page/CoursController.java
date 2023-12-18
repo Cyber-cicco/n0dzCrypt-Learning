@@ -47,9 +47,21 @@ public class CoursController {
                 response
         );
         coursIrrigator.irrigateAdminPanel(userInfos, model);
-        return Routes.ADR_COURS_ADMIN;
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_ADMIN);
+        return Routes.ADR_BASE_LAYOUT;
     }
 
+    @GetMapping("/admin/api")
+    public String getCoursAdminPanelApi(Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(
+                userInfos.getRoles(),
+                List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR),
+                response
+        );
+        coursIrrigator.irrigateAdminPanel(userInfos, model);
+        return Routes.ADR_COURS_ADMIN;
+    }
     @GetMapping("/module/api")
     public String getModuleApi( @RequestParam("id") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -100,14 +112,14 @@ public class CoursController {
     }
 
     @GetMapping("/chapitre/api")
-    public String getChapitreApi( @RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
+    public String getChapitreApi(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         coursIrrigator.irrigateChapitre(userInfos, id, idCours, model);
         return Routes.ADR_VISIONNEUSE_COURS;
     }
 
     @GetMapping("/chapitre")
-    public String getChapitre( @RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
+    public String getChapitre(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         coursIrrigator.irrigateChapitre(userInfos, id, idCours, model);
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_VISIONNEUSE);
@@ -115,14 +127,14 @@ public class CoursController {
     }
 
     @PatchMapping("/bookmark")
-    public String patchBookmark( @RequestParam("id") Long idCours, Model model) {
+    public String patchBookmark(@RequestParam("id") Long idCours, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         coursIrrigator.irrigateBookmarked(model, userInfos, idCours);
         return Routes.ADR_BOOKMARK_ICON;
     }
 
     @PatchMapping("/finished")
-    public String patchFinished( @RequestParam("id") Long idCours, Model model) {
+    public String patchFinished(@RequestParam("id") Long idCours, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         coursIrrigator.irrigateFinished(model, userInfos, idCours);
         return Routes.ADR_FINISHED_ICON;

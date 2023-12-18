@@ -7,6 +7,11 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Représente le chapitre d'un cours
+ *
+ * @author Abel Ciccoli
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

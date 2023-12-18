@@ -8,6 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Représente une session pour un groupe donné
+ * Possède toutes les informations qui avaient été nécessaires pour le SID
+ *
+ * @author DIGINAMIC
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

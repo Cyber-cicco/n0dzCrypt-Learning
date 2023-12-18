@@ -19,7 +19,7 @@ public class AuthenticationInfos {
     private String token;
     private Long id;
 
-    public boolean isFomatteur(){
+    public boolean isFormateur(){
         return roles.contains(TypeRole.ROLE_FORMATEUR.getLibelle());
     }
 

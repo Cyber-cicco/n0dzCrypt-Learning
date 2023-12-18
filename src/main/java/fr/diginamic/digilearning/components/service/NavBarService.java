@@ -10,8 +10,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class NavBarService {
 
+    /**
+     * Permet de récupérer un array d'objets représentant les différents liens de la navbar
+     * en fonction des autorisations que l'on a.
+     * @param userInfos les informations de l'utilisateur authentifié
+     * @return la liste des liens de la navbar en fonction du role de l'utilisateur
+     */
     public NavLinks[] getLinks(AuthenticationInfos userInfos) {
-        if(userInfos.isAdministrateur() || userInfos.isFomatteur()){
+        if(userInfos.isAdministrateur() || userInfos.isFormateur()){
             return new NavLinks[]{
                     NavLinks.builder()
                             .navLinks(new NavLink[]{

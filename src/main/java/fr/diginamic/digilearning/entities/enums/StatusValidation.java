@@ -1,5 +1,9 @@
 package fr.diginamic.digilearning.entities.enums;
 
+/**
+ * Status de validation d'une session
+ * Artefact du SID
+ */
 public enum StatusValidation {
     /** A_VALIDER : StatutValidation */
     A_VALIDER("A Valider"),

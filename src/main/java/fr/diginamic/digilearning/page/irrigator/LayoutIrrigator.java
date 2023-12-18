@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+/**
+ * Irrigateur du model donné par le controlleur
+ * HyperMédia du layout de l'appilcation
+ */
 @Service
 @RequiredArgsConstructor
 public class LayoutIrrigator {

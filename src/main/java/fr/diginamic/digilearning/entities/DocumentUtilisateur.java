@@ -3,6 +3,11 @@ package fr.diginamic.digilearning.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Représente un document utilisateur
+ *
+ * @author DIGINAMIC
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

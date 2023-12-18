@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Réponse à une question posée à propos d'un chapitre
+ *
+ * @author Abel Ciccoli
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

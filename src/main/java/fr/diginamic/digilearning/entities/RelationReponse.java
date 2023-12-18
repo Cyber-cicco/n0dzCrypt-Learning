@@ -3,6 +3,11 @@ package fr.diginamic.digilearning.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Relation entre un utilisateur et une réponse
+ *
+ * @author Abel Ciccoli
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

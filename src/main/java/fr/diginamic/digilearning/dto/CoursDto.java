@@ -4,6 +4,11 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Représentation d'un cours avec les flags
+ * d'un utilisateur donné et le nom du sous module dans
+ * lequel il se trouve.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,8 +26,4 @@ public class CoursDto {
     private Boolean liked;
     private LocalDateTime datePrevue;
     private String titreSousModule;
-
-    public boolean isAtDatePrevue(HourInfos hourInfos, DayInfos dayInfos) {
-        return datePrevue.equals(LocalDateTime.of(dayInfos.dateJour(), hourInfos.time()));
-    }
 }

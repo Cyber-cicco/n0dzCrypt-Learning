@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.page.irrigator;
 
+import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Conversation;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
@@ -16,6 +17,10 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 
+/**
+ * Irrigateur du modèle donnée par le controlleur
+ * HyperMédia de la conversation
+ */
 @Service
 @RequiredArgsConstructor
 public class ConversationIrrigator {
@@ -24,13 +29,26 @@ public class ConversationIrrigator {
     private final AuthenticationService authenticationService;
     private final ConversationService conversationService;
     private final MessageValidator messageValidator;
+
+    /**
+     * Irrigue les informations essentielles pour le modèle de la conversation
+     * pour un stagiaire
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param response la réponse envoyée à l'utilisateur
+     */
     public void irrigateBaseAttributesStagiaires(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_STAGIAIRE, response);
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
         irrigateBaseAttributesConversationStagiaire(utilisateur, model);
     }
+
+    /**
+     * Permet de récupérer les informations nécessaires pour afficher la conversation
+     * @param utilisateur l'utilisateur connecté
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     */
     public void irrigateBaseAttributesConversationStagiaire(Utilisateur utilisateur, Model model){
-        model.addAttribute("title", "Mon suivi");
         model.addAttribute("idUtilisateur", utilisateur.getId());
         List<ConversationService.ContactInfos> contactInfos = conversationService.createContactList(utilisateur);
         if(contactInfos.get(0) != null) {
@@ -41,6 +59,12 @@ public class ConversationIrrigator {
         model.addAttribute("contacts", contactInfos);
     }
 
+    /**
+     * Permet d'irriguer le modèle du chat pour un interlocuteur donné
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param idInterlocuteur l'identifiant de l'interlocuteur.
+     */
     public void  irrgateConversationInterlocuteur(Model model, AuthenticationInfos userInfos, Long idInterlocuteur){
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
         Utilisateur interlocuteur = utilisateurRepository.findById(idInterlocuteur).orElseThrow(EntityNotFoundException::new);
@@ -53,16 +77,32 @@ public class ConversationIrrigator {
         model.addAttribute("page", 0);
     }
 
-    public void irrigateConvWithNewMessage(Model model, AuthenticationInfos userInfos, ConversationService.MessageModel message, Long id){
+    /**
+     * Irrigue la conversation avec un interlocteur donné
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param message le nouveau message
+     * @param id l'identifiant de la conversation
+     */
+    public void irrigateConvWithNewMessage(Model model, AuthenticationInfos userInfos, MessageDto message, Long id){
         Utilisateur emetteur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
         Conversation conversation;
-        messageValidator.validateMessage(message.usermsg());
+        messageValidator.validateMessage(message.getMessage());
         conversation = conversationService.postNewMessage(emetteur, message, id);
         model.addAttribute("error", "");
         model.addAttribute("idUtilisateur", emetteur.getId());
         model.addAttribute("conversation", conversationService.getMessagesFromConversation(conversation, 0));
         model.addAttribute("page", 0);
     }
+
+    /**
+     * Permet d'irriguer le modèle de la conversation lors du rafraichissement de la
+     * conversation
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param page le numéro de la page
+     * @param idConversation l'identifiant de la conversation
+     */
     public void irrigateRefresh(Model model, AuthenticationInfos userInfos, int page, Long idConversation) {
         ConversationService.PartialConv conversation = conversationService.getConversation(userInfos, idConversation, page);
         model.addAttribute("idUtilisateur", userInfos.getId());
