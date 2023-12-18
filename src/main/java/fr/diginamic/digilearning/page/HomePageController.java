@@ -1,14 +1,9 @@
 package fr.diginamic.digilearning.page;
 
-import fr.diginamic.digilearning.components.service.NavBarService;
+import fr.diginamic.digilearning.page.irrigator.HomePageIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
-import fr.diginamic.digilearning.page.service.CoursService;
-import fr.diginamic.digilearning.repository.CoursRepository;
-import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
-import fr.diginamic.digilearning.utils.DateUtil;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,33 +15,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 @RequiredArgsConstructor
 public class HomePageController {
-    private final UtilisateurRepository utilisateurRepository;
     private final AuthenticationService authenticationService;
-    private final CoursRepository coursRepository;
-    private final CoursService coursService;
-    private final DateUtil dateUtil;
-    private final NavBarService navBarService;
+    private final HomePageIrrigator homePageIrrigator;
+    private final LayoutIrrigator layoutIrrigator;
 
     @GetMapping({"api", "home/api"})
-    public String getHomePageApi(@CookieValue("AUTH-TOKEN") String token, Model model){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        irrigateModel(model, userInfos);
+    public String getHomePageApi( Model model){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        homePageIrrigator.irrigateModel(model, userInfos);
         return Routes.ADR_HOME;
     }
     @GetMapping({"/", "", "home"})
-    public String getHomePage(@CookieValue("AUTH-TOKEN") String token, Model model){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
-        model.addAttribute("insert", Routes.ADR_HOME);
-        model.addAttribute("links", navBarService.getLinks(userInfos));
-        irrigateModel(model, userInfos);
+    public String getHomePage( Model model){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_HOME);
+        homePageIrrigator.irrigateModel(model, userInfos);
         return Routes.ADR_BASE_LAYOUT;
-    }
-
-    private void irrigateModel(Model model, AuthenticationInfos userInfos) {
-        model.addAttribute("utilisateur", utilisateurRepository.findById(userInfos.getId())
-                .orElseThrow(EntityNotFoundException::new));
-        model.addAttribute("schedueled", coursService.getCoursCeJour(userInfos.getId()));
-        model.addAttribute("bookmarked", coursRepository.getBookMarked(userInfos.getId()));
-        model.addAttribute("dateUtil", dateUtil);
     }
 }

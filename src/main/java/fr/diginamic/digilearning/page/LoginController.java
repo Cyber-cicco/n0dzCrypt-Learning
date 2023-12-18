@@ -29,7 +29,6 @@ public class LoginController {
 
     @GetMapping
     public String getloginPage(Model model, HttpServletResponse response){
-        model.addAttribute("title", "Me connecter");
         return Routes.ADR_LOGIN;
     }
     @GetMapping("/api")

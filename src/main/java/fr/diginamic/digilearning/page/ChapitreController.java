@@ -21,31 +21,31 @@ public class ChapitreController {
     private final ChapitreService chapitreService;
 
     @PatchMapping("/question/like")
-    public String changeLikeQuestion(@CookieValue("AUTH-TOKEN") String token, Model model, @RequestParam("id") Long idQuestion){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+    public String changeLikeQuestion( Model model, @RequestParam("id") Long idQuestion){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         Question question = chapitreIrrigator.irrigateCoursQuestion(model, userInfos, idQuestion);
         chapitreService.likeQuestion(question, userInfos.getId());
         return Routes.ADR_COURS_QUESTION_RATING;
     }
     @PatchMapping("/question/dislike")
-    public String changeDislikeQuestion(@CookieValue("AUTH-TOKEN") String token, Model model, @RequestParam("id") Long idQuestion){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+    public String changeDislikeQuestion( Model model, @RequestParam("id") Long idQuestion){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         Question question = chapitreIrrigator.irrigateCoursQuestion(model, userInfos, idQuestion);
         chapitreService.dislikeQuestion(question, userInfos.getId());
         return Routes.ADR_COURS_QUESTION_RATING;
     }
 
     @PatchMapping("/reponse/like")
-    public String changeLikeReponse(@CookieValue("AUTH-TOKEN") String token, Model model, @RequestParam("id") Long idReponse){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+    public String changeLikeReponse( Model model, @RequestParam("id") Long idReponse){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         Reponse reponse = chapitreIrrigator.irrigateReponse(model, userInfos, idReponse);
         chapitreService.likeReponse(reponse, userInfos.getId());
         return Routes.ADR_COURS_REPONSE_RATING;
     }
 
     @PatchMapping("/reponse/dislike")
-    public String changeDislikeReponse(@CookieValue("AUTH-TOKEN") String token, Model model, @RequestParam("id") Long idReponse){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+    public String changeDislikeReponse( Model model, @RequestParam("id") Long idReponse){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         Reponse reponse = chapitreIrrigator.irrigateReponse(model, userInfos, idReponse);
         chapitreService.dislikeReponse(reponse, userInfos.getId());
         return Routes.ADR_COURS_REPONSE_RATING;
@@ -64,15 +64,15 @@ public class ChapitreController {
     }
 
     @PostMapping("/question")
-    public String postNewQuestion(@CookieValue("AUTH-TOKEN") String token, Model model, @RequestParam("id") Long idChapitre, @ModelAttribute MessageDto questionDto) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+    public String postNewQuestion( Model model, @RequestParam("id") Long idChapitre, @ModelAttribute MessageDto questionDto) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         chapitreIrrigator.irrigateListQuestions(model, userInfos, idChapitre, questionDto);
         return Routes.ADR_LISTE_QUESTIONS;
 
     }
     @PostMapping("/reponse")
-    public String postNewReponse(@CookieValue("AUTH-TOKEN") String token, Model model, @RequestParam("id") Long idQuestion, @ModelAttribute MessageDto reponseDto) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos(token);
+    public String postNewReponse( Model model, @RequestParam("id") Long idQuestion, @ModelAttribute MessageDto reponseDto) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         chapitreIrrigator.irrigateListeReponses(model, userInfos, idQuestion, reponseDto);
         return Routes.ADR_LISTE_REPONSES;
     }

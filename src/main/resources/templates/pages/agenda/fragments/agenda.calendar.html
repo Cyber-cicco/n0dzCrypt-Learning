@@ -75,40 +75,15 @@
                     th:class="(${iterStat.index} % 2 == 1) ? 'px-5 border-t-grey border-t-4 h-[50px] min-w-[200px] max-w-1/5 w-1/5 bg-white' : 'px-5 min-w-[200px] max-w-1/5 border-t-white border-t-4 h-[50px] w-1/5 bg-grey'"
                     th:data-draggable2="${dateUtil.getLdt(w.dateJour(), h.time()).toString()}"
                     th:each="w, iterStat: ${week}" >
-                    <section 
-                        th:id="${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getId()}"
-                        th:data-dragged="${dateUtil.getLdt(w.dateJour(), h.time()).toString()}"
-                        th:if="${hourMap.containsKey(dateUtil.getLdt(w.dateJour(), h.time()))}"
-                        th:class="'relative hover:cursor-move flex bg-lightPrimary text-white shadow-dark w-full overflow-y-visible shadow-md rounded-md h-[' + ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getDureeEstimee()} + '00%]'"
-                        >
-                        <a 
-                            class="p-2 hover:cursor-pointer grow overflow-hidden"
-                            th:with="c=${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time()))}"
-                            th:text="${c.getTitre()}"
-                            th:hx-get="'/cours/sommaire/api?id=' + ${c.getId()}"
-                            th:hx-push-url="'/cours/sommaire?id=' + ${c.getId()}"
-                            hx-target="#insert"
-                            hx-swap="innerHTML transition:true"
-                            ￼
-                            ></a><span class="flex">
-                            <div
-                                th:with="c=${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time()))}"
-                                class="rounded-full h-fit hover:cursor-pointer hover:bg-lightAccent p-1"
-                                th:hx-patch="'/cours/finished?id=' + ${c.getId()}"
-                                th:hx-target="'#finished-' + ${c.getId()}"
-                                hx-swap="outerHTML"
-                                >
-                                <img
-                                    class="min-w-[30px] min-h-[30px]"
-                                    th:id="'finished-' + ${c.getId()}"
-                                    width="30"
-                                    src="/img/icons/check.svg"
-                                    th:style="${c.getFinished()} ?
-                                    'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : '' "
-                                >
-                            </div>
-                        </span>
-                    </section>
+                    <th:block th:if="${hourMap.containsKey(dateUtil.getLdt(w.dateJour(), h.time()))}">
+                        <th:block 
+                            th:replace="~{pages/agenda/fragments/agenda.calendar.cours :: cours(
+                                ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getId()}, 
+                                ${dateUtil.getLdt(w.dateJour(), h.time()).toString()},
+                                ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getDureeEstimee()},
+                                ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time()))}
+                            )}"></th:block>
+                    </th:block>
                 </td>
             </tr>
         </tbody>

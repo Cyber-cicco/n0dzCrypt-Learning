@@ -83,4 +83,7 @@ public class CoursIrrigator {
         model.addAttribute("id", idCours);
     }
 
+    public void irrigateAdminPanel(AuthenticationInfos userInfos, Model model) {
+        model.addAttribute("coursCrees", coursRepository.getCoursCrees(userInfos.getId()));
+    }
 }

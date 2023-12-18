@@ -19,7 +19,7 @@ function drakeListen(drake) {
             if(target.getAttribute("data-draggable2")) {
                 const date = target.getAttribute("data-draggable2");
                 const id = el.getAttribute("id");
-                htmx.ajax('POST', '/agenda/cours?date=' + date + '&id=' + id, '#insert').then(() => {
+                htmx.ajax('POST', '/agenda/cours?date=' + date + '&id=' + id, '#' + target.getAttribute("id")).then(() => {
                     reInit();
                     return;
                 });
@@ -28,7 +28,7 @@ function drakeListen(drake) {
             if(target.getAttribute("data-draggable1") && el.getAttribute("data-dragged")) {
                 const date = el.getAttribute("data-dragged");
                 const id = el.getAttribute("id");
-                htmx.ajax('DELETE', '/agenda/cours?date=' + date + '&id=' + id, '#insert').then(() => {
+                htmx.ajax('DELETE', '/agenda/cours?date=' + date + '&id=' + id, '#cours-a-prevoir').then(() => {
                     reInit();
                     return;
                 });

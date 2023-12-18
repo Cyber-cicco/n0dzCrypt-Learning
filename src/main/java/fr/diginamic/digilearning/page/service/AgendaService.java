@@ -7,6 +7,7 @@ import fr.diginamic.digilearning.dto.HourInfos;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.FlagCours;
 import fr.diginamic.digilearning.entities.Utilisateur;
+import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
 import fr.diginamic.digilearning.page.service.enums.DateOption;
@@ -108,7 +109,7 @@ public class AgendaService {
         return mapDateToCours;
     }
 
-    public void putCoursInDate(AuthenticationInfos userInfos, LocalDateTime datePrevue, Long coursId) {
+    public Optional<CoursDto> putCoursInDate(AuthenticationInfos userInfos, LocalDateTime datePrevue, Long coursId) {
         Utilisateur utilisateur = utilisateurRepository.findById(userInfos.getId())
                 .orElseThrow(EntityNotFoundException::new);
         Cours cours = coursRepository.findByUserAndId(utilisateur.getId(), coursId)
@@ -133,9 +134,22 @@ public class AgendaService {
                             || (datePrevue.isBefore(flagCours1.getDatePrevue()) && datePrevue.plusHours(cours.getDureeEstimee()).isAfter(flagCours1.getDatePrevue()))
                             || (datePrevue.isAfter(flagCours1.getDatePrevue()) && flagCours1.getDatePrevue().plusHours(flagCours1.getCours().getDureeEstimee()).isAfter(datePrevue)))
                             && !flagCours1.getId().equals(flagCours.getId())
-            ) return;
+            ) {
+                return Optional.empty();
+            }
         }
         flagCoursRepository.save(flagCours);
+        return Optional.ofNullable(CoursDto.builder()
+                .id(cours.getId())
+                .titre(cours.getTitre())
+                .ordre(cours.getOrdre())
+                .difficulte(cours.getDifficulte())
+                .dureeEstimee(cours.getDureeEstimee())
+                .boomarked(flagCours.getBoomarked())
+                .datePrevue(flagCours.getDatePrevue())
+                .finished(flagCours.getFinished())
+                .liked(flagCours.getLiked())
+                .build());
     }
 
     public void removeCoursFromAgenda(AuthenticationInfos userInfos, Long coursId) {

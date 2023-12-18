@@ -6,7 +6,6 @@ import fr.diginamic.digilearning.security.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -47,11 +46,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     .parseClaimsJws(token)
                                     .getBody();
                             String username = body.getSubject();
+                            Long credentials = body.get("id", Long.class);
                             String serializedRoles = body.get("role", String.class);
                             ObjectMapper objectMapper = new ObjectMapper();
                             List<String> roles;
                             roles = objectMapper.readValue(serializedRoles, List.class);
-                            Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
+                            Authentication authentication = new UsernamePasswordAuthenticationToken(username, credentials,
                                     roles.stream()
                                             .map(SimpleGrantedAuthority::new)
                                             .toList()

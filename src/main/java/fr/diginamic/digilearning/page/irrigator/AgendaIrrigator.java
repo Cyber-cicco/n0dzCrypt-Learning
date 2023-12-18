@@ -1,7 +1,6 @@
 package fr.diginamic.digilearning.page.irrigator;
 
 import fr.diginamic.digilearning.dto.CoursDto;
-import fr.diginamic.digilearning.page.AgendaController;
 import fr.diginamic.digilearning.page.Routes;
 import fr.diginamic.digilearning.page.service.AgendaService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,6 +32,24 @@ public class AgendaIrrigator {
         model.addAttribute("cours", agendaService.getCoursForAgenda(userInfos.getId()));
         model.addAttribute("calendar", Routes.ADR_AGENDA_BODY);
         irrigateCalendar(model, date, userInfos);
+    }
+
+    public void irrigateCoursPrevus(AuthenticationInfos userInfos, Model model){
+        model.addAttribute("cours", agendaService.getCoursForAgenda(userInfos.getId()));
+    }
+
+    /**
+     * Irrigue le modèle d'un cours dans le calendrier
+     * @param userInfos les informations d'authentification de l'utilisateur
+     * @param model un objet permettant d'irriguer le template thymeleaf
+     * @param temps la date à laquelle le cours est prévu
+     * @param cours le cours prévu avec ses flags associés
+     */
+    public void irrigateCoursOnCalendar(AuthenticationInfos userInfos, Model model, LocalDateTime temps, CoursDto cours) {
+        model.addAttribute("id", cours.getId());
+        model.addAttribute("date", temps);
+        model.addAttribute("dureeEstimee", cours.getDureeEstimee());
+        model.addAttribute("cours", cours);
     }
     /**
      * Irrigue le model avec les informations nécessaires au fait de créer le calendrier

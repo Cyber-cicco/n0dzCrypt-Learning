@@ -132,4 +132,12 @@ left outer join dl_cours dc on dl_sous_module.id = dc.sous_module_id
 where U.ID = ?1
 """)
     Integer getNbCours(Utilisateur utilisateur);
+
+    @Query(nativeQuery = true, value = """
+select c.*
+from dl_cours c 
+join dl_utilisateur_cours duc on c.id = duc.id_cours
+where duc.id_utilisateur = ?1
+""")
+    List<Cours> getCoursCrees(Long id);
 }

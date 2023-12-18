@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.security;
 
+import fr.diginamic.digilearning.entities.enums.TypeRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,16 @@ public class AuthenticationInfos {
     private String email;
     private String token;
     private Long id;
+
+    public boolean isFomatteur(){
+        return roles.contains(TypeRole.ROLE_FORMATEUR.getLibelle());
+    }
+
+    public boolean isStagiaire(){
+        return roles.contains(TypeRole.ROLE_STAGIAIRE.getLibelle());
+    }
+
+    public boolean isAdministrateur(){
+        return roles.contains(TypeRole.ROLE_ADMINISTRATEUR.getLibelle());
+    }
 }

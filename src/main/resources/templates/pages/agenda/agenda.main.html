@@ -1,24 +1,8 @@
 <!--/*@thymesVar id="cours" type="java.util.List<fr.diginamic.digilearning.entities.Cours>"*/-->
 <th:block th:replace="~{components/entete.nav :: entete('Agenda')}"></th:block>
 <section class="flex p-2 bg-white h-full gap-1">
-    <div class="hidden lg:flex flex-col bg-primary w-1/5 min-w-1/5 text-white rounded-md h-full shadow-dark shadow-md ">
-        <h1 class="text-2xl font-poppins text-center py-2">Cours à prévoir</h1>
-        <div data-draggable1="true" class="flex overflow-y-scroll flex-col px-1 gap-1">
-            <div
-                th:each="c, iterStat : ${cours}"
-                th:id="${c.getId()}"
-                th:class="'relative text-white bg-lightPrimary w-full rounded-md z-50 hover:cursor-move hover:brightness-150 drag-peasant ' + (${c.getDatePrevue()} != null ? 'brightness-75' : '')"
-                >
-                <div
-                    class="p-2 hover:cursor-pointer"
-                    th:text="${c.getTitre()}"
-                    th:hx-get="'/cours/sommaire/api?id=' + ${c.getId()}"
-                    th:hx-push-url="'/cours/sommaire?id=' + ${c.getId()}"
-                    hx-target="#insert"
-                    hx-swap="innerHTML"
-                    ></div>
-            </div>
-        </div>
+    <div id="cours-a-prevoir" class="hidden lg:flex flex-col bg-primary w-1/5 min-w-1/5 text-white rounded-md h-full shadow-dark shadow-md ">
+        <th:block th:replace="pages/agenda/fragments/agenda.cours-a-prevoir"></th:block>
     </div>
     <div class="overflow-x-scroll overscroll-x-auto w-full">
         <th:block th:replace="pages/agenda/fragments/agenda.calendar"></th:block>

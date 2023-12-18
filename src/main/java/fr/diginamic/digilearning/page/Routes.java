@@ -14,6 +14,7 @@ public class Routes {
     public static final String ADR_OUTER_CHAT ="pages/conversation/fragments/conversation.outer-chat";
     public static final  String ADR_INNER_CHAT = "pages/conversation/fragments/conversation.inner-chat";
     public static final String ADR_AGENDA_BODY = "pages/agenda/agenda.main";
+    public static final String ADR_AGENDA_COURSAPREVOIR = "pages/agenda/fragments/agenda.cours-a-prevoir";
     public static final String ADR_COURS_QUESTION_RATING = "pages/cours/visionneuse/fragments/cours.question.rating";
     public static final String ADR_COURS_REPONSE_RATING = "pages/cours/visionneuse/fragments/cours.reponse.rating";
     public static final String ADR_MODAL_COURS_REPONSE = "/components/modal/modal.cours.reponse";
@@ -40,6 +41,8 @@ public class Routes {
     public static final String ADR_PROFIL_PROGRES = "pages/profil/fragments/profil.progress";
     public static final String ADR_COURS_MODULE = "pages/cours/modules/cours.modules";
     public static final String ADR_COURS_MODULE_BODY = "pages/cours/modules/fragments/cours.modules.body";
+    public static final String ADR_COURS_CAL = "pages/agenda/fragments/agenda.calendar.cours";
+    public static final String ADR_COURS_ADMIN = "pages/cours/admin/cours.admin.main-panel";
 
     private Routes(){}
 }

@@ -1,0 +1,35 @@
+<section 
+
+    th:fragment="cours(id, date, dureeEstimee, cours)"
+    
+
+    th:id="${id}"
+    th:data-dragged="${date}"
+    th:class="'relative hover:cursor-move flex bg-lightPrimary text-white shadow-dark w-full overflow-y-visible shadow-md rounded-md h-[' + ${dureeEstimee} + '00%]'"
+    >
+    <a 
+        class="p-2 hover:cursor-pointer grow overflow-hidden"
+        th:text="${cours.getTitre()}"
+        th:hx-get="'/cours/sommaire/api?id=' + ${cours.getId()}"
+        th:hx-push-url="'/cours/sommaire?id=' + ${cours.getId()}"
+        hx-target="#insert"
+        hx-swap="innerHTML transition:true"
+        ￼
+        ></a><span class="flex">
+        <div
+            class="rounded-full h-fit hover:cursor-pointer hover:bg-lightAccent p-1"
+            th:hx-patch="'/cours/finished?id=' + ${cours.getId()}"
+            th:hx-target="'#finished-' + ${cours.getId()}"
+            hx-swap="outerHTML"
+            >
+            <img
+            class="min-w-[30px] min-h-[30px]"
+            th:id="'finished-' + ${cours.getId()}"
+            width="30"
+            src="/img/icons/check.svg"
+            th:style="${cours.getFinished()} ?
+            'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : '' "
+            >
+        </div>
+    </span>
+</section>

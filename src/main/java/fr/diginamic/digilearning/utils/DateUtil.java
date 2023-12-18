@@ -12,9 +12,11 @@ public class DateUtil {
     public LocalDateTime getLdt(LocalDate date, LocalTime time) {
         return LocalDateTime.of(date, time);
     }
-
     public String getId(LocalDate date, LocalTime time) {
         return "T" + LocalDateTime.of(date, time).format(DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm-ss"));
+    }
+    public String getId(LocalDateTime localDateTime) {
+        return "T" + localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm-ss"));
     }
 
     public String getHeure(LocalDateTime dateTime) {

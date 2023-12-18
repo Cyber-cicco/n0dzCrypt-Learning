@@ -7,18 +7,19 @@ import fr.diginamic.digilearning.security.AuthenticationInfos;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private PasswordEncoder passwordEncoder;
-    private final UtilisateurRepository utilisateurRepository;
     private final JwtService jwtService;
     public AuthenticationInfos getAuthInfos(String token){
         Claims claims = jwtService.extractAllClaims(token);
@@ -30,9 +31,35 @@ public class AuthenticationService {
                 .build();
     }
 
+    public AuthenticationInfos getAuthInfos(){
+        return AuthenticationInfos.builder()
+                .email(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString())
+                .roles(SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+                        .stream()
+                        .map(Object::toString)
+                        .toList())
+                .id((Long) SecurityContextHolder.getContext().getAuthentication().getCredentials())
+                .build();
+    }
+
     public void mustBeOfRole(List<String> currentRoles, TypeRole expectedRole, HttpServletResponse response) {
         if(!currentRoles.contains(expectedRole.getLibelle())) {
             try {
+                response.setHeader("HX-Retarget", "html");
+                response.sendRedirect("/login");
+            } catch (IOException e){
+                throw new BrokenRuleException();
+            }
+        }
+    }
+
+    public void rolesMustMatchOne(List<String> currentRoles, List<TypeRole> acceptedRoles, HttpServletResponse response) {
+        if(Collections.disjoint(acceptedRoles
+                .stream()
+                .map(TypeRole::getLibelle)
+                .toList(), currentRoles)){
+            try {
+                response.setHeader("HX-Retarget", "html");
                 response.sendRedirect("/login");
             } catch (IOException e){
                 throw new BrokenRuleException();

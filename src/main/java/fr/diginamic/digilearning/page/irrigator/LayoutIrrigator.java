@@ -9,9 +9,9 @@ import org.springframework.ui.Model;
 @Service
 @RequiredArgsConstructor
 public class LayoutIrrigator {
-    public static final String ADR_BASE_LAYOUT = "layout/base";
     private final NavBarService navBarService;
     public void irrigateBaseLayout(Model model, AuthenticationInfos userInfos, String fragmentAdress) {
+        model.addAttribute("user", userInfos);
         model.addAttribute("insert", fragmentAdress);
         model.addAttribute("links", navBarService.getLinks(userInfos));
     }
