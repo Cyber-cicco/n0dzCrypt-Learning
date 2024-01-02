@@ -5,20 +5,7 @@
                 <div class="flex w-full flex-wrap gap-3 items-center p-3">
                     <th:block th:replace="~{/components/text-option :: textOption('bold', 'Rendre le texte gras')}"></th:block>
                     <th:block th:replace="~{/components/text-option :: textOption('italic', 'Rendre le texte italique')}"></th:block>
-                    <button data-text-option 
-                        data-tooltip-target="tooltip-strikethrough"
-                        id="strikethrough"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/strikethrough.svg">
-                    </button>
-                    <div id="tooltip-strikethrough"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Barrer le texte
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
+                    <th:block th:replace="~{/components/text-option :: textOption('strikethrough', 'Barrer le texte')}"></th:block>
                     <button data-text-option
                         data-tooltip-target="tooltip-list"
                         id="list"
@@ -179,8 +166,26 @@
                         hx-swap="innerHTML"
                         class="border-grey border-2 rounded-md p-2 h-full" th:text="${contenu}"></textarea>
                 </div>
-                <div id="buttons" class="p-3">
+                <div id="buttons" class="p-3 flex gap-3">
                     <button class="bg-lightPrimary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Publier</button>
+                    <form id='form' hx-encoding='multipart/form-data' hx-post='/cours/admin/photo'>
+                        <input style="
+                        width: 0.1px;
+                        height: 0.1px;
+                        opacity: 0;
+                        position: absolute;
+                        z-index: -1;
+                        " type='file' name='file'>
+                        <button class="">
+                            Upload
+                        </button>
+                        <progress id='progress' value='0' max='100'></progress>
+                    </form>
+                    <script>
+                        htmx.on('#form', 'htmx:xhr:progress', function(evt) {
+                            htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)
+                        });
+                    </script>
                 </div>
             </div>
         </div>

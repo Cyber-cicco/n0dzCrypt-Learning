@@ -21,24 +21,26 @@ function initTextEditor(id) {
 
     const middle = 1;
 
+    const uploadMD = () => {
+        const formDatas = new FormData()
+        formDatas.append("contenu", writingArea.value)
+        fetch(`/cours/admin/chapitre/contenu?id=${id}`,  {
+            method : 'POST',
+            body : formDatas
+        }).then((content) => {
+            return content.text()
+        }).then(html => {
+            htmx.find("#markdown").innerHTML = html
+        })
+    }
+
     let textHistory = [writingArea.value]
     let historyPointer = 0;
 
     textOptions.forEach(option => {
         option.addEventListener("click", ()=>{
             pushHistory(writingArea.value)
-            setTimeout(() => {
-                const formDatas = new FormData()
-                formDatas.append("contenu", writingArea.value)
-                fetch(`/cours/admin/chapitre/contenu?id=${id}`,  {
-                    method : 'POST',
-                    body : formDatas
-                }).then((content) => {
-                    return content.text()
-                }).then(html => {
-                    htmx.find("#markdown").innerHTML = html
-                }, 100)
-            })
+            setTimeout(uploadMD, 100)
         })
     })
 
@@ -57,7 +59,7 @@ function initTextEditor(id) {
                     contentAsArray[middle] = "**" + contentAsArray[middle] + "**"
                 }
             }, () => {
-                return "** bold **";
+                return "**bold**";
             })
     });
 
@@ -70,7 +72,7 @@ function initTextEditor(id) {
                     contentAsArray[middle] = "*" + contentAsArray[middle] + "*"
                 }
             }, () => {
-                return "* italic *";
+                return "*italic*";
             })
     })
 
@@ -125,6 +127,7 @@ function initTextEditor(id) {
         if(historyPointer > 0) {
             historyPointer--;
             writingArea.value = textHistory[historyPointer];
+            uploadMD();
         }
     })
 
@@ -132,6 +135,7 @@ function initTextEditor(id) {
         if(historyPointer < textHistory.length - 1) {
             historyPointer++;
             writingArea.value = textHistory[historyPointer]
+            uploadMD();
         }
     })
 
@@ -140,7 +144,7 @@ function initTextEditor(id) {
             (contentAsArray) => {
                 contentAsArray[middle] = "(" + contentAsArray[middle] + ")[https://www.example.com]"
             }, () => {
-                return "(your link text)[https://www.example.com]"
+                return "[your link text](https://www.example.com)"
             }
         )
     })

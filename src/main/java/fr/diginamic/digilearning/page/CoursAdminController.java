@@ -39,6 +39,11 @@ public class CoursAdminController {
         response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.getId());
         return Routes.ADR_ADMIN_CHAPITRE;
     }
+    @PostMapping("/photo")
+    public String ajouterPhoto(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        return Routes.ADR_MESSAGE;
+    }
     @PostMapping("/chapitre/contenu")
     public String editerChapitre(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
