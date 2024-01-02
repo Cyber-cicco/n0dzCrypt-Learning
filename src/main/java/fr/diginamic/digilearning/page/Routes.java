@@ -43,6 +43,8 @@ public class Routes {
     public static final String ADR_COURS_MODULE_BODY = "pages/cours/modules/fragments/cours.modules.body";
     public static final String ADR_COURS_CAL = "pages/agenda/fragments/agenda.calendar.cours";
     public static final String ADR_COURS_ADMIN = "pages/cours/admin/cours.admin.main-panel";
+    public static final String ADR_COURS_ADMIN_EDITER = "pages/cours/admin/fragments/cours.admin.editer.sommaire";
+    public static final String ADR_ADMIN_CHAPITRE = "pages/cours/admin/fragments/cours.admin.editer.chapitre";
 
     private Routes(){}
 }

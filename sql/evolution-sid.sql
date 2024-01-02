@@ -122,6 +122,7 @@ create table sid.dl_chapitre
     id             bigint auto_increment
         primary key,
     contenu        longtext      null,
+    contenuNonPublie        longtext      null,
     libelle        varchar(255)  null,
     statusChapitre tinyint       null,
     cours_id       bigint        null,

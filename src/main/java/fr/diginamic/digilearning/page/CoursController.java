@@ -118,6 +118,21 @@ public class CoursController {
         return Routes.ADR_VISIONNEUSE_COURS;
     }
 
+    @GetMapping("/admin/editer/api")
+    public String getAdminCoursEditerApi(@RequestParam("id") Long idCours, Model model){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
+        return Routes.ADR_COURS_ADMIN_EDITER;
+    }
+
+    @GetMapping("/admin/editer")
+    public String getAdminCoursEditer(@RequestParam("id") Long idCours, Model model){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_ADMIN_EDITER);
+        return Routes.ADR_BASE_LAYOUT;
+    }
+
     @GetMapping("/chapitre")
     public String getChapitre(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Irrigateur du modèle donnée par le controlleur
+ * Irrigateur du model donné par le controleur
  * HyperMédia de l'agenda
  */
 @Service

@@ -1,0 +1,32 @@
+# Digi-learning
+
+Plateforme e-learning de Diginamic.
+
+# D'où vient l'idée
+
+* On récupère les besoins du staff interne de Diginamic
+* Mais on peut tout externaliser vers des éditeurs de logiciel
+* Pendant que le plus important finalement c'est les clients de Diginamic et Tecken.
+
+* Besoin de se faire connaitre et respecter
+* Bouche à oreille sur la qualité des prestations proposées
+* Vitrines qui claquent
+
+# Les retours de la formation
+
+ * Des bons profs
+ * Linkedin Learning est une grosse blague.
+
+# Autre constat
+
+ * L'ENI et Studi ont des LMS et un suivi tout claqué.
+ * Le LMS de Studi est un vieux truc en AngularJS qui rame et bug tout le temps.
+ * Pas adapté au fait de tisser des liens avec d'autres développeurs, pas adapaté au fait d'organiser son emploi du temps, etc.
+
+# Donc
+
+ * Dans un premier temps on peut utiliser Digi-learning pour proposer des cours un cran au dessus de Linkedin Learning, et donc ne plus avoir à
+ se soucier de placer des sessions en e-learning sur certains sujets. Cela demandera juste de mettre certains cours au format markdown et de tourner
+ quelques vidéos. Cela pour
+
+ http://localhost:8081/cours/sommaire?id=23

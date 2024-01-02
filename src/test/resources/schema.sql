@@ -1,4 +1,4 @@
-create table if not exists FORMATION
+create table if not exists sid.FORMATION
 (
     ID                     bigint auto_increment
         primary key,
@@ -39,7 +39,7 @@ create index FK_FORMATION2
 create index FK_FORMATION3
     on FORMATION (ID_PREVIOUS);
 
-create table if not exists SESSION
+create table if not exists sid.SESSION
 (
     ID                         bigint auto_increment
         primary key,
@@ -55,10 +55,6 @@ create table if not exists SESSION
     ID_NEXT                    bigint                          null,
     ID_PARENT                  bigint                          null,
     ID_PREVIOUS                bigint                          null,
-    ID_SAL                     bigint                          null,
-    ID_SOCIETE                 bigint                          null,
-    ID_LISTE                   bigint                          null,
-    ID_PROJET                  bigint                          null,
     SANS_CONFLIT               tinyint(1)                      not null,
     COMMENTAIRES               varchar(500)                    null,
     RESPONSABLE_PEDAGOGIQUE    varchar(50)                     null,
@@ -71,16 +67,8 @@ create table if not exists SESSION
     STATUT_PREPARATION         varchar(25) default 'CONFIRMEE' not null,
     TYPE_EMARGEMENT            varchar(10) default 'DECO_RECO' not null,
     ID_SOCIETE_BDC             bigint                          null,
-    constraint FK_EMETTEUR_BON
-        foreign key (ID_SOCIETE_BDC) references EMETTEUR_BON (ID),
-    constraint FK_SESSION1
-        foreign key (ID_CENTRE) references CENTRE (ID),
     constraint FK_SESSION2
         foreign key (ID_FOR) references FORMATION (ID),
-    constraint FK_SESSION6
-        foreign key (ID_SAL) references SALLE (ID),
-    constraint FK_SESSION7
-        foreign key (ID_SOCIETE) references SOCIETE (ID),
     constraint FKiskaef2xqdgp1c8ik877kokev
         foreign key (ID_FOR) references FORMATION (ID)
 );
@@ -94,7 +82,7 @@ create index FK_SESSION4
 create index FK_SESSION5
     on SESSION (ID_PREVIOUS);
 
-create table if not exists UTILISATEUR
+create table if not exists sid.UTILISATEUR
 (
     ID                                bigint auto_increment
         primary key,
@@ -146,7 +134,6 @@ create table if not exists UTILISATEUR
     ds_statusAse                      tinyint          null,
     ds_typeRecherche                  tinyint          null,
     ds_adresse_id                     bigint           null,
-    ds_role_id                        bigint           null,
     ds_session_id                     bigint           null,
     ds_statusLettre                   tinyint          null,
     ds_commentaires_abandon           varchar(255)     null,
@@ -160,27 +147,17 @@ create table if not exists UTILISATEUR
     constraint FK_UTILISATEUR1
         foreign key (ID_VALIDEUR) references UTILISATEUR (ID),
     constraint FK5qeds3exckipc0b5e77jjtqnf
-        foreign key (ID_VALIDEUR) references UTILISATEUR (ID),
-    constraint FK_UTILISATEUR2
-        foreign key (ID_SOCIETE) references SOCIETE (ID),
-    constraint FK_UTILISATEUR3
-        foreign key (ID_CENTRE) references CENTRE (ID),
-    constraint FKfh87vtxs3130g87erfekpx6hb
-        foreign key (ds_role_id) references ds_role_utilisateur (id),
-    constraint FKmxfq49eravm9cjgvkwf1teno0
-        foreign key (ds_adresse_id) references ds_adresse (id),
-    constraint FK7xn4w2yas8j17s3knkiu1opcb
-        foreign key (ds_adresse_id) references ds_adresse (id)
+        foreign key (ID_VALIDEUR) references UTILISATEUR (ID)
 );
 
-create table if not exists dl_conversation
+create table if not exists sid.dl_conversation
 (
     id            bigint auto_increment
         primary key,
     libelleGroupe varchar(255) null
 );
 
-create table if not exists dl_message
+create table if not exists sid.dl_message
 (
     id              bigint auto_increment
         primary key,
@@ -195,22 +172,22 @@ create table if not exists dl_message
     constraint UK_pub3mtlofrvy27c3x5xqwcwws
         unique (previous_id),
     constraint FK22nbs8gg0kiw0crn4y66avop1
-        foreign key (conversation_id) references dl_conversation (id),
+        foreign key (conversation_id) references sid.dl_conversation (id),
     constraint FKh26t60c07vc8plu5b9jf0qhvo
-        foreign key (previous_id) references dl_message (id),
+        foreign key (previous_id) references sid.dl_message (id),
     constraint FKnbuyn9bigrthhabsov5nkpciq
         foreign key (emetteur_id) references UTILISATEUR (ID),
     constraint FKgwrkoy6a4tlf6c9yvtxhcbgk
         foreign key (emetteur_id) references UTILISATEUR (ID),
     constraint FKqwxcdmqpv6umffvcdl771jert
-        foreign key (next_id) references dl_message (id),
+        foreign key (next_id) references sid.dl_message (id),
     constraint dl_message_ibfk_1
-        foreign key (next_id) references dl_message (id),
+        foreign key (next_id) references sid.dl_message (id),
     constraint dl_message_ibfk_2
-        foreign key (previous_id) references dl_message (id)
+        foreign key (previous_id) references sid.dl_message (id)
 );
 
-create table if not exists dl_module
+create table if not exists sid.dl_module
 (
     id      bigint auto_increment
         primary key,
@@ -218,17 +195,17 @@ create table if not exists dl_module
     photo   varchar(255) null
 );
 
-create table if not exists dl_module_formation
+create table if not exists sid.dl_module_formation
 (
     id_module    bigint not null,
     id_formation bigint not null,
     constraint FK1fm74nw6wf5e2kqdkwbwgbnch
         foreign key (id_formation) references FORMATION (ID),
     constraint FK7snjvvky9uljwv1ja952sgiwy
-        foreign key (id_module) references dl_module (id)
+        foreign key (id_module) references sid.dl_module (id)
 );
 
-create table if not exists dl_post
+create table if not exists sid.dl_post
 (
     id           bigint auto_increment
         primary key,
@@ -239,29 +216,27 @@ create table if not exists dl_post
         foreign key (emetteur_id) references UTILISATEUR (ID)
 );
 
-create table if not exists dl_post_session
+create table if not exists sid.dl_post_session
 (
     session_id bigint not null,
     post_id    bigint not null,
     constraint FKa76gtv4dw1o7wunx0o9cdsky6
-        foreign key (post_id) references dl_post (id),
+        foreign key (post_id) references sid.dl_post (id),
     constraint FKs3k65ftt0g0u0oi30d81nu9kt
         foreign key (session_id) references SESSION (ID)
 );
 
-create table if not exists dl_ressource_cours
+create table if not exists sid.dl_ressource_cours
 (
     id             bigint auto_increment
         primary key,
     libelle        varchar(255) null,
     libelleAffiche varchar(255) null,
     typeRessource  varchar(255) null,
-    coursRef_id    bigint       null,
-    constraint FKl6b10gkxstrr4mf25thpmvdbt
-        foreign key (coursRef_id) references COURS_REF (ID)
+    coursRef_id    bigint       null
 );
 
-create table if not exists dl_sous_module
+create table if not exists sid.dl_sous_module
 (
     id    bigint auto_increment
         primary key,
@@ -269,7 +244,7 @@ create table if not exists dl_sous_module
     photo varchar(50) not null
 );
 
-create table if not exists dl_cours
+create table if not exists sid.dl_cours
 (
     id             bigint auto_increment
         primary key,
@@ -280,10 +255,10 @@ create table if not exists dl_cours
     description    mediumtext   null,
     dureeEstimee   int          null,
     constraint FKobqm6x4582q04wnakti9hy7ml
-        foreign key (sous_module_id) references dl_sous_module (id)
+        foreign key (sous_module_id) references sid.dl_sous_module (id)
 );
 
-create table if not exists dl_chapitre
+create table if not exists sid.dl_chapitre
 (
     id             bigint auto_increment
         primary key,
@@ -294,20 +269,20 @@ create table if not exists dl_chapitre
     ordre          int           null,
     lienVideo      varchar(1024) null,
     constraint FKqv4923y4wxkbcj9esuernp4l8
-        foreign key (cours_id) references dl_cours (id)
+        foreign key (cours_id) references sid.dl_cours (id)
 );
 
-create table if not exists dl_detail_cours
+create table if not exists sid.dl_detail_cours
 (
     id          bigint auto_increment
         primary key,
     libelle     varchar(255) null,
     chapitre_id bigint       null,
     constraint FK1v4vqnejnh1ylppkk4iyvh8sq
-        foreign key (chapitre_id) references dl_chapitre (id)
+        foreign key (chapitre_id) references sid.dl_chapitre (id)
 );
 
-create table if not exists dl_flag_cours
+create table if not exists sid.dl_flag_cours
 (
     id           bigint auto_increment
         primary key,
@@ -320,20 +295,20 @@ create table if not exists dl_flag_cours
     constraint FK6e19t2sf0xefd6lfhm4564e4p
         foreign key (stagiaire_id) references UTILISATEUR (ID),
     constraint FK8du4e1bgysgsilwptkafua0b5
-        foreign key (cours_id) references dl_cours (id)
+        foreign key (cours_id) references sid.dl_cours (id)
 );
 
-create table if not exists dl_module_smodule
+create table if not exists sid.dl_module_smodule
 (
     id_smodule bigint not null,
     id_module  bigint not null,
     constraint FKo4s0rbwin71gkdqcu30kcofm2
-        foreign key (id_module) references dl_module (id),
+        foreign key (id_module) references sid.dl_module (id),
     constraint FKqjbjngdft52b5hmr473q3dgj2
-        foreign key (id_smodule) references dl_sous_module (id)
+        foreign key (id_smodule) references sid.dl_sous_module (id)
 );
 
-create table if not exists dl_question
+create table if not exists sid.dl_question
 (
     id             bigint auto_increment
         primary key,
@@ -342,12 +317,12 @@ create table if not exists dl_question
     utilisateur_id bigint       null,
     chapitre_id    bigint       null,
     constraint FKjq1l51wf4nshwwheglxjeqcdy
-        foreign key (chapitre_id) references dl_chapitre (id),
+        foreign key (chapitre_id) references sid.dl_chapitre (id),
     constraint FKkxbjlay565h1lysk0sh0e4wbo
         foreign key (utilisateur_id) references UTILISATEUR (ID)
 );
 
-create table if not exists dl_relation_question
+create table if not exists sid.dl_relation_question
 (
     id             bigint auto_increment
         primary key,
@@ -358,10 +333,10 @@ create table if not exists dl_relation_question
     constraint FK963dsd05d9oe5y1f92kc7ds4h
         foreign key (utilisateur_id) references UTILISATEUR (ID),
     constraint FKnb3swcm9yediexax82erkrx0s
-        foreign key (question_id) references dl_question (id)
+        foreign key (question_id) references sid.dl_question (id)
 );
 
-create table if not exists dl_reponse
+create table if not exists sid.dl_reponse
 (
     id          bigint auto_increment
         primary key,
@@ -370,14 +345,14 @@ create table if not exists dl_reponse
     supprimee   bit           not null,
     auteur_id   bigint        not null,
     constraint FKpo05hpshnfd2j2aal883u9d2c
-        foreign key (question_id) references dl_question (id),
+        foreign key (question_id) references sid.dl_question (id),
     constraint dl_reponse_UTILISATEUR__fk
         foreign key (auteur_id) references UTILISATEUR (ID),
     constraint FKf3fsvktg4chbdhhygoy7uv38p
         foreign key (auteur_id) references UTILISATEUR (ID)
 );
 
-create table if not exists dl_relation_reponse
+create table if not exists sid.dl_relation_reponse
 (
     id             bigint auto_increment
         primary key,
@@ -386,19 +361,19 @@ create table if not exists dl_relation_reponse
     reponse_id     bigint null,
     utilisateur_id bigint null,
     constraint FK6ag1pfv55ifvqeeu6k3ubfodi
-        foreign key (reponse_id) references dl_reponse (id),
+        foreign key (reponse_id) references sid.dl_reponse (id),
     constraint FK8lvbsitmq1wvbcfgvusfi4uy1
         foreign key (utilisateur_id) references UTILISATEUR (ID)
 );
 
-create table if not exists dl_sujet
+create table if not exists sid.dl_sujet
 (
     id      bigint auto_increment
         primary key,
     libelle varchar(255) null
 );
 
-create table if not exists dl_salon
+create table if not exists sid.dl_salon
 (
     id          bigint auto_increment
         primary key,
@@ -406,20 +381,20 @@ create table if not exists dl_salon
     titre       varchar(255) null,
     sujet_id    bigint       null,
     constraint FKl5rv9oj3fcvx35dj8wk3x9n2s
-        foreign key (sujet_id) references dl_sujet (id)
+        foreign key (sujet_id) references sid.dl_sujet (id)
 );
 
-create table if not exists blacklist
+create table if not exists sid.blacklist
 (
     utilisateur_id bigint not null,
     salon_id       bigint not null,
     constraint FK30k32u352ke79p1mrdvyj3wje
-        foreign key (salon_id) references dl_salon (id),
+        foreign key (salon_id) references sid.dl_salon (id),
     constraint FKs8ovdvbebrxhgh3w4isly7e9y
         foreign key (utilisateur_id) references UTILISATEUR (ID)
 );
 
-create table if not exists dl_fil_discussion
+create table if not exists sid.dl_fil_discussion
 (
     id             bigint auto_increment
         primary key,
@@ -432,12 +407,12 @@ create table if not exists dl_fil_discussion
     dateCreation   datetime      not null,
     description    varchar(2048) null,
     constraint FKcau15ftfywm879pkcvlg7bt5s
-        foreign key (salon_id) references dl_salon (id),
+        foreign key (salon_id) references sid.dl_salon (id),
     constraint FKi2cuhkgsdgnpf2of88u972tyk
         foreign key (utilisateur_id) references UTILISATEUR (ID)
 );
 
-create table if not exists dl_post_forum
+create table if not exists sid.dl_post_forum
 (
     id                bigint auto_increment
         primary key,
@@ -447,34 +422,34 @@ create table if not exists dl_post_forum
     fil_discussion_id bigint        null,
     reponseA_id       bigint        null,
     constraint FK23xnww5xp6nveemdye1njiacd
-        foreign key (reponseA_id) references dl_post_forum (id),
+        foreign key (reponseA_id) references sid.dl_post_forum (id),
     constraint FK9cxivt7g88aot86n077xrqb4t
         foreign key (auteur_id) references UTILISATEUR (ID),
     constraint FKtdccrmuv21n8iqf84rw4bqwxw
-        foreign key (fil_discussion_id) references dl_fil_discussion (id)
+        foreign key (fil_discussion_id) references sid.dl_fil_discussion (id)
 );
 
-create table if not exists dl_utilisateur_conversation
+create table if not exists sid.dl_utilisateur_conversation
 (
     utilisateur_id  bigint not null,
     conversation_id bigint not null,
     constraint FK6kvr5j6sm3q64fu9notdx49li
-        foreign key (conversation_id) references dl_conversation (id),
+        foreign key (conversation_id) references sid.dl_conversation (id),
     constraint FKjkln4noag4pakv4f2f0oyy0sw
         foreign key (utilisateur_id) references UTILISATEUR (ID)
 );
 
-create table if not exists dl_utilisateur_cours
+create table if not exists sid.dl_utilisateur_cours
 (
     id_utilisateur bigint not null,
     id_cours       bigint not null,
     constraint FK3s16tpc2cjf85lemgxmnm192h
         foreign key (id_utilisateur) references UTILISATEUR (ID),
     constraint FKgy4sqe8wdrbwoqyirc0ne6trl
-        foreign key (id_cours) references dl_cours (id)
+        foreign key (id_cours) references sid.dl_cours (id)
 );
 
-create table if not exists dl_utilisateur_session
+create table if not exists sid.dl_utilisateur_session
 (
     utilisateur_id bigint not null,
     session_id     bigint not null,
@@ -484,13 +459,13 @@ create table if not exists dl_utilisateur_session
         foreign key (utilisateur_id) references UTILISATEUR (ID)
 );
 
-create table if not exists whitelist
+create table if not exists sid.whitelist
 (
     utilisateur_id bigint not null,
     salon_id       bigint not null,
     constraint FK1jnrnh5pst18vw23xqj1sk13j
         foreign key (utilisateur_id) references UTILISATEUR (ID),
     constraint FKdf2x3s0i3iedvuf53d51394le
-        foreign key (salon_id) references dl_salon (id)
+        foreign key (salon_id) references sid.dl_salon (id)
 );
 

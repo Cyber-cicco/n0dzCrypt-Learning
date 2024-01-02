@@ -29,4 +29,6 @@ logging:
     level:
       org.springframework: WARN
 server:
+    http2:
+        enabled: true
     port: 8081

@@ -15,8 +15,8 @@
                 <form class="flex flex-col md:flex-row p-2"  onsubmit="return false;">
                     <div class="flex flex-col md:flex-row gap-2 w-full items-center">
                         <label for="semaine">Semaine :</label>
-                        <input 
-                        name="semaine" 
+                        <input
+                        name="semaine"
                         id="semaine"
                         th:value="${dateValue}"
                         class="p-2 text-black w-[200px] border-primary border-2 rounded-md"
@@ -59,7 +59,7 @@
         <thead class="flex w-full gap-1">
             <tr class="flex w-full">
                 <th class="px-5 py-2  bg-lightAccent"></th>
-                <th 
+                <th
                     class="px-5 py-2 w-1/5 min-w-[200px] bg-lightAccent text-center"
                     th:each="w, iterStat : ${week}"
                     th:text="${w.weekDay()}  + ' ' + ${w.dateNumber()}"
@@ -70,15 +70,15 @@
         <tbody class="flex flex-col py-2 h-[85vh] w-full">
             <tr class="flex w-full h-[75px]" th:each="h, hiterStat : ${hours}">
                 <td class="px-5 h-[50px] py-2" th:text="${h.hour()} + 'h'"></td>
-                <td 
+                <td
                     th:id="${dateUtil.getId(w.dateJour(), h.time()).toString()}"
                     th:class="(${iterStat.index} % 2 == 1) ? 'px-5 border-t-grey border-t-4 h-[50px] min-w-[200px] max-w-1/5 w-1/5 bg-white' : 'px-5 min-w-[200px] max-w-1/5 border-t-white border-t-4 h-[50px] w-1/5 bg-grey'"
                     th:data-draggable2="${dateUtil.getLdt(w.dateJour(), h.time()).toString()}"
                     th:each="w, iterStat: ${week}" >
                     <th:block th:if="${hourMap.containsKey(dateUtil.getLdt(w.dateJour(), h.time()))}">
-                        <th:block 
+                        <th:block
                             th:replace="~{pages/agenda/fragments/agenda.calendar.cours :: cours(
-                                ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getId()}, 
+                                ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getId()},
                                 ${dateUtil.getLdt(w.dateJour(), h.time()).toString()},
                                 ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getDureeEstimee()},
                                 ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time()))}

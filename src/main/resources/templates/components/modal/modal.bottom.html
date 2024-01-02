@@ -1,0 +1,10 @@
+<div th:fragment="modalBg(content)" id="modal-bg" class="fixed top-0 left-0 w-screen h-screen bg-accent bg-opacity-25 z-40" hidden="true">
+    <section id="modal-bot" class="absolute bottom-0 bg-grey rounded-md p-1 w-full ">
+        <div class="flex justify-end w-full" method="dialog">
+            <button onclick="closeModalBot()"><img src="/img/icons/close.svg"></button>
+        </div>
+        <div>
+            <th:block th:replace="${content}"></th:block>
+        </div>
+    </section>
+</div>

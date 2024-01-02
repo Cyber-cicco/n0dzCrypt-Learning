@@ -1,14 +1,24 @@
-<section class="flex flex-col h-screen">
+<section hx-history="false" class="flex flex-col h-screen">
     <th:block th:replace="~{components/entete.nav :: entete('Cours')}"></th:block>
     <div class="flex flex-col p-3 gap-3">
-        <div th:if="${user.isFormateur()}" class="flex flex-col h-full">
+        <div th:if="${user.isFormateur()}" class="flex bg-white flex-col h-full">
             <h2 class="text-primary font-poppins text-3xl p-3 bg-white">Gérer mes cours</h2>
-            <div class="text-primary p-3 bg-white" th:each="c, iterStat : ${coursCrees}">
-                <a class="hover:cursor-pointer hover:underline" th:href="'/cours/admin/editer?id=' + ${c.getId()}" th:text="${c.getSousModule().getTitre() + ' : ' + c.getTitre()}"></a>
+            <div class="px-2">
+                <div class="h-0.5 bg-greyDeep w-full"></div>
             </div>
-        </div>
-        <div class="flex justify-center">
-            <button class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-lightPrimary">+</button>
+            <div class="text-primary pt-3 px-3 justify-center bg-white flex flex-col gap-3" th:each="c, iterStat : ${coursCrees}">
+                <a class="hover:cursor-pointer hover:underline"
+                   th:href="'/cours/admin/editer?id=' + ${c.getId()}"
+                   th:text="${c.getSousModule().getTitre() + ' : ' + c.getTitre()}"
+                   th:hx-get="'/cours/admin/editer/api?id=' + ${c.getId()}"
+                   hx-target="#insert"
+                   th:hx-push-url="'/cours/admin/editer?id=' + ${c.getId()}"
+                   ></a>
+                <div class="h-0.5 bg-grey w-full"></div>
+            </div>
+            <div class="flex justify-center items-center p-3">
+                <button class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-lightPrimary brightness-125">+</button>
+            </div>
         </div>
     </div>
 </section>
