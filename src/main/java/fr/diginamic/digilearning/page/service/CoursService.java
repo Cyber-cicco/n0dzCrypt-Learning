@@ -1,9 +1,13 @@
 package fr.diginamic.digilearning.page.service;
 
+import fr.diginamic.digilearning.dto.ChapitreDto;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.dto.ModuleDto;
 import fr.diginamic.digilearning.entities.*;
+import fr.diginamic.digilearning.entities.enums.StatusChapitre;
+import fr.diginamic.digilearning.page.validators.CoursValidator;
 import fr.diginamic.digilearning.repository.*;
+import fr.diginamic.digilearning.security.service.AuthenticationService;
 import org.commonmark.Extension;
 import org.commonmark.ext.front.matter.YamlFrontMatterExtension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -35,6 +39,7 @@ public class CoursService {
     private final QuestionRepository questionRepository;
     private final ReponseRepository reponseRepository;
     private final ChapitreRepository chapitreRepository;
+    private final CoursValidator coursValidator;
     public List<ModuleDto> findSModulesByUtilisateur(Long id, Long idModule){
         List<ModuleDto> sousModules = sousModuleRepository.findModulesByUtilisateur(id, idModule)
                 .stream()
@@ -158,5 +163,25 @@ public class CoursService {
         return moduleRepository.findModulesByUtilisateur(id)
                 .stream().map(mod -> SqlResultMapper.mapToObject(ModuleDto.class, mod))
                 .toList();
+    }
+
+    public void editerDescription(Long idCours, MessageDto descriptionCours, AuthenticationInfos userInfos) {
+        Cours cours = coursRepository.getCoursByIdAndFormateur(idCours, userInfos.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        cours.setDescription(descriptionCours.getMessage());
+        coursRepository.save(cours);
+    }
+
+    public Chapitre createNewChapitre(AuthenticationInfos userInfos, Long idCours, ChapitreDto chapitreDto) {
+        Cours cours = coursRepository.getCoursByIdAndFormateur(idCours, userInfos.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        coursValidator.validateTitreChapitre(chapitreDto.getTitre());
+        Chapitre chapitre = Chapitre.builder()
+                .cours(cours)
+                .libelle(chapitreDto.getTitre())
+                .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
+                .statusChapitre(chapitreDto.getStatusChapitre())
+                .build();
+        return chapitreRepository.save(chapitre);
     }
 }

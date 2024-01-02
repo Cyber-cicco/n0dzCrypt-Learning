@@ -3,13 +3,16 @@ package fr.diginamic.digilearning.page.irrigator;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
+import fr.diginamic.digilearning.exception.UnauthorizedException;
 import fr.diginamic.digilearning.page.service.CoursService;
 import fr.diginamic.digilearning.page.validators.QuestionValidator;
 import fr.diginamic.digilearning.page.validators.ReponseValidator;
+import fr.diginamic.digilearning.repository.ChapitreRepository;
 import fr.diginamic.digilearning.repository.QuestionRepository;
 import fr.diginamic.digilearning.repository.ReponseRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -25,6 +28,7 @@ public class ChapitreIrrigator {
     private final ReponseValidator reponseValidator;
     private final QuestionRepository questionRepository;
     private final ReponseRepository reponseRepository;
+    private final ChapitreRepository chapitreRepository;
 
     /**
      * Irrigateur d'un élément n'affichant qu'une question
@@ -86,5 +90,12 @@ public class ChapitreIrrigator {
         Question updatedQuestion = coursService.saveReponse(userInfos.getId(), idQuestion, reponseDto);
         model.addAttribute("question", updatedQuestion);
         model.addAttribute("idUtilisateur", userInfos.getId());
+    }
+
+    public void irrigateAdminChapitre(Model model, AuthenticationInfos userInfos, Long idChapitre){
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
+                .orElseThrow(UnauthorizedException::new);
+        model.addAttribute("contenuHTML", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
+        model.addAttribute("contenu", chapitre.getContenuNonPublie());
     }
 }

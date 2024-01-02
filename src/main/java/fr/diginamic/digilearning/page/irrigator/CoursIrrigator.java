@@ -142,4 +142,9 @@ public class CoursIrrigator {
         model.addAttribute("user", userInfos);
         model.addAttribute("coursCrees", coursRepository.getCoursCrees(userInfos.getId()));
     }
+
+    public void irrigateEditionCours(Model model, Long idCours, AuthenticationInfos userInfos) {
+        model.addAttribute("cours", coursRepository.getCoursByIdAndFormateur(idCours, userInfos.getId())
+            .orElseThrow(EntityNotFoundException::new));
+    }
 }

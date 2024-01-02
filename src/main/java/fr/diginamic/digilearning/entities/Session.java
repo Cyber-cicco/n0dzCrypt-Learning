@@ -29,20 +29,6 @@ public class Session {
 	@Column(name = "ID")
 	private Long id;
 
-	/** centre : Centre */
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "ID_CENTRE")
-	//private Centre centre;
-
-	/** societe : Societe */
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "ID_SOCIETE")
-	//private Societe societe;
-
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "ID_SOCIETE_BDC")
-	//private EmetteurBon emetteurBDCParDefaut;
-
 	/** Nom de la session */
 	@Column(name = "NOM")
 	private String nom;
@@ -59,19 +45,6 @@ public class Session {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_FOR")
 	private Formation formation;
-
-	///** Liste des dates fermées spécifique pour cette session */
-	//@OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
-	//private Set<PeriodeFermeeSession> fermes = new HashSet<>();
-
-	///** bilans : List de BilanSession */
-	//@OneToMany(mappedBy = "session", fetch = FetchType.LAZY)
-	//private List<BilanSession> bilans = new ArrayList<>();
-
-	///** Salle d'informatique par défaut dans laquelle aura lieu la formation */
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "ID_SAL")
-	//private Salle salle;
 
 	/** dateMaj : LocalDateTime */
 	@Column(name = "DATE_MAJ")
@@ -140,16 +113,6 @@ public class Session {
 
 	@OneToMany(mappedBy = "session")
 	private List<AdministrationSession> administrationSessions = new ArrayList<>();
-
-	///** listeModele */
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "ID_LISTE")
-	//private ListeModele listeModele;
-
-	///** projet : Projet */
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "ID_PROJET")
-	//private Projet projet;
 
 	/** dureeFacturable */
 	@Column(name="DUREE_FACTURABLE")

@@ -41,9 +41,8 @@
 }
 
 #markdown li {
-    display: flex;
-    align-items: start;
     padding: 0.5rem;
+    list-style: disc;
 }
 
 #markdown strong {

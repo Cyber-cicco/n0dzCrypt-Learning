@@ -27,6 +27,8 @@ public class Chapitre {
 	private String libelle;
 	@Column(columnDefinition = "LONGTEXT")
 	private String contenu;
+	@Column(columnDefinition = "LONGTEXT")
+	private String contenuNonPublie;
 	private String lienVideo;
 	private Integer ordre;
 	@Enumerated

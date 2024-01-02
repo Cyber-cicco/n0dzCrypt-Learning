@@ -1,0 +1,18 @@
+package fr.diginamic.digilearning.utils.parser;
+
+public enum SyntaxKind {
+    TEXT,
+    STAR_TOKEN,
+    TILDA_TOKEN,
+    DASH_TOKEN,
+    NUMBER_TOKEN,
+    DOT_TOKEN,
+    BACK_QUOTE_TOKEN,
+    PIPE_TOKEN,
+    DEUXPOINT_TOKEN,
+    OPEN_BRACKET_TOKEN,
+    CLOSING_BRACKET_TOKEN,
+    OPEN_PARENTHESIS_TOKEN,
+    CLOSING_PARENTHESIS_TOKEN,
+    BANG_TOKEN,
+}

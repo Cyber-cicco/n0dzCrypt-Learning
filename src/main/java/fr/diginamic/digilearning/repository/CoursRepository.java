@@ -4,6 +4,7 @@ import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -92,15 +93,6 @@ order by fc.datePrevue
     List<String[]> getPrevusCeJour(Long id);
 
     @Query(nativeQuery = true, value = """
-select count(distinct c.id)
-from dl_cours c
-join dl_sous_module dsm on c.sous_module_id = dsm.id
-where fc.stagiaire_id = ?1
-order by fc.datePrevue
-""")
-    Double getPourcentageCompletionModule(Long idUtilisateur, Long idModule);
-
-    @Query(nativeQuery = true, value = """
 select count(dc.id), count(dfc.id)
 from dl_module m  
 join dl_module_formation dmf on m.id = dmf.id_module
@@ -140,4 +132,16 @@ join dl_utilisateur_cours duc on c.id = duc.id_cours
 where duc.id_utilisateur = ?1
 """)
     List<Cours> getCoursCrees(Long id);
+
+    @Query(nativeQuery = true, value = """
+select c.* 
+from dl_cours c
+join dl_utilisateur_cours duc on c.id = duc.id_cours
+where duc.id_utilisateur = ?2
+and c.id = ?1
+""")
+    Optional<Cours> getCoursByIdAndFormateur(Long idCours, Long id);
+
+    @Query("select count(c)  from Chapitre c where c.cours.id = :id")
+    Integer findNombreChapitre(Long id);
 }

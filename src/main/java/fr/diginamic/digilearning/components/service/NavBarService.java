@@ -29,7 +29,7 @@ public class NavBarService {
                                     NavLink.builder()
                                             .iconSource("school.svg")
                                             .url("cours/admin")
-                                            .libelle("Gérer des cours")
+                                            .libelle("Ressources")
                                             .build(),
                                     NavLink.builder()
                                             .iconSource("conversation.svg")
