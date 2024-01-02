@@ -1,8 +1,6 @@
 package fr.diginamic.digilearning.page.service;
 
-import fr.diginamic.digilearning.dto.ChapitreDto;
-import fr.diginamic.digilearning.dto.MessageDto;
-import fr.diginamic.digilearning.dto.ModuleDto;
+import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.enums.StatusChapitre;
 import fr.diginamic.digilearning.page.validators.CoursValidator;
@@ -16,7 +14,6 @@ import org.commonmark.ext.task.list.items.TaskListItemsExtension;
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
-import fr.diginamic.digilearning.dto.CoursDto;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
@@ -100,6 +97,7 @@ public class CoursService {
         HtmlRenderer renderer = HtmlRenderer.builder()
                 .extensions(extensions)
                 .build();
+        if(contenu == null) contenu = "";
         Node document = parser.parse(contenu);
         return renderer.render(document);
     }
@@ -182,6 +180,13 @@ public class CoursService {
                 .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
                 .statusChapitre(chapitreDto.getStatusChapitre())
                 .build();
+        return chapitreRepository.save(chapitre);
+    }
+
+    public Chapitre updateContenu(AuthenticationInfos userInfos, Long idChapitre, ContenuChapitreDto contenuChapitreDto) {
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
+                .orElseThrow(UnauthorizedException::new);
+        chapitre.setContenuNonPublie(contenuChapitreDto.getContenu());
         return chapitreRepository.save(chapitre);
     }
 }

@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.dto.ChapitreDto;
+import fr.diginamic.digilearning.dto.ContenuChapitreDto;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Chapitre;
 import fr.diginamic.digilearning.page.irrigator.ChapitreIrrigator;
@@ -37,6 +38,13 @@ public class CoursAdminController {
         Chapitre chapitre = coursService.createNewChapitre(userInfos, idCours, chapitreDto);
         response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.getId());
         return Routes.ADR_ADMIN_CHAPITRE;
+    }
+    @PostMapping("/chapitre/contenu")
+    public String editerChapitre(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        Chapitre chapitre = coursService.updateContenu(userInfos, idChapitre, contenuChapitreDto);
+        model.addAttribute("content", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
+        return Routes.ADR_COURS_CONTENT;
     }
 
     @GetMapping("/chapitre/editer/api")

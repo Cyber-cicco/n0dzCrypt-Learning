@@ -97,5 +97,6 @@ public class ChapitreIrrigator {
                 .orElseThrow(UnauthorizedException::new);
         model.addAttribute("contenuHTML", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
         model.addAttribute("contenu", chapitre.getContenuNonPublie());
+        model.addAttribute("id", chapitre.getId());
     }
 }

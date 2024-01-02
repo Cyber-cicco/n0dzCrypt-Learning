@@ -1,0 +1,17 @@
+<div th:fragment="textOption(type, tooltip)">
+    <button
+        data-text-option
+        th:data-tooltip-target="'tooltip-' + ${type}"
+        th:id="${type}"
+        class="hover:bg-grey border-2 h-[30px] rounded-md"
+        >
+        <img th:src="'/img/text-icons/' + ${type} + '.svg'">
+    </button>
+        <div th:id="'tooltip-' + ${type}"
+            role="tooltip"
+            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
+            th:text="${tooltip}"
+            >
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+</div>
