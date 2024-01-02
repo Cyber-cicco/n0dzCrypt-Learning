@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class CoursAdminController {
         return Routes.ADR_FORM_ERROR;
     }
 
-    @PostMapping("/chapitre")
+    @PostMapping("/chapitre/photo")
     public String creerChapitre(@RequestParam("id") Long idCours, @ModelAttribute ChapitreDto chapitreDto, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         Chapitre chapitre = coursService.createNewChapitre(userInfos, idCours, chapitreDto);
@@ -40,10 +43,12 @@ public class CoursAdminController {
         return Routes.ADR_ADMIN_CHAPITRE;
     }
     @PostMapping("/photo")
-    public String ajouterPhoto(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto, HttpServletResponse response) {
+    public String ajouterPhoto(Model model, @ModelAttribute("file") MultipartFile file) throws IOException {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        coursService.uploadPhoto(file, userInfos);
         return Routes.ADR_MESSAGE;
     }
+
     @PostMapping("/chapitre/contenu")
     public String editerChapitre(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();

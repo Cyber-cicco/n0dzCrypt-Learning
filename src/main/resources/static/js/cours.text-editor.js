@@ -1,4 +1,5 @@
 var putInHistory;
+var uploadPhoto;
 
 function initTextEditor(id) {
     let textOptions = document.querySelectorAll("[data-text-option]")
@@ -32,6 +33,17 @@ function initTextEditor(id) {
         }).then(html => {
             htmx.find("#markdown").innerHTML = html
         })
+    }
+
+    uploadPhoto = () => {
+
+        let photo = document.querySelector("#file-input").files[0];
+        const formData = new FormData();
+        formData.append("file", photo);
+        fetch("/cours/admin/photo", {
+            method : 'POST',
+            body : formData })
+            .then(() => document.querySelector("#file-input").files = [])
     }
 
     let textHistory = [writingArea.value]

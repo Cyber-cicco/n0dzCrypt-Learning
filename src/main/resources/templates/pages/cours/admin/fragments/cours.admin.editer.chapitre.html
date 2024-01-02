@@ -154,7 +154,23 @@
                         Insérer un bloque de code
                         <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
-                </div>
+                    <label 
+                        data-tooltip-target="tooltip-image"
+                        id="photo"
+                        class="hover:bg-grey hover:cursor-pointer h-[30px] border-2 rounded-md"
+                        for="file-input"
+                        >
+                        <img src="/img/text-icons/img.svg">
+                    </label>
+                        <input onchange="uploadPhoto()" class="hidden" id="file-input" type="file">
+                        <div id="tooltip-image"
+                            role="tooltip"
+                            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
+                            >
+                            Ajouter une nouvelle image depuis votre PC.
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    </div>
                 <div class="p-3 flex flex-col h-full">
                     <textarea 
                         id="text-input" 
@@ -162,30 +178,13 @@
                         hx-trigger="keyup changed delay:0.3s" 
                         th:hx-post="'/cours/admin/chapitre/contenu?id=' + ${id}"
                         hx-on::before-request="putInHistory()"
+                        hx-on::after-request="hljs.highlightAll()"
                         hx-target="#markdown"
                         hx-swap="innerHTML"
                         class="border-grey border-2 rounded-md p-2 h-full" th:text="${contenu}"></textarea>
                 </div>
                 <div id="buttons" class="p-3 flex gap-3">
                     <button class="bg-lightPrimary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Publier</button>
-                    <form id='form' hx-encoding='multipart/form-data' hx-post='/cours/admin/photo'>
-                        <input style="
-                        width: 0.1px;
-                        height: 0.1px;
-                        opacity: 0;
-                        position: absolute;
-                        z-index: -1;
-                        " type='file' name='file'>
-                        <button class="">
-                            Upload
-                        </button>
-                        <progress id='progress' value='0' max='100'></progress>
-                    </form>
-                    <script>
-                        htmx.on('#form', 'htmx:xhr:progress', function(evt) {
-                            htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)
-                        });
-                    </script>
                 </div>
             </div>
         </div>
@@ -199,4 +198,5 @@
   <script src="/js/cours.text-editor.js"></script>
   <script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
   <script th:text="'initTextEditor(' + ${id} + ')'" defer></script>
+  <script>hljs.highlightAll();</script>
 </section>

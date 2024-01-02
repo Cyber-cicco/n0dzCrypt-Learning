@@ -343,6 +343,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 		return hasRole(TypeRole.ROLE_CONTACT);
 	}
 
+	public String getPersonalDirectory(){
+		return nom + id + "/";
+	}
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
