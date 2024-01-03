@@ -1,6 +1,6 @@
 # Digilearing
 
-## Qu'est-ce que Digilearing ?
+## Qu'est-ce que Digilearning ?
 
 Digilearning est la pateforme de e-learning de Diginamic. C'est ici que les formateurs peuvent mettre en ligne des cours. Ils peuvent téléverser des cours au format markdown, partager des pdfs, des exercices, et des vidéos d'explication pour les cours.
 
