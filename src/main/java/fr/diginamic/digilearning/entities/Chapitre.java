@@ -31,6 +31,7 @@ public class Chapitre {
 	private String contenuNonPublie;
 	private String lienVideo;
 	private Integer ordre;
+	private Boolean aJour;
 	@Enumerated
 	private StatusChapitre statusChapitre;
 	@OneToMany(mappedBy = "chapitre")

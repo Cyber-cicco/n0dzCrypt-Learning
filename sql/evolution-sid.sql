@@ -123,6 +123,7 @@ create table sid.dl_chapitre
         primary key,
     contenu        longtext      null,
     contenuNonPublie        longtext      null,
+    aJour          tinyint       null,
     libelle        varchar(255)  null,
     statusChapitre tinyint       null,
     cours_id       bigint        null,

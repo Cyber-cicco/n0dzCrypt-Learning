@@ -16,7 +16,7 @@ function initTextEditor() {
     let title = document.querySelector("#title")
     let titleSelect = document.querySelector("#heading")
     let tableau = document.querySelector("#table")
-    let citation = document.querySelector("#citation")
+    let citation = document.querySelector("#quote")
     let codeBlock = document.querySelector("#code-block")
     let writingArea = document.getElementById("text-input")
 
@@ -24,8 +24,6 @@ function initTextEditor() {
     const id = new URLSearchParams(window.location.search).get("id");
 
     const uploadMD = () => {
-        const formDatas = new FormData()
-        formDatas.append("contenu", writingArea.value)
         fetch(`/cours/admin/chapitre/contenu?id=${id}`,  {
             method : 'POST',
             body : formDatas
@@ -56,7 +54,17 @@ function initTextEditor() {
                 )
             })
             .then(() => {
-                document.querySelector("#file-input").files = []
+                const formDatas = new FormData()
+                formDatas.append("contenu", writingArea.value)
+                fetch(`/cours/admin/chapitre/contenu?id=${id}`,  {
+                    method : 'POST',
+                    body : formDatas
+                }).then((content) => {
+                    return content.text()
+                }).then(html => {
+                    htmx.find("#markdown").innerHTML = html
+                    hljs.highlightAll();
+                })
             })
     }
 

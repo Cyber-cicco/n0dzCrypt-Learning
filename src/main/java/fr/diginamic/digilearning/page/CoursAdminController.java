@@ -34,6 +34,20 @@ public class CoursAdminController {
     private final ChapitreIrrigator chapitreIrrigator;
     private final PhotoService photoService;
 
+    @GetMapping("/chapitre/editer/api")
+    public String getAdminPanelChapitreApi(Model model, @RequestParam("id") Long idChapitre) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        chapitreIrrigator.irrigateAdminChapitre(model, userInfos, idChapitre);
+        return Routes.ADR_ADMIN_CHAPITRE;
+    }
+    @GetMapping("/chapitre/editer")
+    public String getAdminPanelChapitre(Model model, @RequestParam("id") Long idChapitre) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        chapitreIrrigator.irrigateAdminChapitre(model, userInfos, idChapitre);
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_ADMIN_CHAPITRE);
+        return Routes.ADR_BASE_LAYOUT;
+    }
+
     @PostMapping("/description")
     public String editerDescription(@RequestParam("id") Long idCours, @ModelAttribute MessageDto descriptionCours) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -58,24 +72,20 @@ public class CoursAdminController {
     }
 
     @PostMapping("/chapitre/contenu")
-    public String editerChapitre(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto) {
+    public String editerChapitre(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto, HttpServletResponse reponse) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         Chapitre chapitre = coursService.updateContenu(userInfos, idChapitre, contenuChapitreDto);
         model.addAttribute("content", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
         return Routes.ADR_COURS_CONTENT;
     }
 
-    @GetMapping("/chapitre/editer/api")
-    public String getAdminPanelChapitreApi(Model model, @RequestParam("id") Long idChapitre) {
+    @PostMapping("/chapitre/publier")
+    public String publierChapitre(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto, HttpServletResponse reponse) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        chapitreIrrigator.irrigateAdminChapitre(model, userInfos, idChapitre);
-        return Routes.ADR_ADMIN_CHAPITRE;
-    }
-    @GetMapping("/chapitre/editer")
-    public String getAdminPanelChapitre(Model model, @RequestParam("id") Long idChapitre) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        chapitreIrrigator.irrigateAdminChapitre(model, userInfos, idChapitre);
-        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_ADMIN_CHAPITRE);
-        return Routes.ADR_BASE_LAYOUT;
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
+        Chapitre chapitre = coursService.publierContenu(userInfos, idChapitre, contenuChapitreDto);
+        model.addAttribute("content", "La version de votre cours est publiée");
+        return Routes.ADR_MESSAGE;
     }
 }

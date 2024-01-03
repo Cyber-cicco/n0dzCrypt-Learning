@@ -183,8 +183,17 @@ public class CoursService {
         Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
                 .orElseThrow(UnauthorizedException::new);
         chapitre.setContenuNonPublie(contenuChapitreDto.getContenu());
+        chapitre.setAJour(false);
         return chapitreRepository.save(chapitre);
     }
 
 
+    public Chapitre publierContenu(AuthenticationInfos userInfos, Long idChapitre, ContenuChapitreDto contenuChapitreDto) {
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
+                .orElseThrow(UnauthorizedException::new);
+        chapitre.setContenuNonPublie(contenuChapitreDto.getContenu());
+        chapitre.setContenu(contenuChapitreDto.getContenu());
+        chapitre.setAJour(true);
+        return chapitreRepository.save(chapitre);
+    }
 }

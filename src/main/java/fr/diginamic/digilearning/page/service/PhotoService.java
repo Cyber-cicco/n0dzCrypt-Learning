@@ -49,7 +49,6 @@ public class PhotoService {
     }
 
     public Media getPhoto(String nomPhoto){
-        System.out.println("in photo");
         Path photoPath = Path.of(DEFAULT_DOCUMENT_DIRECTORY + "/public/" + nomPhoto);
         Media media = new Media();
         if(!Files.exists(photoPath)) {
@@ -57,22 +56,10 @@ public class PhotoService {
         }
         String suffix = nomPhoto.substring(nomPhoto.lastIndexOf("."));
         switch (suffix) {
-            case ".png" : {
-                media.setMediaType(MediaType.IMAGE_PNG);
-                break;
-            }
-            case ".jpeg" : {
-                media.setMediaType(MediaType.IMAGE_JPEG);
-                break;
-            }
-            case ".svg" : {
-                //TODO : vérifier que cela ne pose aucun problème de sécurité
-                media.setMediaType(MediaType.APPLICATION_XML);
-                break;
-            }
-            default :
-                System.out.println("default");
-                throw new BrokenRuleException("Vous ne pouvez demander autre chose qu'une photo via ce point d'entrée");
+            case ".png" -> media.setMediaType(MediaType.IMAGE_PNG);
+            case ".jpeg" ->  media.setMediaType(MediaType.IMAGE_JPEG);
+            case ".svg" ->  media.setMediaType(MediaType.APPLICATION_XML);
+            default -> throw new BrokenRuleException("Vous ne pouvez demander autre chose qu'une photo via ce point d'entrée");
         }
         media.setResource(new FileSystemResource(photoPath));
         media.setNomRessource(nomPhoto);
