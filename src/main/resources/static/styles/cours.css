@@ -60,3 +60,10 @@
     text-underline: #0067a3;
     text-decoration: underline;
 }
+#markdown code {
+    background-color: #dedede;
+    color: #444444;
+    font-family: "JetBrains Mono", serif;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}

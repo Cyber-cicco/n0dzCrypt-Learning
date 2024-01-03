@@ -1,7 +1,7 @@
 var putInHistory;
 var uploadPhoto;
 
-function initTextEditor(id) {
+function initTextEditor() {
     let textOptions = document.querySelectorAll("[data-text-option]")
     let bold = document.querySelector("#bold")
     let italic = document.querySelector("#italic")
@@ -21,6 +21,7 @@ function initTextEditor(id) {
     let writingArea = document.getElementById("text-input")
 
     const middle = 1;
+    const id = new URLSearchParams(window.location.search).get("id");
 
     const uploadMD = () => {
         const formDatas = new FormData()
@@ -32,6 +33,7 @@ function initTextEditor(id) {
             return content.text()
         }).then(html => {
             htmx.find("#markdown").innerHTML = html
+            hljs.highlightAll();
         })
     }
 
@@ -43,7 +45,19 @@ function initTextEditor(id) {
         fetch("/cours/admin/photo", {
             method : 'POST',
             body : formData })
-            .then(() => document.querySelector("#file-input").files = [])
+            .then((res) => res.json())
+            .then((res) => {
+                changeSelection(
+                    (contentAsArray) => {
+                        contentAsArray[middle] = `![${contentAsArray[middle]}](/photo?name=${res.name})`
+                    }, () => {
+                        return `![your alt text](/photo?name=${res.name})`
+                    }
+                )
+            })
+            .then(() => {
+                document.querySelector("#file-input").files = []
+            })
     }
 
     let textHistory = [writingArea.value]
@@ -216,9 +230,9 @@ function initTextEditor(id) {
         const del1 = writingArea.selectionStart;
         let areaValue = writingArea.value;
         let text = `
-            | En tête 1 | En tête 2 | En tête 3 |
-            |-----------|-----------|-----------|
-            |row 1 col 1|row 1 col 2|row 1 col 3|
+| En tête 1 | En tête 2 | En tête 3 |
+|-----------|-----------|-----------|
+|row 1 col 1|row 1 col 2|row 1 col 3|
             `
         contentAsArray = [
             areaValue.substring(0, del1),
@@ -288,7 +302,6 @@ function initTextEditor(id) {
 
     const changeSelection = (changer, creer) => {
         let text;
-        let selection;
         const del1 = writingArea.selectionStart;
         const del2 = writingArea.selectionEnd;
         text = writingArea.value;
@@ -330,3 +343,5 @@ function initTextEditor(id) {
     }
 
 }
+
+initTextEditor();

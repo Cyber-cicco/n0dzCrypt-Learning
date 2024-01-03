@@ -2,10 +2,8 @@ package fr.diginamic.digilearning.page.service;
 
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.*;
-import fr.diginamic.digilearning.entities.enums.StatusChapitre;
 import fr.diginamic.digilearning.page.validators.CoursValidator;
 import fr.diginamic.digilearning.repository.*;
-import fr.diginamic.digilearning.security.service.AuthenticationService;
 import org.commonmark.Extension;
 import org.commonmark.ext.front.matter.YamlFrontMatterExtension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -20,21 +18,12 @@ import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class CoursService {
-    private static final String DEFAULT_DOCUMENT_DIRECTORY = System.getProperty("user.dir") + "/ressources/";
     private final FlagCoursRepository flagCoursRepository;
     private final SousModuleRepository sousModuleRepository;
     private final CoursRepository coursRepository;
@@ -197,25 +186,5 @@ public class CoursService {
         return chapitreRepository.save(chapitre);
     }
 
-    public void uploadPhoto(MultipartFile file, AuthenticationInfos userInfos) throws IOException {
 
-        boolean isPng = Objects.equals(file.getContentType(), "image/png");
-        boolean isJpg = Objects.equals(file.getContentType(), "image/jpeg");
-
-        if(!(isPng || isJpg)) {
-            throw new UnauthorizedException("Le fichier doit être au format png ou jpeg");
-        }
-
-        Utilisateur utilisateur = utilisateurRepository.findById(userInfos.getId())
-                .orElseThrow(EntityNotFoundException::new);
-
-        String directoryName = utilisateur.getPersonalDirectory();
-        Path directoryPath = Path.of(DEFAULT_DOCUMENT_DIRECTORY + directoryName);
-
-        if (!Files.isDirectory(directoryPath)){
-            Files.createDirectory(directoryPath);
-        }
-
-        file.transferTo(new File(directoryPath + "/" + file.getOriginalFilename()));
-    }
 }

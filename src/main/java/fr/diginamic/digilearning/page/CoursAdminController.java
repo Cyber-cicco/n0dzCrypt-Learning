@@ -4,19 +4,24 @@ import fr.diginamic.digilearning.dto.ChapitreDto;
 import fr.diginamic.digilearning.dto.ContenuChapitreDto;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Chapitre;
+import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.irrigator.ChapitreIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.page.service.CoursService;
+import fr.diginamic.digilearning.page.service.PhotoService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,6 +32,7 @@ public class CoursAdminController {
     private final AuthenticationService authenticationService;
     private final LayoutIrrigator layoutIrrigator;
     private final ChapitreIrrigator chapitreIrrigator;
+    private final PhotoService photoService;
 
     @PostMapping("/description")
     public String editerDescription(@RequestParam("id") Long idCours, @ModelAttribute MessageDto descriptionCours) {
@@ -35,18 +41,20 @@ public class CoursAdminController {
         return Routes.ADR_FORM_ERROR;
     }
 
-    @PostMapping("/chapitre/photo")
-    public String creerChapitre(@RequestParam("id") Long idCours, @ModelAttribute ChapitreDto chapitreDto, HttpServletResponse response) {
+    @PostMapping("/chapitre")
+    public String creerChapitre(Model model, @RequestParam("id") Long idCours, @ModelAttribute ChapitreDto chapitreDto, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         Chapitre chapitre = coursService.createNewChapitre(userInfos, idCours, chapitreDto);
+        chapitreIrrigator.irrigateAdminChapitre(model, userInfos, chapitre.getId());
         response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.getId());
         return Routes.ADR_ADMIN_CHAPITRE;
     }
     @PostMapping("/photo")
-    public String ajouterPhoto(Model model, @ModelAttribute("file") MultipartFile file) throws IOException {
+    public ResponseEntity<?> ajouterPhoto(Model model, @ModelAttribute("file") MultipartFile file, HttpServletResponse response) throws IOException {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        coursService.uploadPhoto(file, userInfos);
-        return Routes.ADR_MESSAGE;
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        String fileName = photoService.uploadPhoto(file, userInfos);
+        return ResponseEntity.ok(Map.of("name", fileName));
     }
 
     @PostMapping("/chapitre/contenu")

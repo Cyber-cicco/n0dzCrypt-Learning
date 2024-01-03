@@ -177,8 +177,7 @@
                         name="contenu"
                         hx-trigger="keyup changed delay:0.3s" 
                         th:hx-post="'/cours/admin/chapitre/contenu?id=' + ${id}"
-                        hx-on::before-request="putInHistory()"
-                        hx-on::after-request="hljs.highlightAll()"
+                        hx-on::after-request="hljs.highlightAll(); putInHistory()"
                         hx-target="#markdown"
                         hx-swap="innerHTML"
                         class="border-grey border-2 rounded-md p-2 h-full" th:text="${contenu}"></textarea>
@@ -196,7 +195,6 @@
         </div>
     </div>
   <script src="/js/cours.text-editor.js"></script>
-  <script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
-  <script th:text="'initTextEditor(' + ${id} + ')'" defer></script>
   <script>hljs.highlightAll();</script>
+  <script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
 </section>
