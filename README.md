@@ -1,4 +1,4 @@
-# Digilearing
+# Digilearning
 
 ## Qu'est-ce que Digilearing ?
 
