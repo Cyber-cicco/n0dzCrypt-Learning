@@ -3,17 +3,13 @@ package fr.diginamic.digilearning.page;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.page.irrigator.ConversationIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
-import fr.diginamic.digilearning.page.service.ConversationService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.context.ThemeSource;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

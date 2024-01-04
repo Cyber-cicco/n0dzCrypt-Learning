@@ -2,12 +2,12 @@
         class="flex  flex-col text-primary items-center hover:cursor-pointer"
         th:fragment="nav_link(url, icon, libelle)"
         th:hx-get="'/' + ${url} + '/api'"
+        th:href="'/' + ${url}"
         th:hx-push-url="'/' + ${url}"
         hx-swap="innerHTML transition:true"
         hx-target="#insert"
         hx-boost="true"
->
-    <div class="rounded-full overflow-hidden">
+    ><div class="rounded-full overflow-hidden">
         <img class="hover:bg-accent text-white p-2 bg-white" th:src="${'/img/icons/' + icon}" width="50">
     </div>
     <div class="text-sm text-center" th:text="${libelle}"></div>

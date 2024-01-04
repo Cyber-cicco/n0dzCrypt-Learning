@@ -46,6 +46,7 @@ public class Routes {
     public static final String ADR_COURS_ADMIN_EDITER = "pages/cours/admin/fragments/cours.admin.editer.sommaire";
     public static final String ADR_ADMIN_CHAPITRE = "pages/cours/admin/fragments/cours.admin.editer.chapitre";
     public static final String ADR_COURS_CONTENT = "pages/cours/admin/fragments/cours.admin.html-fragment";
+    public static final String ADR_MESSAGE = "components/reponses/message-reponse.html";
 
     private Routes(){}
 }

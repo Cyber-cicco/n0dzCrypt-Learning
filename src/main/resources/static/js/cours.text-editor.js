@@ -1,6 +1,7 @@
 var putInHistory;
+var uploadPhoto;
 
-function initTextEditor(id) {
+function initTextEditor() {
     let textOptions = document.querySelectorAll("[data-text-option]")
     let bold = document.querySelector("#bold")
     let italic = document.querySelector("#italic")
@@ -15,19 +16,46 @@ function initTextEditor(id) {
     let title = document.querySelector("#title")
     let titleSelect = document.querySelector("#heading")
     let tableau = document.querySelector("#table")
-    let citation = document.querySelector("#citation")
+    let citation = document.querySelector("#quote")
     let codeBlock = document.querySelector("#code-block")
     let writingArea = document.getElementById("text-input")
 
     const middle = 1;
+    const id = new URLSearchParams(window.location.search).get("id");
 
-    let textHistory = [writingArea.value]
-    let historyPointer = 0;
+    const uploadMD = () => {
+        const formData = new FormData();
+        formData.append("contenu", writingArea.value);
+        fetch(`/cours/admin/chapitre/contenu?id=${id}`,  {
+            method : 'POST',
+            body : formData
+        }).then((content) => {
+            return content.text()
+        }).then(html => {
+            htmx.find("#markdown").innerHTML = html
+            hljs.highlightAll();
+        })
+    }
 
-    textOptions.forEach(option => {
-        option.addEventListener("click", ()=>{
-            pushHistory(writingArea.value)
-            setTimeout(() => {
+    uploadPhoto = () => {
+
+        let photo = document.querySelector("#file-input").files[0];
+        const formData = new FormData();
+        formData.append("file", photo);
+        fetch("/cours/admin/photo", {
+            method : 'POST',
+            body : formData })
+            .then((res) => res.json())
+            .then((res) => {
+                changeSelection(
+                    (contentAsArray) => {
+                        contentAsArray[middle] = `![${contentAsArray[middle]}](/photo?name=${res.name})`
+                    }, () => {
+                        return `![your alt text](/photo?name=${res.name})`
+                    }
+                )
+            })
+            .then(() => {
                 const formDatas = new FormData()
                 formDatas.append("contenu", writingArea.value)
                 fetch(`/cours/admin/chapitre/contenu?id=${id}`,  {
@@ -37,8 +65,18 @@ function initTextEditor(id) {
                     return content.text()
                 }).then(html => {
                     htmx.find("#markdown").innerHTML = html
-                }, 100)
+                    hljs.highlightAll();
+                })
             })
+    }
+
+    let textHistory = [writingArea.value]
+    let historyPointer = 0;
+
+    textOptions.forEach(option => {
+        option.addEventListener("click", ()=>{
+            pushHistory(writingArea.value)
+            setTimeout(uploadMD, 100)
         })
     })
 
@@ -57,7 +95,7 @@ function initTextEditor(id) {
                     contentAsArray[middle] = "**" + contentAsArray[middle] + "**"
                 }
             }, () => {
-                return "** bold **";
+                return "**bold**";
             })
     });
 
@@ -70,7 +108,7 @@ function initTextEditor(id) {
                     contentAsArray[middle] = "*" + contentAsArray[middle] + "*"
                 }
             }, () => {
-                return "* italic *";
+                return "*italic*";
             })
     })
 
@@ -125,6 +163,7 @@ function initTextEditor(id) {
         if(historyPointer > 0) {
             historyPointer--;
             writingArea.value = textHistory[historyPointer];
+            uploadMD();
         }
     })
 
@@ -132,6 +171,7 @@ function initTextEditor(id) {
         if(historyPointer < textHistory.length - 1) {
             historyPointer++;
             writingArea.value = textHistory[historyPointer]
+            uploadMD();
         }
     })
 
@@ -140,7 +180,7 @@ function initTextEditor(id) {
             (contentAsArray) => {
                 contentAsArray[middle] = "(" + contentAsArray[middle] + ")[https://www.example.com]"
             }, () => {
-                return "(your link text)[https://www.example.com]"
+                return "[your link text](https://www.example.com)"
             }
         )
     })
@@ -200,9 +240,9 @@ function initTextEditor(id) {
         const del1 = writingArea.selectionStart;
         let areaValue = writingArea.value;
         let text = `
-            | En tête 1 | En tête 2 | En tête 3 |
-            |-----------|-----------|-----------|
-            |row 1 col 1|row 1 col 2|row 1 col 3|
+| En tête 1 | En tête 2 | En tête 3 |
+|-----------|-----------|-----------|
+|row 1 col 1|row 1 col 2|row 1 col 3|
             `
         contentAsArray = [
             areaValue.substring(0, del1),
@@ -272,7 +312,6 @@ function initTextEditor(id) {
 
     const changeSelection = (changer, creer) => {
         let text;
-        let selection;
         const del1 = writingArea.selectionStart;
         const del2 = writingArea.selectionEnd;
         text = writingArea.value;
@@ -314,3 +353,5 @@ function initTextEditor(id) {
     }
 
 }
+
+initTextEditor();

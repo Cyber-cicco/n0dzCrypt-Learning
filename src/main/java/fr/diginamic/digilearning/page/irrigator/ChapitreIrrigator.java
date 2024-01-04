@@ -98,5 +98,13 @@ public class ChapitreIrrigator {
         model.addAttribute("contenuHTML", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
         model.addAttribute("contenu", chapitre.getContenuNonPublie());
         model.addAttribute("id", chapitre.getId());
+        String aJour = (chapitre.getAJour())
+                ? "La version de votre cours est publiée"
+                : "La version de votre cours est en avance par rapport à la version publiée";
+        String classAJour = chapitre.getAJour()
+                ? "text-validation"
+                : "text-error";
+        model.addAttribute("aJour", aJour);
+        model.addAttribute("classAJour", classAJour);
     }
 }

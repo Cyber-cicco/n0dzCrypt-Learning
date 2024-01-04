@@ -2,10 +2,8 @@ package fr.diginamic.digilearning.page.service;
 
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.*;
-import fr.diginamic.digilearning.entities.enums.StatusChapitre;
 import fr.diginamic.digilearning.page.validators.CoursValidator;
 import fr.diginamic.digilearning.repository.*;
-import fr.diginamic.digilearning.security.service.AuthenticationService;
 import org.commonmark.Extension;
 import org.commonmark.ext.front.matter.YamlFrontMatterExtension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -20,8 +18,6 @@ import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -187,6 +183,17 @@ public class CoursService {
         Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
                 .orElseThrow(UnauthorizedException::new);
         chapitre.setContenuNonPublie(contenuChapitreDto.getContenu());
+        chapitre.setAJour(false);
+        return chapitreRepository.save(chapitre);
+    }
+
+
+    public Chapitre publierContenu(AuthenticationInfos userInfos, Long idChapitre, ContenuChapitreDto contenuChapitreDto) {
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
+                .orElseThrow(UnauthorizedException::new);
+        chapitre.setContenuNonPublie(contenuChapitreDto.getContenu());
+        chapitre.setContenu(contenuChapitreDto.getContenu());
+        chapitre.setAJour(true);
         return chapitreRepository.save(chapitre);
     }
 }

@@ -8,6 +8,7 @@ module.exports = {
       lightPrimary : '#0067a3',
       secondary : '#bccdd6',
       accent : '#fabb00',
+      validation : '#32CD32',
       lightAccent : '#f5d26c',
       light : '#ffecb3',
       error : '#ea5353',
