@@ -15,5 +15,4 @@ FROM azul/zulu-openjdk-alpine:17-latest
 WORKDIR /digi-learning
 COPY --from=build /workspace/target/*.jar app.jar
 EXPOSE 8080
-RUN sh
 
