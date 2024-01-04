@@ -10,6 +10,7 @@ Il pourra également discuter avec d'autres membres de la session, pourra prendr
 
 On peut également imaginer qu'une personne qui ne soit pas inscrite à Diginamic ait également accès à ce site pour consulter des cours d'introduction à la programmation.
 
+
 ## Pourquoi Digilearning ?
 
 L'idée initiale vient d'un feedback que tout le monde m'a fait sur les journées de e-learning : linkedin learning, c'est vraiment très mauvais. Le fait que Diginamic soit dépendant de cela pour certaines journées de cours écorne l'image du centre de formation, qui pourtant se démarque en temps normal de la concurrence par la qualité des cours dispensés (d'après Eli N'Diathe finalement l'ENI c'est pas si bien que ça).
