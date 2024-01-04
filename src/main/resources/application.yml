@@ -19,10 +19,11 @@ spring:
         cache: false
         mode: HTML
         encoding: UTF-8
-        prefix: file:src/main/resources/templates/
+        prefix: classpath:/templates/
+        suffix: .html
     web:
         resources:
-            static-locations: file:src/main/resources/static/
+            static-locations: classpath:/static/
             cache:
                 period: 0
 jwt:
@@ -35,4 +36,4 @@ logging:
 server:
     http2:
         enabled: true
-    port: 8081
+    port: 8080
