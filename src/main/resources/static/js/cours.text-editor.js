@@ -24,9 +24,11 @@ function initTextEditor() {
     const id = new URLSearchParams(window.location.search).get("id");
 
     const uploadMD = () => {
+        const formData = new FormData();
+        formData.append("contenu", writingArea.value);
         fetch(`/cours/admin/chapitre/contenu?id=${id}`,  {
             method : 'POST',
-            body : formDatas
+            body : formData
         }).then((content) => {
             return content.text()
         }).then(html => {
