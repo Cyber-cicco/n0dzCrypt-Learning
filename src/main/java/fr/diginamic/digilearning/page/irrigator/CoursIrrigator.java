@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Irrigateur du modèle donnée par le controlleur
@@ -139,8 +139,17 @@ public class CoursIrrigator {
     }
 
     public void irrigateAdminPanel(AuthenticationInfos userInfos, Model model) {
+        List<SousModule> sousModules = sousModuleRepository.findAll();
+        SortedMap<SousModule, List<Cours>> sousModuleListMap = new TreeMap<>();
+        List<Cours> coursCrees = coursRepository.getCoursCrees(userInfos.getId());
+        for (SousModule sousModule : sousModules) {
+            sousModuleListMap.put(sousModule, new ArrayList<>());
+        }
+        for (Cours coursCree : coursCrees) {
+            sousModuleListMap.get(coursCree.getSousModule()).add(coursCree);
+        }
         model.addAttribute("user", userInfos);
-        model.addAttribute("coursCrees", coursRepository.getCoursCrees(userInfos.getId()));
+        model.addAttribute("moduleMap", sousModuleListMap);
     }
 
     public void irrigateEditionCours(Model model, Long idCours, AuthenticationInfos userInfos) {

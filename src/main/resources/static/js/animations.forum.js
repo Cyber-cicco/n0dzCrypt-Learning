@@ -1,4 +1,4 @@
-document.querySelectorAll("#sujet").forEach(el => {
+document.querySelectorAll("[data-rotato-container]").forEach(el => {
     const rotateButton = el.querySelector('[data-rotatable]')
     const subMenu = el.querySelector(".wrapper")
     const openMenu = (e) => {

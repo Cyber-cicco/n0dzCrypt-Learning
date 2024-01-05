@@ -174,6 +174,7 @@ public class CoursService {
                 .cours(cours)
                 .libelle(chapitreDto.getTitre())
                 .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
+                .aJour(false)
                 .statusChapitre(chapitreDto.getStatusChapitre())
                 .build();
         return chapitreRepository.save(chapitre);

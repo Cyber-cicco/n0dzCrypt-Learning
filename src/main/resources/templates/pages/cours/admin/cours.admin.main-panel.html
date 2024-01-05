@@ -1,24 +1,45 @@
 <section hx-history="false" class="flex flex-col h-screen">
     <th:block th:replace="~{components/entete.nav :: entete('Cours')}"></th:block>
-    <div class="flex flex-col p-3 gap-3">
+    <div class="flex flex-col h-full p-3 gap-3">
         <div th:if="${user.isFormateur()}" class="flex bg-white flex-col h-full">
             <h2 class="text-primary font-poppins text-3xl p-3 bg-white">Gérer mes cours</h2>
             <div class="px-2">
                 <div class="h-0.5 bg-greyDeep w-full"></div>
             </div>
-            <div class="text-primary pt-3 px-3 justify-center bg-white flex flex-col gap-3" th:each="c, iterStat : ${coursCrees}">
-                <a class="hover:cursor-pointer hover:underline"
-                   th:href="'/cours/admin/editer?id=' + ${c.getId()}"
-                   th:text="${c.getSousModule().getTitre() + ' : ' + c.getTitre()}"
-                   th:hx-get="'/cours/admin/editer/api?id=' + ${c.getId()}"
-                   hx-target="#insert"
-                   th:hx-push-url="'/cours/admin/editer?id=' + ${c.getId()}"
-                   ></a>
-                <div class="h-0.5 bg-grey w-full"></div>
-            </div>
-            <div class="flex justify-center items-center p-3">
-                <button class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-lightPrimary brightness-125">+</button>
-            </div>
+            <th:block  th:each="sModule, iterStat : ${moduleMap.keySet()}">
+                <div 
+                    data-rotato-container
+                    th:if="${!#lists.isEmpty(moduleMap.get(sModule))}"
+                    class="text-primary pt-3 px-3 bg-white flex flex-col"
+                    >
+                    <div class="flex p-2 justify-between w-full items-center shadow-sm">
+                        <div class="w-3/4 p-2" th:text="${sModule.getTitre()}"></div>
+                        <img
+                        class="hover:cursor-pointer"
+                        width="24"
+                        data-rotatable
+                        tabindex="1"
+                        src="/img/icons/simple-arrow-primary.svg"
+                        >
+                    </div>
+                    <div class="wrapper">
+                        <div class="sub-menu">
+                            <div class="bg-grey hover:cursor-pointer p-2 hover:underline"
+                                th:each="cours, iterStat : ${moduleMap.get(sModule)}"
+                                th:text="${cours.getTitre()}"
+                                th:hx-get="'/cours/admin/editer/api?id=' + ${cours.getId()}"
+                                th:hx-push-url="'/cours/admin/editer?id=' + ${cours.getId()}"
+                                hx-target="#insert"
+                                hx-swap="innerHTML transition:true"
+                                ></div>
+                            <div class="flex justify-center items-center justify-self-end p-2 bg-grey">
+                                <button class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-primary brightness-125">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
         </div>
     </div>
+    <script src="/js/animations.forum.js"></script>
 </section>

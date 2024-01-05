@@ -19,7 +19,7 @@
         </div>
     </section>
     <section class="flex lg:hidden h-full relative top-0 left-0 overflow-y-scroll flex-col font-poppins bg-primary text-white w-full">
-        <div id="sujet" th:each="sujet, iterStat : ${sujets}">
+        <div data-rotato-container th:each="sujet, iterStat : ${sujets}">
             <div class="flex p-2 justify-between w-full items-center shadow-md">
                 <div class="w-3/4 p-2" th:text="${sujet.getLibelle()}"></div>
                 <img
