@@ -196,4 +196,11 @@ public class CoursService {
         chapitre.setAJour(true);
         return chapitreRepository.save(chapitre);
     }
+
+    public Long supprimerChapitre(AuthenticationInfos userInfos, Long idChapitre) {
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
+                .orElseThrow(UnauthorizedException::new);
+        chapitreRepository.delete(chapitre);
+        return chapitre.getCours().getId();
+    }
 }

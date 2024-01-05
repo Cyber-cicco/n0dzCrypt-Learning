@@ -85,6 +85,8 @@
             <div class="flex gap-2">
                 <button 
                     class="bg-accent p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                    th:hx-delete="'/cours/admin/chapitre?id=' + ${id}"
+                    hx-target="#insert"
                     >Oui</button>
                 <button 
                     class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
@@ -93,8 +95,8 @@
             </div>
         </div>
     </th:block>
-  <script src="/js/cours.text-editor.js"></script>
-  <script src="/js/animation.modal.js"></script>
-  <script>hljs.highlightAll();</script>
-  <script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
+    <script th:insert="scripts/flowbite.min.js"></script>
+    <script src="/js/cours.text-editor.js"></script>
+    <script src="/js/animation.modal.js"></script>
+    <script>hljs.highlightAll();</script>
 </section>

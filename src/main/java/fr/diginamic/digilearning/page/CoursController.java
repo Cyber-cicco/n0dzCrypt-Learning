@@ -38,30 +38,7 @@ public class CoursController {
         return Routes.ADR_BASE_LAYOUT;
     }
 
-    @GetMapping("/admin")
-    public String getCoursAdminPanel(Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        authenticationService.rolesMustMatchOne(
-                userInfos.getRoles(),
-                List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR),
-                response
-        );
-        coursIrrigator.irrigateAdminPanel(userInfos, model);
-        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_ADMIN);
-        return Routes.ADR_BASE_LAYOUT;
-    }
 
-    @GetMapping("/admin/api")
-    public String getCoursAdminPanelApi(Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        authenticationService.rolesMustMatchOne(
-                userInfos.getRoles(),
-                List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR),
-                response
-        );
-        coursIrrigator.irrigateAdminPanel(userInfos, model);
-        return Routes.ADR_COURS_ADMIN;
-    }
     @GetMapping("/module/api")
     public String getModuleApi( @RequestParam("id") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -116,21 +93,6 @@ public class CoursController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         coursIrrigator.irrigateChapitre(userInfos, id, idCours, model);
         return Routes.ADR_VISIONNEUSE_COURS;
-    }
-
-    @GetMapping("/admin/editer/api")
-    public String getAdminCoursEditerApi(@RequestParam("id") Long idCours, Model model){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
-        return Routes.ADR_COURS_ADMIN_EDITER;
-    }
-
-    @GetMapping("/admin/editer")
-    public String getAdminCoursEditer(@RequestParam("id") Long idCours, Model model){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
-        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_ADMIN_EDITER);
-        return Routes.ADR_BASE_LAYOUT;
     }
 
     @GetMapping("/chapitre")

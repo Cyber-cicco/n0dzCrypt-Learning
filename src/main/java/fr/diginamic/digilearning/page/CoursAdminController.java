@@ -6,6 +6,7 @@ import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Chapitre;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.irrigator.ChapitreIrrigator;
+import fr.diginamic.digilearning.page.irrigator.CoursIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.page.service.CoursService;
 import fr.diginamic.digilearning.page.service.PhotoService;
@@ -33,6 +34,31 @@ public class CoursAdminController {
     private final LayoutIrrigator layoutIrrigator;
     private final ChapitreIrrigator chapitreIrrigator;
     private final PhotoService photoService;
+    private final CoursIrrigator coursIrrigator;
+    @GetMapping
+    public String getCoursAdminPanel(Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(
+                userInfos.getRoles(),
+                List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR),
+                response
+        );
+        coursIrrigator.irrigateAdminPanel(userInfos, model);
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_ADMIN);
+        return Routes.ADR_BASE_LAYOUT;
+    }
+
+    @GetMapping("/api")
+    public String getCoursAdminPanelApi(Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(
+                userInfos.getRoles(),
+                List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR),
+                response
+        );
+        coursIrrigator.irrigateAdminPanel(userInfos, model);
+        return Routes.ADR_COURS_ADMIN;
+    }
 
     @GetMapping("/chapitre/editer/api")
     public String getAdminPanelChapitreApi(Model model, @RequestParam("id") Long idChapitre) {
@@ -40,11 +66,27 @@ public class CoursAdminController {
         chapitreIrrigator.irrigateAdminChapitre(model, userInfos, idChapitre);
         return Routes.ADR_ADMIN_CHAPITRE;
     }
+
     @GetMapping("/chapitre/editer")
     public String getAdminPanelChapitre(Model model, @RequestParam("id") Long idChapitre) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         chapitreIrrigator.irrigateAdminChapitre(model, userInfos, idChapitre);
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_ADMIN_CHAPITRE);
+        return Routes.ADR_BASE_LAYOUT;
+    }
+
+    @GetMapping("/editer/api")
+    public String getAdminCoursEditerApi(@RequestParam("id") Long idCours, Model model){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
+        return Routes.ADR_COURS_ADMIN_EDITER;
+    }
+
+    @GetMapping("/editer")
+    public String getAdminCoursEditer(@RequestParam("id") Long idCours, Model model){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_ADMIN_EDITER);
         return Routes.ADR_BASE_LAYOUT;
     }
 
@@ -80,6 +122,7 @@ public class CoursAdminController {
         return Routes.ADR_COURS_CONTENT;
     }
 
+
     @PostMapping("/chapitre/publier")
     public String publierChapitre(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto, HttpServletResponse reponse) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -87,5 +130,14 @@ public class CoursAdminController {
         Chapitre chapitre = coursService.publierContenu(userInfos, idChapitre, contenuChapitreDto);
         model.addAttribute("content", "La version de votre cours est publiée");
         return Routes.ADR_MESSAGE;
+    }
+    @DeleteMapping("/chapitre")
+    public String deleteChapitre(Model model, @RequestParam("id") Long idChapitre, HttpServletResponse reponse){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
+        Long idCours = coursService.supprimerChapitre(userInfos, idChapitre);
+        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
+        reponse.setHeader("HX-Push-Url", "/cours/admin/chapitre?id=" + idCours);
+        return Routes.ADR_COURS_ADMIN_EDITER;
     }
 }

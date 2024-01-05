@@ -21,8 +21,8 @@
     <link rel="stylesheet" th:href="@{/styles/cours.css}">
     <link rel="stylesheet" th:href="@{/styles/addons.css}">
     <script src="/js/dragula.js"></script>
-    <script src="/js/calendar.js"></script>
     <script src="/js/highlight.js"></script>
+    <script th:insert="scripts/flowbite.min.js"></script>
     <title>Digi-Learning</title>
 </head>
 <body class="flex flex-col xl:flex-row w-full h-full overflow-hidden">
@@ -31,9 +31,5 @@
         <div id="insert" th:insert="${insert}" class="w-full h-screen"></div>
     </main>
     <th:block th:replace="components/modal.nav"></th:block>
-    <script src="/js/animation.post-forum.js"></script>
-    <script src="/js/form-checking.js"></script>
-    <script src="/js/animation.cours.js" type="module"></script>
-    <script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
 </body>
 </html>
