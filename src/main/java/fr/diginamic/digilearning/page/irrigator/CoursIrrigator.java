@@ -1,11 +1,13 @@
 package fr.diginamic.digilearning.page.irrigator;
 
 import fr.diginamic.digilearning.dto.CoursDto;
+import fr.diginamic.digilearning.dto.CreationCoursDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.page.Routes;
 import fr.diginamic.digilearning.page.service.CoursService;
+import fr.diginamic.digilearning.page.service.types.CoursCreationDiagnostics;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.repository.ModuleRepository;
 import fr.diginamic.digilearning.repository.SousModuleRepository;
@@ -142,18 +144,40 @@ public class CoursIrrigator {
         List<SousModule> sousModules = sousModuleRepository.findAll();
         SortedMap<SousModule, List<Cours>> sousModuleListMap = new TreeMap<>();
         List<Cours> coursCrees = coursRepository.getCoursCrees(userInfos.getId());
+        List<SousModule> sousModulesVides = new ArrayList<>();
         for (SousModule sousModule : sousModules) {
             sousModuleListMap.put(sousModule, new ArrayList<>());
         }
         for (Cours coursCree : coursCrees) {
             sousModuleListMap.get(coursCree.getSousModule()).add(coursCree);
         }
+        for (SousModule sousModule : sousModuleListMap.keySet()) {
+            if(sousModuleListMap.get(sousModule).isEmpty()){
+                sousModulesVides.add(sousModule);
+            }
+        }
         model.addAttribute("user", userInfos);
         model.addAttribute("moduleMap", sousModuleListMap);
+        model.addAttribute("sousModuleVides", sousModulesVides);
     }
 
     public void irrigateEditionCours(Model model, Long idCours, AuthenticationInfos userInfos) {
         model.addAttribute("cours", coursRepository.getCoursByIdAndFormateur(idCours, userInfos.getId())
             .orElseThrow(EntityNotFoundException::new));
+    }
+    public void irrigateEditionCours(Model model, Cours cours, AuthenticationInfos userInfos) {
+        model.addAttribute("cours", cours);
+    }
+
+    public void irragateFormCreationCoursError(Model model, CoursCreationDiagnostics diagnostics, CreationCoursDto cours, Long idSousModule) {
+        model.addAttribute("id", idSousModule);
+        model.addAttribute("titreError", diagnostics.getTitre());
+        model.addAttribute("difficulteError", diagnostics.getDifficulte());
+        model.addAttribute("ordreError", diagnostics.getOrdre());
+        model.addAttribute("dureeError", diagnostics.getDuree());
+        model.addAttribute("titre", cours.getTitre());
+        model.addAttribute("difficulte", cours.getDifficulte());
+        model.addAttribute("ordre", cours.getOrdre());
+        model.addAttribute("duree", cours.getDuree());
     }
 }

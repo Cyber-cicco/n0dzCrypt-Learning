@@ -1,7 +1,47 @@
 <section hx-history="false" class="flex flex-col h-screen">
+    <script>
+        function setModalContent(id) {
+            const modalContent = document.querySelector("#modal-content")
+            modalContent.innerHTML = `
+
+                <div class="text-xl font-poppins">Créer un nouveau cours : </div>
+                <form 
+                    class="flex flex-col gap-2 w-full items-center"
+                    >
+                    <div class="flex flex-col gap-2 w-full" th:fragment="textInput(label, id, placeholder)">
+                        <label for="titre">Titre : </label>
+                        <input id="titre" name="titre" class="rounded-sm p-2 text-black w-full" type="text" placeholder="ex : introduction au cobol">
+                        <div id="titre-error" class="text-error"></div>
+                    </div>
+                    <div class="flex flex-col gap-2 w-full" th:fragment="textInput(label, id, placeholder)">
+                        <label for="difficulte">Difficulté (sur 5) : </label>
+                        <input id="difficulte" name="difficulte" min="1" max="5" class="rounded-sm p-2 text-black w-full" type="number">
+                        <div id="difficulte-error" class="text-error"></div>
+                    </div>
+                    <div class="flex flex-col gap-2 w-full" th:fragment="textInput(label, id, placeholder)">
+                        <label for="ordre">Ordre dans le sous module: </label>
+                        <input id="ordre" name="ordre" min="1" max="5" class="rounded-sm p-2 text-black w-full" type="number">
+                        <div id="ordre-error" class="text-error"></div>
+                    </div>
+                    <div class="flex flex-col gap-2 w-full" th:fragment="textInput(label, id, placeholder)">
+                        <label for="duree">Durée estimée du cours (en heure) </label>
+                        <input id="duree" name="duree" min="1" max="6" class="rounded-sm p-2 text-black w-full" type="number">
+                        <div id="duree-error" class="text-error"></div>
+                    </div>
+                    <button 
+                        class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                        hx-post="/cours/admin?id=${id}"
+                        hx-target="#insert"
+                        type="submit"
+                        >Créer</button>
+                </form>`
+            htmx.process(modalContent)
+
+        }
+    </script>
     <th:block th:replace="~{components/entete.nav :: entete('Cours')}"></th:block>
     <div class="flex flex-col h-full p-3 gap-3">
-        <div th:if="${user.isFormateur()}" class="flex bg-white flex-col h-full">
+        <div th:if="${user.isFormateur()}" class="flex bg-white flex-col h-full overflow-y-scroll">
             <h2 class="text-primary font-poppins text-3xl p-3 bg-white">Gérer mes cours</h2>
             <div class="px-2">
                 <div class="h-0.5 bg-greyDeep w-full"></div>
@@ -33,13 +73,36 @@
                                 hx-swap="innerHTML transition:true"
                                 ></div>
                             <div class="flex justify-center items-center justify-self-end p-2 bg-grey">
-                                <button class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-primary brightness-125">+</button>
+                                <button 
+                                    class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-primary brightness-125"
+                                    th:onclick="'setModalContent(' + ${sModule.getId()} + '); openModalBot()'"
+                                    >+</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </th:block>
+            <div class="px-2">
+                <div class="h-0.5 bg-greyDeep w-full"></div>
+            </div>
+            <th:block  th:each="sModule, iterStat : ${sousModuleVides}">
+                <div 
+                    class="text-primary pt-3 px-3 bg-white flex flex-col"
+                    >
+                    <div class="flex p-2 justify-between w-full items-center shadow-sm">
+                        <div class="w-3/4 p-2" th:text="${sModule.getTitre()}"></div>
+                        <div class="flex justify-center items-center justify-self-end p-2">
+                            <button class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-primary brightness-125">+</button>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
         </div>
+        <th:block th:replace="~{/components/modal/modal.bottom :: modalBg( ~{::#modal-content})}">
+            <div class="text-xl text-white bg-primary w-full flex flex-col items-center gap-5 p-3" id="modal-content">
+            </div>
+        </th:block>
     </div>
     <script src="/js/animations.forum.js"></script>
+    <script src="/js/animation.modal.js"></script>
 </section>

@@ -2,6 +2,8 @@ package fr.diginamic.digilearning.page.service;
 
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.*;
+import fr.diginamic.digilearning.page.service.types.CoursCreationDiagnostics;
+import fr.diginamic.digilearning.page.service.types.CoursCreationResult;
 import fr.diginamic.digilearning.page.validators.CoursValidator;
 import fr.diginamic.digilearning.repository.*;
 import org.commonmark.Extension;
@@ -203,5 +205,25 @@ public class CoursService {
                 .orElseThrow(UnauthorizedException::new);
         chapitreRepository.delete(chapitre);
         return chapitre.getCours().getId();
+    }
+
+    public CoursCreationResult creerCours(AuthenticationInfos userInfos, Long idSousModule, CreationCoursDto creationCoursDto) {
+        CoursCreationDiagnostics diagnostics = coursValidator.validateCoursCreation(creationCoursDto, idSousModule);
+        if(diagnostics.isValid()) {
+            Cours newCours = Cours.builder()
+                    .auteurs(List.of(utilisateurRepository.findById(userInfos.getId()).orElseThrow(EntityNotFoundException::new)))
+                    .ordre(creationCoursDto.getOrdre())
+                    .titre(creationCoursDto.getTitre())
+                    .difficulte(creationCoursDto.getDifficulte())
+                    .dureeEstimee(creationCoursDto.getDuree())
+                    .sousModule(sousModuleRepository.findById(idSousModule).orElseThrow(EntityNotFoundException::new))
+                    .build();
+            coursRepository.changeOrdre(newCours.getOrdre(), idSousModule);
+            return new CoursCreationResult(
+                    coursRepository.save(newCours),
+                    diagnostics
+            );
+        }
+        return new CoursCreationResult(null, diagnostics);
     }
 }

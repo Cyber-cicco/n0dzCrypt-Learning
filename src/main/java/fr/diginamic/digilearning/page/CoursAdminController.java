@@ -2,14 +2,17 @@ package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.dto.ChapitreDto;
 import fr.diginamic.digilearning.dto.ContenuChapitreDto;
+import fr.diginamic.digilearning.dto.CreationCoursDto;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Chapitre;
+import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.irrigator.ChapitreIrrigator;
 import fr.diginamic.digilearning.page.irrigator.CoursIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.page.service.CoursService;
 import fr.diginamic.digilearning.page.service.PhotoService;
+import fr.diginamic.digilearning.page.service.types.CoursCreationResult;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -95,6 +98,25 @@ public class CoursAdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         coursService.editerDescription(idCours, descriptionCours, userInfos);
         return Routes.ADR_FORM_ERROR;
+    }
+
+    @PostMapping
+    public String creerCours(Model model, @RequestParam("id") Long idSousModule, @ModelAttribute CreationCoursDto creationCoursDto, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(
+                userInfos.getRoles(),
+                List.of(TypeRole.ROLE_ADMINISTRATEUR, TypeRole.ROLE_FORMATEUR),
+                response
+        );
+        CoursCreationResult resultat = coursService.creerCours(userInfos, idSousModule, creationCoursDto);
+        if(resultat.diagnostics().isValid()){
+            coursIrrigator.irrigateEditionCours(model, resultat.cours(), userInfos);
+            response.setHeader("HX-Push-Url", "cours/admin/editer?id=" + resultat.cours().getId());
+            return Routes.ADR_COURS_ADMIN_EDITER;
+        }
+        coursIrrigator.irragateFormCreationCoursError(model, resultat.diagnostics(), creationCoursDto, idSousModule);
+        response.setHeader("HX-Retarget", "#modal-content");
+        return Routes.ADR_MODAL_AJOUT_COURS;
     }
 
     @PostMapping("/chapitre")

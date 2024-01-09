@@ -36,14 +36,16 @@ public class Cours {
             joinColumns = @JoinColumn(name = "id_cours", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_utilisateur", referencedColumnName = "ID")
     )
-    private List<Utilisateur> auteurs;
+    private List<Utilisateur> auteurs = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "sous_module_id")
     private SousModule sousModule;
     @OneToMany(mappedBy = "cours")
+    @Builder.Default
     private List<Chapitre> chapitres = new ArrayList<>();
 
     @OneToMany(mappedBy = "cours")
+    @Builder.Default
     private List<FlagCours> flagCours = new ArrayList<>();
 
     public List<Chapitre> getChapitres() {

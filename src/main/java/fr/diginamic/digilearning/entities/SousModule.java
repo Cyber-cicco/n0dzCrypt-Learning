@@ -39,11 +39,11 @@ public class SousModule implements Comparable<SousModule> {
     @Override
     public int compareTo(SousModule o) {
         if(o.ordre == null){
-            return o.titre.compareTo(titre);
+            return titre.compareTo(o.titre);
         }
         if(o.ordre > ordre) return -1;
         if(o.ordre.equals(ordre)) {
-            return o.titre.compareTo(titre);
+            return titre.compareTo(o.titre);
         }
         return 1;
     }
