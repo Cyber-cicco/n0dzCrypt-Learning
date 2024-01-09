@@ -51,7 +51,9 @@
                                 hx-on::after-request="hljs.highlightAll(); putInHistory()"
                                 hx-sync="closest form:abort"
                                 hx-target="#markdown"
-                                hx-swap="innerHTML"
+                                hx-select="#markdown"
+                                hx-select-oob="#info"
+                                hx-swap="outerHTML"
                                 class="border-grey border-2 rounded-md p-2 h-full" th:text="${contenu}"></textarea>
                         </div>
                         <div id="buttons" class="p-3 flex gap-3 justify-between items-center">

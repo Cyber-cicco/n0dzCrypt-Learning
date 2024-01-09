@@ -144,4 +144,21 @@ and c.id = ?1
 
     @Query("select count(c)  from Chapitre c where c.cours.id = :id")
     Integer findNombreChapitre(Long id);
+
+    Boolean existsByTitre(String titre);
+
+    @Query(nativeQuery = true, value = """
+select max(c.ordre) 
+from dl_cours c
+where c.sous_module_id = ?1
+""")
+    Optional<Integer> maxByOrdre(Long idSousModule);
+
+    @Query(nativeQuery = true, value = """
+update dl_cours c 
+set c.ordre = c.ordre + 1
+where c.ordre >= ?1
+and c.sous_module_id = ?2
+""")
+    void changeOrdre(Integer ordre, Long idSousModule);
 }

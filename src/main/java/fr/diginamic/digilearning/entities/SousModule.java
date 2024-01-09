@@ -19,13 +19,14 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "dl_sous_module")
-public class SousModule {
+public class SousModule implements Comparable<SousModule> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titre;
     private String photo;
+    private Integer ordre;
     @OneToMany(mappedBy = "sousModule")
     private List<Cours> cours = new ArrayList<>();
     @ManyToMany
@@ -35,4 +36,19 @@ public class SousModule {
     )
     private List<Module> module = new ArrayList<>();
 
+    @Override
+    public int compareTo(SousModule o) {
+        if(o.ordre == null){
+            return titre.compareTo(o.titre);
+        }
+        if(o.ordre > ordre) return -1;
+        if(o.ordre.equals(ordre)) {
+            return titre.compareTo(o.titre);
+        }
+        return 1;
+    }
+
+    public List<Cours> getCours(){
+        return cours.stream().sorted().toList();
+    }
 }
