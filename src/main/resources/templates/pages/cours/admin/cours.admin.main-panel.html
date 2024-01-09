@@ -11,22 +11,22 @@
                     <div class="flex flex-col gap-2 w-full" th:fragment="textInput(label, id, placeholder)">
                         <label for="titre">Titre : </label>
                         <input id="titre" name="titre" class="rounded-sm p-2 text-black w-full" type="text" placeholder="ex : introduction au cobol">
-                        <div id="titre-error" class="text-error"></div>
+                        <div class="text-error h-1"></div>
                     </div>
                     <div class="flex flex-col gap-2 w-full" th:fragment="textInput(label, id, placeholder)">
                         <label for="difficulte">Difficulté (sur 5) : </label>
                         <input id="difficulte" name="difficulte" min="1" max="5" class="rounded-sm p-2 text-black w-full" type="number">
-                        <div id="difficulte-error" class="text-error"></div>
+                        <div class="text-error h-1"></div>
                     </div>
                     <div class="flex flex-col gap-2 w-full" th:fragment="textInput(label, id, placeholder)">
                         <label for="ordre">Ordre dans le sous module: </label>
                         <input id="ordre" name="ordre" min="1" max="5" class="rounded-sm p-2 text-black w-full" type="number">
-                        <div id="ordre-error" class="text-error"></div>
+                        <div class="text-error h-1"></div>
                     </div>
                     <div class="flex flex-col gap-2 w-full" th:fragment="textInput(label, id, placeholder)">
                         <label for="duree">Durée estimée du cours (en heure) </label>
                         <input id="duree" name="duree" min="1" max="6" class="rounded-sm p-2 text-black w-full" type="number">
-                        <div id="duree-error" class="text-error"></div>
+                        <div class="text-error h-1"></div>
                     </div>
                     <button 
                         class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
@@ -46,14 +46,13 @@
             <div class="px-2">
                 <div class="h-0.5 bg-greyDeep w-full"></div>
             </div>
-            <th:block  th:each="sModule, iterStat : ${moduleMap.keySet()}">
+            <th:block  th:each="smodule, iterStat : ${smodules}">
                 <div 
                     data-rotato-container
-                    th:if="${!#lists.isEmpty(moduleMap.get(sModule))}"
                     class="text-primary pt-3 px-3 bg-white flex flex-col"
                     >
                     <div class="flex p-2 justify-between w-full items-center shadow-sm">
-                        <div class="w-3/4 p-2" th:text="${sModule.getTitre()}"></div>
+                        <div class="w-3/4 p-2" th:text="${smodule.getTitre()}"></div>
                         <img
                         class="hover:cursor-pointer"
                         width="24"
@@ -64,39 +63,28 @@
                     </div>
                     <div class="wrapper">
                         <div class="sub-menu">
-                            <div class="bg-grey hover:cursor-pointer p-2 hover:underline"
-                                th:each="cours, iterStat : ${moduleMap.get(sModule)}"
+                            <div 
+                                th:each="cours, iterStat : ${smodule.getCours()}"
+                                th:class="(${#lists.contains(coursCrees, cours.getId())}) ?
+                                'bg-grey hover:cursor-pointer p-2 hover:underline' :
+                                'bg-greyDeep p-2'"
                                 th:text="${cours.getTitre()}"
-                                th:hx-get="'/cours/admin/editer/api?id=' + ${cours.getId()}"
+                                th:attrappend="hx-get=${#lists.contains(coursCrees, cours.getId())}? 
+                                    @{'/cours/admin/editer/api?id=' + ${cours.getId()}}"
                                 th:hx-push-url="'/cours/admin/editer?id=' + ${cours.getId()}"
                                 hx-target="#insert"
                                 hx-swap="innerHTML transition:true"
-                                ></div>
+                                >
+                            </div>
                             <div class="flex justify-center items-center justify-self-end p-2 bg-grey">
                                 <button 
                                     class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-primary brightness-125"
-                                    th:onclick="'setModalContent(' + ${sModule.getId()} + '); openModalBot()'"
+                                    th:onclick="'setModalContent(' + ${smodule.getId()} + '); openModalBot()'"
                                     >+</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </th:block>
-            <div class="px-2">
-                <div class="h-0.5 bg-greyDeep w-full"></div>
-            </div>
-            <th:block  th:each="sModule, iterStat : ${sousModuleVides}">
-                <div 
-                    class="text-primary pt-3 px-3 bg-white flex flex-col"
-                    >
-                    <div class="flex p-2 justify-between w-full items-center shadow-sm">
-                        <div class="w-3/4 p-2" th:text="${sModule.getTitre()}"></div>
-                        <div class="flex justify-center items-center justify-self-end p-2">
-                            <button class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-primary brightness-125">+</button>
-                        </div>
-                    </div>
-                </div>
-            </th:block>
         </div>
         <th:block th:replace="~{/components/modal/modal.bottom :: modalBg( ~{::#modal-content})}">
             <div class="text-xl text-white bg-primary w-full flex flex-col items-center gap-5 p-3" id="modal-content">

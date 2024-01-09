@@ -22,7 +22,7 @@ import java.util.Optional;
 @Builder
 @Entity
 @Table(name = "dl_cours")
-public class Cours {
+public class Cours implements Comparable<Cours> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -59,5 +59,14 @@ public class Cours {
     public Chapitre getChapitreSuivant(Integer ordre) {
         Optional<Chapitre> chapitre = chapitres.stream().filter(c -> c.getOrdre().equals(ordre + 1)).findFirst();
         return chapitre.orElse(null);
+    }
+
+    @Override
+    public int compareTo(Cours o) {
+        int comp = ordre.compareTo(o.ordre);
+        if(comp == 0){
+            return titre.compareTo(o.titre);
+        }
+        return comp;
     }
 }

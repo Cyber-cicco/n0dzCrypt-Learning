@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Irrigateur du modèle donnée par le controlleur
@@ -142,23 +143,10 @@ public class CoursIrrigator {
 
     public void irrigateAdminPanel(AuthenticationInfos userInfos, Model model) {
         List<SousModule> sousModules = sousModuleRepository.findAll();
-        SortedMap<SousModule, List<Cours>> sousModuleListMap = new TreeMap<>();
-        List<Cours> coursCrees = coursRepository.getCoursCrees(userInfos.getId());
-        List<SousModule> sousModulesVides = new ArrayList<>();
-        for (SousModule sousModule : sousModules) {
-            sousModuleListMap.put(sousModule, new ArrayList<>());
-        }
-        for (Cours coursCree : coursCrees) {
-            sousModuleListMap.get(coursCree.getSousModule()).add(coursCree);
-        }
-        for (SousModule sousModule : sousModuleListMap.keySet()) {
-            if(sousModuleListMap.get(sousModule).isEmpty()){
-                sousModulesVides.add(sousModule);
-            }
-        }
+        List<Long> idCoursCrees = coursRepository.getCoursCrees(userInfos.getId()).stream().map(Cours::getId).toList();
         model.addAttribute("user", userInfos);
-        model.addAttribute("moduleMap", sousModuleListMap);
-        model.addAttribute("sousModuleVides", sousModulesVides);
+        model.addAttribute("smodules", sousModules);
+        model.addAttribute("coursCrees", idCoursCrees);
     }
 
     public void irrigateEditionCours(Model model, Long idCours, AuthenticationInfos userInfos) {

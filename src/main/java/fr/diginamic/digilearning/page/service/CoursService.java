@@ -52,9 +52,8 @@ public class CoursService {
         }
         return cours
                 .stream()
-                .peek(System.out::println)
                 .map(c -> SqlResultMapper.mapToObject(CoursDto.class, c))
-                .peek(System.out::println)
+                .sorted()
                 .toList();
     }
 

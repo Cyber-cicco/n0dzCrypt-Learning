@@ -47,4 +47,8 @@ public class SousModule implements Comparable<SousModule> {
         }
         return 1;
     }
+
+    public List<Cours> getCours(){
+        return cours.stream().sorted().toList();
+    }
 }

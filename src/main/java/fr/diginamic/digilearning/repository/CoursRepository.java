@@ -157,7 +157,7 @@ where c.sous_module_id = ?1
     @Query(nativeQuery = true, value = """
 update dl_cours c 
 set c.ordre = c.ordre + 1
-where c.ordre > ?1
+where c.ordre >= ?1
 and c.sous_module_id = ?2
 """)
     void changeOrdre(Integer ordre, Long idSousModule);

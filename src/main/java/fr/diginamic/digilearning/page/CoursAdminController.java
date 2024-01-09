@@ -141,6 +141,14 @@ public class CoursAdminController {
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         Chapitre chapitre = coursService.updateContenu(userInfos, idChapitre, contenuChapitreDto);
         model.addAttribute("content", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
+        String aJour = (chapitre.getAJour())
+                ? "La version de votre cours est publiée"
+                : "La version de votre cours est en avance par rapport à la version publiée";
+        String classAJour = chapitre.getAJour()
+                ? "text-validation"
+                : "text-error";
+        model.addAttribute("aJour", aJour);
+        model.addAttribute("classAJour", classAJour);
         return Routes.ADR_COURS_CONTENT;
     }
 
