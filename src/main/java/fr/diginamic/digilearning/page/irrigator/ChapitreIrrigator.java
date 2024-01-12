@@ -107,4 +107,8 @@ public class ChapitreIrrigator {
         model.addAttribute("aJour", aJour);
         model.addAttribute("classAJour", classAJour);
     }
+
+    public void irrigateAdminQCM(Model model, QCM qcm) {
+        model.addAttribute("qcm", qcm);
+    }
 }

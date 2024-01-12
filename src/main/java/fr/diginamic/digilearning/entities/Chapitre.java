@@ -32,8 +32,6 @@ public class Chapitre {
 	private String lienVideo;
 	private Integer ordre;
 	private Boolean aJour;
-	@Enumerated
-	private StatusChapitre statusChapitre;
 	@OneToMany(mappedBy = "chapitre")
 	private List<Question> questions;
 	@ManyToOne

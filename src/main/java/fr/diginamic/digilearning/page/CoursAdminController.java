@@ -5,8 +5,8 @@ import fr.diginamic.digilearning.dto.ContenuChapitreDto;
 import fr.diginamic.digilearning.dto.CreationCoursDto;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Chapitre;
-import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
+import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.page.irrigator.ChapitreIrrigator;
 import fr.diginamic.digilearning.page.irrigator.CoursIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
@@ -122,10 +122,22 @@ public class CoursAdminController {
     @PostMapping("/chapitre")
     public String creerChapitre(Model model, @RequestParam("id") Long idCours, @ModelAttribute ChapitreDto chapitreDto, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        Chapitre chapitre = coursService.createNewChapitre(userInfos, idCours, chapitreDto);
-        chapitreIrrigator.irrigateAdminChapitre(model, userInfos, chapitre.getId());
-        response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.getId());
-        return Routes.ADR_ADMIN_CHAPITRE;
+        CoursService.TypesChapitres result = coursService.createNewChapitre(userInfos, idCours, chapitreDto);
+        switch (chapitreDto.getStatusChapitre()) {
+            case COURS -> {
+                chapitreIrrigator.irrigateAdminChapitre(model, userInfos, result.chapitre().getId());
+                response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + result.chapitre().getId());
+                return Routes.ADR_ADMIN_CHAPITRE;
+            }
+            case QCM -> {
+                chapitreIrrigator.irrigateAdminQCM(model, result.qcm());
+                return Routes.ADR_ADMIN_QCM;
+            }
+            case EXERCICE -> {
+                throw new RuntimeException();
+            }
+            default -> throw new BrokenRuleException();
+        }
     }
     @PostMapping("/photo")
     public ResponseEntity<?> ajouterPhoto(Model model, @ModelAttribute("file") MultipartFile file, HttpServletResponse response) throws IOException {

@@ -1,0 +1,27 @@
+<section class="flex h-full w-full">
+    <div class="w-full text-primary font-poppins" th:text="${qcm.getLibelle()}"
+    <div id="questions-liste" class="w-1/5 h-full flex flex-col gap-1">
+        <th:block th:each="q, iterStat : ${qcm.getQcmQuestions()}">
+            <div class="flex w-full">
+                <div class="w-4/5" th:text="${q.getLibelle()}" ></div>
+                <div 
+                    class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                    th:hx-delete="'/cours/admin/qcm/question?id=' + ${q.getId()}"
+                    hx-target="#questions-liste"
+                    hx-swap="outerHTML"
+                    >
+                    <img src="/img/icons/delete.svg">
+                </div>
+            </div>
+        </th:block>
+        <div class="flex justify-center items-center justify-self-end p-2 bg-grey">
+            <button 
+                class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-primary brightness-125"
+                hx-get="/cours/admin/qcm/new"
+                hx-target="#qcm-ajout"
+                >+</button>
+        </div>
+    </div>
+    <div id="qcm-ajout" class="flex grow">
+    </div>
+</section>

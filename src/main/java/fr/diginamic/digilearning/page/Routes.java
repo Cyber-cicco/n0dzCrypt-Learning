@@ -48,6 +48,7 @@ public class Routes {
     public static final String ADR_COURS_CONTENT = "pages/cours/admin/fragments/cours.admin.html-fragment";
     public static final String ADR_MESSAGE = "components/reponses/message-reponse.html";
     public static final String ADR_MODAL_AJOUT_COURS = "pages/cours/admin/fragments/cours.admin.modal-ajout-cours";
+    public static final String ADR_ADMIN_QCM = "pages/cours/admin/fragments/cours.admin.";
 
     private Routes(){}
 }

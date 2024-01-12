@@ -1,0 +1,40 @@
+<form>
+    <label 
+        for="question"
+        >Question à poser</label>
+    <input 
+        type="text"
+        id="question"
+        name="question"
+        hx-trigger="keyup changed delay:0.3s" 
+        th:hx-post="'/cours/admin/qcm/question?id=' + ${question.getId()}"
+        value="Nouvelle question"
+    >
+    <div id="choix-liste" class="flex flex-col h-full">
+        <th:block th:each="choix, iterStat : ${question.getChoix()}">
+            <div class="flex w-full p-2 " >
+                <div class="w-4/5" th:text="${choix.getLibelle()}"></div>
+                <div 
+                    class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                    th:hx-patch="'/cours/admin/qcm/choix/valid?id=' + ${c.getId()}"
+                    th:hx-target="'#valid-' + ${choix.getId()}"
+                    hx-swap="outerHTML"
+                    >
+                    <img 
+                        src="/img/icons/check.svg"
+                        th:id="'valid-' + ${choix.getId()}"
+                        th:style="${choix.getValid()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
+                        >
+                </div> 
+                <div 
+                    class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                    th:hx-delete="'/cours/admin/qcm/choix?id=' + ${c.getId()}"
+                    hx-target="#choix-liste"
+                    hx-swap="outerHTML"
+                    >
+                    <img src="/img/icons/delete.svg">
+                </div>
+            </div>
+        </th:block>
+    </div>
+</form>

@@ -2,6 +2,8 @@ package fr.diginamic.digilearning.page.service;
 
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.*;
+import fr.diginamic.digilearning.entities.enums.StatusPublication;
+import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.page.service.types.CoursCreationDiagnostics;
 import fr.diginamic.digilearning.page.service.types.CoursCreationResult;
 import fr.diginamic.digilearning.page.validators.CoursValidator;
@@ -167,18 +169,44 @@ public class CoursService {
         coursRepository.save(cours);
     }
 
-    public Chapitre createNewChapitre(AuthenticationInfos userInfos, Long idCours, ChapitreDto chapitreDto) {
+    public record TypesChapitres(
+            Chapitre chapitre,
+            QCM qcm,
+            TravauxPratique travauxPratique
+    ){}
+
+    public TypesChapitres createNewChapitre(AuthenticationInfos userInfos, Long idCours, ChapitreDto chapitreDto) {
         Cours cours = coursRepository.getCoursByIdAndFormateur(idCours, userInfos.getId())
                 .orElseThrow(EntityNotFoundException::new);
         coursValidator.validateTitreChapitre(chapitreDto.getTitre());
-        Chapitre chapitre = Chapitre.builder()
-                .cours(cours)
-                .libelle(chapitreDto.getTitre())
-                .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
-                .aJour(false)
-                .statusChapitre(chapitreDto.getStatusChapitre())
-                .build();
-        return chapitreRepository.save(chapitre);
+        switch (chapitreDto.getStatusChapitre()) {
+            case QCM -> {
+                return new TypesChapitres(null,
+                            QCM.builder()
+                                    .publie(StatusPublication.NON_PUBLIE)
+                                    .cours(coursRepository.getCoursByIdAndFormateur(idCours, userInfos.getId())
+                                            .orElseThrow(EntityNotFoundException::new))
+                                    .libelle(chapitreDto.getTitre())
+                                    .build(),
+                        null);
+            }
+            case COURS -> {
+                return new TypesChapitres(
+                        chapitreRepository.save(Chapitre.builder()
+                                .cours(cours)
+                                .libelle(chapitreDto.getTitre())
+                                .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
+                                .aJour(false)
+                                .build()),
+                        null,
+                        null) ;
+            }
+            case EXERCICE -> {
+                return null;
+            }
+            default -> throw new BrokenRuleException("Il est nécessaire de préciser le type du chapitre");
+
+        }
     }
 
     public Chapitre updateContenu(AuthenticationInfos userInfos, Long idChapitre, ContenuChapitreDto contenuChapitreDto) {
