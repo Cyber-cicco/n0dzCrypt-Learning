@@ -29,7 +29,8 @@ and qq.ordre between ?1 and ?2
 update dl_qcm_question qq
 set ordre = ordre + 1
 where qq.qcm_id = ?3
-and qq.ordre between ?1 and ?2
+and qq.ordre <= ?1
+and qq.ordre >= ?2
     """)
-    void updateOrdreDescendant(int oldOrdre, int ordre, long idQuestion);
+    void updateOrdreDescendant(int oldOrdre, int ordre, long idChapitre);
 }

@@ -303,13 +303,13 @@ public class CoursService {
             throw new BrokenRuleException("Ordre invalide");
         }
         if(ordre > oldOrdre) {
-            qcmQuestionRepository.updateOrdreAscendant(oldOrdre, ordre, question.getId());
+            qcmQuestionRepository.updateOrdreAscendant(oldOrdre, ordre, qcm.getId());
         } else {
-            qcmQuestionRepository.updateOrdreDescendant(oldOrdre, ordre, question.getId());
+            qcmQuestionRepository.updateOrdreDescendant(oldOrdre, ordre, qcm.getId());
         }
         question.setOrdre(ordre);
         qcmQuestionRepository.save(question);
-        return question.getQcm();
+        return qcm;
     }
 
     public record ReponseChangementQuestion(QCMQuestion question, Optional<String> diagnostic){}

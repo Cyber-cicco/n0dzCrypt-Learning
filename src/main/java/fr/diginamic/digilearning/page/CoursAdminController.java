@@ -246,6 +246,7 @@ public class CoursAdminController {
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         Chapitre qcm = chapitreRepository.findById(idQCM).orElseThrow(EntityNotFoundException::new);
         QCMQuestion question = coursService.creerQuestion(qcm);
+        qcm.getRawQCMQuestions().add(question);
         model.addAttribute("question", question);
         model.addAttribute("qcm", qcm);
         return Routes.ADR_ADMIN_QCM;

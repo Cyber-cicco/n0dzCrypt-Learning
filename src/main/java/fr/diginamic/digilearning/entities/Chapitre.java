@@ -54,6 +54,9 @@ public class Chapitre {
 		return questions.stream().filter(question -> !question.getSupprimee()).toList();
 	}
 
+	public List<QCMQuestion> getRawQCMQuestions() {
+		return qcmQuestions;
+	}
 	public List<QCMQuestion> getQcmQuestions() {
 		return qcmQuestions.stream().sorted(Comparator.comparing(QCMQuestion::getOrdre)).toList();
 	}
