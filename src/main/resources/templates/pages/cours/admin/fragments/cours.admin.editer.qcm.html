@@ -1,31 +1,10 @@
 <section class="flex flex-col h-full w-full">
-    <script src="/js/drag-drop.qcm.js"></script>
     <div class="flex w-full h-full p-2 gap-2">
         <div id="questions-liste" class="w-1/5 h-full bg-primary rounded-md text-white flex flex-col">
-            <div class="flex flex-col grow py-2">
-                <div 
-                    class="text-xl font-poppins text-white text-center p-2"
-                    th:text="${qcm.getLibelle()}"
-                    ></div>
-                <th:block th:each="question, iterStat : ${qcm.getQcmQuestions()}">
-                    <div data-draggable1>
-                        <th:block th:replace="~{pages/cours/admin/fragments/qcm.question.list-item}"></th:block>
-                    </div>
-                </th:block>
-            </div>
-            <div class="flex justify-center items-center align-self-end p-2">
-                <button 
-                    class="h-[30px] w-[30px] font-bold rounded-full hover:cursor-pointer hover:bg-accent bg-lightAccent text-primary"
-                    th:hx-post="'/cours/admin/qcm/new?id=' + ${qcm.getId()}"
-                    hx-target="#insert"
-                    >+</button>
-            </div>
+            <th:block th:replace="~{pages/cours/admin/fragments/qcm.question.liste}"></th:block>
         </div>
-        <div id="qcm-ajout" class="flex grow bg-grey rounded-md">
+        <div id="qcm-ajout" class="flex w-4/5 bg-grey rounded-md">
             <th:block th:replace="~{pages/cours/admin/fragments/cours.admin.editer.qcm.question}"></th:block>
         </div>
     </div>
-    <script defer>
-        reInit()
-    </script>
 </section>

@@ -18,6 +18,7 @@ public class QCMQuestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String libelle;
+    private Integer ordre;
     @OneToMany(mappedBy = "question")
     @Builder.Default
     private List<QCMChoix> choix = new ArrayList<>();

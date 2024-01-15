@@ -3,6 +3,8 @@
     th:id="'question-' + ${question.getId()}"
     th:hx-get="'/cours/admin/qcm/question?id=' + ${question.getId()}"
     hx-target="#qcm-ajout"
+    th:data-ordre="${question.getOrdre()}"
+    th:data-id="${question.getId()}"
     >
     <div 
         class="w-4/5"

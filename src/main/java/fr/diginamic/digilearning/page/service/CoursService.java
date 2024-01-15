@@ -273,6 +273,7 @@ public class CoursService {
     public QCMQuestion creerQuestion(Chapitre qcm) {
         return qcmQuestionRepository.save(QCMQuestion.builder()
                 .libelle("Nouvelle question")
+                .ordre(qcm.getQcmQuestions().size() + 1)
                 .qcm(qcm)
                 .build());
     }
@@ -289,6 +290,26 @@ public class CoursService {
         qcmQuestionRepository.deleteById(idQuestion);
         chapitre.setQcmQuestions(chapitre.getQcmQuestions().stream().filter(q -> !q.getId().equals(idQuestion)).toList());
         return chapitre;
+    }
+
+    public Chapitre changeQCMQuestionOrdre(Long idQuestion, int ordre) {
+        QCMQuestion question = qcmQuestionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
+        Chapitre qcm = question.getQcm();
+        int oldOrdre = question.getOrdre();
+        if(oldOrdre == ordre) {
+            return qcm;
+        }
+        if(ordre < 1 || ordre > qcm.getQcmQuestions().size()) {
+            throw new BrokenRuleException("Ordre invalide");
+        }
+        if(ordre > oldOrdre) {
+            qcmQuestionRepository.updateOrdreAscendant(oldOrdre, ordre, question.getId());
+        } else {
+            qcmQuestionRepository.updateOrdreDescendant(oldOrdre, ordre, question.getId());
+        }
+        question.setOrdre(ordre);
+        qcmQuestionRepository.save(question);
+        return question.getQcm();
     }
 
     public record ReponseChangementQuestion(QCMQuestion question, Optional<String> diagnostic){}

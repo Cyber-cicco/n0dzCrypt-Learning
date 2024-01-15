@@ -53,6 +53,7 @@ public class Routes {
     public static final String ADR_QCM_CHOIX_LISTE = "pages/cours/admin/fragments/qcm.choix.liste";
     public static final String ADR_COMPOSANT_VALIDATION = "components/flag-icons/validation";
     public static final String ADR_QCM_EDITION_QUESTION = "pages/cours/admin/fragments/cours.admin.editer.qcm.question";
+    public static final String ADR_ADMIN_QCM_QUESTION_LISTE = "pages/cours/admin/fragments/qcm.question.liste";
 
     private Routes(){}
 }

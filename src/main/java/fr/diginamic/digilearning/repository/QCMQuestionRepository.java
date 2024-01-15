@@ -17,4 +17,19 @@ where duc.id_utilisateur = ?2
 and qq.id = ?1
     """)
     Optional<QCMQuestion> findByIdAndAdminId(Long idQuestion, Long idFormateur);
+
+    @Query(nativeQuery = true, value = """
+update dl_qcm_question qq
+set ordre = ordre - 1
+where qq.qcm_id = ?3
+and qq.ordre between ?1 and ?2
+    """)
+    void updateOrdreAscendant(int oldOrdre, int ordre, long idQuestion);
+    @Query(nativeQuery = true, value = """
+update dl_qcm_question qq
+set ordre = ordre + 1
+where qq.qcm_id = ?3
+and qq.ordre between ?1 and ?2
+    """)
+    void updateOrdreDescendant(int oldOrdre, int ordre, long idQuestion);
 }

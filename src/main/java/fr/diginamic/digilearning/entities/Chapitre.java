@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -51,5 +52,9 @@ public class Chapitre {
 
 	public List<Question> getQuestionsNonSuppr() {
 		return questions.stream().filter(question -> !question.getSupprimee()).toList();
+	}
+
+	public List<QCMQuestion> getQcmQuestions() {
+		return qcmQuestions.stream().sorted(Comparator.comparing(QCMQuestion::getOrdre)).toList();
 	}
 }

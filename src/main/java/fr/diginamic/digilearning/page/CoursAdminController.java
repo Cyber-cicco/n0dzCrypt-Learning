@@ -267,6 +267,15 @@ public class CoursAdminController {
 
     }
 
+    @PatchMapping("/qcm/question/ordre")
+    public String changerOrdreQuestion(Model model, @RequestParam("id") Long idQuestion, @RequestParam("ordre") int ordre, HttpServletResponse reponse) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
+        Chapitre qcm = coursService.changeQCMQuestionOrdre(idQuestion, ordre);
+        model.addAttribute("qcm", qcm);
+        return Routes.ADR_ADMIN_QCM_QUESTION_LISTE;
+    }
+
     @PatchMapping("/qcm/choix/valid")
     public String changerStatusValidationChoix(Model model, @RequestParam("id") Long idChoix, HttpServletResponse reponse) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();

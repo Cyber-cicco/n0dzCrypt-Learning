@@ -12,6 +12,13 @@ function reInit() {
 
 function drakeListen(drake) {
     drake.on("drop", (el, target, source, sibling) => {
-        console.log(el, target, source, sibling);
+        //convert nodeList to array
+        const children = Array.prototype.slice.call(target.children);
+        const ordre = children.indexOf(el) + 1;
+        const id = el.getAttribute("data-id")
+        htmx.ajax('PATCH', '/cours/admin/qcm/question/ordre?ordre=' + ordre + '&id=' + id, '#questions-liste').then(() => {
+            reInit();
+            return;
+        });
     })
 }
