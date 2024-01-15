@@ -24,6 +24,8 @@ import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -286,12 +288,15 @@ public class CoursService {
     public Chapitre supprimerQuestion(AuthenticationInfos userInfos, Long idQuestion) {
         Chapitre chapitre = chapitreRepository.findByAdminIdAndQuestionId(userInfos.getId(), idQuestion)
                 .orElseThrow(EntityNotFoundException::new);
+        QCMQuestion question = qcmQuestionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
         qcmChoixRepository.deleteAll(chapitre.getQcmQuestions().stream().filter(q -> q.getId().equals(idQuestion)).toList().get(0).getChoix());
-        qcmQuestionRepository.deleteById(idQuestion);
+        qcmQuestionRepository.delete(question);
+        qcmQuestionRepository.updateOrdreAfterSuppression(question.getOrdre(), chapitre.getId());
         chapitre.setQcmQuestions(chapitre.getQcmQuestions().stream().filter(q -> !q.getId().equals(idQuestion)).toList());
         return chapitre;
     }
 
+    @Transactional
     public Chapitre changeQCMQuestionOrdre(Long idQuestion, int ordre) {
         QCMQuestion question = qcmQuestionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
         Chapitre qcm = question.getQcm();
@@ -309,6 +314,7 @@ public class CoursService {
         }
         question.setOrdre(ordre);
         qcmQuestionRepository.save(question);
+        qcm = chapitreRepository.findById(qcm.getId()).orElseThrow(EntityNotFoundException::new);
         return qcm;
     }
 

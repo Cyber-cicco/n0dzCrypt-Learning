@@ -17,11 +17,9 @@ function drakeListen(drake) {
 
         const ordre = children.indexOf(el) + 1;
         const id = el.getAttribute("data-id")
-        fetch(`/cours/admin/qcm/question/ordre?ordre=${ordre}&id=${id}`,  {
-            method : 'PATCH',
-        }).then((content) => {
+        htmx.ajax('PATCH', `/cours/admin/qcm/question/ordre?ordre=${ordre}&id=${id}`, '#questions-liste').then(() => {
             reInit();
             return;
-        })
+        });
     })
 }
