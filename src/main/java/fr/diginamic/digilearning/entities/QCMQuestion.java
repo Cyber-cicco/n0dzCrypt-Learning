@@ -25,4 +25,26 @@ public class QCMQuestion {
     @ManyToOne
     @JoinColumn(name = "qcm_id")
     Chapitre qcm;
+    @ManyToOne
+    @JoinColumn(name = "qcm_publie_id")
+    Chapitre qcmPublie;
+
+    public QCMQuestion clone() {
+        QCMQuestion qcmQuestion = QCMQuestion.builder()
+                .libelle(libelle)
+                .ordre(ordre)
+                .qcmPublie(qcm)
+                .build();
+        qcmQuestion.setChoix(choix.stream().map(choix -> choix.clone(qcmQuestion)).toList());
+        return qcmQuestion;
+    }
+
+    @Override
+    public String toString() {
+        return "QCMQuestion{" +
+                "id=" + id +
+                ", libelle='" + libelle + '\'' +
+                ", ordre=" + ordre +
+                '}';
+    }
 }

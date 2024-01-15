@@ -33,12 +33,14 @@ public class Chapitre {
 	private String contenuNonPublie;
 	private String lienVideo;
 	private Integer ordre;
-	private Boolean aJour;
 	private StatusPublication statusPublication;
 	private StatusChapitre statusChapitre;
 	@OneToMany(mappedBy = "qcm")
 	@Builder.Default
 	private List<QCMQuestion> qcmQuestions = new ArrayList<>();
+	@OneToMany(mappedBy = "qcmPublie")
+	@Builder.Default
+	private List<QCMQuestion> qcmQuestionsPublies = new ArrayList<>();
 	@OneToMany(mappedBy = "chapitre")
 	private List<Question> questions;
 	@ManyToOne

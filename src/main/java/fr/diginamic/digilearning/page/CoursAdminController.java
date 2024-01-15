@@ -3,6 +3,7 @@ package fr.diginamic.digilearning.page;
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.Chapitre;
 import fr.diginamic.digilearning.entities.QCMQuestion;
+import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -204,14 +205,7 @@ public class CoursAdminController {
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         Chapitre chapitre = coursService.updateContenu(userInfos, idChapitre, contenuChapitreDto);
         model.addAttribute("content", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
-        String aJour = (chapitre.getAJour())
-                ? "La version de votre cours est publiée"
-                : "La version de votre cours est en avance par rapport à la version publiée";
-        String classAJour = chapitre.getAJour()
-                ? "text-validation"
-                : "text-error";
-        model.addAttribute("aJour", aJour);
-        model.addAttribute("classAJour", classAJour);
+        chapitreIrrigator.irrigateAjour(model, chapitre);
         return Routes.ADR_COURS_CONTENT;
     }
 
@@ -250,6 +244,24 @@ public class CoursAdminController {
         model.addAttribute("question", question);
         model.addAttribute("qcm", qcm);
         return Routes.ADR_ADMIN_QCM;
+    }
+
+    @PostMapping("/qcm/publier")
+    public String changerTitreQuestion(Model model, @RequestParam("id") Long idQCM, HttpServletResponse reponse) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
+        CoursService.ReponsePublicationQCM reponsePublicationQCM = coursService.publierQCM(idQCM, reponse);
+        if (reponsePublicationQCM.diagnostics().isEmpty()){
+            chapitreIrrigator.irrigateAjour(model, reponsePublicationQCM.chapitre());
+            model.addAttribute("id", "qcm-a-jour");
+            return Routes.ADR_GENERIC_MESSAGE;
+        }
+        reponse.setHeader("HX-Retarget", "#error");
+        reponse.setHeader("HX-Reswap", "outerHTML");
+        model.addAttribute("aJour", reponsePublicationQCM.getMessage());
+        model.addAttribute("classAJour", "text-error");
+        model.addAttribute("id", "qcm-error-publication");
+        return Routes.ADR_GENERIC_MESSAGE;
     }
 
     @PatchMapping("/qcm/question")

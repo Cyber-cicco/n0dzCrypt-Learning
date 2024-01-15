@@ -46,5 +46,10 @@
         <div id="choix-liste" class="flex flex-col grow">
             <th:block th:replace="~{pages/cours/admin/fragments/qcm.choix.liste}"></th:block>
         </div>
+        <div id="qcm-error-publication" class="text-error"></div>
+        <button 
+            class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+            th:hx-post="'/cours/admin/qcm/publier?id=' + ${qcm.getId()}"
+            >Publier</button>
     </th:block>
 </div>

@@ -10,6 +10,7 @@ import fr.diginamic.digilearning.page.service.types.CoursCreationResult;
 import fr.diginamic.digilearning.page.validators.CoursValidator;
 import fr.diginamic.digilearning.page.validators.QCMValidator;
 import fr.diginamic.digilearning.repository.*;
+import jakarta.servlet.http.HttpServletResponse;
 import org.commonmark.Extension;
 import org.commonmark.ext.front.matter.YamlFrontMatterExtension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -26,9 +27,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -184,7 +187,6 @@ public class CoursService {
         switch (chapitreDto.getStatusChapitre()) {
             case QCM -> {
                 Chapitre chapitre = chapitreRepository.save(Chapitre.builder()
-                        .aJour(false)
                         .statusPublication(StatusPublication.NON_PUBLIE)
                         .statusChapitre(StatusChapitre.QCM)
                         .cours(cours)
@@ -204,7 +206,7 @@ public class CoursService {
                         .libelle(chapitreDto.getTitre())
                         .statusChapitre(StatusChapitre.COURS)
                         .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
-                        .aJour(false)
+                        .statusPublication(StatusPublication.NON_PUBLIE)
                         .build());
             }
             case EXERCICE -> {
@@ -219,7 +221,8 @@ public class CoursService {
         Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
                 .orElseThrow(UnauthorizedException::new);
         chapitre.setContenuNonPublie(contenuChapitreDto.getContenu());
-        chapitre.setAJour(false);
+        if(chapitre.getStatusPublication() == StatusPublication.NON_PUBLIE) return chapitreRepository.save(chapitre);
+        chapitre.setStatusPublication(StatusPublication.PUBLIE_PAS_A_JOUR);
         return chapitreRepository.save(chapitre);
     }
 
@@ -229,7 +232,7 @@ public class CoursService {
                 .orElseThrow(UnauthorizedException::new);
         chapitre.setContenuNonPublie(contenuChapitreDto.getContenu());
         chapitre.setContenu(contenuChapitreDto.getContenu());
-        chapitre.setAJour(true);
+        chapitre.setStatusPublication(StatusPublication.PUBLIE_A_JOUR);
         return chapitreRepository.save(chapitre);
     }
 
@@ -317,6 +320,35 @@ public class CoursService {
         qcm = chapitreRepository.findById(qcm.getId()).orElseThrow(EntityNotFoundException::new);
         return qcm;
     }
+
+    public record ReponsePublicationQCM(Chapitre chapitre, List<String> diagnostics){
+        public String getMessage() {
+            return "Le QCM ne peut être publié pour les raisons suivantes :  \n" + String.join("\n", diagnostics);
+        }
+    }
+    public ReponsePublicationQCM publierQCM(Long idQCM, HttpServletResponse response) {
+        Chapitre chapitre = chapitreRepository.findById(idQCM).orElseThrow(EntityNotFoundException::new);
+        List<String> diagnostics = qcmValidator.validateQCM(chapitre);
+        if(!diagnostics.isEmpty()){
+            return new ReponsePublicationQCM(chapitre, diagnostics);
+        }
+        chapitre.setQcmQuestionsPublies(
+                chapitre.getQcmQuestions()
+                        .stream()
+                        .peek(System.out::println)
+                        .map(QCMQuestion::clone)
+                        .peek(System.out::println)
+                        .collect(Collectors.toCollection(ArrayList::new)));
+        System.out.println(chapitre.getQcmQuestionsPublies());
+        qcmQuestionRepository.saveAll(chapitre.getQcmQuestionsPublies());
+        qcmChoixRepository.saveAll(chapitre.getQcmQuestionsPublies()
+                .stream()
+                .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
+                .toList());
+        chapitre.setStatusPublication(StatusPublication.PUBLIE_A_JOUR);
+        chapitreRepository.save(chapitre);
+        return new ReponsePublicationQCM(chapitreRepository.save(chapitre), diagnostics);
+   }
 
     public record ReponseChangementQuestion(QCMQuestion question, Optional<String> diagnostic){}
 

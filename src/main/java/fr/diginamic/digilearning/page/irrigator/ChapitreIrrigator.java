@@ -96,14 +96,7 @@ public class ChapitreIrrigator {
         model.addAttribute("contenuHTML", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
         model.addAttribute("contenu", chapitre.getContenuNonPublie());
         model.addAttribute("id", chapitre.getId());
-        String aJour = (chapitre.getAJour())
-                ? "La version de votre cours est publiée"
-                : "La version de votre cours est en avance par rapport à la version publiée";
-        String classAJour = chapitre.getAJour()
-                ? "text-validation"
-                : "text-error";
-        model.addAttribute("aJour", aJour);
-        model.addAttribute("classAJour", classAJour);
+        irrigateAjour(model, chapitre);
     }
 
     public void irrigateAdminChapitre(Model model, AuthenticationInfos userInfos, Long idChapitre){
@@ -119,5 +112,27 @@ public class ChapitreIrrigator {
         } else {
             model.addAttribute("question", null);
         }
+    }
+
+    public void irrigateAjour(Model model, Chapitre chapitre) {
+        String aJour;
+        String classAJour;
+        switch (chapitre.getStatusPublication()) {
+            case NON_PUBLIE ->{
+                aJour = "La version de votre cours n'est pas encore publiée";
+                classAJour = "text-error";
+            }
+            case PUBLIE_PAS_A_JOUR -> {
+                aJour = "La version de votre cours est en avance par rapport à la version publiée";
+                classAJour = "text-error";
+            }
+            case PUBLIE_A_JOUR -> {
+                aJour = "La version de votre cours est publiée et à jour";
+                classAJour = "text-validation";
+            }
+            default -> throw new RuntimeException();
+        }
+        model.addAttribute("aJour", aJour);
+        model.addAttribute("classAJour", classAJour);
     }
 }

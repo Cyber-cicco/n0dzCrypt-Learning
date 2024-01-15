@@ -21,4 +21,12 @@ public class QCMChoix {
     @JoinColumn(name = "question_id")
     private QCMQuestion question;
 
+    public QCMChoix clone(QCMQuestion question){
+        return QCMChoix.builder()
+                .question(question)
+                .libelle(libelle)
+                .valid(valid)
+                .build();
+    }
+
 }
