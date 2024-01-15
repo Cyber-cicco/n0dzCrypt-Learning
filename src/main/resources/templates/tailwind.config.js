@@ -14,6 +14,7 @@ module.exports = {
       error : '#ea5353',
       warn : '#fdf7dd',
       warn2 : '#ca991c',
+      greyLight : '#f8f8f8',
       grey : '#f2f2f2',
       greyDeep : '#dedede',
       dark : '#919191',

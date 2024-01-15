@@ -1,0 +1,40 @@
+<div class="text-xl w-full font-poppins text-center text-primary p-2">Réponses possibles</div>
+<table class="flex flex-col w-full p-2">
+    <thead class="flex w-full">
+        <tr class="flex w-full p-1 rounded-t-lg bg-primary text-white">
+            <th class="w-3/5">Choix</th>
+            <th class="w-1/5">Valide</th>
+            <th class="w-1/5">Supprimer</th>
+        </tr>
+    </thead>
+    <tbody>
+        <th:block th:each="choix, iterStat : ${question.getChoix()}">
+            <tr class="flex w-full p-2 bg-white">
+                <td class="w-3/5" th:text="${choix.getLibelle()}"></td>
+                <td 
+                    class="flex w-1/5 justify-center rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                    th:hx-patch="'/cours/admin/qcm/choix/valid?id=' + ${choix.getId()}"
+                    th:hx-target="'#valid-' + ${choix.getId()}"
+                    hx-swap="outerHTML"
+                    >
+                    <img 
+                    class="h-[30px] w-[30px]"
+                    src="/img/icons/check.svg"
+                    th:id="'valid-' + ${choix.getId()}"
+                    th:style="${choix.getValid()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
+                    >
+                </td> 
+                <td 
+                    class="flex w-1/5 justify-center rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+                    th:hx-delete="'/cours/admin/qcm/choix?id=' + ${choix.getId()}"
+                    hx-target="#choix-liste"
+                    >
+                    <img 
+                    class="h-[30px] w-[30px]"
+                    src="/img/icons/delete.svg"
+                    >
+                </td>
+            </tr>
+        </th:block>
+    </tbody>
+</table>

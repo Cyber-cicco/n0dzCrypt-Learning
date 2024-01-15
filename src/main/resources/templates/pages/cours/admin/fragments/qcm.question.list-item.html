@@ -1,0 +1,20 @@
+<div 
+    class="flex items-center w-full p-1 px-2 bg-lightPrimary hover:brightness-150 hover:cursor-pointer"
+    th:id="'question-' + ${question.getId()}"
+    th:hx-get="'/cours/admin/qcm/question?id=' + ${question.getId()}"
+    hx-target="#qcm-ajout"
+    >
+    <div 
+        class="w-4/5"
+        th:text="${question.getLibelle()}"
+        ></div>
+    <div class="flex items-center justify-end grow ">
+        <div 
+            class="rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+            th:hx-delete="'/cours/admin/qcm/question?id=' + ${question.getId()}"
+            hx-target="#insert"
+            >
+            <img src="/img/icons/delete.svg">
+        </div>
+    </div>
+</div>

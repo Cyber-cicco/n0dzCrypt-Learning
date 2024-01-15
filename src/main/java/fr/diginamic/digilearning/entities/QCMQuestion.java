@@ -18,10 +18,10 @@ public class QCMQuestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String libelle;
-    @OneToMany
+    @OneToMany(mappedBy = "question")
     @Builder.Default
     private List<QCMChoix> choix = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "qcm_id")
-    QCM qcm;
+    Chapitre qcm;
 }

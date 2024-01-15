@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.entities;
 
 import fr.diginamic.digilearning.entities.enums.StatusChapitre;
+import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +33,11 @@ public class Chapitre {
 	private String lienVideo;
 	private Integer ordre;
 	private Boolean aJour;
+	private StatusPublication statusPublication;
+	private StatusChapitre statusChapitre;
+	@OneToMany(mappedBy = "qcm")
+	@Builder.Default
+	private List<QCMQuestion> qcmQuestions = new ArrayList<>();
 	@OneToMany(mappedBy = "chapitre")
 	private List<Question> questions;
 	@ManyToOne

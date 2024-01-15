@@ -48,7 +48,11 @@ public class Routes {
     public static final String ADR_COURS_CONTENT = "pages/cours/admin/fragments/cours.admin.html-fragment";
     public static final String ADR_MESSAGE = "components/reponses/message-reponse.html";
     public static final String ADR_MODAL_AJOUT_COURS = "pages/cours/admin/fragments/cours.admin.modal-ajout-cours";
-    public static final String ADR_ADMIN_QCM = "pages/cours/admin/fragments/cours.admin.";
+    public static final String ADR_ADMIN_QCM = "pages/cours/admin/fragments/cours.admin.editer.qcm";
+    public static final String ADR_QCM_QUESTION_LISTE = "pages/cours/admin/fragments/qcm.question.list-item";
+    public static final String ADR_QCM_CHOIX_LISTE = "pages/cours/admin/fragments/qcm.choix.liste";
+    public static final String ADR_COMPOSANT_VALIDATION = "components/flag-icons/validation";
+    public static final String ADR_QCM_EDITION_QUESTION = "pages/cours/admin/fragments/cours.admin.editer.qcm.question";
 
     private Routes(){}
 }

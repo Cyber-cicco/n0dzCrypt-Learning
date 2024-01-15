@@ -2,11 +2,13 @@ package fr.diginamic.digilearning.page.service;
 
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.*;
+import fr.diginamic.digilearning.entities.enums.StatusChapitre;
 import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.page.service.types.CoursCreationDiagnostics;
 import fr.diginamic.digilearning.page.service.types.CoursCreationResult;
 import fr.diginamic.digilearning.page.validators.CoursValidator;
+import fr.diginamic.digilearning.page.validators.QCMValidator;
 import fr.diginamic.digilearning.repository.*;
 import org.commonmark.Extension;
 import org.commonmark.ext.front.matter.YamlFrontMatterExtension;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,9 @@ public class CoursService {
     private final ReponseRepository reponseRepository;
     private final ChapitreRepository chapitreRepository;
     private final CoursValidator coursValidator;
+    private final QCMQuestionRepository qcmQuestionRepository;
+    private final QCMValidator qcmValidator;
+    private final QCMChoixRepository qcmChoixRepository;
     public List<ModuleDto> findSModulesByUtilisateur(Long id, Long idModule){
         List<ModuleDto> sousModules = sousModuleRepository.findModulesByUtilisateur(id, idModule)
                 .stream()
@@ -169,37 +175,35 @@ public class CoursService {
         coursRepository.save(cours);
     }
 
-    public record TypesChapitres(
-            Chapitre chapitre,
-            QCM qcm,
-            TravauxPratique travauxPratique
-    ){}
-
-    public TypesChapitres createNewChapitre(AuthenticationInfos userInfos, Long idCours, ChapitreDto chapitreDto) {
+    public Chapitre createNewChapitre(AuthenticationInfos userInfos, Long idCours, ChapitreDto chapitreDto) {
         Cours cours = coursRepository.getCoursByIdAndFormateur(idCours, userInfos.getId())
                 .orElseThrow(EntityNotFoundException::new);
         coursValidator.validateTitreChapitre(chapitreDto.getTitre());
         switch (chapitreDto.getStatusChapitre()) {
             case QCM -> {
-                return new TypesChapitres(null,
-                            QCM.builder()
-                                    .publie(StatusPublication.NON_PUBLIE)
-                                    .cours(coursRepository.getCoursByIdAndFormateur(idCours, userInfos.getId())
-                                            .orElseThrow(EntityNotFoundException::new))
-                                    .libelle(chapitreDto.getTitre())
-                                    .build(),
-                        null);
+                Chapitre chapitre = chapitreRepository.save(Chapitre.builder()
+                        .aJour(false)
+                        .statusPublication(StatusPublication.NON_PUBLIE)
+                        .statusChapitre(StatusChapitre.QCM)
+                        .cours(cours)
+                        .libelle(chapitreDto.getTitre())
+                        .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
+                        .build());
+                QCMQuestion question = qcmQuestionRepository.save(QCMQuestion.builder()
+                                .libelle("Nouvelle question")
+                                .qcm(chapitre)
+                                .build());
+                chapitre.getQcmQuestions().add(question);
+                return chapitre;
             }
             case COURS -> {
-                return new TypesChapitres(
-                        chapitreRepository.save(Chapitre.builder()
-                                .cours(cours)
-                                .libelle(chapitreDto.getTitre())
-                                .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
-                                .aJour(false)
-                                .build()),
-                        null,
-                        null) ;
+                return chapitreRepository.save(Chapitre.builder()
+                        .cours(cours)
+                        .libelle(chapitreDto.getTitre())
+                        .statusChapitre(StatusChapitre.COURS)
+                        .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
+                        .aJour(false)
+                        .build());
             }
             case EXERCICE -> {
                 return null;
@@ -252,5 +256,67 @@ public class CoursService {
             );
         }
         return new CoursCreationResult(null, diagnostics);
+    }
+
+    public boolean changeStatusValidationChoix(Long idChoix) {
+        QCMChoix qcmChoix = qcmChoixRepository.findById(idChoix).orElseThrow(EntityNotFoundException::new);
+        qcmChoix.setValid(!qcmChoix.getValid());
+        return qcmChoixRepository.save(qcmChoix).getValid();
+    }
+
+    public QCMQuestion supprimerChoix(Long idChoix) {
+        QCMChoix qcmChoix = qcmChoixRepository.findById(idChoix).orElseThrow(EntityNotFoundException::new);
+        qcmChoixRepository.delete(qcmChoix);
+        return qcmChoix.getQuestion();
+    }
+
+    public QCMQuestion creerQuestion(Chapitre qcm) {
+        return qcmQuestionRepository.save(QCMQuestion.builder()
+                .libelle("Nouvelle question")
+                .qcm(qcm)
+                .build());
+    }
+
+    public QCMQuestion getQuestion(Long idQuestion, AuthenticationInfos userInfos) {
+        return qcmQuestionRepository.findByIdAndAdminId(idQuestion, userInfos.getId())
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    public Chapitre supprimerQuestion(AuthenticationInfos userInfos, Long idQuestion) {
+        Chapitre chapitre = chapitreRepository.findByAdminIdAndQuestionId(userInfos.getId(), idQuestion)
+                .orElseThrow(EntityNotFoundException::new);
+        qcmChoixRepository.deleteAll(chapitre.getQcmQuestions().stream().filter(q -> q.getId().equals(idQuestion)).toList().get(0).getChoix());
+        qcmQuestionRepository.deleteById(idQuestion);
+        chapitre.setQcmQuestions(chapitre.getQcmQuestions().stream().filter(q -> !q.getId().equals(idQuestion)).toList());
+        return chapitre;
+    }
+
+    public record ReponseChangementQuestion(QCMQuestion question, Optional<String> diagnostic){}
+
+    public ReponseChangementQuestion changeQCMQuestion(Long idQuestion, MessageDto messageDto) {
+        var question = qcmQuestionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
+        Optional<String> diagnostic = qcmValidator.validateQCMQuestion(messageDto.getMessage());
+        if(diagnostic.isEmpty()){
+            question.setLibelle(messageDto.getMessage());
+            qcmQuestionRepository.save(question);
+        }
+        return new ReponseChangementQuestion(question, diagnostic);
+    }
+
+    public record ReponseCreationChoix(QCMQuestion question, Optional<String> diagnostic){}
+
+    public ReponseCreationChoix creerChoix(Long idQuestion, ChoixDto choixDto) {
+        Optional<String> diagnostic = qcmValidator.validateQCMChoix(choixDto.getLibelle());
+        if(diagnostic.isEmpty()){
+            QCMQuestion question = qcmQuestionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
+            QCMChoix qcmChoix = qcmChoixRepository.save(QCMChoix.builder()
+                    .libelle(choixDto.getLibelle())
+                    .question(question)
+                    .valid(choixDto.getValid() != null)
+                    .build());
+            question.getChoix().add(qcmChoix);
+            return new ReponseCreationChoix(question, diagnostic);
+        }
+        return new ReponseCreationChoix(null, diagnostic);
     }
 }

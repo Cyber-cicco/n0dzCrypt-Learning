@@ -47,10 +47,6 @@ public class Cours implements Comparable<Cours> {
     @OneToMany(mappedBy = "cours")
     @Builder.Default
     private List<FlagCours> flagCours = new ArrayList<>();
-    @OneToMany(mappedBy = "cours")
-    @Builder.Default
-    private List<QCM> exercicesQCM = new ArrayList<>();
-
     public List<Chapitre> getChapitres() {
         return chapitres.stream().sorted(Comparator.comparing(Chapitre::getOrdre)).toList();
     }

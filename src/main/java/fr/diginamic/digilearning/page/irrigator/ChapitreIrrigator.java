@@ -92,9 +92,7 @@ public class ChapitreIrrigator {
         model.addAttribute("idUtilisateur", userInfos.getId());
     }
 
-    public void irrigateAdminChapitre(Model model, AuthenticationInfos userInfos, Long idChapitre){
-        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
-                .orElseThrow(UnauthorizedException::new);
+    public void irrigateAdminChapitre(Model model, AuthenticationInfos userInfos, Chapitre chapitre) {
         model.addAttribute("contenuHTML", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
         model.addAttribute("contenu", chapitre.getContenuNonPublie());
         model.addAttribute("id", chapitre.getId());
@@ -108,7 +106,18 @@ public class ChapitreIrrigator {
         model.addAttribute("classAJour", classAJour);
     }
 
-    public void irrigateAdminQCM(Model model, QCM qcm) {
+    public void irrigateAdminChapitre(Model model, AuthenticationInfos userInfos, Long idChapitre){
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
+                .orElseThrow(UnauthorizedException::new);
+        irrigateAdminChapitre(model, userInfos, chapitre);
+    }
+
+    public void irrigateAdminQCM(Model model, Chapitre qcm) {
         model.addAttribute("qcm", qcm);
+        if(!qcm.getQcmQuestions().isEmpty()) {
+            model.addAttribute("question", qcm.getQcmQuestions().get(0));
+        } else {
+            model.addAttribute("question", null);
+        }
     }
 }
