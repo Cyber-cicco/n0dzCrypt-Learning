@@ -1,26 +1,26 @@
 /*Variable contenant les éléments pouvant se drag and drop*/
-drakeQCM = undefined;
+drake = undefined;
 
 /*Permet d'initialiser les éléments pouvant se drag and drop*/
-function reInitQCM() {
+function reInitSommaire() {
 
-    if(drakeQCM) drakeQCM.destroy();
+    if(drake) drake.destroy();
     const newDragabble1 = Array.prototype.slice.call(document.querySelectorAll("[data-draggable1]"))
-    drakeQCM = dragula(newDragabble1);
-    drakeListenQCM(drakeQCM);
+    drake = dragula(newDragabble1);
+    drakeListen(drake);
 }
 
-function drakeListenQCM(drake) {
+function drakeListen(drake) {
     drake.on("drop", (el, target, source, sibling) => {
         //convert nodeList to array
         const children = Array.prototype.slice.call(target.children);
 
         const ordre = children.indexOf(el) + 1;
         const id = el.getAttribute("data-id")
-        htmx.ajax('PATCH', `/cours/admin/qcm/question/ordre?ordre=${ordre}&id=${id}`, '#questions-liste').then(() => {
-            reInitQCM();
+        htmx.ajax('PATCH', `/cours/admin/chapitre/ordre?ordre=${ordre}&id=${id}`, '#chapitres').then(() => {
+            reInitSommaire();
             return;
         });
     })
 }
-
+reInitSommaire()

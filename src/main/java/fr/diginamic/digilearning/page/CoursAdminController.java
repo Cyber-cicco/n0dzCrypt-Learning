@@ -341,6 +341,15 @@ public class CoursAdminController {
         return Routes.ADR_ADMIN_QCM_QUESTION_LISTE;
     }
 
+    @PatchMapping("/chapitre/ordre")
+    public String changerOrdreChapitre(Model model, @RequestParam("id") Long idChapitre, @RequestParam("ordre") int ordre, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        Cours cours = coursService.changeOrdreChapitre(idChapitre, ordre, userInfos);
+        model.addAttribute("cours", cours);
+        return Routes.ADR_SOMMAIRE_CHAPITRES;
+    }
+
     @PatchMapping("/qcm/choix/valid")
     public String changerStatusValidationChoix(Model model, @RequestParam("id") Long idChoix, HttpServletResponse reponse) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -364,9 +373,9 @@ public class CoursAdminController {
     public String deleteChapitre(Model model, @RequestParam("id") Long idChapitre, HttpServletResponse reponse){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
-        Long idCours = coursService.supprimerChapitre(userInfos, idChapitre);
-        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
-        reponse.setHeader("HX-Push-Url", "/cours/admin/chapitre?id=" + idCours);
+        Cours cours = coursService.supprimerChapitre(userInfos, idChapitre);
+        coursIrrigator.irrigateEditionCours(model, cours, userInfos);
+        reponse.setHeader("HX-Push-Url", "/cours/admin/editer?id=" + cours.getId());
         return Routes.ADR_COURS_ADMIN_EDITER;
     }
 

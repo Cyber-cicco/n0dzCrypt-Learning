@@ -1,0 +1,18 @@
+<th:block th:each="c, iterStat : ${cours.getChapitres()}" >
+    <div 
+        class="text-primary hover:cursor-pointer w-full text-xl justify-center pt-3 px-3 flex flex-col gap-3"
+        th:data-ordre="${c.getOrdre()}"
+        th:data-id="${c.getId()}"
+        >
+        <div class="flex flex-col items-center">
+            <a class="hover:cursor-pointer hover:underline"
+                th:href="'/cours/admin/chapitre/editer?id=' + ${c.getId()}"
+                th:text="${c.getLibelle()}"
+                th:hx-get="'/cours/admin/chapitre/editer/api?id=' + ${c.getId()}"
+                hx-target="#insert"
+                th:hx-push-url="'/cours/admin/chapitre/editer?id=' + ${c.getId()}"
+                ></a>
+        </div>
+        <div class="h-0.5 bg-greyDeep w-full"></div>
+    </div>
+</th:block>

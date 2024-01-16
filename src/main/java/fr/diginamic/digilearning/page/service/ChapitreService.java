@@ -73,4 +73,6 @@ public class ChapitreService {
         question.setIllustration(null);
         return qcmQuestionRepository.save(question);
     }
+
+
 }

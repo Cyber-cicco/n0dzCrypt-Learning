@@ -2,6 +2,7 @@ package fr.diginamic.digilearning.repository;
 
 import fr.diginamic.digilearning.entities.Chapitre;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
@@ -46,4 +47,30 @@ public interface ChapitreRepository extends JpaRepository<Chapitre, Long>  {
     and duc.id_utilisateur = ?1
     """)
     Optional<Chapitre> findByAdminIdAndQuestionId(Long id, Long idQuestion);
+
+    @Modifying(clearAutomatically = true)
+    @Query(nativeQuery = true, value = """
+update dl_chapitre ch
+set ordre = ordre + 1
+where ch.cours_id = ?3
+and ch.ordre <= ?1
+and ch.ordre >= ?2
+    """)
+    void updateOrdreDescendant(int oldOrdre, int ordre, long idChapitre);
+    @Modifying(clearAutomatically = true)
+    @Query(nativeQuery = true, value = """
+update dl_chapitre ch
+set ordre = ordre - 1
+where ch.cours_id = ?3
+and ch.ordre <= ?1
+and ch.ordre >= ?2
+    """)
+    void updateOrdreAscendant(int oldOrdre, int ordre, Long idCours);
+    @Query(nativeQuery = true, value = """
+update dl_chapitre ch
+set ordre = ordre - 1
+where ch.cours_id = ?2
+and ch.ordre > ?1
+    """)
+    void updateOrdreAfterSuppression(int ordre, Long idCours);
 }

@@ -30,18 +30,13 @@
            <div class="flex flex-col p-2 w-full bg-white items-center rounded-md border-greyDeep border-t-2">
                <h2 class="text-primary text-3xl font-poppins">Sommaire</h2>
                 <div class="h-0.5 bg-greyDeep w-full"></div>
-               <div class="text-primary w-full text-xl justify-center pt-3 px-3 flex flex-col gap-3" th:each="c, iterStat : ${cours.getChapitres()}">
-                   <div class="flex flex-col items-center">
-                       <a class="hover:cursor-pointer hover:underline"
-                           th:href="'/cours/admin/chapitre/editer?id=' + ${c.getId()}"
-                           th:text="${c.getLibelle()}"
-                           th:hx-get="'/cours/admin/chapitre/editer/api?id=' + ${c.getId()}"
-                           hx-target="#insert"
-                           th:hx-push-url="'/cours/admin/chapitre/editer?id=' + ${c.getId()}"
-                           ></a>
-                   </div>
-                   <div class="h-0.5 bg-greyDeep w-full"></div>
-               </div>
+                <div 
+                    id="chapitres"
+                    class="flex flex-col w-full"
+                    data-draggable1
+                    >
+                    <th:block th:replace="~{pages/cours/admin/fragments/sommaire.chapitres}"></th:block>
+                </div>
                <div class="flex justify-center items-center p-3">
                    <button onclick="openModalBot()" class="h-[30px] w-[30px] text-white font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-lightPrimary brightness-125">+</button>
                </div>
@@ -75,4 +70,5 @@
            </form>
 </th:block>
        <script src="/js/animation.modal.js"></script>
+       <script src="/js/drag-drop.chapitre.js"></script>
 </section>

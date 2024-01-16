@@ -236,11 +236,12 @@ public class CoursService {
         return chapitreRepository.save(chapitre);
     }
 
-    public Long supprimerChapitre(AuthenticationInfos userInfos, Long idChapitre) {
+    public Cours supprimerChapitre(AuthenticationInfos userInfos, Long idChapitre) {
         Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
                 .orElseThrow(UnauthorizedException::new);
+        chapitreRepository.updateOrdreAfterSuppression(chapitre.getOrdre(), chapitre.getCours().getId());
         chapitreRepository.delete(chapitre);
-        return chapitre.getCours().getId();
+        return chapitre.getCours();
     }
 
     public CoursCreationResult creerCours(AuthenticationInfos userInfos, Long idSousModule, CreationCoursDto creationCoursDto) {
@@ -324,6 +325,29 @@ public class CoursService {
         qcmQuestionRepository.save(question);
         qcm = chapitreRepository.findById(qcm.getId()).orElseThrow(EntityNotFoundException::new);
         return qcm;
+    }
+
+    @Transactional
+    public Cours changeOrdreChapitre(Long idChapitre, int ordre, AuthenticationInfos userInfos){
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        Cours cours = chapitre.getCours();
+        int oldOrdre = chapitre.getOrdre();
+        if(oldOrdre == ordre) {
+            return cours;
+        }
+        if(ordre < 1 || ordre > cours.getChapitres().size()) {
+            throw new BrokenRuleException("Ordre invalide");
+        }
+        if(ordre > oldOrdre) {
+            chapitreRepository.updateOrdreAscendant(oldOrdre, ordre, cours.getId());
+        } else {
+            chapitreRepository.updateOrdreDescendant(oldOrdre, ordre, cours.getId());
+        }
+        chapitre.setOrdre(ordre);
+        chapitreRepository.save(chapitre);
+        chapitre = chapitreRepository.findById(chapitre.getId()).orElseThrow(EntityNotFoundException::new);
+        return chapitre.getCours();
     }
 
     public ReponseChangementQuestion changeQCMQuestionCommentaire(Long idQuestion, String comentaire) {
