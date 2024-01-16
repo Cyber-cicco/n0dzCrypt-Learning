@@ -9,7 +9,6 @@ spring:
             max-file-size: "10MB"
             max-request-size: "10MB"
     jpa:
-        show-sql: false
         database: mysql
         generate-ddl: false
         hibernate:
@@ -32,6 +31,8 @@ jwt:
 logging:
     level:
       org.springframework: WARN
+      org.hibernate.type.descriptor: trace
+      org.hibernate.sql: debug
 server:
     http2:
         enabled: true

@@ -1,0 +1,76 @@
+<div class="flex flex-col h-full w-full text-lg">
+    <script>
+        function uploadIllustration() {
+            let photo = document.querySelector("#file-input").files[0];
+            let id = document.querySelector("#file-input").getAttribute("data-id");
+            const formData = new FormData();
+            formData.append("file", photo);
+            fetch(`/cours/admin/qcm/illustration?id=${id}`, {
+            method : 'POST',
+            body : formData }).then((content) => {
+                return content.text();
+            }).then((text) => {
+                document.querySelector("#qcm-illustration").innerHTML = text;
+            })
+        }
+    </script>
+    <th:block th:if="${question != null}">
+        <div class="flex w-full">
+            <form class="flex flex-col grow w-1/2 p-2 gap-2">
+                <div class="text-xl w-full font-poppins text-center text-primary">Question</div>
+                <label 
+                    for="message"
+                    >Libelle : </label>
+                <input 
+                    class="rounded-sm p-2 text-black w-full"
+                    type="text"
+                    id="question"
+                    name="message"
+                    hx-trigger="keyup changed delay:0.3s" 
+                    th:hx-patch="'/cours/admin/qcm/question?id=' + ${question.getId()}"
+                    th:hx-target="'#question-' + ${question.getId()}"
+                    hx-swap="outerHTML"
+                    th:value="${question.getLibelle()}"
+                    hx-on::before-request="document.querySelector('#error').innerText = ''"
+                >
+                <div id="error" class="text-error"></div>
+                <label 
+                    for="commentaire"
+                    >Commentaire : </label>
+                <textarea 
+                    class="rounded-sm p-2 text-black w-full"
+                    id="commentaire"
+                    name="commentaire"
+                    hx-trigger="keyup changed delay:0.3s" 
+                    th:hx-patch="'/cours/admin/qcm/commentaire?id=' + ${question.getId()}"
+                    hx-target="#error-commentaire"
+                    hx-swap="outerHTML"
+                    th:value="${question.getCommentaire()}"
+                ></textarea>
+                <div id="error-commentaire" class="text-error"></div>
+                <label 
+                    id="illustration"
+                    class="bg-primary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150 text-center"
+                    for="file-input"
+                    >
+                    Ajouter une illustration
+                </label>
+                <input th:data-id="${question.getId()}" onchange="uploadIllustration()" class="hidden" id="file-input" type="file">
+            </form>
+            <div id="qcm-illustration" class="flex p-2 w-1/2">
+                <th:block th:replace="~{pages/cours/admin/fragments/qcm.illustration}"></th:block>
+            </div>
+        </div>
+        <div class="h-0.5 bg-greyDeep w-full"></div>
+        <div id="choix-liste" class="flex flex-col overflow-y-scroll grow">
+            <th:block th:replace="~{pages/cours/admin/fragments/qcm.choix.liste}"></th:block>
+        </div>
+        <div id="qcm-error-publication" class="text-error"></div>
+        <button 
+            class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+            th:hx-post="'/cours/admin/qcm/publier?id=' + ${qcm.getId()}"
+            hx-target="#questions-liste"
+            hx-on::before-request="document.querySelector('#qcm-error-publication').innerText = ''"
+            >Publier</button>
+    </th:block>
+</div>

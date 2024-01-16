@@ -126,6 +126,7 @@ public class CoursIrrigator {
         );
         model.addAttribute("id", idCours);
     }
+
     /**
      * Irrigue un model contenant juste une icone pour signifier l'ajout dans un favori
      * @param model un objet permettant d'irriguer le template thymeleaf
@@ -141,6 +142,12 @@ public class CoursIrrigator {
         model.addAttribute("id", idCours);
     }
 
+    /**
+     * Irrigue le panel d'administration
+     *
+     * @param  userInfos  les informations d'authentification de l'utilisateur
+     * @param  model      un objet permettant d'irriguer le template thymeleaf
+     */
     public void irrigateAdminPanel(AuthenticationInfos userInfos, Model model) {
         List<SousModule> sousModules = sousModuleRepository.findAll();
         List<Long> idCoursCrees = coursRepository.getCoursCrees(userInfos.getId()).stream().map(Cours::getId).toList();

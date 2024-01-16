@@ -31,9 +31,19 @@ public interface ChapitreRepository extends JpaRepository<Chapitre, Long>  {
     from dl_chapitre ch
     join dl_cours co on ch.cours_id = co.id
     join dl_utilisateur_cours duc on co.id = duc.id_cours
-    join UTILISATEUR U on duc.id_utilisateur = U.ID
     where ch.id = ?1
-    and U.ID = ?2
+    and duc.id_utilisateur = ?2
     """)
     Optional<Chapitre> findByIdAndAdminId(Long idChapitre, Long idUtilisateur);
+
+    @Query(nativeQuery = true, value = """
+    select ch.* 
+    from dl_chapitre ch
+    join dl_cours co on ch.cours_id = co.id
+    join dl_utilisateur_cours duc on co.id = duc.id_cours
+    join dl_qcm_question dqq on ch.id = dqq.qcm_id
+    where dqq.id = ?2
+    and duc.id_utilisateur = ?1
+    """)
+    Optional<Chapitre> findByAdminIdAndQuestionId(Long id, Long idQuestion);
 }
