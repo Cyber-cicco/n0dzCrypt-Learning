@@ -18,6 +18,8 @@ public class QCMQuestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String libelle;
+    private String illustration;
+    private String commentaire;
     private Integer ordre;
     @OneToMany(mappedBy = "question")
     @Builder.Default
@@ -33,6 +35,7 @@ public class QCMQuestion {
         QCMQuestion qcmQuestion = QCMQuestion.builder()
                 .libelle(libelle)
                 .ordre(ordre)
+                .illustration(illustration)
                 .qcmPublie(qcm)
                 .build();
         qcmQuestion.setChoix(choix.stream().map(choix -> choix.clone(qcmQuestion)).toList());

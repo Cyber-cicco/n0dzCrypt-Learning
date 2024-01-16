@@ -326,6 +326,17 @@ public class CoursService {
         return qcm;
     }
 
+    public ReponseChangementQuestion changeQCMQuestionCommentaire(Long idQuestion, String comentaire) {
+        QCMQuestion question = qcmQuestionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
+        Optional<String> diagnostic = qcmValidator.validateQCMCommentaire(comentaire);
+        if(diagnostic.isEmpty()){
+            question.setCommentaire(comentaire);
+            changeStatusPublication(question.getQcm());
+            qcmQuestionRepository.save(question);
+        }
+        return new ReponseChangementQuestion(question, diagnostic);
+    }
+
     public record ReponsePublicationQCM(Chapitre chapitre, List<String> diagnostics){
         public String getMessage() {
             return "Le QCM ne peut être publié pour les raisons suivantes :  \n" + String.join("\n", diagnostics);

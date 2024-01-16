@@ -51,4 +51,11 @@ public class QCMValidator {
         }
         return diagnostics;
     }
+
+    public Optional<String> validateQCMCommentaire(String comentaire) {
+        if(comentaire.length() > 1024) {
+            return Optional.of("La taille du commentaire ne peut excéder 255 caractères");
+        }
+        return Optional.empty();
+    }
 }

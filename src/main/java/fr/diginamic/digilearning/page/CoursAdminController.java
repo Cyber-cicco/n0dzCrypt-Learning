@@ -3,7 +3,6 @@ package fr.diginamic.digilearning.page;
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.Chapitre;
 import fr.diginamic.digilearning.entities.QCMQuestion;
-import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -11,6 +10,7 @@ import fr.diginamic.digilearning.exception.UnauthorizedException;
 import fr.diginamic.digilearning.page.irrigator.ChapitreIrrigator;
 import fr.diginamic.digilearning.page.irrigator.CoursIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
+import fr.diginamic.digilearning.page.service.ChapitreService;
 import fr.diginamic.digilearning.page.service.CoursService;
 import fr.diginamic.digilearning.page.service.PhotoService;
 import fr.diginamic.digilearning.page.service.types.CoursCreationResult;
@@ -36,6 +36,7 @@ import java.util.Map;
 public class CoursAdminController {
 
     private final CoursService coursService;
+    private final ChapitreService chapitreService;
     private final AuthenticationService authenticationService;
     private final LayoutIrrigator layoutIrrigator;
     private final ChapitreIrrigator chapitreIrrigator;
@@ -201,6 +202,16 @@ public class CoursAdminController {
         return ResponseEntity.ok(Map.of("name", fileName));
     }
 
+    @PostMapping("/qcm/illustration")
+    public String ajouterQCMPhoto(Model model, @RequestParam("id") Long idQuestion, @ModelAttribute("file") MultipartFile file, HttpServletResponse response) throws IOException {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        String fileName = photoService.uploadPhoto(file, userInfos);
+        QCMQuestion question = chapitreService.updateIllustrationQCM(idQuestion, fileName);
+        model.addAttribute("question", question);
+        return Routes.ADR_QCM_ILLUSTRATION;
+    }
+
     @PostMapping("/chapitre/contenu")
     public String editerChapitre(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute ContenuChapitreDto contenuChapitreDto, HttpServletResponse reponse) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -281,6 +292,25 @@ public class CoursAdminController {
 
     }
 
+    public record CommentaireDto(String commentaire){}
+    @PatchMapping("/qcm/commentaire")
+    public String changerCommentaire(Model model, @RequestParam("id") Long idQuestion, @ModelAttribute CommentaireDto commentaireDto, HttpServletResponse reponse) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
+        CoursService.ReponseChangementQuestion qcmQuestion = coursService.changeQCMQuestionCommentaire(idQuestion, commentaireDto.commentaire());
+        if(qcmQuestion.diagnostic().isPresent()){
+            reponse.setHeader("HX-Reswap", "outerHTML");
+            model.addAttribute("aJour", qcmQuestion.diagnostic().get());
+            model.addAttribute("classAJour", "text-error");
+            model.addAttribute("id", "error-commentaire");
+            return Routes.ADR_GENERIC_MESSAGE;
+        }
+        model.addAttribute("aJour", "");
+        model.addAttribute("classAJour", "");
+        model.addAttribute("id", "error-commentaire");
+        return Routes.ADR_GENERIC_MESSAGE;
+    }
+
     @PatchMapping("/qcm/question/ordre")
     public String changerOrdreQuestion(Model model, @RequestParam("id") Long idQuestion, @RequestParam("ordre") int ordre, HttpServletResponse reponse) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -335,6 +365,15 @@ public class CoursAdminController {
         Chapitre chapitre = coursService.supprimerQuestion(userInfos, idQuestion);
         chapitreIrrigator.irrigateAdminQCM(model, chapitre);
         return Routes.ADR_ADMIN_QCM;
+    }
+
+    @DeleteMapping("/qcm/question/illustration")
+    public String deleteIllustration(Model model, @RequestParam("id") Long idQuestion, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        QCMQuestion question = chapitreService.deleteIllustration(idQuestion);
+        model.addAttribute("question", question);
+        return Routes.ADR_QCM_ILLUSTRATION;
     }
 
 }
