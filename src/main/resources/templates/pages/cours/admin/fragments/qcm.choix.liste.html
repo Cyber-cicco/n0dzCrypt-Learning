@@ -1,40 +1,40 @@
+<script>
+    function changeToModifier(id) {
+
+        let choixModif = document.querySelector(`#choix-modif-${id}`)
+        let choix = document.querySelector(`#choix-${id}`)
+
+        if(choixModif.classList.contains('hidden')) {
+            choixModif.classList.remove('hidden')
+            choix.classList.add('hidden')
+            return
+        }
+
+        choixModif.classList.add('hidden')
+        choix.classList.remove('hidden')
+    }
+</script>
 <div class="text-xl w-full font-poppins text-center text-primary p-2">Réponses possibles</div>
-<table class="flex flex-col w-full p-2">
-    <thead class="flex w-full">
-        <tr class="flex w-full p-1 rounded-t-lg bg-primary text-white">
-            <th class="w-3/5">Choix</th>
-            <th class="w-1/5">Valide</th>
-            <th class="w-1/5">Supprimer</th>
-        </tr>
-    </thead>
-    <tbody>
-        <th:block th:each="choix, iterStat : ${question.getChoix()}">
-            <tr class="flex w-full p-2 bg-white">
-                <td class="w-3/5" th:text="${choix.getLibelle()}"></td>
-                <td 
-                    class="flex w-1/5 justify-center rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
-                    th:hx-patch="'/cours/admin/qcm/choix/valid?id=' + ${choix.getId()}"
-                    th:hx-target="'#valid-' + ${choix.getId()}"
-                    hx-swap="outerHTML"
-                    >
-                    <img 
-                    class="h-[30px] w-[30px]"
-                    src="/img/icons/check.svg"
-                    th:id="'valid-' + ${choix.getId()}"
-                    th:style="${choix.getValid()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
-                    >
-                </td> 
-                <td 
-                    class="flex w-1/5 justify-center rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
-                    th:hx-delete="'/cours/admin/qcm/choix?id=' + ${choix.getId()}"
-                    hx-target="#choix-liste"
-                    >
-                    <img 
-                    class="h-[30px] w-[30px]"
-                    src="/img/icons/delete.svg"
-                    >
-                </td>
+<div class=" overflow-y-scroll">
+    <table class="flex flex-col w-full p-2 overflow-y-scroll">
+        <thead class="flex w-full">
+            <tr class="flex w-full p-1 rounded-t-lg bg-primary text-white">
+                <th class="w-3/5">Choix</th>
+                <th class="w-1/5">Valide</th>
+                <th class="w-1/5">Supprimer</th>
             </tr>
-        </th:block>
-    </tbody>
-</table>
+        </thead>
+        <tbody class="flex flex-col h-fit overflow-y-scroll">
+            <th:block th:each="choix, iterStat : ${question.getChoix()}">
+                <th:block th:replace="~{pages/cours/admin/fragments/qcm.choix.row}"></th:block>
+            </th:block>
+        </tbody>
+    </table>
+    <div class="flex justify-center items-center align-self-end p-2">
+        <button 
+            class="flex items-center justify-center text-center h-[30px] w-[30px] font-bold rounded-full hover:cursor-pointer hover:brightness-150 bg-primary text-white"
+            th:hx-post="'/cours/admin/qcm/choix/new?id=' + ${question.getId()}"
+            hx-target="#choix-liste"
+            >+</button>
+    </div>
+</div>

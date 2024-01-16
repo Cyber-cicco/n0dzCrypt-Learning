@@ -337,6 +337,31 @@ public class CoursService {
         return new ReponseChangementQuestion(question, diagnostic);
     }
 
+    public QCMQuestion creerNouveauChoix(Long idAdmin, Long idQuestion) {
+        QCMQuestion question = qcmQuestionRepository.findByIdAndAdminId(idQuestion, idAdmin)
+                .orElseThrow(EntityNotFoundException::new);
+        QCMChoix choix = qcmChoixRepository.save(QCMChoix.builder()
+                .question(question)
+                .valid(false)
+                .libelle("Nouveau choix")
+                .build());
+        question.getChoix().add(choix);
+        return question;
+    }
+
+
+    public QCMChoix changerLibelleChoix(Long idChoix, MessageDto messageDto, AuthenticationInfos userInfos) {
+        qcmValidator.validateQCMChoix(messageDto.getMessage());
+        QCMChoix choix = qcmChoixRepository.findByIdAndAdminId(idChoix, userInfos.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        Optional<String> diagnotic = qcmValidator.validateQCMChoix(messageDto.getMessage());
+        if(diagnotic.isPresent()){
+            return choix;
+        }
+        choix.setLibelle(messageDto.getMessage());
+        return qcmChoixRepository.save(choix);
+    }
+
     public record ReponsePublicationQCM(Chapitre chapitre, List<String> diagnostics){
         public String getMessage() {
             return "Le QCM ne peut être publié pour les raisons suivantes :  \n" + String.join("\n", diagnostics);
@@ -356,11 +381,8 @@ public class CoursService {
         chapitre.setQcmQuestionsPublies(
                 chapitre.getQcmQuestions()
                         .stream()
-                        .peek(System.out::println)
                         .map(QCMQuestion::clone)
-                        .peek(System.out::println)
                         .collect(Collectors.toCollection(ArrayList::new)));
-        System.out.println(chapitre.getQcmQuestionsPublies());
         qcmQuestionRepository.saveAll(chapitre.getQcmQuestionsPublies());
         qcmChoixRepository.saveAll(chapitre.getQcmQuestionsPublies()
                 .stream()

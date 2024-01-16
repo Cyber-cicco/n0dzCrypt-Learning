@@ -2,6 +2,8 @@ package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.Chapitre;
+import fr.diginamic.digilearning.entities.Cours;
+import fr.diginamic.digilearning.entities.QCMChoix;
 import fr.diginamic.digilearning.entities.QCMQuestion;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
@@ -258,6 +260,25 @@ public class CoursAdminController {
         model.addAttribute("qcm", qcm);
         return Routes.ADR_ADMIN_QCM;
     }
+
+    @PostMapping("/qcm/choix/new")
+    public String creerNouveauChoix(Model model, @RequestParam("id") Long idQuestion, HttpServletResponse reponse) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
+        QCMQuestion question = coursService.creerNouveauChoix(userInfos.getId(), idQuestion);
+        model.addAttribute("question", question);
+        return Routes.ADR_QCM_CHOIX_LISTE;
+    }
+
+    @PatchMapping("/qcm/choix")
+    public String changerChoix(Model model, @RequestParam("id") Long idChoix, HttpServletResponse response, @ModelAttribute MessageDto messageDto){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        QCMChoix choix = coursService.changerLibelleChoix(idChoix, messageDto, userInfos);
+        model.addAttribute("choix", choix);
+        return Routes.ADR_QCM_CHOIX_ROW;
+    }
+
 
     @PostMapping("/qcm/publier")
     public String changerTitreQuestion(Model model, @RequestParam("id") Long idQCM, HttpServletResponse reponse) {

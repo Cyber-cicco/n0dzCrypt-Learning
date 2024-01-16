@@ -1,0 +1,51 @@
+<tr th:id="'choix-row-' + ${choix.getId()}" class="flex w-full p-2 bg-white">
+    <td 
+        th:id="'choix-' + ${choix.getId()}"
+        class="w-3/5 hover:cursor-pointer"
+        th:text="${choix.getLibelle()}"
+        th:onclick="'changeToModifier(' + ${choix.getId()} + ')' "
+        ></td>
+    <td 
+        th:id="'choix-modif-' + ${choix.getId()}"
+        class="w-3/5 hidden"
+        >
+        <form class="flex gap-2">
+            <input 
+            name="message"
+            th:id="'choix-input-' + ${choix.getId()}"
+            class="rounded-md p-2 text-black w-5/6 border-2 border-primary"
+            type="text"
+            th:value="${choix.getLibelle()}"
+            >
+            <button 
+                class="bg-primary p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+                type="submit"
+                th:hx-patch="'/cours/admin/qcm/choix?id=' + ${choix.getId()}"
+                th:hx-target="'#choix-row-' + ${choix.getId()}"
+                >Modifier</button>
+        </form>
+    </td>
+    <td 
+        class="flex w-1/5 justify-center rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+        th:hx-patch="'/cours/admin/qcm/choix/valid?id=' + ${choix.getId()}"
+        th:hx-target="'#valid-' + ${choix.getId()}"
+        hx-swap="outerHTML"
+        >
+        <img 
+        class="h-[30px] w-[30px]"
+        src="/img/icons/check.svg"
+        th:id="'valid-' + ${choix.getId()}"
+        th:style="${choix.getValid()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
+        >
+    </td> 
+        <td 
+            class="flex w-1/5 justify-center rounded-full hover:cursor-pointer hover:bg-lightAccent p-1"
+            th:hx-delete="'/cours/admin/qcm/choix?id=' + ${choix.getId()}"
+            hx-target="#choix-liste"
+            >
+            <img 
+            class="h-[30px] w-[30px]"
+            src="/img/icons/delete.svg"
+            >
+        </td>
+</tr>

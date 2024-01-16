@@ -56,6 +56,7 @@ public class Routes {
     public static final String ADR_ADMIN_QCM_QUESTION_LISTE = "pages/cours/admin/fragments/qcm.question.liste";
     public static final String ADR_GENERIC_MESSAGE = "components/reponses/generic-message";
     public static final String ADR_QCM_ILLUSTRATION = "pages/cours/admin/fragments/qcm.illustration";
+    public static final String ADR_QCM_CHOIX_ROW = "pages/cours/admin/fragments/qcm.choix.row";
 
     private Routes(){}
 }
