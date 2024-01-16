@@ -50,6 +50,7 @@
         <button 
             class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
             th:hx-post="'/cours/admin/qcm/publier?id=' + ${qcm.getId()}"
+            hx-target="#questions-liste"
             >Publier</button>
     </th:block>
 </div>

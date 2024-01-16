@@ -62,4 +62,15 @@ public class Chapitre {
 	public List<QCMQuestion> getQcmQuestions() {
 		return qcmQuestions.stream().sorted(Comparator.comparing(QCMQuestion::getOrdre)).toList();
 	}
+
+	public String getNomAndStatus() {
+		String status;
+		switch (statusPublication) {
+			case NON_PUBLIE -> status = "Non publie";
+			case PUBLIE_A_JOUR -> status = "Publie et à jour";
+			case PUBLIE_PAS_A_JOUR -> status = "Copie en avance sur la publication";
+			default -> status = "Inconnu";
+		}
+		return libelle + " (" + status  + ")";
+	}
 }

@@ -140,7 +140,9 @@ public class CoursAdminController {
                 List.of(TypeRole.ROLE_ADMINISTRATEUR, TypeRole.ROLE_FORMATEUR),
                 response
         );
-        model.addAttribute("question", coursService.getQuestion(idQuestion, userInfos));
+        QCMQuestion question = coursService.getQuestion(idQuestion, userInfos);
+        model.addAttribute("question", question);
+        model.addAttribute("qcm", question.getQcm());
         return Routes.ADR_QCM_EDITION_QUESTION;
     }
 
@@ -215,7 +217,7 @@ public class CoursAdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         Chapitre chapitre = coursService.publierContenu(userInfos, idChapitre, contenuChapitreDto);
-        model.addAttribute("content", "La version de votre cours est publiée");
+        model.addAttribute("qcm", "La version de votre cours est publiée");
         return Routes.ADR_MESSAGE;
     }
 
@@ -252,11 +254,10 @@ public class CoursAdminController {
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         CoursService.ReponsePublicationQCM reponsePublicationQCM = coursService.publierQCM(idQCM, reponse);
         if (reponsePublicationQCM.diagnostics().isEmpty()){
-            chapitreIrrigator.irrigateAjour(model, reponsePublicationQCM.chapitre());
-            model.addAttribute("id", "qcm-a-jour");
-            return Routes.ADR_GENERIC_MESSAGE;
+            chapitreIrrigator.irrigateAdminQCM(model, reponsePublicationQCM.chapitre());
+            return Routes.ADR_ADMIN_QCM_QUESTION_LISTE;
         }
-        reponse.setHeader("HX-Retarget", "#error");
+        reponse.setHeader("HX-Retarget", "#qcm-error-publication");
         reponse.setHeader("HX-Reswap", "outerHTML");
         model.addAttribute("aJour", reponsePublicationQCM.getMessage());
         model.addAttribute("classAJour", "text-error");

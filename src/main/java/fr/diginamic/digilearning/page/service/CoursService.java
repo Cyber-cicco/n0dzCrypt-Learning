@@ -266,16 +266,19 @@ public class CoursService {
     public boolean changeStatusValidationChoix(Long idChoix) {
         QCMChoix qcmChoix = qcmChoixRepository.findById(idChoix).orElseThrow(EntityNotFoundException::new);
         qcmChoix.setValid(!qcmChoix.getValid());
+        changeStatusPublication(qcmChoix.getQuestion().getQcm());
         return qcmChoixRepository.save(qcmChoix).getValid();
     }
 
     public QCMQuestion supprimerChoix(Long idChoix) {
         QCMChoix qcmChoix = qcmChoixRepository.findById(idChoix).orElseThrow(EntityNotFoundException::new);
         qcmChoixRepository.delete(qcmChoix);
+        changeStatusPublication(qcmChoix.getQuestion().getQcm());
         return qcmChoix.getQuestion();
     }
 
     public QCMQuestion creerQuestion(Chapitre qcm) {
+        changeStatusPublication(qcm);
         return qcmQuestionRepository.save(QCMQuestion.builder()
                 .libelle("Nouvelle question")
                 .ordre(qcm.getQcmQuestions().size() + 1)
@@ -295,6 +298,7 @@ public class CoursService {
         qcmChoixRepository.deleteAll(chapitre.getQcmQuestions().stream().filter(q -> q.getId().equals(idQuestion)).toList().get(0).getChoix());
         qcmQuestionRepository.delete(question);
         qcmQuestionRepository.updateOrdreAfterSuppression(question.getOrdre(), chapitre.getId());
+        changeStatusPublication(chapitre);
         chapitre.setQcmQuestions(chapitre.getQcmQuestions().stream().filter(q -> !q.getId().equals(idQuestion)).toList());
         return chapitre;
     }
@@ -316,6 +320,7 @@ public class CoursService {
             qcmQuestionRepository.updateOrdreDescendant(oldOrdre, ordre, qcm.getId());
         }
         question.setOrdre(ordre);
+        changeStatusPublication(question.getQcm());
         qcmQuestionRepository.save(question);
         qcm = chapitreRepository.findById(qcm.getId()).orElseThrow(EntityNotFoundException::new);
         return qcm;
@@ -332,6 +337,11 @@ public class CoursService {
         if(!diagnostics.isEmpty()){
             return new ReponsePublicationQCM(chapitre, diagnostics);
         }
+        qcmChoixRepository.deleteAll(chapitre.getQcmQuestionsPublies()
+                .stream()
+                .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
+                .toList());
+        qcmQuestionRepository.deleteAll(chapitre.getQcmQuestionsPublies());
         chapitre.setQcmQuestionsPublies(
                 chapitre.getQcmQuestions()
                         .stream()
@@ -352,11 +362,18 @@ public class CoursService {
 
     public record ReponseChangementQuestion(QCMQuestion question, Optional<String> diagnostic){}
 
+    private void changeStatusPublication(Chapitre chapitre) {
+        if(chapitre.getStatusPublication() == StatusPublication.NON_PUBLIE || chapitre.getStatusPublication() == StatusPublication.PUBLIE_PAS_A_JOUR) return;
+        chapitre.setStatusPublication(StatusPublication.PUBLIE_PAS_A_JOUR);
+        chapitreRepository.save(chapitre);
+    }
+
     public ReponseChangementQuestion changeQCMQuestion(Long idQuestion, MessageDto messageDto) {
         var question = qcmQuestionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
         Optional<String> diagnostic = qcmValidator.validateQCMQuestion(messageDto.getMessage());
         if(diagnostic.isEmpty()){
             question.setLibelle(messageDto.getMessage());
+            changeStatusPublication(question.getQcm());
             qcmQuestionRepository.save(question);
         }
         return new ReponseChangementQuestion(question, diagnostic);
@@ -374,6 +391,7 @@ public class CoursService {
                     .valid(choixDto.getValid() != null)
                     .build());
             question.getChoix().add(qcmChoix);
+            changeStatusPublication(question.getQcm());
             return new ReponseCreationChoix(question, diagnostic);
         }
         return new ReponseCreationChoix(null, diagnostic);
