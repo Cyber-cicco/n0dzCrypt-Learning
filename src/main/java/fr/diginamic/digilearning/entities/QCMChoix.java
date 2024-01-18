@@ -3,6 +3,8 @@ package fr.diginamic.digilearning.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,4 +31,16 @@ public class QCMChoix {
                 .build();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QCMChoix qcmChoix = (QCMChoix) o;
+        return Objects.equals(id, qcmChoix.id) && Objects.equals(libelle, qcmChoix.libelle) && Objects.equals(valid, qcmChoix.valid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, libelle, valid);
+    }
 }

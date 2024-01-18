@@ -1,4 +1,4 @@
-package fr.diginamic.digilearning.page.service.types;
+package fr.diginamic.digilearning.service.types;
 
 public interface Diagnostics {
     boolean isValid();

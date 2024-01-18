@@ -1,4 +1,4 @@
-package fr.diginamic.digilearning.page.service;
+package fr.diginamic.digilearning.service;
 
 import fr.diginamic.digilearning.dto.CalendarInfos;
 import fr.diginamic.digilearning.dto.CoursDto;
@@ -7,10 +7,9 @@ import fr.diginamic.digilearning.dto.HourInfos;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.FlagCours;
 import fr.diginamic.digilearning.entities.Utilisateur;
-import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
-import fr.diginamic.digilearning.page.service.enums.DateOption;
+import fr.diginamic.digilearning.service.enums.DateOption;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.repository.FlagCoursRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;

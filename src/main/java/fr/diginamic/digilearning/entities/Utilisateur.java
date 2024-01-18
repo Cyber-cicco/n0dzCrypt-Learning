@@ -218,6 +218,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@OneToMany(mappedBy = "auteur")
 	private List<Question> questions;
 
+	@OneToMany(mappedBy = "utilisateur")
+	private List<QCMPasse> qcmPasses;
+
 	/**
 	 * Constructor
 	 * 

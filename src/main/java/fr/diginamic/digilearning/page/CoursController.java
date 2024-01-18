@@ -1,18 +1,16 @@
 package fr.diginamic.digilearning.page;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import fr.diginamic.digilearning.components.service.NavBarService;
-import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.irrigator.CoursIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
+import fr.diginamic.digilearning.service.ChapitreService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("cours")
@@ -22,6 +20,7 @@ public class CoursController {
     private final AuthenticationService authenticationService;
     private final NavBarService navBarService;
     private final CoursIrrigator coursIrrigator;
+    private final ChapitreService chapitreService;
     private final LayoutIrrigator layoutIrrigator;
 
     @GetMapping("/api")
@@ -89,16 +88,38 @@ public class CoursController {
     }
 
     @GetMapping("/chapitre/api")
-    public String getChapitreApi(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
+    public String getChapitreApi(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        coursIrrigator.irrigateChapitre(userInfos, id, idCours, model);
-        return Routes.ADR_VISIONNEUSE_COURS;
+        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, id, idCours);
+        switch (chapitreInfos.chapitre().getStatusChapitre()){
+            case COURS -> {
+                coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+                return Routes.ADR_VISIONNEUSE_COURS;
+            }
+            case QCM -> {
+                coursIrrigator.irrigateQCM(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+                return Routes.ADR_VISIONNEUSE_COURS;
+            }
+            case EXERCICE -> {
+                throw new RuntimeException("Partie non implémentée");
+            }
+            default -> {
+                throw new RuntimeException();
+            }
+        }
     }
 
     @GetMapping("/chapitre")
-    public String getChapitre(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
+    public String getChapitre(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, id, idCours);
         coursIrrigator.irrigateChapitre(userInfos, id, idCours, model);
+        switch (chapitreInfos.chapitre().getStatusChapitre()){
+            case COURS -> coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+            case QCM -> coursIrrigator.irrigateQCM(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+            case EXERCICE -> throw new RuntimeException("Partie non implémentée");
+            default ->  throw new RuntimeException();
+        }
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_VISIONNEUSE);
         return Routes.ADR_BASE_LAYOUT;
     }

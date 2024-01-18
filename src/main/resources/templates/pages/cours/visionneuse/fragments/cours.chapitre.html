@@ -59,12 +59,12 @@
             >Sommaire</a>
         </div>
     </header>
-    <div class="flex flex-col overflow-hidden">
+    <div class="flex flex-col overflow-hidden h-full">
         <!--/*@thymesVar id="contenu" type="java.lang.String"*/-->
-        <div class="flex overflow-x-hidden w-full">
-            <div class="flex min-w-full flex-col w-full overflow-y-scroll">
-                <div id="cours-content">
-                    <article class="" id="markdown" th:utext="${contenu}">
+        <div class="flex overflow-x-hidden grow h-full w-full  pb-2">
+            <div class="flex min-w-full flex-col h-full grow w-full overflow-y-scroll">
+                <div class="flex flex-col h-full grow" id="cours-content">
+                    <article class="flex flex-col h-full" id="markdown" th:utext="${contenu}">
                     </article>
                     <div th:if="${chapitre.getLienVideo() != null}" class="flex h-[460px] justify-center pt-5"
                          th:utext="${chapitre.getLienVideo()}"></div>

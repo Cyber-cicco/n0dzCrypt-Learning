@@ -1,4 +1,4 @@
-package fr.diginamic.digilearning.page.validators;
+package fr.diginamic.digilearning.validators;
 
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Chapitre;

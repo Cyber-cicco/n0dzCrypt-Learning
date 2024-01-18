@@ -4,9 +4,9 @@ package fr.diginamic.digilearning.page;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.dto.PostFilDto;
 import fr.diginamic.digilearning.page.irrigator.ForumIrrigator;
-import fr.diginamic.digilearning.page.service.ForumService;
-import fr.diginamic.digilearning.page.validators.FilValidator;
-import fr.diginamic.digilearning.page.validators.PostForumValidator;
+import fr.diginamic.digilearning.service.ForumService;
+import fr.diginamic.digilearning.validators.FilValidator;
+import fr.diginamic.digilearning.validators.PostForumValidator;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

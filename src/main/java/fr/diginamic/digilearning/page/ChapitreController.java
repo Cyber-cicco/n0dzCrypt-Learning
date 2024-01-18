@@ -3,7 +3,7 @@ package fr.diginamic.digilearning.page;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.page.irrigator.ChapitreIrrigator;
-import fr.diginamic.digilearning.page.service.ChapitreService;
+import fr.diginamic.digilearning.service.ChapitreService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;

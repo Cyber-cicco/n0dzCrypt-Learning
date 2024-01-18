@@ -1,4 +1,4 @@
-package fr.diginamic.digilearning.page.service;
+package fr.diginamic.digilearning.service;
 
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Conversation;

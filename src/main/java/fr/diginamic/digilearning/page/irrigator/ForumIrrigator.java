@@ -4,7 +4,7 @@ import fr.diginamic.digilearning.entities.FilDiscussion;
 import fr.diginamic.digilearning.entities.Salon;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.page.Routes;
-import fr.diginamic.digilearning.page.service.ForumService;
+import fr.diginamic.digilearning.service.ForumService;
 import fr.diginamic.digilearning.repository.SujetRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;

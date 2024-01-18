@@ -1,8 +1,7 @@
-package fr.diginamic.digilearning.page.validators;
+package fr.diginamic.digilearning.validators;
 
 import fr.diginamic.digilearning.dto.CreationCoursDto;
-import fr.diginamic.digilearning.exception.BrokenRuleException;
-import fr.diginamic.digilearning.page.service.types.CoursCreationDiagnostics;
+import fr.diginamic.digilearning.service.types.CoursCreationDiagnostics;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

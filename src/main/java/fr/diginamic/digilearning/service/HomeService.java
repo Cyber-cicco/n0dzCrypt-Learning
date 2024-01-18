@@ -1,4 +1,4 @@
-package fr.diginamic.digilearning.page.service;
+package fr.diginamic.digilearning.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

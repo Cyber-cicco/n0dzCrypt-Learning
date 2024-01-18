@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor
@@ -31,6 +32,9 @@ public class QCMQuestion {
     @JoinColumn(name = "qcm_publie_id")
     Chapitre qcmPublie;
 
+    public List<QCMChoix> getBonChoix(){
+        return choix.stream().filter(QCMChoix::getValid).toList();
+    }
     public QCMQuestion clone() {
         QCMQuestion qcmQuestion = QCMQuestion.builder()
                 .libelle(libelle)

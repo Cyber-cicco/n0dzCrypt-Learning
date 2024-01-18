@@ -1,4 +1,4 @@
-package fr.diginamic.digilearning.page.service.enums;
+package fr.diginamic.digilearning.service.enums;
 
 import lombok.AllArgsConstructor;
 

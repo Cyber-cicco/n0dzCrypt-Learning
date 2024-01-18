@@ -1,9 +1,9 @@
-package fr.diginamic.digilearning.page.service;
+package fr.diginamic.digilearning.service;
 
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
-import fr.diginamic.digilearning.page.service.types.Media;
+import fr.diginamic.digilearning.service.types.Media;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.StringUtils;
 import lombok.RequiredArgsConstructor;

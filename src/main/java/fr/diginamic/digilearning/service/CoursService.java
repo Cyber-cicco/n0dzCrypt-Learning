@@ -1,14 +1,14 @@
-package fr.diginamic.digilearning.page.service;
+package fr.diginamic.digilearning.service;
 
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.enums.StatusChapitre;
 import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
-import fr.diginamic.digilearning.page.service.types.CoursCreationDiagnostics;
-import fr.diginamic.digilearning.page.service.types.CoursCreationResult;
-import fr.diginamic.digilearning.page.validators.CoursValidator;
-import fr.diginamic.digilearning.page.validators.QCMValidator;
+import fr.diginamic.digilearning.service.types.CoursCreationDiagnostics;
+import fr.diginamic.digilearning.service.types.CoursCreationResult;
+import fr.diginamic.digilearning.validators.CoursValidator;
+import fr.diginamic.digilearning.validators.QCMValidator;
 import fr.diginamic.digilearning.repository.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.commonmark.Extension;
