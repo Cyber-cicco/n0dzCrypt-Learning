@@ -23,4 +23,3 @@ function drakeListen(drake) {
         });
     })
 }
-reInitSommaire()

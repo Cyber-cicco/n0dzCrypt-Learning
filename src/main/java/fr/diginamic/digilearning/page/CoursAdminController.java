@@ -28,6 +28,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.processing.RoundEnvironment;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -178,16 +179,21 @@ public class CoursAdminController {
     @PostMapping("/chapitre")
     public String creerChapitre(Model model, @RequestParam("id") Long idCours, @ModelAttribute ChapitreDto chapitreDto, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        Chapitre chapitre = coursService.createNewChapitre(userInfos, idCours, chapitreDto);
+        var chapitre = coursService.createNewChapitre(userInfos, idCours, chapitreDto);
+        if(chapitre.diagnostic().isPresent()){
+            model.addAttribute("error", chapitre.diagnostic().get());
+            response.setHeader("HX-Retarget", "#error");
+            return Routes.ADR_FORM_ERROR;
+        }
         switch (chapitreDto.getStatusChapitre()) {
             case COURS -> {
-                chapitreIrrigator.irrigateAdminChapitre(model, userInfos, chapitre);
-                response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.getId());
+                chapitreIrrigator.irrigateAdminChapitre(model, userInfos, chapitre.chapitre());
+                response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.chapitre().getId());
                 return Routes.ADR_ADMIN_CHAPITRE;
             }
             case QCM -> {
-                chapitreIrrigator.irrigateAdminQCM(model, chapitre);
-                response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.getId());
+                chapitreIrrigator.irrigateAdminQCM(model, chapitre.chapitre());
+                response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.chapitre().getId());
                 return Routes.ADR_ADMIN_QCM;
             }
             case EXERCICE -> {
@@ -230,7 +236,7 @@ public class CoursAdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         Chapitre chapitre = coursService.publierContenu(userInfos, idChapitre, contenuChapitreDto);
-        model.addAttribute("qcm", "La version de votre cours est publiée");
+        model.addAttribute("content", "La version de votre cours est publiée");
         return Routes.ADR_MESSAGE;
     }
 
@@ -268,6 +274,20 @@ public class CoursAdminController {
         QCMQuestion question = coursService.creerNouveauChoix(userInfos.getId(), idQuestion);
         model.addAttribute("question", question);
         return Routes.ADR_QCM_CHOIX_LISTE;
+    }
+
+    @PatchMapping("/titre")
+    public String changerTitre(Model model, @RequestParam("id") Long idCours, HttpServletResponse response, @ModelAttribute MessageDto messageDto) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        var titre = coursService.changerTitre(idCours, messageDto, userInfos.getId());
+        if(titre.diagnostics().isPresent()){
+            model.addAttribute("error", titre.diagnostics().get());
+            response.setHeader("HX-Retarget", "#error");
+            return Routes.ADR_FORM_ERROR;
+        }
+        model.addAttribute("cours", titre.cours());
+        return Routes.ADR_COURS_TITRE;
     }
 
     @PatchMapping("/qcm/choix")

@@ -180,10 +180,14 @@ public class CoursService {
         coursRepository.save(cours);
     }
 
-    public Chapitre createNewChapitre(AuthenticationInfos userInfos, Long idCours, ChapitreDto chapitreDto) {
+    public record ReponseCreationChapitre(Chapitre chapitre, Optional<String> diagnostic){}
+    public ReponseCreationChapitre createNewChapitre(AuthenticationInfos userInfos, Long idCours, ChapitreDto chapitreDto) {
         Cours cours = coursRepository.getCoursByIdAndFormateur(idCours, userInfos.getId())
                 .orElseThrow(EntityNotFoundException::new);
-        coursValidator.validateTitreChapitre(chapitreDto.getTitre());
+        var diagnostic = coursValidator.validateTitreChapitre(chapitreDto.getTitre());
+        if(diagnostic.isPresent()){
+            return new ReponseCreationChapitre(null, diagnostic);
+        }
         switch (chapitreDto.getStatusChapitre()) {
             case QCM -> {
                 Chapitre chapitre = chapitreRepository.save(Chapitre.builder()
@@ -198,16 +202,16 @@ public class CoursService {
                                 .qcm(chapitre)
                                 .build());
                 chapitre.getQcmQuestions().add(question);
-                return chapitre;
+                return new ReponseCreationChapitre(chapitre, diagnostic);
             }
             case COURS -> {
-                return chapitreRepository.save(Chapitre.builder()
+                return new ReponseCreationChapitre(chapitreRepository.save(Chapitre.builder()
                         .cours(cours)
                         .libelle(chapitreDto.getTitre())
                         .statusChapitre(StatusChapitre.COURS)
                         .ordre(coursRepository.findNombreChapitre(cours.getId()) + 1)
                         .statusPublication(StatusPublication.NON_PUBLIE)
-                        .build());
+                        .build()), diagnostic);
             }
             case EXERCICE -> {
                 return null;
@@ -384,6 +388,18 @@ public class CoursService {
         }
         choix.setLibelle(messageDto.getMessage());
         return qcmChoixRepository.save(choix);
+    }
+
+    public record ReponseChangementTitre(Cours cours, Optional<String> diagnostics){}
+    public ReponseChangementTitre changerTitre(Long idCours, MessageDto messageDto, Long idAdmin) {
+        Cours cours = coursRepository.getCoursByIdAndFormateur(idCours, idAdmin)
+                .orElseThrow(EntityNotFoundException::new);
+        Optional<String> diagnostic = coursValidator.validateTitreChapitre(messageDto.getMessage());
+        if(diagnostic.isPresent()){
+            return new ReponseChangementTitre(null, diagnostic);
+        }
+        cours.setTitre(messageDto.getMessage());
+        return new ReponseChangementTitre(coursRepository.save(cours), diagnostic);
     }
 
     public record ReponsePublicationQCM(Chapitre chapitre, List<String> diagnostics){

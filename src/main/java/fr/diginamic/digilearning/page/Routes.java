@@ -58,6 +58,7 @@ public class Routes {
     public static final String ADR_QCM_ILLUSTRATION = "pages/cours/admin/fragments/qcm.illustration";
     public static final String ADR_QCM_CHOIX_ROW = "pages/cours/admin/fragments/qcm.choix.row";
     public static final String ADR_SOMMAIRE_CHAPITRES = "pages/cours/admin/fragments/sommaire.chapitres";
+    public static final String ADR_COURS_TITRE = "pages/cours/admin/fragments/titre.chapitre";
 
     private Routes(){}
 }

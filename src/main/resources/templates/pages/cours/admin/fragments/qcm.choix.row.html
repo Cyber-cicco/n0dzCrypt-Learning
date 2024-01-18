@@ -22,6 +22,7 @@
                 type="submit"
                 th:hx-patch="'/cours/admin/qcm/choix?id=' + ${choix.getId()}"
                 th:hx-target="'#choix-row-' + ${choix.getId()}"
+                hx-swap="outerHTML"
                 >Modifier</button>
         </form>
     </td>

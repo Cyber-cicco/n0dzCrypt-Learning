@@ -15,10 +15,14 @@ public class CoursValidator {
 
     private final CoursRepository coursRepository;
 
-    public void validateTitreChapitre(String titreChapitre) {
-        if(titreChapitre.length() > 255) {
-            throw new BrokenRuleException("Le titre d'un chapitre ne peut excéder 255 caractères");
+    public Optional<String> validateTitreChapitre(String titreChapitre) {
+        if(titreChapitre == null || titreChapitre.isBlank()){
+            return Optional.of("Le titre du chapitre ne peut pas être vide");
         }
+        if(titreChapitre.length() > 255) {
+            return Optional.of("Le titre d'un chapitre ne peut excéder 255 caractères");
+        }
+        return Optional.empty();
     }
 
     public CoursCreationDiagnostics validateCoursCreation(CreationCoursDto cours, Long idSousModule) {
