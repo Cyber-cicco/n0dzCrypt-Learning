@@ -13,6 +13,7 @@ import fr.diginamic.digilearning.service.ChapitreService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import fr.diginamic.digilearning.service.QCMService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -109,7 +110,7 @@ public class CoursController {
             }
             case QCM -> {
                 handleQCM(model, userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours());
-                return Routes.ADR_VISIONNEUSE_COURS;
+                return Routes.ADR_QCM;
             }
             case EXERCICE -> {
                 throw new RuntimeException("Partie non implémentée");
@@ -121,10 +122,13 @@ public class CoursController {
     }
 
     private void handleQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, FlagCours flagCours){
+        System.out.println("id utilisateur : " + userInfos.getId());
+        System.out.println("qcm id : " + qcm.getId());
         Optional<QCMPasse> qcmPasseOpt = qcmPasseRepository.findByUtilisateurAndQCM(userInfos.getId(), qcm.getId());
         if(qcmPasseOpt.isPresent()){
             QCMPasse qcmPasse = qcmPasseOpt.get();
-            model.addAttribute("qcm", qcmPasse);
+            System.out.println("here");
+            coursIrrigator.irrigateBaseQCM(model, userInfos, qcm, cours, 0);
             if(qcmPasse.isQCMFinished()) {
                 model.addAttribute("slide", Routes.ADR_QCM_REFAIRE);
                 return;
@@ -142,7 +146,7 @@ public class CoursController {
         coursIrrigator.irrigateChapitre(userInfos, id, idCours, model);
         switch (chapitreInfos.chapitre().getStatusChapitre()){
             case COURS -> coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
-            case QCM -> coursIrrigator.irrigateQCM(model, userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), 0);
+            case QCM -> handleQCM(model, userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours());
             case EXERCICE -> throw new RuntimeException("Partie non implémentée");
             default ->  throw new RuntimeException();
         }
@@ -150,15 +154,27 @@ public class CoursController {
         return Routes.ADR_BASE_LAYOUT;
     }
 
+    @GetMapping("/qcm/resultat")
+    public String getResultats(Model model, @RequestParam("id") Integer id, @RequestParam("idCours") Long idCours) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, id, idCours);
+        Optional<QCMPasse> qcmPasse = qcmPasseRepository.findByUtilisateurAndQCM(userInfos.getId(), chapitreInfos.chapitre().getId());
+        coursIrrigator.irrigateQCMFinished(model, userInfos, chapitreInfos.chapitre(), qcmPasse.get());
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_VISIONNEUSE);
+        return Routes.ADR_BASE_LAYOUT;
+    }
+
     @PostMapping("/qcm/response")
-    public String postNewResponseToQCM(Model model, @RequestParam("id") Long idQCM, @RequestParam("idQuestion") Long idQuestion, @RequestBody List<ReponseQCMDto> reponseQCM){
+    public String postNewResponseToQCM(Model model, @RequestParam("id") Long idQCM, @RequestParam("idQuestion") Long idQuestion, @RequestBody List<ReponseQCMDto> reponseQCM, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         var nextPage = qcmService.postNewResponse(userInfos.getId(), idQCM, idQuestion, reponseQCM);
         if(nextPage.index().isPresent()){
             coursIrrigator.irrigateQCM(model, userInfos, nextPage.qcm(), nextPage.qcm().getCours(), nextPage.index().get());
             return Routes.ADR_QCM;
         }
+        qcmService.archiveQCMPasse(nextPage.qcmPasse());
         coursIrrigator.irrigateQCMFinished(model, userInfos, nextPage.qcm(), nextPage.qcmPasse());
+        response.setHeader("HX-Push-Url", "/cours/qcm/resultat?id=" + nextPage.qcm().getId());
         return Routes.ADR_QCM_TERMINE;
     }
 

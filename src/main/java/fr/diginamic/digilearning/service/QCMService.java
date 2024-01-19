@@ -51,6 +51,11 @@ public class QCMService {
         return getQCM(qcm);
     }
 
+    public void archiveQCMPasse(QCMPasse qcmPasse) {
+        qcmPasse.setArchived(true);
+        qcmPasseRepository.save(qcmPasse);
+    }
+
 
     public record ResponseForNewResponse(Chapitre qcm, QCMPasse qcmPasse, Optional<Integer> index){}
 
@@ -71,6 +76,7 @@ public class QCMService {
                 .orElseGet(() -> qcmPasseRepository.save(QCMPasse
                         .builder()
                         .qcm(qcm)
+                        .archived(false)
                         .utilisateur(utilisateur)
                         .build()));
         QCMQuestion question = qcm.getQcmQuestions()

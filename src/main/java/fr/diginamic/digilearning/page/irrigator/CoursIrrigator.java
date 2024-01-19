@@ -14,6 +14,7 @@ import fr.diginamic.digilearning.repository.ModuleRepository;
 import fr.diginamic.digilearning.repository.SousModuleRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -182,6 +183,10 @@ public class CoursIrrigator {
 
     public void irrigateQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, int index) {
         model.addAttribute("slide", Routes.ADR_QCM);
+        irrigateBaseQCM(model, userInfos, qcm, cours, index);
+    }
+
+    public void irrigateBaseQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, int index) {
         model.addAttribute("qcm", qcm);
         model.addAttribute("question", qcm.getQcmQuestions().get(index));
         model.addAttribute("idUtilisateur", userInfos.getId());

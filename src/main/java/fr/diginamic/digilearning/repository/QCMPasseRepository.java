@@ -13,6 +13,7 @@ select qp.*
 from dl_qcm_passe qp
 where qp.utilisateur_id = ?1
 and qp.qcm_id = ?2
+and qp.archived = 0;
 """)
     Optional<QCMPasse> findByUtilisateurAndQCM(Long idUtilisateur, Long idQcm);
 }
