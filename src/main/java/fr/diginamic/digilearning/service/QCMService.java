@@ -3,19 +3,25 @@ package fr.diginamic.digilearning.service;
 import fr.diginamic.digilearning.dto.QCMChoixDto;
 import fr.diginamic.digilearning.dto.QCMDto;
 import fr.diginamic.digilearning.dto.QCMQuestionDto;
-import fr.diginamic.digilearning.entities.Chapitre;
-import fr.diginamic.digilearning.entities.QCMChoix;
+import fr.diginamic.digilearning.dto.ReponseQCMDto;
+import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
-import fr.diginamic.digilearning.repository.ChapitreRepository;
-import fr.diginamic.digilearning.security.AuthenticationInfos;
+import fr.diginamic.digilearning.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class QCMService {
 
     private final ChapitreRepository chapitreRepository;
+    private final QCMPasseRepository qcmPasseRepository;
+    private final UtilisateurRepository utilisateurRepository;
+    private final QCMChoixRepository qcmChoixRepository;
+    private final ResultatQuestionRepository resultatQuestionRepository;
 
     public QCMDto getQCM(Chapitre qcm){
         return QCMDto.builder()
@@ -45,6 +51,52 @@ public class QCMService {
         return getQCM(qcm);
     }
 
-    public void getCurrentQuestion(Chapitre qcm, AuthenticationInfos userInfos) {
+
+    public record ResponseForNewResponse(Chapitre qcm, QCMPasse qcmPasse, Optional<Integer> index){}
+
+    /**
+     * Sauvegarde une nouvelle réponse.
+     * Très peu optimisé d'un point du nombre de requête SQL mais
+     * TODO : OPTIMISATION SQL
+     * @param idUtilisateur
+     * @param idQCM
+     * @param idQuestion
+     * @param reponseQCM
+     */
+    public ResponseForNewResponse postNewResponse(Long idUtilisateur, Long idQCM, Long idQuestion, List<ReponseQCMDto> reponseQCM) {
+        Chapitre qcm = chapitreRepository.findByIdAndUtilisateurId(idQCM, idUtilisateur)
+                .orElseThrow(EntityNotFoundException::new);
+        Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur).orElseThrow(EntityNotFoundException::new);
+        QCMPasse qcmPasse = qcmPasseRepository.findByUtilisateurAndQCM(idUtilisateur, idQCM)
+                .orElseGet(() -> qcmPasseRepository.save(QCMPasse
+                        .builder()
+                        .qcm(qcm)
+                        .utilisateur(utilisateur)
+                        .build()));
+        QCMQuestion question = qcm.getQcmQuestions()
+                .stream()
+                .filter(question1 -> question1.getId().equals(idQuestion))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new);
+        ResultatQuestion resultatQuestion = ResultatQuestion.builder()
+                .question(question)
+                .qcmPasse(qcmPasse)
+                .choixValides(reponseQCM.stream()
+                        .filter(ReponseQCMDto::getValue)
+                        .map(reponseQCMDto -> qcmChoixRepository.findById(reponseQCMDto.getId())
+                                .orElseThrow(EntityNotFoundException::new))
+                        .toList()
+                )
+                .build();
+        resultatQuestionRepository.save(resultatQuestion);
+        int idCurrQ = qcm.getQcmQuestions().indexOf(question);
+        if(idCurrQ + 1 >= qcm.getQcmQuestions().size()){
+            return new ResponseForNewResponse(qcm, qcmPasse, Optional.empty());
+        }
+        return new ResponseForNewResponse(qcm, qcmPasse, Optional.of(idCurrQ + 1));
     }
+
+    //public QCMQuestion getCurrentQuestion(Chapitre qcm, AuthenticationInfos userInfos) {
+    //
+    //}
 }

@@ -1,5 +1,21 @@
-<section hx-history="false" id="chapitre-cours" th:data-id="${qcm.getId()}" class="flex flex-col h-full w-2/3">
-    <div>
-        <div></div>
-    </div>
+<section hx-history="false" id="chapitre-cours" th:data-id-question="${question.getId()}" th:data-id="${qcm.getId()}" class="flex bg-white rounded-lg flex-col h-full w-full">
+    <script th:insert="~{scripts/qcm.submit.js}"></script>
+    <form class="p-10 flex flex-col gap-14 h-full" onsubmit="submitResponse(event)">
+        <h1 class="text-center text-5xl font-poppins text-primary" th:text="${qcm.getLibelle()}"></h1>
+        <h2 class="text-4xl text-primary font-poppins" th:text="${question.getLibelle()}"></h2>
+        <div class="flex flex-col grow gap-7">
+            <th:block th:each="rep, iterStat : ${question.getChoix()}">
+                <div class="flex gap-5">
+                    <input class="rep" th:data-id="${rep.getId()}"  type="checkbox">
+                    <div class="text-xl text-primary" th:text="${rep.getLibelle()}"></div>
+                </div>
+            </th:block>
+        </div>
+        <div class="flex w-full justify-end">
+            <button 
+                type="submit"
+                class="bg-primary font-bold text-xl disabled:brightness-75 p-3 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+               >Répondre</button>
+        </div>
+    </form>
 </section>

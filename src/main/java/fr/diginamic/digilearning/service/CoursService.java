@@ -413,18 +413,18 @@ public class CoursService {
         if(!diagnostics.isEmpty()){
             return new ReponsePublicationQCM(chapitre, diagnostics);
         }
-        qcmChoixRepository.deleteAll(chapitre.getQcmQuestionsPublies()
+        qcmChoixRepository.deleteAll(chapitre.getQcmQuestionsPubliees()
                 .stream()
                 .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
                 .toList());
-        qcmQuestionRepository.deleteAll(chapitre.getQcmQuestionsPublies());
-        chapitre.setQcmQuestionsPublies(
+        qcmQuestionRepository.deleteAll(chapitre.getQcmQuestionsPubliees());
+        chapitre.setQcmQuestionsPubliees(
                 chapitre.getQcmQuestions()
                         .stream()
                         .map(QCMQuestion::clone)
                         .collect(Collectors.toCollection(ArrayList::new)));
-        qcmQuestionRepository.saveAll(chapitre.getQcmQuestionsPublies());
-        qcmChoixRepository.saveAll(chapitre.getQcmQuestionsPublies()
+        qcmQuestionRepository.saveAll(chapitre.getQcmQuestionsPubliees());
+        qcmChoixRepository.saveAll(chapitre.getQcmQuestionsPubliees()
                 .stream()
                 .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
                 .toList());

@@ -1,10 +1,7 @@
 package fr.diginamic.digilearning.page.irrigator;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.diginamic.digilearning.dto.CoursDto;
 import fr.diginamic.digilearning.dto.CreationCoursDto;
-import fr.diginamic.digilearning.dto.QCMDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -183,13 +180,18 @@ public class CoursIrrigator {
         model.addAttribute("duree", cours.getDuree());
     }
 
-    public void irrigateQCM(AuthenticationInfos userInfos, Chapitre qcm, Cours cours, FlagCours flagCours, Model model) {
-        qcmService.getCurrentQuestion(qcm, userInfos);
+    public void irrigateQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, int index) {
         model.addAttribute("slide", Routes.ADR_QCM);
         model.addAttribute("qcm", qcm);
+        model.addAttribute("question", qcm.getQcmQuestions().get(index));
         model.addAttribute("idUtilisateur", userInfos.getId());
         model.addAttribute("cours", cours);
-        model.addAttribute("flags", flagCours);
         model.addAttribute("idCours", cours.getId());
+    }
+
+    public void irrigateQCMFinished(Model model, AuthenticationInfos userInfos, Chapitre qcm, QCMPasse qcmPasse) {
+        model.addAttribute("resultat", qcmPasse);
+        model.addAttribute("qcm", qcm);
+        model.addAttribute("slide", Routes.ADR_QCM_TERMINE);
     }
 }

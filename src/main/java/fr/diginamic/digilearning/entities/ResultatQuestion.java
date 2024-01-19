@@ -13,22 +13,26 @@ import java.util.Map;
 @Getter
 @Setter
 @Builder
+@Table(name = "dl_resultat_question")
 public class ResultatQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToMany
-    @JoinTable(name = "resultat_choix",
+    @JoinTable(name = "dl_resultat_choix",
             joinColumns = @JoinColumn(name = "resultat_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "choix_id", referencedColumnName = "id")
     )
     private List<QCMChoix> choixValides;
     @ManyToOne
+    @JoinColumn(name = "question_id")
+    private QCMQuestion question;
+    @ManyToOne
     @JoinColumn(name = "qcmPasse_id")
     private QCMPasse qcmPasse;
 
     public record Resultat(Map<QCMChoix, Boolean> choixToValidite, boolean isQuestionBienRepondue){}
-    public Resultat getResultats(QCMQuestion question){
+    public Resultat getResultats(){
         List<QCMChoix> bonChoix = question.getBonChoix();
         Map<QCMChoix, Boolean> choixToValidite = new HashMap<>();
         boolean isQuestionBienRepondue = true;

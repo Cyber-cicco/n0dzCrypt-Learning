@@ -27,7 +27,6 @@ public class Routes {
     public static final String ADR_LISTE_REPONSES = "pages/cours/visionneuse/fragments/chapitre.reponses";
     public static final String ADR_LISTE_COURS = "pages/cours/liste/cours.liste";
     public static final String ADR_VISIONNEUSE_COURS = "pages/cours/visionneuse/cours.visionneuse";
-    
     public static final String ADR_BOOKMARK_ICON = "components/flag-icons/bookmark";
     public static final String ADR_FINISHED_ICON = "components/flag-icons/finished";
     public static final String ADR_UTILISATEUR_ERROR = "pages/errors/utilisateur.error";
@@ -61,6 +60,9 @@ public class Routes {
     public static final String ADR_SOMMAIRE_CHAPITRES = "pages/cours/admin/fragments/sommaire.chapitres";
     public static final String ADR_COURS_TITRE = "pages/cours/admin/fragments/titre.chapitre";
     public static final String ADR_QCM = "pages/cours/visionneuse/fragments/qcm/cours.qcm" ;
+    public static final String ADR_QCM_REFAIRE = "pages/cours/visionneuse/fragments/qcm/already-done";
+    public static final String ADR_QCM_EN_COURS = "pages/cours/visionneuse/fragments/qcm/en-cours";
+    public static final String ADR_QCM_TERMINE = "pages/cours/visionneuse/fragments/qcm/termine";
 
     private Routes(){}
 }
