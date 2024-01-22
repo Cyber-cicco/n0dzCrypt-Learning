@@ -1,6 +1,9 @@
 package fr.diginamic.digilearning.security.config;
 
+import org.apache.coyote.http2.Http2Protocol;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -74,6 +77,13 @@ public class WebSecurityConfig {
     @Bean
     public MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector){
         return new MvcRequestMatcher.Builder(introspector);
+    }
+
+    @Bean
+    public ConfigurableServletWebServerFactory tomcatCustomizer() {
+        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+        factory.addConnectorCustomizers(connector -> connector.addUpgradeProtocol(new Http2Protocol()));
+        return factory;
     }
 
 }
