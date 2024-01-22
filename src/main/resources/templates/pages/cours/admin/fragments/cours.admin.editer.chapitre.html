@@ -3,15 +3,15 @@
         <div class="bg-white w-full h-full rounded-lg shadow-md">
             <div class="flex flex-col h-full w-full">
                 <div class="flex w-full flex-wrap gap-3 items-center p-3">
-                    <th:block th:replace="~{/components/text-option :: textOption('bold', 'Rendre le texte gras')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: textOption('italic', 'Rendre le texte italique')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: textOption('strikethrough', 'Barrer le texte')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: textOption('list', 'Créer une liste')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: textOption('ordered-list', 'Créer une liste ordonnée')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: editorOption('undo', 'Revenir en arrière')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: editorOption('redo', 'Refaire')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: textOption('link', 'Insérer un lien')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: textOption('code-line', 'Insérer du code')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('bold', 'Rendre le texte gras')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('italic', 'Rendre le texte italique')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('strikethrough', 'Barrer le texte')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('list', 'Créer une liste')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('ordered-list', 'Créer une liste ordonnée')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: editorOption('undo', 'Revenir en arrière')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: editorOption('redo', 'Refaire')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('link', 'Insérer un lien')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('code-line', 'Insérer du code')}"></th:block>
                 </div> 
                 <div class="bg-greyDeep h-0.5 w-full"></div>
                 <div class="flex w-full flex-wrap gap-3 items-center p-3">
@@ -21,9 +21,9 @@
                         <option class="hover:cursor-pointer text-primary font-poppins text-3xl" value="h2">Titre</option>
                         <option class="hover:cursor-pointer text-primary font-poppins text-xl" value="h3">Sous titre</option>
                     </select>
-                    <th:block th:replace="~{/components/text-option :: textOption('table', 'Insérer un tableau')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: textOption('quote', 'Insérer une citation')}"></th:block>
-                    <th:block th:replace="~{/components/text-option :: textOption('code-block', 'Insérer un bloque de code')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('table', 'Insérer un tableau')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('quote', 'Insérer une citation')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('code-block', 'Insérer un bloque de code')}"></th:block>
                     <label 
                         data-tooltip-target="tooltip-image"
                         id="photo"
