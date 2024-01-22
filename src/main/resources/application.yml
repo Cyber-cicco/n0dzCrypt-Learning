@@ -22,7 +22,7 @@ spring:
         suffix: .html
     web:
         resources:
-            static-locations: file:src/main/resources/static/
+            static-locations: classpath:/static/
             cache:
                 period: 0
 jwt:
