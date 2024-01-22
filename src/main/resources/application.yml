@@ -15,10 +15,11 @@ spring:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     thymeleaf: # Thymeleaf
-        cache: false
+        cache: true
         mode: HTML
         encoding: UTF-8
-        prefix: file:src/main/resources/templates/
+        prefix: classpath:/templates/
+        suffix: .html
     web:
         resources:
             static-locations: file:src/main/resources/static/
