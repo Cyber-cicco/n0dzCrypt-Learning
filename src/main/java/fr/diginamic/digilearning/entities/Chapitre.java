@@ -40,7 +40,7 @@ public class Chapitre {
 	private List<QCMQuestion> qcmQuestions = new ArrayList<>();
 	@OneToMany(mappedBy = "qcmPublie")
 	@Builder.Default
-	private List<QCMQuestion> qcmQuestionsPublies = new ArrayList<>();
+	private List<QCMQuestion> qcmQuestionsPubliees = new ArrayList<>();
 	@OneToMany(mappedBy = "chapitre")
 	private List<Question> questions;
 	@ManyToOne

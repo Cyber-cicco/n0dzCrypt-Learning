@@ -1,7 +1,9 @@
 <th:block th:replace="~{components/entete.nav :: entete(${cours.getTitre()})}"></th:block>
 <div class="flex justify-center gap-2 p-5 h-screen overflow-y-scroll">
-    <th:block th:replace="~{${slide}}"></th:block>
-    <aside class="flex flex-col h-full bg-grey overflow-hidden shadow-dark w-1/5 bg-primary text-white shadow-md rounded-md">
+    <div id="router-cours" class="flex w-2/3 justify-center">
+        <th:block th:replace="~{${slide}}"></th:block>
+    </div>
+    <aside class="flex flex-col h-full overflow-hidden shadow-dark w-1/5 bg-primary text-white shadow-md rounded-md">
         <div class="p-5 font-poppins">Chapitres : </div>
         <div
                 class="p-2 w-full bg-lightPrimary hover:brightness-150 hover:cursor-pointer"
@@ -37,7 +39,7 @@
                     <img
                     class="min-w-[30px] min-h-[30px]"
                     th:id="'bookmarked-' + ${cours.getId()}"
-                    width="30"
+                    th:width="${width}"
                     src="/img/icons/bookmark.svg"
                     th:style="${flags.getBoomarked()} ? 'filter: invert(73%) sepia(83%) saturate(1960%) hue-rotate(3deg) brightness(99%) contrast(108%);' : _"
                     >
@@ -53,7 +55,7 @@
                     <img
                     class="min-w-[30px] min-h-[30px]"
                     th:id="'finished-' + ${cours.getId()}"
-                    width="30"
+                    th:width="${width}"
                     src="/img/icons/check.svg"
                     th:style="${flags.getFinished()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
                     >

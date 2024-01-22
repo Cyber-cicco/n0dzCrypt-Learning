@@ -6,18 +6,19 @@ import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.page.Routes;
-import fr.diginamic.digilearning.page.service.CoursService;
-import fr.diginamic.digilearning.page.service.types.CoursCreationDiagnostics;
+import fr.diginamic.digilearning.service.CoursService;
+import fr.diginamic.digilearning.service.QCMService;
+import fr.diginamic.digilearning.service.types.CoursCreationDiagnostics;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.repository.ModuleRepository;
 import fr.diginamic.digilearning.repository.SousModuleRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Irrigateur du modèle donnée par le controlleur
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class CoursIrrigator {
     private final ModuleRepository moduleRepository;
     private final CoursService coursService;
+    private final QCMService qcmService;
     private final CoursRepository coursRepository;
     private final SousModuleRepository sousModuleRepository;
 
@@ -100,15 +102,18 @@ public class CoursIrrigator {
      */
     public void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Model model) {
         Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
-        FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
         Chapitre chapitre = coursService.getChapitreIfExistsElseThrow(cours, idChapitre);
+        FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
+        irrigateChapitre(userInfos, chapitre, cours, flagCours, model);
+    }
+    public void irrigateChapitre(AuthenticationInfos userInfos, Chapitre chapitre , Cours cours, FlagCours flagCours, Model model) {
         model.addAttribute("idUtilisateur", userInfos.getId());
         model.addAttribute("contenu", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenu()));
         model.addAttribute("chapitre", chapitre);
         model.addAttribute("questions", chapitre.getQuestionsNonSuppr());
         model.addAttribute("cours", cours);
         model.addAttribute("flags", flagCours);
-        model.addAttribute("idCours", idCours);
+        model.addAttribute("idCours", cours.getId());
         model.addAttribute("slide", Routes.ADR_CHAPITRE);
     }
 
@@ -174,5 +179,24 @@ public class CoursIrrigator {
         model.addAttribute("difficulte", cours.getDifficulte());
         model.addAttribute("ordre", cours.getOrdre());
         model.addAttribute("duree", cours.getDuree());
+    }
+
+    public void irrigateQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, int index) {
+        model.addAttribute("slide", Routes.ADR_QCM);
+        irrigateBaseQCM(model, userInfos, qcm, cours, index);
+    }
+
+    public void irrigateBaseQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, int index) {
+        model.addAttribute("qcm", qcm);
+        model.addAttribute("question", qcm.getQcmQuestions().get(index));
+        model.addAttribute("idUtilisateur", userInfos.getId());
+        model.addAttribute("cours", cours);
+        model.addAttribute("idCours", cours.getId());
+    }
+
+    public void irrigateQCMFinished(Model model, AuthenticationInfos userInfos, Chapitre qcm, QCMPasse qcmPasse) {
+        model.addAttribute("resultat", qcmPasse);
+        model.addAttribute("qcm", qcm);
+        model.addAttribute("slide", Routes.ADR_QCM_TERMINE);
     }
 }

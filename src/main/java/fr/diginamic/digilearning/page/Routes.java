@@ -57,6 +57,12 @@ public class Routes {
     public static final String ADR_GENERIC_MESSAGE = "components/reponses/generic-message";
     public static final String ADR_QCM_ILLUSTRATION = "pages/cours/admin/fragments/qcm.illustration";
     public static final String ADR_QCM_CHOIX_ROW = "pages/cours/admin/fragments/qcm.choix.row";
+    public static final String ADR_SOMMAIRE_CHAPITRES = "pages/cours/admin/fragments/sommaire.chapitres";
+    public static final String ADR_COURS_TITRE = "pages/cours/admin/fragments/titre.chapitre";
+    public static final String ADR_QCM = "pages/cours/visionneuse/fragments/qcm/cours.qcm" ;
+    public static final String ADR_QCM_REFAIRE = "pages/cours/visionneuse/fragments/qcm/already-done";
+    public static final String ADR_QCM_EN_COURS = "pages/cours/visionneuse/fragments/qcm/en-cours";
+    public static final String ADR_QCM_TERMINE = "pages/cours/visionneuse/fragments/qcm/termine";
 
     private Routes(){}
 }

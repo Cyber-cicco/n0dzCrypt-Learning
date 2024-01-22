@@ -44,6 +44,8 @@
                     <form class="flex flex-col h-full w-full justify-between">
                         <div class="p-3 flex flex-col h-full">
                             <textarea 
+                                spellcheck="true"
+                                lang="fr"
                                 id="text-input" 
                                 name="contenu"
                                 hx-trigger="keyup changed delay:0.3s" 
@@ -99,7 +101,7 @@
         </div>
     </th:block>
     <script th:insert="scripts/flowbite.min.js"></script>
-    <script src="/js/cours.text-editor.js"></script>
-    <script src="/js/animation.modal.js"></script>
+    <script defer src="/js/cours.text-editor.js"></script>
+    <script defer src="/js/animation.modal.js"></script>
     <script>hljs.highlightAll();</script>
 </section>

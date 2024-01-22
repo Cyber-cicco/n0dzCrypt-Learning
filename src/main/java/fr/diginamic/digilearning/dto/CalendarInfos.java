@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.dto;
 
-import fr.diginamic.digilearning.page.service.enums.DateOption;
+import fr.diginamic.digilearning.service.enums.DateOption;
 
 /**
  * Structure représentant les informations nécessaires pour irriguer le calendrier

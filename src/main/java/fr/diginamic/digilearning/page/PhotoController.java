@@ -1,9 +1,8 @@
 package fr.diginamic.digilearning.page;
 
-import fr.diginamic.digilearning.page.service.PhotoService;
-import fr.diginamic.digilearning.page.service.types.Media;
+import fr.diginamic.digilearning.service.PhotoService;
+import fr.diginamic.digilearning.service.types.Media;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

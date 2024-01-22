@@ -2,24 +2,25 @@
 <!--/*@thymesVar id="chapitre" type="fr.diginamic.digilearning.entities.Chapitre"*/-->
 <!--/*@thymesvar id="question" type="fr.diginamic.digilearning.entities.question"*/-->
 <!--/*@thymesVar id="idUtilisateur" type="java.lang.Long"*/-->
-<section id="chapitre-cours" class="flex flex-col gap-5 bg-grey overflow-hidden shadow-dark h-full w-full lg:w-2/3 p-5 shadow-md rounded-md"
+<section id="chapitre-cours" class="flex flex-col gap-5 bg-grey overflow-hidden shadow-dark h-full w-full p-5 shadow-md rounded-md"
 >
     <header class="flex justify-center p-2 max-h-[150px] min-h-[150px] rounded-md text-white bg-primary items-center gap-3">
         <div class="flex flex-col w-1/6 text-center" th:if="${cours.getChapitrePrecedent(chapitre.getOrdre())}">
-            <div>Chapitre précédent :</div>
             <a
-                    class="underline hover:cursor-pointer"
-                    th:text="${cours.getChapitrePrecedent(chapitre.getOrdre()).getLibelle()}"
-                    th:hx-get="'/cours/chapitre/api?id='
-                            + ${cours.getChapitrePrecedent(chapitre.getOrdre()).getOrdre()}
-                            + '&cours=' + ${cours.getId()}"
-                    th:hx-push-url="'/cours/chapitre?id='
-                            + ${cours.getChapitrePrecedent(chapitre.getOrdre()).getOrdre()}
-                            + '&cours=' + ${cours.getId()}"
-                    hx-target="#chapitre-cours"
-                    hx-swap="outerHTML transition:true"
-                    hx-select="#chapitre-cours"
-            ></a>
+                class="underline hover:cursor-pointer"
+                th:hx-get="'/cours/chapitre/api?id='
+                        + ${cours.getChapitrePrecedent(chapitre.getOrdre()).getOrdre()}
+                        + '&cours=' + ${cours.getId()}"
+                th:href="'/cours/chapitre?id='
+                        + ${cours.getChapitrePrecedent(chapitre.getOrdre()).getOrdre()}
+                        + '&cours=' + ${cours.getId()}"
+                th:hx-push-url="'/cours/chapitre?id='
+                        + ${cours.getChapitrePrecedent(chapitre.getOrdre()).getOrdre()}
+                        + '&cours=' + ${cours.getId()}"
+                hx-target="#chapitre-cours"
+                hx-swap="outerHTML transition:true"
+                hx-select="#chapitre-cours"
+                >Chapitre précédent</a>
         </div>
         <div class="flex flex-col w-1/6 text-center" th:unless="${cours.getChapitrePrecedent(chapitre.getOrdre())}">
             <a
@@ -33,20 +34,21 @@
         </div>
         <div class="w-2/3 p-3 text-center text-5xl font-poppins" th:text="${chapitre.getLibelle()}"></div>
         <div class="flex flex-col w-1/6 text-center" th:if="${cours.getChapitreSuivant(chapitre.getOrdre())}">
-            <div>Chapitre suivant :</div>
             <a
-                    class="underline hover:cursor-pointer"
-                    th:text="${cours.getChapitreSuivant(chapitre.getOrdre()).getLibelle()}"
-                    th:hx-get="'/cours/chapitre/api?id='
-                            + ${cours.getChapitreSuivant(chapitre.getOrdre()).getOrdre()}
-                            + '&cours=' + ${cours.getId()}"
-                    th:hx-push-url="'/cours/chapitre?id='
-                            + ${cours.getChapitreSuivant(chapitre.getOrdre()).getOrdre()}
-                            + '&cours=' + ${cours.getId()}"
-                    hx-target="#chapitre-cours"
-                    hx-swap="outerHTML transition:true"
-                    hx-select="#chapitre-cours"
-            ></a>
+                class="underline hover:cursor-pointer"
+                th:hx-get="'/cours/chapitre/api?id='
+                        + ${cours.getChapitreSuivant(chapitre.getOrdre()).getOrdre()}
+                        + '&cours=' + ${cours.getId()}"
+                th:hx-push-url="'/cours/chapitre?id='
+                        + ${cours.getChapitreSuivant(chapitre.getOrdre()).getOrdre()}
+                        + '&cours=' + ${cours.getId()}"
+                th:href="'/cours/chapitre?id='
+                        + ${cours.getChapitreSuivant(chapitre.getOrdre()).getOrdre()}
+                        + '&cours=' + ${cours.getId()}"
+                hx-target="#chapitre-cours"
+                hx-swap="outerHTML transition:true"
+                hx-select="#chapitre-cours"
+                >Chapitre suivant</a>
         </div>
         <div class="flex flex-col w-1/6 text-center" th:unless="${cours.getChapitreSuivant(chapitre.getOrdre())}">
             <a
@@ -59,14 +61,14 @@
             >Sommaire</a>
         </div>
     </header>
-    <div class="flex flex-col overflow-hidden">
+    <div class="flex flex-col overflow-hidden h-full">
         <!--/*@thymesVar id="contenu" type="java.lang.String"*/-->
-        <div class="flex overflow-x-hidden w-full">
-            <div class="flex min-w-full flex-col w-full overflow-y-scroll">
-                <div id="cours-content">
-                    <article class="" id="markdown" th:utext="${contenu}">
+        <div class="flex overflow-x-hidden grow h-full w-full  pb-2">
+            <div class="flex min-w-full flex-col h-full grow w-full overflow-y-scroll">
+                <div class="flex flex-col h-full grow" id="cours-content">
+                    <article class="flex flex-col h-fit" id="markdown" th:utext="${contenu}">
                     </article>
-                    <div th:if="${chapitre.getLienVideo() != null}" class="flex h-[460px] justify-center pt-5"
+                    <div th:if="${chapitre.getLienVideo() != null}" class="flex h-[460px] justify-center p-5"
                          th:utext="${chapitre.getLienVideo()}"></div>
                 </div>
             </div>
@@ -81,7 +83,9 @@
         <section id="modal-bot" class="absolute bottom-0 bg-grey rounded-md p-1 w-full ">
         </section>
     </div>
-    <script src="/js/animation.modal.js"></script>
-    <script src="/js/animation.cours.js"></script>
-    <script>hljs.highlightAll();</script>
+    <script defer src="/js/animation.modal.js"></script>
+    <script defer src="/js/animation.cours.js"></script>
+    <script>
+        hljs.highlightAll()
+    </script>
 </section>

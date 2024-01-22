@@ -2,7 +2,7 @@ package fr.diginamic.digilearning.page.irrigator;
 
 import fr.diginamic.digilearning.dto.CoursDto;
 import fr.diginamic.digilearning.page.Routes;
-import fr.diginamic.digilearning.page.service.AgendaService;
+import fr.diginamic.digilearning.service.AgendaService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.DateUtil;
 import lombok.RequiredArgsConstructor;

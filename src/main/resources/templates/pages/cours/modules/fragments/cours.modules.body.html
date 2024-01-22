@@ -4,16 +4,16 @@
         class="flex w-full overflow-visible md:w-1/2 md:min-w-1/2 lg:min-w-1/3 lg:w-1/3 p-3"
         >
         <div
-            class="bg-grey hoverzoom hover:cursor-pointer overflow-hidden shadow-dark shadow-md rounded-md"
+            class="bg-grey hoverzoom hover:cursor-pointer grow overflow-hidden shadow-dark shadow-md rounded-md"
             th:hx-get="'/cours/module/api?id=' + ${m.getId()}"
             th:hx-push-url="'/cours/module?id=' + ${m.getId()}"
             hx-target="#cours-canvas"
             hx-swap="outerHTML transition:true"
             hx-preserve="#hamb"
             >
-            <div class="flex min-h-[400px] h-full min-w-full flex-col p-5 gap-2">
+            <div class="flex min-h-[400px] h-[500px] min-w-full flex-col p-5 gap-2">
                 <div class="text-center text-lg text-primary font-poppins" th:text="${m.getLibelle()}"></div>
-                <img class="" width="600" height="600" th:src="'/img/malediction/' + ${m.getPhoto()}">
+                <img class="" width="500" th:src="'/img/malediction/' + ${m.getPhoto()}">
                 <div class="grow"></div>
                 <th:block th:replace="~{components/progress-bar :: progress(${m.getPourcentageCompletion()})}"></th:block>
             </div>

@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.page.irrigator;
 
-import fr.diginamic.digilearning.page.service.CoursService;
+import fr.diginamic.digilearning.service.CoursService;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;

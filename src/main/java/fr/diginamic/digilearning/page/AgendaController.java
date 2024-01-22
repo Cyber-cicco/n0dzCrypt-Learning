@@ -1,10 +1,9 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.dto.CoursDto;
-import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.page.irrigator.AgendaIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
-import fr.diginamic.digilearning.page.service.AgendaService;
+import fr.diginamic.digilearning.service.AgendaService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;

@@ -12,10 +12,10 @@ import fr.diginamic.digilearning.exception.UnauthorizedException;
 import fr.diginamic.digilearning.page.irrigator.ChapitreIrrigator;
 import fr.diginamic.digilearning.page.irrigator.CoursIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
-import fr.diginamic.digilearning.page.service.ChapitreService;
-import fr.diginamic.digilearning.page.service.CoursService;
-import fr.diginamic.digilearning.page.service.PhotoService;
-import fr.diginamic.digilearning.page.service.types.CoursCreationResult;
+import fr.diginamic.digilearning.service.ChapitreService;
+import fr.diginamic.digilearning.service.CoursService;
+import fr.diginamic.digilearning.service.PhotoService;
+import fr.diginamic.digilearning.service.types.CoursCreationResult;
 import fr.diginamic.digilearning.repository.ChapitreRepository;
 import fr.diginamic.digilearning.repository.QCMQuestionRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
@@ -178,16 +178,21 @@ public class CoursAdminController {
     @PostMapping("/chapitre")
     public String creerChapitre(Model model, @RequestParam("id") Long idCours, @ModelAttribute ChapitreDto chapitreDto, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        Chapitre chapitre = coursService.createNewChapitre(userInfos, idCours, chapitreDto);
+        var chapitre = coursService.createNewChapitre(userInfos, idCours, chapitreDto);
+        if(chapitre.diagnostic().isPresent()){
+            model.addAttribute("error", chapitre.diagnostic().get());
+            response.setHeader("HX-Retarget", "#error");
+            return Routes.ADR_FORM_ERROR;
+        }
         switch (chapitreDto.getStatusChapitre()) {
             case COURS -> {
-                chapitreIrrigator.irrigateAdminChapitre(model, userInfos, chapitre);
-                response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.getId());
+                chapitreIrrigator.irrigateAdminChapitre(model, userInfos, chapitre.chapitre());
+                response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.chapitre().getId());
                 return Routes.ADR_ADMIN_CHAPITRE;
             }
             case QCM -> {
-                chapitreIrrigator.irrigateAdminQCM(model, chapitre);
-                response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.getId());
+                chapitreIrrigator.irrigateAdminQCM(model, chapitre.chapitre());
+                response.setHeader("HX-Push-Url", "/cours/admin/chapitre/editer?id=" + chapitre.chapitre().getId());
                 return Routes.ADR_ADMIN_QCM;
             }
             case EXERCICE -> {
@@ -230,7 +235,7 @@ public class CoursAdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         Chapitre chapitre = coursService.publierContenu(userInfos, idChapitre, contenuChapitreDto);
-        model.addAttribute("qcm", "La version de votre cours est publiée");
+        model.addAttribute("content", "La version de votre cours est publiée");
         return Routes.ADR_MESSAGE;
     }
 
@@ -268,6 +273,20 @@ public class CoursAdminController {
         QCMQuestion question = coursService.creerNouveauChoix(userInfos.getId(), idQuestion);
         model.addAttribute("question", question);
         return Routes.ADR_QCM_CHOIX_LISTE;
+    }
+
+    @PatchMapping("/titre")
+    public String changerTitre(Model model, @RequestParam("id") Long idCours, HttpServletResponse response, @ModelAttribute MessageDto messageDto) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        var titre = coursService.changerTitre(idCours, messageDto, userInfos.getId());
+        if(titre.diagnostics().isPresent()){
+            model.addAttribute("error", titre.diagnostics().get());
+            response.setHeader("HX-Retarget", "#error");
+            return Routes.ADR_FORM_ERROR;
+        }
+        model.addAttribute("cours", titre.cours());
+        return Routes.ADR_COURS_TITRE;
     }
 
     @PatchMapping("/qcm/choix")
@@ -341,6 +360,15 @@ public class CoursAdminController {
         return Routes.ADR_ADMIN_QCM_QUESTION_LISTE;
     }
 
+    @PatchMapping("/chapitre/ordre")
+    public String changerOrdreChapitre(Model model, @RequestParam("id") Long idChapitre, @RequestParam("ordre") int ordre, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        Cours cours = coursService.changeOrdreChapitre(idChapitre, ordre, userInfos);
+        model.addAttribute("cours", cours);
+        return Routes.ADR_SOMMAIRE_CHAPITRES;
+    }
+
     @PatchMapping("/qcm/choix/valid")
     public String changerStatusValidationChoix(Model model, @RequestParam("id") Long idChoix, HttpServletResponse reponse) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -364,9 +392,9 @@ public class CoursAdminController {
     public String deleteChapitre(Model model, @RequestParam("id") Long idChapitre, HttpServletResponse reponse){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
-        Long idCours = coursService.supprimerChapitre(userInfos, idChapitre);
-        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
-        reponse.setHeader("HX-Push-Url", "/cours/admin/chapitre?id=" + idCours);
+        Cours cours = coursService.supprimerChapitre(userInfos, idChapitre);
+        coursIrrigator.irrigateEditionCours(model, cours, userInfos);
+        reponse.setHeader("HX-Push-Url", "/cours/admin/editer?id=" + cours.getId());
         return Routes.ADR_COURS_ADMIN_EDITER;
     }
 

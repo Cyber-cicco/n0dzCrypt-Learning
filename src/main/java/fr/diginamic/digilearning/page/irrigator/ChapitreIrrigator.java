@@ -4,15 +4,14 @@ import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
-import fr.diginamic.digilearning.page.service.CoursService;
-import fr.diginamic.digilearning.page.validators.QuestionValidator;
-import fr.diginamic.digilearning.page.validators.ReponseValidator;
+import fr.diginamic.digilearning.service.CoursService;
+import fr.diginamic.digilearning.validators.QuestionValidator;
+import fr.diginamic.digilearning.validators.ReponseValidator;
 import fr.diginamic.digilearning.repository.ChapitreRepository;
 import fr.diginamic.digilearning.repository.QuestionRepository;
 import fr.diginamic.digilearning.repository.ReponseRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
