@@ -17,8 +17,8 @@ public class Routes {
     public static final String ADR_AGENDA_COURSAPREVOIR = "pages/agenda/fragments/agenda.cours-a-prevoir";
     public static final String ADR_COURS_QUESTION_RATING = "pages/cours/visionneuse/fragments/cours.question.rating";
     public static final String ADR_COURS_REPONSE_RATING = "pages/cours/visionneuse/fragments/cours.reponse.rating";
-    public static final String ADR_MODAL_COURS_REPONSE = "/components/modal/modal.cours.reponse";
-    public static final String ADR_MODAL_COURS_QUESTION = "/components/modal/modal.cours.question";
+    public static final String ADR_MODAL_COURS_REPONSE = "components/modal/modal.cours.reponse";
+    public static final String ADR_MODAL_COURS_QUESTION = "components/modal/modal.cours.question";
     public static final String ADR_CHAPITRE = "pages/cours/visionneuse/fragments/cours.chapitre";
     public static final String ADR_COURS_VISIONNEUSE = "pages/cours/visionneuse/cours.visionneuse";
     public static final String ADR_SOUS_MODULE = "pages/cours/sous-modules/cours.sous-modules";
