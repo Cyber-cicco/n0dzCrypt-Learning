@@ -39,7 +39,7 @@
                     <img
                     class="min-w-[30px] min-h-[30px]"
                     th:id="'bookmarked-' + ${cours.getId()}"
-                    width="30"
+                    th:width="${width}"
                     src="/img/icons/bookmark.svg"
                     th:style="${flags.getBoomarked()} ? 'filter: invert(73%) sepia(83%) saturate(1960%) hue-rotate(3deg) brightness(99%) contrast(108%);' : _"
                     >
@@ -55,7 +55,7 @@
                     <img
                     class="min-w-[30px] min-h-[30px]"
                     th:id="'finished-' + ${cours.getId()}"
-                    width="30"
+                    th:width="${width}"
                     src="/img/icons/check.svg"
                     th:style="${flags.getFinished()} ? 'filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);' : _"
                     >

@@ -22,22 +22,22 @@ public class NavBarService {
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
                                     NavLink.builder()
-                                            .iconSource("home.svg")
+                                            .iconSource("svg/icons/home")
                                             .url("home")
                                             .libelle("Accueil")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("school.svg")
+                                            .iconSource("svg/icons/school")
                                             .url("cours/admin")
                                             .libelle("Ressources")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("conversation.svg")
+                                            .iconSource("svg/icons/conversation")
                                             .url("conversation/admin")
                                             .libelle("Mes messages")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("forum.svg")
+                                            .iconSource("svg/icons/forum")
                                             .url("forum")
                                             .libelle("Forum")
                                             .build(),
@@ -52,27 +52,27 @@ public class NavBarService {
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
                                     NavLink.builder()
-                                            .iconSource("home.svg")
+                                            .iconSource("svg/icons/home")
                                             .url("home")
                                             .libelle("Accueil")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("school.svg")
+                                            .iconSource("svg/icons/school")
                                             .url("cours")
                                             .libelle("Mes cours")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("calendar.svg")
+                                            .iconSource("svg/icons/calendar")
                                             .url("agenda")
                                             .libelle("Mon agenda")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("conversation.svg")
+                                            .iconSource("svg/icons/conversation")
                                             .url("conversation/stagiaire")
                                             .libelle("Mon suivi")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("forum.svg")
+                                            .iconSource("svg/icons/forum")
                                             .url("forum")
                                             .libelle("Forum")
                                             .build(),
@@ -81,7 +81,7 @@ public class NavBarService {
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
                                     NavLink.builder()
-                                            .iconSource("profil.svg")
+                                            .iconSource("svg/icons/profil")
                                             .url("profil")
                                             .libelle("Profil")
                                             .build(),
@@ -93,17 +93,17 @@ public class NavBarService {
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
                                     NavLink.builder()
-                                            .iconSource("home.svg")
+                                            .iconSource("svg/icons/home")
                                             .url("home")
                                             .libelle("Accueil")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("school.svg")
+                                            .iconSource("svg/icons/school")
                                             .url("cours")
                                             .libelle("Cours disponibles")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("forum.svg")
+                                            .iconSource("svg/icons/forum")
                                             .url("forum")
                                             .libelle("Consulter le forum")
                                             .build(),

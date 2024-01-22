@@ -110,7 +110,7 @@ public class CoursController {
             }
             case QCM -> {
                 handleQCM(model, userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours());
-                return Routes.ADR_QCM;
+                return model.getAttribute("slide").toString();
             }
             case EXERCICE -> {
                 throw new RuntimeException("Partie non implémentée");
@@ -122,14 +122,12 @@ public class CoursController {
     }
 
     private void handleQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, FlagCours flagCours){
-        System.out.println("id utilisateur : " + userInfos.getId());
-        System.out.println("qcm id : " + qcm.getId());
-        Optional<QCMPasse> qcmPasseOpt = qcmPasseRepository.findByUtilisateurAndQCM(userInfos.getId(), qcm.getId());
+        Optional<QCMPasse> qcmPasseOpt = qcmPasseRepository.findByUtilisateurAndQCMWithArchived(userInfos.getId(), qcm.getId()).stream().findFirst();
         if(qcmPasseOpt.isPresent()){
             QCMPasse qcmPasse = qcmPasseOpt.get();
-            System.out.println("here");
             coursIrrigator.irrigateBaseQCM(model, userInfos, qcm, cours, 0);
             if(qcmPasse.isQCMFinished()) {
+                coursIrrigator.irrigateQCMFinished(model, userInfos, qcm, qcmPasse);
                 model.addAttribute("slide", Routes.ADR_QCM_REFAIRE);
                 return;
             }

@@ -13,7 +13,6 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
     <meta name="htmx-config" content='{"historyCacheSize":10}'>
-    <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/styles/output.css}">
     <link rel="stylesheet" th:href="@{/styles/animations.css}">
     <link rel="stylesheet" th:href="@{/styles/modal.css}">
@@ -21,10 +20,10 @@
     <link rel="stylesheet" th:href="@{/styles/dragula.css}">
     <link rel="stylesheet" th:href="@{/styles/cours.css}">
     <link rel="stylesheet" th:href="@{/styles/addons.css}">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="/js/dragula.js"></script>
+    <script th:insert="~{scripts/htmx.min.js}"></script>
+    <script th:insert="~{scripts/dragula.js}"></script>
     <script src="/js/highlight.js"></script>
-    <script th:insert="scripts/flowbite.min.js"></script>
+    <script th:insert="~{scripts/flowbite.min.js}"></script>
     <title>Digi-Learning</title>
 </head>
 <body class="flex flex-col xl:flex-row w-full h-full overflow-hidden">

@@ -16,9 +16,9 @@
         <div class="flex gap-2 w-full mb-5 items-center">
             <textarea id="message" name="message"
                 onkeydown="submitOnEnter(event)"
-                class="flex flex-grow py-2 border-2 resize-none border-primary focus:border-accent px-6 h-12 rounded-full"></textarea>
+                class="flex min-w-0 flex-grow py-2 border-2 resize-none border-primary focus:border-accent px-6 h-12 rounded-full"></textarea>
             <button type="submit">
-                <img width="50" src="/img/icons/send-message.svg">
+                <img class="w-[50px]" th:width="50" src="/img/icons/send-message.svg">
             </button>
         </div>
     </form>

@@ -8,7 +8,7 @@
         hx-target="#insert"
         hx-boost="true"
     ><div class="rounded-full overflow-hidden">
-        <img class="hover:bg-accent text-white p-2 bg-white" th:src="${'/img/icons/' + icon}" width="50">
+        <div class="hover:bg-accent text-white p-2 bg-white" th:insert="${icon} :: svg('30', '30')"></div>
     </div>
     <div class="text-sm text-center" th:text="${libelle}"></div>
 </a>
