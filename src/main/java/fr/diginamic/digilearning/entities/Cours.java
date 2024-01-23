@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.entities;
 
+import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -48,16 +49,37 @@ public class Cours implements Comparable<Cours> {
     @Builder.Default
     private List<FlagCours> flagCours = new ArrayList<>();
     public List<Chapitre> getChapitres() {
-        return chapitres.stream().sorted(Comparator.comparing(Chapitre::getOrdre)).toList();
+        return chapitres.stream()
+                .filter(chapitre -> !chapitre.getStatusPublication().equals(StatusPublication.NON_PUBLIE))
+                .sorted(Comparator.comparing(Chapitre::getOrdre))
+                .toList();
     }
 
     public Chapitre getChapitrePrecedent(Integer ordre) {
         Optional<Chapitre> chapitre = chapitres.stream().filter(c -> c.getOrdre().equals(ordre - 1)).findFirst();
+        while (chapitre.isPresent() && chapitre.get().getStatusPublication().equals(StatusPublication.NON_PUBLIE)){
+            Optional<Chapitre> finalChapitre = chapitre;
+            chapitre = chapitres.stream()
+                    .filter(c -> c.getOrdre().equals(finalChapitre.get().getOrdre() - 1))
+                    .findFirst();
+        }
         return chapitre.orElse(null);
     }
     public Chapitre getChapitreSuivant(Integer ordre) {
         Optional<Chapitre> chapitre = chapitres.stream().filter(c -> c.getOrdre().equals(ordre + 1)).findFirst();
+        while (chapitre.isPresent() && chapitre.get().getStatusPublication().equals(StatusPublication.NON_PUBLIE)){
+            Optional<Chapitre> finalChapitre = chapitre;
+            chapitre = chapitres.stream()
+                    .filter(c -> c.getOrdre().equals(finalChapitre.get().getOrdre() + 1))
+                    .findFirst();
+        }
         return chapitre.orElse(null);
+    }
+
+    public List<Chapitre> getAllChapitres(){
+        return chapitres.stream()
+                .sorted(Comparator.comparing(Chapitre::getOrdre))
+                .toList();
     }
 
     @Override
