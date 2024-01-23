@@ -9,7 +9,9 @@ import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +59,28 @@ public class QCMService {
     }
 
 
+    public record RepriseQCMInfos(Cours cours, Chapitre chapitre, int index){}
+
+    @Transactional
+    public RepriseQCMInfos recommencerQCM(Long idUtilisateur, Long idChapitre) {
+        QCMPasse qcmPasse = qcmPasseRepository.findByUtilisateurAndQCM(idUtilisateur, idChapitre)
+                .orElseThrow(EntityNotFoundException::new);
+        Chapitre chapitre = qcmPasse.getQcm();
+        qcmPasse.setArchived(true);
+        qcmPasseRepository.save(qcmPasse);
+        return new RepriseQCMInfos(chapitre.getCours(), chapitre, 0);
+    }
+
+    public RepriseQCMInfos reprendreQCM(Long idUtilisateur, Long idChapitre) {
+        QCMPasse qcmPasse = qcmPasseRepository.findByUtilisateurAndQCM(idUtilisateur, idChapitre)
+                .orElseThrow(EntityNotFoundException::new);
+        Chapitre chapitre = qcmPasse.getQcm();
+        Cours cours = chapitre.getCours();
+        int index = qcmPasse.getIndex();
+        return new RepriseQCMInfos(cours, chapitre, index);
+    }
+
+
     public record ResponseForNewResponse(Chapitre qcm, QCMPasse qcmPasse, Optional<Integer> index){}
 
     /**
@@ -76,6 +100,7 @@ public class QCMService {
                 .orElseGet(() -> qcmPasseRepository.save(QCMPasse
                         .builder()
                         .qcm(qcm)
+                        .datePassage(LocalDateTime.now())
                         .archived(false)
                         .utilisateur(utilisateur)
                         .build()));

@@ -199,9 +199,10 @@ public class CoursService {
                         .build());
                 QCMQuestion question = qcmQuestionRepository.save(QCMQuestion.builder()
                                 .libelle("Nouvelle question")
+                                .ordre(1)
                                 .qcm(chapitre)
                                 .build());
-                chapitre.getQcmQuestions().add(question);
+                chapitre.setQcmQuestions(List.of(question));
                 return new ReponseCreationChapitre(chapitre, diagnostic);
             }
             case COURS -> {

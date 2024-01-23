@@ -1,5 +1,33 @@
 <section hx-history="false" id="chapitre-cours" class="flex bg-white rounded-lg flex-col h-full w-full">
-    <div class="">
-        Vous avez laissé le qcm en cours de route. Souhaitez-vous le reprendre ou le recommencer depuis le début ?
+    <div class="p-10 flex flex-col gap-14 h-full">
+        <h1 class="text-primary font-poppins text-5xl">QCM en cours</h1>
+        <h2 class="text-xl text-primary">Souhaitez-vous le reprendre ou le recommencer depuis le début ?</h2>
+        <div class="flex gap-2">
+            <button 
+                class="bg-lightPrimary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                th:hx-get="'/cours/qcm/continue?id=' + ${qcm.getId()}"
+                hx-target="#chapitre-cours"
+                hx-swap="outerHTML"
+                >Reprendre</button>
+            <button onclick="openModalBot()" class="bg-error p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Recommencer</button>
+        </div>
     </div>
+    <th:block th:replace="~{/components/modal/modal.bottom :: modalBg( ~{::#modal-content})}">
+        <div class="text-xl text-error w-full flex flex-col items-center gap-5 p-3" id="modal-content">
+            <div>Êtes-vous sur de vouloir reprendre à zéro ? (votre tentative précédente restera sauvegardée)</div>
+            <div class="flex gap-2">
+                <button 
+                    class="bg-accent p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                    th:hx-get="'/cours/qcm/recommencer?id=' + ${qcm.getId()}"
+                    hx-target="#chapitre-cours"
+                    hx-swap="outerHTML"
+                    >Oui</button>
+                <button 
+                    class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+                    onclick="closeModalBot()"
+                    >Non</button>
+            </div>
+        </div>
+    </th:block>
+    <script th:insert="scripts/animation.modal.js"></script>
 </section>

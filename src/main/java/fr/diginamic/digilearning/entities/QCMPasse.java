@@ -3,6 +3,7 @@ package fr.diginamic.digilearning.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class QCMPasse {
     @ManyToOne
     @JoinColumn(name = "qcm_id")
     private Chapitre qcm;
-
+    private LocalDateTime datePassage;
     @OneToMany(mappedBy = "qcmPasse")
     @Builder.Default
     private List<ResultatQuestion> resultatsQuestions = new ArrayList<>();
@@ -40,5 +41,9 @@ public class QCMPasse {
                 .count();
         int note = (int) Math.ceil(((double) questionsBienRepondues / resultatsQuestions.size())*20);
         return note + "/20";
+    }
+
+    public int getIndex() {
+        return resultatsQuestions.size();
     }
 }

@@ -73,4 +73,5 @@ public class Chapitre {
 		}
 		return libelle + " (" + status  + ")";
 	}
+
 }
