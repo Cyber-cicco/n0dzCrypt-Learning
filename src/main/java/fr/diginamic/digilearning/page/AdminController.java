@@ -116,4 +116,20 @@ public class AdminController {
         adminIrrigator.irrigateCoursSessionModal(model, userInfos, idSession);
         return Routes.ADR_ADMIN_SESSION_COURS_MODAL;
     }
+
+    @GetMapping("/module")
+    public String getSousModules(Model model, @RequestParam("id") Long idModule, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        adminIrrigator.irrigateSousModulesModal(model, userInfos, idModule);
+        return Routes.ADR_ADMIN_MODULE;
+    }
+
+    @GetMapping("/smodule")
+    public String getCours(Model model, @RequestParam("id") Long idSModule, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        adminIrrigator.irrigateCoursModal(model, userInfos, idSModule);
+        return Routes.ADR_ADMIN_COURS_LISTE;
+    }
 }

@@ -1,0 +1,35 @@
+<script type="module" th:inline="javascript">
+    /*<![CDATA[*/
+    const id  = /*[[${smodule.getId()}]]*/ 0;
+    /*]]>*/
+    const cours = document.querySelector("#cours-" + id);
+    const smod = document.querySelector("#smodule-" + id)
+    smod.addEventListener("click", () => {
+        if(cours.classList.contains("hidden")) {
+            cours.classList.remove("hidden");
+            return;
+        }
+        cours.classList.add("hidden");
+    })
+</script>
+<div 
+    th:id="'smodule-' + ${smodule.getId()}"
+    class="flex w-full gap-2 hover:cursor-pointer"
+    >
+    <th:block th:replace="svg/icons/module :: svg('20', '20')"></th:block>
+    <div th:text="${smodule.getTitre()}"></div>
+</div>
+<div th:id="'cours-' + ${smodule.getId()}" class="flex py-2 gap-2 flex-col pl-5">
+    <th:block th:each="cour, iterStat : ${smodule.getCours()}">
+        <div 
+            class="flex w-full gap-2"
+            >
+            <th:block th:replace="svg/icons/file :: svg('20', '20')"></th:block>
+            <div class="w-3/5" th:text="${cour.getTitre()}"></div>
+            <form>
+                <input class="w-full" type="datetime-local">
+            </form>
+            
+        </div>
+    </th:block>
+</div>

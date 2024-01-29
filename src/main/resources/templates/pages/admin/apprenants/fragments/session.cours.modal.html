@@ -11,10 +11,17 @@
     </datalist>
     <div class="flex flex-col h-4/5 w-full p-2 border-2 border-black rounded-md overflow-y-scroll">
         <th:block th:each="module, iterStat : ${modules}">
-            <div class="flex w-full gap-2">
+            <div 
+                th:id="'module-' + ${module.getId()}"
+                class="flex w-full gap-2 hover:cursor-pointer"
+                th:hx-get="'/admin/module?id=' + ${module.getId()}"
+                th:hx-target="'#module-' + ${module.getId()}"
+                hx-swap="outerHTML"
+                >
                 <th:block th:replace="svg/icons/module :: svg('20', '20')"></th:block>
                 <div th:text="${module.getLibelle()}"></div>
             </div>
+            <div class="flex flex-col pl-5" ></div>
         </th:block>
     </div>
 </div>

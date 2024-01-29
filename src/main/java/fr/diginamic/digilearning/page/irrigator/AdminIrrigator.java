@@ -1,14 +1,9 @@
 package fr.diginamic.digilearning.page.irrigator;
 
-import fr.diginamic.digilearning.entities.Cours;
+import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.Module;
-import fr.diginamic.digilearning.entities.Session;
-import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
-import fr.diginamic.digilearning.repository.CoursRepository;
-import fr.diginamic.digilearning.repository.ModuleRepository;
-import fr.diginamic.digilearning.repository.SessionRepository;
-import fr.diginamic.digilearning.repository.UtilisateurRepository;
+import fr.diginamic.digilearning.repository.*;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +20,7 @@ public class AdminIrrigator {
     private final SessionRepository sessionRepository;
     private final ModuleRepository moduleRepository;
     private final CoursRepository coursRepository;
+    private final SousModuleRepository sousModuleRepository;
 
     public void irrigateAdminPanelApprenants(Model model, AuthenticationInfos userInfos, List<Session> sessions, String adminInsert){
         model.addAttribute("_sessions", sessions);
@@ -48,5 +44,16 @@ public class AdminIrrigator {
         List<Cours> cours = coursRepository.getCoursBySession(idSession);
         model.addAttribute("modules", modules);
         model.addAttribute("cours", cours);
+    }
+
+    public void irrigateSousModulesModal(Model model, AuthenticationInfos userInfos, Long idModule) {
+        Module module = moduleRepository.findById(idModule).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("smodules", module.getSousModules());
+        model.addAttribute("module", module);
+    }
+
+    public void irrigateCoursModal(Model model, AuthenticationInfos userInfos, Long idSModule) {
+        SousModule sousModule = sousModuleRepository.findById(idSModule).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("smodule", sousModule);
     }
 }

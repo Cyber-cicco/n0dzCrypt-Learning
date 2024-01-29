@@ -1,0 +1,35 @@
+<script type="module" th:inline="javascript">
+    /*<![CDATA[*/
+    const id  = /*[[${module.getId()}]]*/ 'User Name';
+    /*]]>*/
+    const sousModules = document.querySelector("#smodules-" + id);
+    const mod = document.querySelector("#module-" + id)
+    mod.addEventListener("click", () => {
+        if(sousModules.classList.contains("hidden")) {
+            sousModules.classList.remove("hidden");
+            return;
+        }
+        sousModules.classList.add("hidden");
+    })
+</script>
+<div 
+    th:id="'module-' + ${module.getId()}"
+    class="flex w-full gap-2 hover:cursor-pointer"
+    >
+    <th:block th:replace="svg/icons/module :: svg('20', '20')"></th:block>
+    <div th:text="${module.getLibelle()}"></div>
+</div>
+<div th:id="'smodules-' + ${module.getId()}" class="flex flex-col pl-5">
+    <th:block th:each="smodule, iterStat : ${smodules}">
+        <div 
+            th:id="'smodule-' + ${smodule.getId()}"
+            class="flex w-full gap-2 hover:cursor-pointer"
+            th:hx-get="'/admin/smodule?id=' + ${smodule.getId()}"
+            th:hx-target="'#smodule-' + ${smodule.getId()}"
+            hx-swap="outerHTML"
+            >
+            <th:block th:replace="svg/icons/module :: svg('20', '20')"></th:block>
+            <div th:text="${smodule.getTitre()}"></div>
+        </div>
+    </th:block>
+</div>

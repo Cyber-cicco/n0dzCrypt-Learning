@@ -4,8 +4,6 @@ import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -48,6 +46,9 @@ public class Cours implements Comparable<Cours> {
     @OneToMany(mappedBy = "cours")
     @Builder.Default
     private List<FlagCours> flagCours = new ArrayList<>();
+    @OneToMany(mappedBy = "cours")
+    @Builder.Default
+    private List<CoursSession> coursSessions = new ArrayList<>();
     public List<Chapitre> getChapitres() {
         return chapitres.stream()
                 .filter(chapitre -> !chapitre.getStatusPublication().equals(StatusPublication.NON_PUBLIE))
