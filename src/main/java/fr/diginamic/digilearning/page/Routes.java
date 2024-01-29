@@ -63,6 +63,10 @@ public class Routes {
     public static final String ADR_QCM_REFAIRE = "pages/cours/visionneuse/fragments/qcm/already-done";
     public static final String ADR_QCM_EN_COURS = "pages/cours/visionneuse/fragments/qcm/en-cours";
     public static final String ADR_QCM_TERMINE = "pages/cours/visionneuse/fragments/qcm/termine";
+    public static final String ADR_ADMIN_APPRENANTS = "pages/admin/apprenants/base";
+    public static final String ADR_ADMIN_PRESENTATION = "pages/admin/fragments/presentation";
+    public static final String ADR_ADMIN_SESSION = "pages/admin/apprenants/fragments/session";
+    public static final String ADR_ADMIN_UTILISATEUR = "pages/admin/apprenants/fragments/utilisateur";
 
     private Routes(){}
 }

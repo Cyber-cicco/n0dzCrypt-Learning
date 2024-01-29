@@ -1,0 +1,68 @@
+<div class="flex -center flex-col w-full h-full">
+    <nav class="flex justify-around h-[5%] w-full bg-white text-primary text-lg">
+        <ul class="flex justify-around w-full">
+            <li class="flex bg-grey p-2 hover:bg-greyDeep w-full h-full hover:cursor-pointer justify-center">
+                <a 
+                    th:href="'/admin/apprenants?date=' + ${currDate}"
+                    th:hx-get="'/admin/apprenants/api?date=' + ${currDate}"
+                    th:hx-push-url="'/admin/apprenants?date=' + ${currDate}"
+                    hx-target="#insert"
+                    >Gestion des apprenants</a>
+            </li>
+            <li class="flex w-full p-2 hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
+                <a 
+                    href="/admin/modules"
+                    hx-get="/admin/modules/api"
+                    hx-push-url="/admin/modules"
+                    hx-target="#insert"
+                    >Gestion des modules</a>
+            </li>
+            <li class="flex w-full p-2 hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
+                <a 
+                    href="/admin/cours-admin"
+                    >Gestion des cours</a>
+            </li>
+        </ul>
+    </nav>
+    <section class="flex gap-2 p-2 rounded-md h-[95%] w-full">
+        <div id="side-bar" class="flex h-full overflow-y-scroll flex-col gap-2 w-1/5 rounded-lg bg-primary text-white">
+            <h1 class="font-poppins font-bold text-lg text-center p-2">Sessions</h1>
+            <ul class="flew flex-col ">
+                <div data-rotato-container th:each="_session, iterStat : ${_sessions}">
+                    <li 
+                        class="flex p-2 justify-between w-full items-center shadow-md hover:cursor-pointer"
+                        >
+                        <div 
+                            class="w-3/4 p-2"
+                            th:text="${_session.getNom()}"
+                            th:hx-get="'/admin/session?id=' + ${_session.getId()}"
+                            hx-target="#admin-card"
+                            ></div>
+                        <img
+                        class="hover:cursor-pointer"
+                        width="24"
+                        data-rotatable
+                        tabindex="1"
+                        src="/img/icons/simple-arrow.svg"
+                        >
+                    </li>
+                    <ul class="wrapper">
+                        <div class="sub-menu">
+                            <li class="bg-lightPrimary hover:cursor-pointer p-2 hover:brightness-150"
+                                th:each="stagiaire, iterStat : ${_session.getStagiaires()}"
+                                th:text="${stagiaire.getFullName()}"
+                                th:hx-get="'/admin/utilisateur?id=' + ${stagiaire.getId()}"
+                                hx-target="#forum-canvas"
+                                hx-swap="outerHTML transition:true"
+                                ></li>
+                        </div>
+                    </ul>
+                </th:block>
+            </ul>
+        </div>
+        <div class="flex flex-col bg-white h-full w-4/5 rounded-md" id="admin-card">
+            <th:block th:replace="~{${adminInsert}}"></th:block>
+        </div>
+    </section>
+</div>
+<script defer src="/js/animations.forum.js"></script>
