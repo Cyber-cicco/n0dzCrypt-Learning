@@ -108,4 +108,12 @@ public class AdminController {
         adminIrrigator.irrigateSession(model, userInfos, id);
         return Routes.ADR_ADMIN_SESSION;
     }
+
+    @GetMapping("/session/cours")
+    public String getSessionCoursModal(Model model, @RequestParam("id") Long idSession, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        adminIrrigator.irrigateCoursSessionModal(model, userInfos, idSession);
+        return Routes.ADR_ADMIN_SESSION_COURS_MODAL;
+    }
 }

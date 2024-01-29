@@ -67,6 +67,7 @@ public class Routes {
     public static final String ADR_ADMIN_PRESENTATION = "pages/admin/fragments/presentation";
     public static final String ADR_ADMIN_SESSION = "pages/admin/apprenants/fragments/session";
     public static final String ADR_ADMIN_UTILISATEUR = "pages/admin/apprenants/fragments/utilisateur";
+    public static final String ADR_ADMIN_SESSION_COURS_MODAL = "pages/admin/apprenants/fragments/session.cours.modal";
 
     private Routes(){}
 }

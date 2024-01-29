@@ -36,6 +36,7 @@
                             class="w-3/4 p-2"
                             th:text="${_session.getNom()}"
                             th:hx-get="'/admin/session?id=' + ${_session.getId()}"
+                            th:hx-push-url="'/admin/apprenants?date=' + ${currDate} + '&idSession=' + ${_session.getId()} "
                             hx-target="#admin-card"
                             ></div>
                         <img

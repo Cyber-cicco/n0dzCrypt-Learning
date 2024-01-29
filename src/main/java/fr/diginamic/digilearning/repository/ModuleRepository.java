@@ -26,4 +26,14 @@ where U.ID = ?1
 group by m.id, libelle, photo
 """)
     List<String[]> findModulesByUtilisateur(Long id);
+
+    @Query(nativeQuery = true, value = """
+select m.* 
+from dl_module m
+join dl_module_formation dmf on m.id = dmf.id_module
+join FORMATION F on dmf.id_formation = F.ID
+join SESSION S on F.ID = S.ID_FOR
+where S.ID = ?1
+""")
+    List<Module> findModuleBySession(Long idSession);
 }
