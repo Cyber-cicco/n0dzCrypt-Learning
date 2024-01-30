@@ -10,7 +10,7 @@ spring:
             max-request-size: "10MB"
     jpa:
         database: mysql
-        generate-ddl: false
+        generate-ddl: true
         hibernate:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

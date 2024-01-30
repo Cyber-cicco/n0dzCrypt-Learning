@@ -27,10 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +45,7 @@ public class CoursService {
     private final QCMQuestionRepository qcmQuestionRepository;
     private final QCMValidator qcmValidator;
     private final QCMChoixRepository qcmChoixRepository;
+    private final QCMPublicationRepository qcmPublicationRepository;
     public List<ModuleDto> findSModulesByUtilisateur(Long id, Long idModule){
         List<ModuleDto> sousModules = sousModuleRepository.findModulesByUtilisateur(id, idModule)
                 .stream()
@@ -301,7 +299,7 @@ public class CoursService {
         Chapitre chapitre = chapitreRepository.findByAdminIdAndQuestionId(userInfos.getId(), idQuestion)
                 .orElseThrow(EntityNotFoundException::new);
         QCMQuestion question = qcmQuestionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
-        qcmChoixRepository.deleteAll(chapitre.getQcmQuestions().stream().filter(q -> q.getId().equals(idQuestion)).toList().get(0).getChoix());
+        qcmChoixRepository.deleteAll(question.getChoix());
         qcmQuestionRepository.delete(question);
         qcmQuestionRepository.updateOrdreAfterSuppression(question.getOrdre(), chapitre.getId());
         changeStatusPublication(chapitre);
@@ -419,19 +417,52 @@ public class CoursService {
                 .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
                 .toList());
         qcmQuestionRepository.deleteAll(chapitre.getQcmQuestionsPubliees());
-        chapitre.setQcmQuestionsPubliees(
-                chapitre.getQcmQuestions()
-                        .stream()
-                        .map(QCMQuestion::clone)
-                        .collect(Collectors.toCollection(ArrayList::new)));
-        qcmQuestionRepository.saveAll(chapitre.getQcmQuestionsPubliees());
-        qcmChoixRepository.saveAll(chapitre.getQcmQuestionsPubliees()
-                .stream()
-                .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
-                .toList());
+        creerPublication(chapitre);
         chapitre.setStatusPublication(StatusPublication.PUBLIE_A_JOUR);
         chapitreRepository.save(chapitre);
         return new ReponsePublicationQCM(chapitreRepository.save(chapitre), diagnostics);
+   }
+
+   private QCMPublication creerPublication(Chapitre chapitre){
+       if(chapitre.getQcmPublications().isEmpty()) {
+           var qcmPublication = QCMPublication.builder()
+                   .derniere(true)
+                   .questions(chapitre.getQcmQuestions().stream().map(QCMQuestion::clone).toList())
+                   .qcm(chapitre)
+                   .build();
+           qcmQuestionRepository.saveAll(qcmPublication.getQuestions());
+           qcmChoixRepository.saveAll(qcmPublication.getQuestions()
+                   .stream()
+                   .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
+                   .toList());
+           return qcmPublicationRepository.save(qcmPublication);
+       }
+       var qcmPublication = QCMPublication.builder()
+               .build();
+       var prevPublication = chapitre.getQcmPublication();
+       var nouvellesQuestions = chapitre.getQcmQuestions();
+       Map<String, QCMQuestion> prevQuestionsMap = new HashMap<>();
+       for (QCMQuestion question : prevPublication.getQuestions()) {
+           prevQuestionsMap.put(question.getLibelle(), question);
+       }
+       for (QCMQuestion nouvelleQuestion : nouvellesQuestions) {
+           var prevQuestion = prevQuestionsMap.get(nouvelleQuestion.getLibelle());
+           if(prevQuestion == null){
+                qcmPublication.getQuestions().add(nouvelleQuestion.clone());
+                continue;
+           }
+           if(prevQuestion.isSimilar(nouvelleQuestion)) {
+               qcmPublication.getQuestions().add(prevQuestion);
+               continue;
+           }
+           qcmPublication.getQuestions().add(nouvelleQuestion.clone());
+       }
+       prevPublication.setDerniere(false);
+       qcmPublicationRepository.save(prevPublication);
+       qcmPublication.setDerniere(true);
+       qcmPublication.setQcm(chapitre);
+       qcmPublicationRepository.save(qcmPublication);
+       return qcmPublication;
    }
 
     public record ReponseChangementQuestion(QCMQuestion question, Optional<String> diagnostic){}

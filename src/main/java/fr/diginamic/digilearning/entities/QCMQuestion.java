@@ -29,19 +29,23 @@ public class QCMQuestion {
     @ManyToOne
     @JoinColumn(name = "qcm_id")
     Chapitre qcm;
-    @ManyToOne
-    @JoinColumn(name = "qcm_publie_id")
-    Chapitre qcmPublie;
+    @ManyToMany
+    @JoinTable(name = "publication_question",
+            joinColumns = @JoinColumn(name = "question_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "id")
+    )
+    private List<QCMPublication> publications;
 
     public List<QCMChoix> getBonChoix(){
-        return choix.stream().filter(QCMChoix::getValid).toList();
+        return choix.stream()
+                .filter(QCMChoix::getValid)
+                .toList();
     }
     public QCMQuestion clone() {
         QCMQuestion qcmQuestion = QCMQuestion.builder()
                 .libelle(libelle)
                 .ordre(ordre)
                 .illustration(illustration)
-                .qcmPublie(qcm)
                 .build();
         qcmQuestion.setChoix(choix.stream().map(choix -> choix.clone(qcmQuestion)).toList());
         return qcmQuestion;
@@ -67,5 +71,28 @@ public class QCMQuestion {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isSimilar(QCMQuestion question) {
+        if(question.choix.size() != choix.size()){
+            return false;
+        }
+        if(
+        ! (Objects.equals(this.libelle, question.getLibelle())
+                && Objects.equals(this.illustration, question.getIllustration())
+                && Objects.equals(this.ordre, question.getOrdre())
+                && Objects.equals(this.commentaire, question.getCommentaire()))
+        ) {
+            return false;
+        }
+        for (int i = 0; i < choix.size(); ++i) {
+            if(!(
+                    Objects.equals(choix.get(i).getLibelle(), question.getChoix().get(i).getLibelle()) &&
+                    Objects.equals(choix.get(i).getValid(),question.getChoix().get(i).getValid())
+                )) {
+                return false;
+            }
+        }
+        return true;
     }
 }

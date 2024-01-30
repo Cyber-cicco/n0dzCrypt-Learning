@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.entities;
 
+import fr.diginamic.digilearning.repository.QCMPasseRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,13 +27,17 @@ public class QCMPasse {
     @ManyToOne
     @JoinColumn(name = "qcm_id")
     private Chapitre qcm;
+    private Boolean finished;
+    @ManyToOne
+    @JoinColumn(name = "id_publication")
+    private QCMPublication qcmPublication;
     private LocalDateTime datePassage;
     @OneToMany(mappedBy = "qcmPasse")
     @Builder.Default
     private List<ResultatQuestion> resultatsQuestions = new ArrayList<>();
 
     public boolean isQCMFinished() {
-        return resultatsQuestions.size() == qcm.getQcmQuestions().size();
+        return resultatsQuestions.size() == qcm.getQcmQuestionsPubliees().size();
     }
 
     public String getNote() {
