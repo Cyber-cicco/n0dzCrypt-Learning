@@ -94,6 +94,7 @@ public class ChapitreIrrigator {
     public void irrigateAdminChapitre(Model model, AuthenticationInfos userInfos, Chapitre chapitre) {
         model.addAttribute("contenuHTML", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenuNonPublie()));
         model.addAttribute("contenu", chapitre.getContenuNonPublie());
+        model.addAttribute("video", chapitre.getLienVideo());
         model.addAttribute("id", chapitre.getId());
         irrigateAjour(model, chapitre);
     }
@@ -119,15 +120,15 @@ public class ChapitreIrrigator {
         switch (chapitre.getStatusPublication()) {
             case NON_PUBLIE ->{
                 aJour = "La version de votre cours n'est pas encore publiée";
-                classAJour = "text-error";
+                classAJour = "text-error grow text-center";
             }
             case PUBLIE_PAS_A_JOUR -> {
                 aJour = "La version de votre cours est en avance par rapport à la version publiée";
-                classAJour = "text-error";
+                classAJour = "text-error grow text-center";
             }
             case PUBLIE_A_JOUR -> {
                 aJour = "La version de votre cours est publiée et à jour";
-                classAJour = "text-validation";
+                classAJour = "text-validation grow text-center";
             }
             default -> throw new RuntimeException();
         }

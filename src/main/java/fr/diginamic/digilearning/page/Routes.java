@@ -70,6 +70,7 @@ public class Routes {
     public static final String ADR_ADMIN_SESSION_COURS_MODAL = "pages/admin/apprenants/fragments/session.cours.modal";
     public static final String ADR_ADMIN_MODULE = "pages/admin/apprenants/fragments/session.cours.module";
     public static final String ADR_ADMIN_COURS_LISTE = "pages/admin/apprenants/fragments/session.cours.liste-cours";
+    public static final String ADR_CHAPITRE_VIDEO = "pages/cours/admin/fragments/chapitre.video";
 
     private Routes(){}
 }

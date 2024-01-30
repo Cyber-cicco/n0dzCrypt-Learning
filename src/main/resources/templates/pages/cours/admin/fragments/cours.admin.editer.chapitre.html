@@ -59,7 +59,17 @@
                                 hx-swap="outerHTML"
                                 class="border-grey border-2 rounded-md p-2 h-full" th:text="${contenu}"></textarea>
                         </div>
-                        <div id="buttons" class="p-3 flex gap-3 justify-between items-center">
+                        <div id="buttons" class="p-3 flex gap-3 items-center">
+                            <button 
+                                type="button"
+                                onclick="openModalVideo()"
+                                class="bg-lightPrimary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                                >Vidéo</button>
+                            <button 
+                                type="button"
+                                onclick="openModalDepublie()"
+                                class="bg-error p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                                >Dépublier</button>
                             <button 
                                 type="submit"
                                 th:hx-post="'/cours/admin/chapitre/publier?id=' + ${id}"
@@ -67,8 +77,7 @@
                                 hx-swap="outerHTML"
                                 class="bg-lightPrimary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
                                 >Publier</button>
-                            <div id="info" th:class="${classAJour}" th:text="${aJour}"></div>
-
+                            <div id="info" th:class="${classAJour} + ' grow text-center'" th:text="${aJour}"></div>
                             <div 
                                 class="justify-self-end hover:cursor-pointer"
                                 onclick="openModalBot()"
@@ -79,11 +88,64 @@
                 </div>
             </div>
         </div>
-    <div class="flex p-2 flex-col w-1/2 h-full items-center">
+    <div class="flex flex-col p-2 gap-5 w-1/2 h-full items-center">
         <div class="bg-white w-full h-full rounded-lg shadow-md p-5 overflow-y-scroll">
             <article class="" id="markdown" th:utext="${contenuHTML}">
             </article>
+            <div class="flex p-5 w-full justify-center">
+                <div class="flex w-full justify-center" id="video" th:utext="${video}"></div>
+            </div>
         </div>
+    </div>
+    <div id="video-bg" class="fixed top-0 left-0 w-screen h-screen bg-accent bg-opacity-25 z-40" hidden="true">
+        <section id="modal-video" class="absolute bottom-0 bg-grey rounded-md p-1 w-full ">
+            <div class="flex justify-end w-full" method="dialog">
+                <button onclick="closeModalVideo()"><img src="/img/icons/close.svg"></button>
+            </div>
+            <div>
+                <div class="text-xl text-primary w-full flex flex-col items-center gap-5 p-3">
+                    <form 
+                        class="flex flex-col p-5"
+                        th:hx-post="'/cours/admin/chapitre/video?id=' + ${id}"
+                        hx-target="#video"
+                        hx-swap="outerHTML"
+                        hx-on::before-request="closeModalVideo()"
+                        >
+                        <div class="flex flex-col gap-2 w-full">
+                            <label for="video">Insérez ici le lien de votre vidéo youtube.</label>
+                            <input class="rounded-sm p-2 text-black w-full" type="text" name="video" id="video">
+                            <button type="submit" class="bg-accent p-2 text-primary disabled:bg-lightAccent rounded-md hover:cursor-pointer hover:disabled:cursor-auto hover:disabled:brightness-100 hover:brightness-150">Publier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div id="depublie-bg" class="fixed top-0 left-0 w-screen h-screen bg-accent bg-opacity-25 z-40" hidden="true">
+        <section id="modal-depublie" class="absolute bottom-0 bg-grey rounded-md p-1 w-full ">
+            <div class="flex justify-end w-full" method="dialog">
+                <button onclick="closeModalDepublie()"><img src="/img/icons/close.svg"></button>
+            </div>
+            <div>
+                <div class="text-xl text-error w-full flex flex-col items-center gap-5 p-3">
+                    <form 
+                        class="flex flex-col p-5"
+                        th:hx-patch="'/cours/admin/chapitre/depublier?id=' + ${id}"
+                        hx-target="#info"
+                        hx-swap="outerHTML"
+                        hx-on::before-request="closeModalDepublie()"
+                        >
+                        <div class="flex flex-col gap-2 w-full">
+                            <label>Êtes vous sur de vouloir dépublier ce cours ? Plus aucun apprenant ne pourra y avoir accès avant que vous décidiez de le republier.</label>
+                            <div class="flex w-full justify-center gap-2">
+                                <button type="submit" class="bg-accent p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Oui</button>
+                                <button class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150" type="button" onclick="closeModalDepublie()">Non</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
     </div>
     <th:block th:replace="~{/components/modal/modal.bottom :: modalBg( ~{::#modal-content})}">
         <div class="text-xl text-error w-full flex flex-col items-center gap-5 p-3" id="modal-content">
@@ -103,6 +165,31 @@
     </th:block>
     <script th:insert="scripts/flowbite.min.js"></script>
     <script defer src="/js/cours.text-editor.js"></script>
-    <script th:insert="scripts/animation.modal.js"></script>
+    <script>
+        function openModalBot() {
+            document.querySelector('#modal-bot').classList.add("modal-bot");
+            document.querySelector('#modal-bg').removeAttribute("hidden")
+        }
+        function closeModalBot(){
+            document.querySelector('#modal-bot').classList.remove("modal-bot");
+            document.querySelector('#modal-bg').setAttribute("hidden", "true")
+        }
+        function openModalVideo() {
+            document.querySelector('#modal-video').classList.add("modal-bot");
+            document.querySelector('#video-bg').removeAttribute("hidden")
+        }
+        function closeModalVideo(){
+            document.querySelector('#modal-video').classList.remove("modal-bot");
+            document.querySelector('#video-bg').setAttribute("hidden", "true")
+        }
+        function openModalDepublie() {
+            document.querySelector('#modal-depublie').classList.add("modal-bot");
+            document.querySelector('#depublie-bg').removeAttribute("hidden")
+        }
+        function closeModalDepublie(){
+            document.querySelector('#modal-depublie').classList.remove("modal-bot");
+            document.querySelector('#depublie-bg').setAttribute("hidden", "true")
+        }
+    </script>
     <script>hljs.highlightAll();</script>
 </section>

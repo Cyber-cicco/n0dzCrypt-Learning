@@ -5,6 +5,7 @@ import fr.diginamic.digilearning.entities.Chapitre;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.QCMChoix;
 import fr.diginamic.digilearning.entities.QCMQuestion;
+import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -150,10 +151,31 @@ public class CoursAdminController {
     }
 
     @PostMapping("/description")
-    public String editerDescription(@RequestParam("id") Long idCours, @ModelAttribute MessageDto descriptionCours) {
+    public String editerDescription(@RequestParam("id") Long idCours, @ModelAttribute MessageDto descriptionCours, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(
+                userInfos.getRoles(),
+                List.of(TypeRole.ROLE_ADMINISTRATEUR, TypeRole.ROLE_FORMATEUR),
+                response
+        );
         coursService.editerDescription(idCours, descriptionCours, userInfos);
         return Routes.ADR_FORM_ERROR;
+    }
+
+    private record VideoDto(String video){}
+    @PostMapping("/chapitre/video")
+    public String postNewVideo(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute VideoDto videoDto, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(
+                userInfos.getRoles(),
+                List.of(TypeRole.ROLE_ADMINISTRATEUR, TypeRole.ROLE_FORMATEUR),
+                response
+        );
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId()).orElseThrow(EntityNotFoundException::new);
+        chapitre.setLienVideo(videoDto.video());
+        chapitreRepository.save(chapitre);
+        model.addAttribute("video", chapitre.getLienVideo());
+        return Routes.ADR_CHAPITRE_VIDEO;
     }
 
     @PostMapping
@@ -235,8 +257,10 @@ public class CoursAdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         Chapitre chapitre = coursService.publierContenu(userInfos, idChapitre, contenuChapitreDto);
-        model.addAttribute("content", "La version de votre cours est publiée");
-        return Routes.ADR_MESSAGE;
+        model.addAttribute("aJour", "La version de votre cours est publiée et à jour.");
+        model.addAttribute("classAJour", "text-validation grow text-center");
+        model.addAttribute("id", "info");
+        return Routes.ADR_GENERIC_MESSAGE;
     }
 
     @PostMapping("/qcm/choix")
@@ -275,6 +299,18 @@ public class CoursAdminController {
         return Routes.ADR_QCM_CHOIX_LISTE;
     }
 
+    @PatchMapping("chapitre/depublier")
+    public String depublierChapitre(Model model, @RequestParam("id") Long id, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(id, userInfos.getId()).orElseThrow(EntityNotFoundException::new);
+        chapitre.setStatusPublication(StatusPublication.NON_PUBLIE);
+        chapitreRepository.save(chapitre);
+        model.addAttribute("aJour", "Votre cours n'est pas encore publié");
+        model.addAttribute("classAJour", "text-error grow text-center");
+        model.addAttribute("id", "info");
+        return Routes.ADR_GENERIC_MESSAGE;
+    }
     @PatchMapping("/titre")
     public String changerTitre(Model model, @RequestParam("id") Long idCours, HttpServletResponse response, @ModelAttribute MessageDto messageDto) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -311,7 +347,7 @@ public class CoursAdminController {
         reponse.setHeader("HX-Retarget", "#qcm-error-publication");
         reponse.setHeader("HX-Reswap", "outerHTML");
         model.addAttribute("aJour", reponsePublicationQCM.getMessage());
-        model.addAttribute("classAJour", "text-error");
+        model.addAttribute("classAJour", "text-error text-error grow text-center");
         model.addAttribute("id", "qcm-error-publication");
         return Routes.ADR_GENERIC_MESSAGE;
     }
@@ -341,7 +377,7 @@ public class CoursAdminController {
         if(qcmQuestion.diagnostic().isPresent()){
             reponse.setHeader("HX-Reswap", "outerHTML");
             model.addAttribute("aJour", qcmQuestion.diagnostic().get());
-            model.addAttribute("classAJour", "text-error");
+            model.addAttribute("classAJour", "text-error text-error grow text-center");
             model.addAttribute("id", "error-commentaire");
             return Routes.ADR_GENERIC_MESSAGE;
         }
