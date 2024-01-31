@@ -27,7 +27,6 @@ public class QCMPasse {
     @ManyToOne
     @JoinColumn(name = "qcm_id")
     private Chapitre qcm;
-    private Boolean finished;
     @ManyToOne
     @JoinColumn(name = "id_publication")
     private QCMPublication qcmPublication;

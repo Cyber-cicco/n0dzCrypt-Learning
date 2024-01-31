@@ -406,31 +406,30 @@ public class CoursService {
             return "Le QCM ne peut être publié pour les raisons suivantes :  \n" + String.join("\n", diagnostics);
         }
     }
+    @Transactional
     public ReponsePublicationQCM publierQCM(Long idQCM, HttpServletResponse response) {
         Chapitre chapitre = chapitreRepository.findById(idQCM).orElseThrow(EntityNotFoundException::new);
         List<String> diagnostics = qcmValidator.validateQCM(chapitre);
         if(!diagnostics.isEmpty()){
             return new ReponsePublicationQCM(chapitre, diagnostics);
         }
-        qcmChoixRepository.deleteAll(chapitre.getQcmQuestionsPubliees()
-                .stream()
-                .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
-                .toList());
-        qcmQuestionRepository.deleteAll(chapitre.getQcmQuestionsPubliees());
         creerPublication(chapitre);
         chapitre.setStatusPublication(StatusPublication.PUBLIE_A_JOUR);
         chapitreRepository.save(chapitre);
         return new ReponsePublicationQCM(chapitreRepository.save(chapitre), diagnostics);
    }
 
+
    private QCMPublication creerPublication(Chapitre chapitre){
        if(chapitre.getQcmPublications().isEmpty()) {
            var qcmPublication = QCMPublication.builder()
                    .derniere(true)
-                   .questions(chapitre.getQcmQuestions().stream().map(QCMQuestion::clone).toList())
+                   .questions(qcmQuestionRepository.saveAll(chapitre.getQcmQuestions().stream()
+                           .map(QCMQuestion::clone)
+                           .toList()))
                    .qcm(chapitre)
                    .build();
-           qcmQuestionRepository.saveAll(qcmPublication.getQuestions());
+           qcmPublication.getQuestions().forEach(System.out::println);
            qcmChoixRepository.saveAll(qcmPublication.getQuestions()
                    .stream()
                    .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
@@ -445,6 +444,7 @@ public class CoursService {
        for (QCMQuestion question : prevPublication.getQuestions()) {
            prevQuestionsMap.put(question.getLibelle(), question);
        }
+       System.out.println(prevQuestionsMap);
        for (QCMQuestion nouvelleQuestion : nouvellesQuestions) {
            var prevQuestion = prevQuestionsMap.get(nouvelleQuestion.getLibelle());
            if(prevQuestion == null){
@@ -461,6 +461,11 @@ public class CoursService {
        qcmPublicationRepository.save(prevPublication);
        qcmPublication.setDerniere(true);
        qcmPublication.setQcm(chapitre);
+       qcmQuestionRepository.saveAll(qcmPublication.getQuestions());
+       qcmChoixRepository.saveAll(qcmPublication.getQuestions()
+               .stream()
+               .flatMap(qcmQuestion -> qcmQuestion.getChoix().stream())
+               .toList());
        qcmPublicationRepository.save(qcmPublication);
        return qcmPublication;
    }

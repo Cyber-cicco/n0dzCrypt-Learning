@@ -22,7 +22,7 @@ public class QCMPublication {
     private Boolean derniere;
 
     @ManyToMany
-    @JoinTable(name = "publication_question",
+    @JoinTable(name = "dl_publication_question",
             joinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "question_id", referencedColumnName = "id")
     )

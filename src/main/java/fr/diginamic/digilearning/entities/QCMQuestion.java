@@ -30,7 +30,7 @@ public class QCMQuestion {
     @JoinColumn(name = "qcm_id")
     Chapitre qcm;
     @ManyToMany
-    @JoinTable(name = "publication_question",
+    @JoinTable(name = "dl_publication_question",
             joinColumns = @JoinColumn(name = "question_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "id")
     )

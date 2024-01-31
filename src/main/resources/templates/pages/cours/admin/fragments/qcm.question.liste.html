@@ -8,7 +8,7 @@
         class="flex flex-col w-full gap-1"
         data-draggable1
         >
-        <th:block th:each="question, iterStat : ${qcm.getQcmQuestionsPubliees()}">
+        <th:block th:each="question, iterStat : ${qcm.getQcmQuestions()}">
             <th:block th:replace="~{pages/cours/admin/fragments/qcm.question.list-item}"></th:block>
         </th:block>
     </div>
