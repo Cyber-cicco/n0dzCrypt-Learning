@@ -299,13 +299,19 @@ public class CoursAdminController {
         return Routes.ADR_QCM_CHOIX_LISTE;
     }
 
+    @PatchMapping("qcm/depublier")
+    public String depublierQCM(Model model, @RequestParam("id") Long id, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        Chapitre chapitre = chapitreService.depublierChapitre(id, userInfos.getId());
+        chapitreIrrigator.irrigateAdminQCM(model, chapitre);
+        return Routes.ADR_ADMIN_QCM_QUESTION_LISTE;
+    }
     @PatchMapping("chapitre/depublier")
     public String depublierChapitre(Model model, @RequestParam("id") Long id, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
-        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(id, userInfos.getId()).orElseThrow(EntityNotFoundException::new);
-        chapitre.setStatusPublication(StatusPublication.NON_PUBLIE);
-        chapitreRepository.save(chapitre);
+        chapitreService.depublierChapitre(userInfos.getId(), id);
         model.addAttribute("aJour", "Votre cours n'est pas encore publié");
         model.addAttribute("classAJour", "text-error grow text-center");
         model.addAttribute("id", "info");

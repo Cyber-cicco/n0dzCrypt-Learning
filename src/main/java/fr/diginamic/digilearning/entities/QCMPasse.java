@@ -36,7 +36,7 @@ public class QCMPasse {
     private List<ResultatQuestion> resultatsQuestions = new ArrayList<>();
 
     public boolean isQCMFinished() {
-        return resultatsQuestions.size() == qcm.getQcmQuestionsPubliees().size();
+        return resultatsQuestions.size() == qcmPublication.getQuestions().size();
     }
 
     public String getNote() {

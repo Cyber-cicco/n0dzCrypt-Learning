@@ -66,11 +66,54 @@
             <th:block th:replace="~{pages/cours/admin/fragments/qcm.choix.liste}"></th:block>
         </div>
         <div id="qcm-error-publication" class="text-error"></div>
-        <button 
-            class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
-            th:hx-post="'/cours/admin/qcm/publier?id=' + ${qcm.getId()}"
-            hx-target="#questions-liste"
-            hx-on::before-request="document.querySelector('#qcm-error-publication').innerText = ''"
-            >Publier</button>
+        <div class="flex gap-2 p-5">
+            <button 
+                type="submit"
+                th:hx-post="'/cours/admin/qcm/publier?id=' + ${qcm.getId()}"
+                hx-target="#questions-liste"
+                hx-on::before-request="document.querySelector('#qcm-error-publication').innerText = ''"
+                class="bg-lightPrimary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                >Publier</button>
+            <button 
+                type="button"
+                onclick="openModalDepublie()"
+                class="bg-error p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                >Dépublier</button>
+        </div>
     </th:block>
+    <div id="depublie-bg" class="fixed top-0 left-0 w-screen h-screen bg-accent bg-opacity-25 z-40" hidden="true">
+        <section id="modal-depublie" class="absolute bottom-0 bg-grey rounded-md p-1 w-full ">
+            <div class="flex justify-end w-full" method="dialog">
+                <button onclick="closeModalDepublie()"><img src="/img/icons/close.svg"></button>
+            </div>
+            <div>
+                <div class="text-xl text-error w-full flex flex-col items-center gap-5 p-3">
+                    <form 
+                        class="flex flex-col p-5"
+                        th:hx-patch="'/cours/admin/qcm/depublier?id=' + ${qcm.getId()}"
+                        hx-target="#questions-liste"
+                        hx-on::before-request="closeModalDepublie()"
+                        >
+                        <div class="flex flex-col gap-2 w-full">
+                            <label>Êtes vous sur de vouloir dépublier ce qcm ? Plus aucun apprenant ne pourra y avoir accès avant que vous décidiez de le republier.</label>
+                            <div class="flex w-full justify-center gap-2">
+                                <button type="submit" class="bg-accent p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Oui</button>
+                                <button class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150" type="button" onclick="closeModalDepublie()">Non</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        function openModalDepublie() {
+            document.querySelector('#modal-depublie').classList.add("modal-bot");
+            document.querySelector('#depublie-bg').removeAttribute("hidden")
+        }
+        function closeModalDepublie(){
+            document.querySelector('#modal-depublie').classList.remove("modal-bot");
+            document.querySelector('#depublie-bg').setAttribute("hidden", "true")
+        }
+    </script>
 </div>
