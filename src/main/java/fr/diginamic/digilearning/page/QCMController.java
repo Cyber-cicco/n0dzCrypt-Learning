@@ -42,7 +42,7 @@ public class QCMController {
     public String continueQCM(Model model, @RequestParam("id") Long idQCM) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         var repriseQCMInfos = qcmService.reprendreQCM(userInfos.getId(), idQCM);
-        coursIrrigator.irrigateQCM(model, userInfos, repriseQCMInfos.chapitre(), repriseQCMInfos.chapitre().getQcmQuestionsPubliees(), repriseQCMInfos.cours(), repriseQCMInfos.index());
+        coursIrrigator.irrigateQCM(model, userInfos, repriseQCMInfos.chapitre(), repriseQCMInfos.qcmPasse().getQcmPublication().getQuestions(), repriseQCMInfos.cours(), repriseQCMInfos.index());
         return Routes.ADR_QCM;
     }
     @GetMapping("/recommencer")

@@ -127,6 +127,7 @@ public class CoursController {
                 .stream()
                 .max(Comparator.comparing(QCMPasse::getDatePassage));
         if(qcmPasseOpt.isPresent()){
+            System.out.println("here");
             QCMPasse qcmPasse = qcmPasseOpt.get();
             coursIrrigator.irrigateBaseQCM(model, userInfos, qcm, qcmPasse.getQcmPublication().getQuestions(), cours, 0);
             if(qcmPasse.isQCMFinished()) {

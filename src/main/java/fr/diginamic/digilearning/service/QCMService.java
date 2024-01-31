@@ -105,7 +105,7 @@ public class QCMService {
                         .archived(false)
                         .utilisateur(utilisateur)
                         .build()));
-        QCMQuestion question = qcm.getQcmQuestionsPubliees()
+        QCMQuestion question = qcmPasse.getQcmPublication().getQuestions()
                 .stream()
                 .filter(question1 -> question1.getId().equals(idQuestion))
                 .findFirst()
@@ -121,7 +121,7 @@ public class QCMService {
                 )
                 .build();
         resultatQuestionRepository.save(resultatQuestion);
-        int idCurrQ = qcm.getQcmQuestionsPubliees().indexOf(question);
+        int idCurrQ = qcmPasse.getQcmPublication().getQuestions().indexOf(question);
         if(idCurrQ + 1 >= qcm.getQcmQuestionsPubliees().size()){
             return new ResponseForNewResponse(qcm, qcmPasse, Optional.empty());
         }

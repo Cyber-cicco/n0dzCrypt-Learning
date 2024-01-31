@@ -45,7 +45,7 @@
                     th:hx-patch="'/cours/admin/qcm/commentaire?id=' + ${question.getId()}"
                     hx-target="#error-commentaire"
                     hx-swap="outerHTML"
-                    th:value="${question.getCommentaire()}"
+                    th:text="${question.getCommentaire()}"
                 ></textarea>
                 <div id="error-commentaire" class="text-error"></div>
                 <label 
