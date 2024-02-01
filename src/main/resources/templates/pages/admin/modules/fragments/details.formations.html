@@ -1,0 +1,16 @@
+<div id="formations-card" class="flex flex-col w-full">
+    <th:block th:fragment="formations()">
+        <h2 class="text-xl pb-2 font-poppins text-primary">Formations associées : </h2>
+        <div class="flex p-2 h-[50%] overflow-y-auto flex-col bg-lightAccent rounded-md">
+            <th:block th:each="formation, iterStat : ${module.getFormations()}">
+                <div class="flex flex-col gap-1 py-1">
+                    <div class="" th:text="${formation.getNom()}"></div>
+                    <div class="w-full h-0.5 bg-primary"></div>
+                </div>
+            </th:block>
+        </div>
+    </th:block>
+</div>
+<div id="formations-modal">
+    <th:block th:replace="pages/admin/modules/fragments/details.formations :: formations()"></th:block>
+</div>

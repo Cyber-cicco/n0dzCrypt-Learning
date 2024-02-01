@@ -76,6 +76,8 @@ public class Routes {
     public static final String ADR_ADMIN_MODULES_TITRE = "pages/admin/modules/fragments/details.titre";
 
     public static final String ADR_ADMIN_MODULES_PHOTO = "pages/admin/modules/fragments/module.photo";
+    public static final String ADR_ADMIN_MODULE_FORMATION_MODAL = "pages/admin/modules/fragments/module.formation.modal";
+    public static final String ADR_ADMIN_MODULE_FORMATION_DETAILS = "pages/admin/modules/fragments/details.formations";
 
     private Routes(){}
 }

@@ -70,16 +70,6 @@
                                             <div th:text="${smodule.getTitre()}"></div>
                                         </div>
                                     </div>
-                                    <div data-cours-list th:id="'cours-' + ${smodule.getId()}" class="flex hidden py-2 gap-1 flex-col pl-5">
-                                        <th:block th:each="cour, iterStat : ${smodule.getCours()}">
-                                            <div 
-                                                class="flex w-full gap-2"
-                                                >
-                                                <th:block th:replace="svg/icons/file :: svg('20', '20')"></th:block>
-                                                <div class="w-3/5" th:text="${cour.getTitre()}"></div>
-                                            </div>
-                                        </th:block>
-                                    </div>
                                 </th:block>
                             </div>
                         </div>
@@ -90,5 +80,12 @@
         <div class="flex flex-col items-center gap-2 bg-white h-full w-3/5 p-5 rounded-md" id="admin-card">
         </div>
     </section>
+    <aside id="modal-changement" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
+        <div class="flex justify-end w-full">
+            <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" data-close-modal >
+        </div>
+        <section id="modal-content" class="flex flex-col h-full gap-2">
+        </section>
+    </aside>
     <script th:insert="~{scripts/cours-elements-tree.js}" type="module" th:inline="javascript"></script>
 </div>

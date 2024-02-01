@@ -1,11 +1,14 @@
 package fr.diginamic.digilearning.service;
 
+import fr.diginamic.digilearning.entities.Formation;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
+import fr.diginamic.digilearning.repository.FormationRepository;
 import fr.diginamic.digilearning.repository.ModuleRepository;
 import fr.diginamic.digilearning.validators.ModuleValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.thymeleaf.model.IModel;
 
@@ -17,10 +20,23 @@ public class ModuleService {
 
     private final ModuleRepository moduleRepository;
     private final ModuleValidator moduleValidator;
+    private final FormationRepository formationRepository;
 
     public Module updateNewPhoto(String fileName, Long idModule) {
-        Module module = moduleRepository.findById(idModule).orElseThrow(EntityNotFoundException::new);
+        Module module = moduleRepository.findById(idModule)
+                .orElseThrow(EntityNotFoundException::new);
         module.setPhoto(fileName);
+        return moduleRepository.save(module);
+    }
+
+    @Transactional
+    public Module putFormation(Long idModule, String nomFormation) {
+        System.out.println(nomFormation);
+        Formation formation = formationRepository.findByNom(nomFormation)
+                .orElseThrow(EntityNotFoundException::new);
+        Module module = moduleRepository.findById(idModule)
+                .orElseThrow(EntityNotFoundException::new);
+        module.getFormations().add(formation);
         return moduleRepository.save(module);
     }
 

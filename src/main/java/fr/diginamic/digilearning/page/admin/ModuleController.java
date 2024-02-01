@@ -57,6 +57,14 @@ public class ModuleController implements DiagnoticHandler {
         return Routes.ADR_ADMIN_MODULES_DETAILS;
     }
 
+    @GetMapping("/formations-smodule")
+    public String getFormationsForModule(Model model, @RequestParam("id") Long idModule, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        moduleIrrigator.irrigateFormations(model, idModule);
+        return Routes.ADR_ADMIN_MODULE_FORMATION_MODAL;
+    }
+
     @PatchMapping("titre")
     public String patchModuleTitre(Model model, @RequestParam("id") Long idModule, @ModelAttribute MessageDto titre, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -77,5 +85,15 @@ public class ModuleController implements DiagnoticHandler {
         Module module = moduleService.updateNewPhoto(fileName, idModule);
         model.addAttribute("module", module);
         return Routes.ADR_ADMIN_MODULES_PHOTO;
+    }
+
+    public record FormationRequest(String formation){}
+    @PutMapping("/formation")
+    public String putNewFormation(Model model, @RequestParam("id") Long idModule, @ModelAttribute FormationRequest formationRequest, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        Module module = moduleService.putFormation(idModule, formationRequest.formation());
+        moduleIrrigator.irrigateDetailsFormation(model, module);
+        return Routes.ADR_ADMIN_MODULE_FORMATION_DETAILS;
     }
 }

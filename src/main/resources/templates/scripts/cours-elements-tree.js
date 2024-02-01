@@ -15,15 +15,3 @@ for (const child of children) {
         }
     })
 }
-
-for (const smodule of smodules) {
-    const smoduleName = smodule.querySelector("[data-smodule]")
-    smoduleName.addEventListener("click", () => {
-        const coursList = smodule.querySelector("[data-cours-list]");
-        if(coursList.classList.contains("hidden"))  {
-            coursList.classList.remove("hidden");
-        } else {
-            coursList.classList.add("hidden");
-        }
-    })
-}
