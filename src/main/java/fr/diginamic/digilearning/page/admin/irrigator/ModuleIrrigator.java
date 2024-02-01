@@ -5,6 +5,7 @@ import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.repository.FormationRepository;
 import fr.diginamic.digilearning.repository.ModuleRepository;
+import fr.diginamic.digilearning.repository.SousModuleRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class ModuleIrrigator {
 
     private final ModuleRepository moduleRepository;
     private final FormationRepository formationRepository;
+    private final SousModuleRepository sousModuleRepository;
     public void irrigateBaseModule(Model model){
         List<Module> modules = moduleRepository.findAll();
         Set<SousModule> sousModules = modules
@@ -50,6 +52,17 @@ public class ModuleIrrigator {
     }
 
     public void irrigateDetailsFormation(Model model, Module module) {
+        model.addAttribute("module", module);
+    }
+
+    public void irrigateSousModules(Model model, Long idModule) {
+        Module module = moduleRepository.findById(idModule).orElseThrow(EntityNotFoundException::new);
+        List<SousModule> sousModules = sousModuleRepository.findAll();
+        model.addAttribute("module", module);
+        model.addAttribute("smodules", sousModules);
+    }
+
+    public void irrigateDetailsSousModule(Model model, Module module) {
         model.addAttribute("module", module);
     }
 }

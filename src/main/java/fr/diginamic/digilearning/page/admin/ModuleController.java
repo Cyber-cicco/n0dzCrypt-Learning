@@ -57,7 +57,7 @@ public class ModuleController implements DiagnoticHandler {
         return Routes.ADR_ADMIN_MODULES_DETAILS;
     }
 
-    @GetMapping("/formations-smodule")
+    @GetMapping("/formations-module")
     public String getFormationsForModule(Model model, @RequestParam("id") Long idModule, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
@@ -65,6 +65,13 @@ public class ModuleController implements DiagnoticHandler {
         return Routes.ADR_ADMIN_MODULE_FORMATION_MODAL;
     }
 
+    @GetMapping("/smodules-module")
+    public String getSousModulesForModule(Model model, @RequestParam("id") Long idModule, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        moduleIrrigator.irrigateSousModules(model, idModule);
+        return Routes.ADR_ADMIN_MODULE_SMODULES_MODAL;
+    }
     @PatchMapping("titre")
     public String patchModuleTitre(Model model, @RequestParam("id") Long idModule, @ModelAttribute MessageDto titre, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -93,8 +100,17 @@ public class ModuleController implements DiagnoticHandler {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         Module module = moduleService.putFormation(idModule, formationRequest.formation());
-        moduleIrrigator.irrigateDetailsFormation(model, module);
+        moduleIrrigator.irrigateDetailsSousModule(model, module);
         return Routes.ADR_ADMIN_MODULE_FORMATION_DETAILS;
+    }
+    private record SModuleRequest(String smodule){}
+    @PutMapping("/smodule")
+    public String putNewSModule(Model model, @RequestParam("id") Long idModule, @ModelAttribute SModuleRequest formationRequest, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        Module module = moduleService.putSousModule(idModule, formationRequest.smodule);
+        moduleIrrigator.irrigateDetailsFormation(model, module);
+        return Routes.ADR_ADMIN_MODULE_SMODULES_DETAILS;
     }
     @DeleteMapping("/formation")
     public String deleteFormation(Model model, @RequestParam("idFormation") Long idFormation, @RequestParam("idModule") Long idModule, HttpServletResponse response) {
@@ -103,5 +119,13 @@ public class ModuleController implements DiagnoticHandler {
         Module module = moduleService.deleteFormation(idFormation, idModule);
         moduleIrrigator.irrigateDetailsFormation(model, module);
         return Routes.ADR_ADMIN_MODULE_FORMATION_DETAILS;
+    }
+    @DeleteMapping("/smodule")
+    public String deleteSousModule(Model model, @RequestParam("idSmodule") Long idSmodule, @RequestParam("idModule") Long idModule, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        Module module = moduleService.deleteSousModule(idSmodule, idModule);
+        moduleIrrigator.irrigateDetailsSousModule(model, module);
+        return Routes.ADR_ADMIN_MODULE_SMODULES_DETAILS;
     }
 }

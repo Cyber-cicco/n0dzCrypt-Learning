@@ -14,6 +14,10 @@
                             + '&idModule=' 
                             + ${module.getId()}
                             "
+                            hx-select="#smodules-card"
+                            hx-select-oob="#smodules-modal"
+                            hx-target="#smodules-card"
+                            hx-swap="outerHTML"
                             >
                             <th:block th:replace="svg/icons/delete :: svg('25', '25')"></th:block>
                         </div>
@@ -23,4 +27,7 @@
             </th:block>
         </div>
     </th:block>
+</div>
+<div id="smodules-modal" class="flex flex-col h-[50%]">
+    <th:block th:replace="pages/admin/modules/fragments/details.smodules :: smodules()"></th:block>
 </div>

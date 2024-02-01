@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SousModuleRepository extends JpaRepository<SousModule,Long>{
 
@@ -28,6 +29,7 @@ group by sm.id, sm.titre, sm.photo
 """)
     List<String[]> findModulesByUtilisateur(Long idUtilisateur, Long idModule);
 
+    Optional<SousModule> findByTitre(String titre);
     @Query(nativeQuery = true, value = """
 select sm.*
 from dl_sous_module sm

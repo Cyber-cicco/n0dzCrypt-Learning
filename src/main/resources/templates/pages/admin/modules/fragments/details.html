@@ -14,7 +14,7 @@
                     data-open-modal
                     class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
                     id="button-formation"
-                    th:hx-get="'/admin/modules/formations-smodule?id=' + ${module.getId()}"
+                    th:hx-get="'/admin/modules/formations-module?id=' + ${module.getId()}"
                     hx-target="#modal-content"
                     >Ajouter une formation</button>
             </div>
@@ -31,6 +31,8 @@
                     data-open-modal
                     class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
                     id="button-smodule"
+                    th:hx-get="'/admin/modules/smodules-module?id=' + ${module.getId()}"
+                    hx-target="#modal-content"
                     >Ajouter un sous module</button>
             </div>
         </div>
