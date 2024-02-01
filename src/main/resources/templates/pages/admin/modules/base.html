@@ -58,7 +58,7 @@
                                     <th:block th:replace="svg/icons/module :: svg('20', '20')"></th:block>
                                     <div th:text="${module.getLibelle()}"></div>
                                 </div>
-                            </div>
+                           </div>
                             <div data-smodules th:id="'smodules-' + ${module.getId()}" class="flex hidden flex-col pl-5">
                                 <th:block th:each="smodule, iterStat : ${module.getSousModules()}">
                                     <div data-smodule>

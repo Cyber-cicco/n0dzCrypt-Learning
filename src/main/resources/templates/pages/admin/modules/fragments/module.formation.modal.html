@@ -2,6 +2,8 @@
     th:hx-put="'/admin/modules/formation?id=' + ${module.getId()}"
     hx-select-oob="#formations-card"
     hx-select="#formations-modal"
+    hx-target="#formations-modal"
+    hx-swap="outerHTML"
     class="flex flex-col py-5 gap-2"
     >
     <div class="flex gap-2 items-center">

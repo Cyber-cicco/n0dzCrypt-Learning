@@ -31,12 +31,21 @@ public class ModuleService {
 
     @Transactional
     public Module putFormation(Long idModule, String nomFormation) {
-        System.out.println(nomFormation);
         Formation formation = formationRepository.findByNom(nomFormation)
                 .orElseThrow(EntityNotFoundException::new);
         Module module = moduleRepository.findById(idModule)
                 .orElseThrow(EntityNotFoundException::new);
         module.getFormations().add(formation);
+        return moduleRepository.save(module);
+    }
+
+    @Transactional
+    public Module deleteFormation(Long idFormation, Long idModule) {
+        Formation formation = formationRepository.findById(idFormation)
+                .orElseThrow(EntityNotFoundException::new);
+        Module module = moduleRepository.findById(idModule)
+                .orElseThrow(EntityNotFoundException::new);
+        module.getFormations().remove(formation);
         return moduleRepository.save(module);
     }
 
