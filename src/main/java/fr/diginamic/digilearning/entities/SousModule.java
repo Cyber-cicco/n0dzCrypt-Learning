@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.entities;
 
+import fr.diginamic.digilearning.entities.enums.TypeCoursElement;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "dl_sous_module")
-public class SousModule implements Comparable<SousModule> {
+public class SousModule implements Comparable<SousModule>, CoursElement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,5 +51,15 @@ public class SousModule implements Comparable<SousModule> {
 
     public List<Cours> getCours(){
         return cours.stream().sorted().toList();
+    }
+
+    @Override
+    public String getNom() {
+        return titre;
+    }
+
+    @Override
+    public TypeCoursElement getTypeElement() {
+        return TypeCoursElement.SOUS_MODULE;
     }
 }

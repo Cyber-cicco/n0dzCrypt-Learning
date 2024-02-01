@@ -31,11 +31,11 @@ public class AdminController {
     private final SessionRepository sessionRepository;
     @GetMapping
     public String getAdminPanel(Model model, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         LocalDate dateRecherche = LocalDate.now();
         response.addHeader("HX-Push-Url", "/admin/apprenant?date=" + dateRecherche);
         var sessions = sessionService.getSessionsWhereDateFinAfter(dateRecherche);
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         adminIrrigator.irrigateAdminPanelApprenants(model, userInfos, sessions, Routes.ADR_ADMIN_PRESENTATION);
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_ADMIN_APPRENANTS);
         return Routes.ADR_BASE_LAYOUT;
@@ -115,21 +115,5 @@ public class AdminController {
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         adminIrrigator.irrigateCoursSessionModal(model, userInfos, idSession);
         return Routes.ADR_ADMIN_SESSION_COURS_MODAL;
-    }
-
-    @GetMapping("/module")
-    public String getSousModules(Model model, @RequestParam("id") Long idModule, HttpServletResponse response) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
-        adminIrrigator.irrigateSousModulesModal(model, userInfos, idModule);
-        return Routes.ADR_ADMIN_MODULE;
-    }
-
-    @GetMapping("/smodule")
-    public String getCours(Model model, @RequestParam("id") Long idSModule, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
-        adminIrrigator.irrigateCoursModal(model, userInfos, idSModule);
-        return Routes.ADR_ADMIN_COURS_LISTE;
     }
 }

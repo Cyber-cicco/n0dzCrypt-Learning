@@ -1,3 +1,4 @@
+<th:block th:fragment="titre()">
 <script>
     function changeToModifier() {
 
@@ -7,7 +8,9 @@
         if(titreModif.classList.contains('hidden')) {
             titreModif.classList.remove('hidden')
             titre.classList.add('hidden')
-            titreModif.focus();
+            const titreInput = titreModif.querySelector('#titre')
+            titreInput.focus();
+            titreInput.select();
             return
         }
 
@@ -17,11 +20,7 @@
 </script>
 <div class="flex w-full items-center p-5" id="wrapper-titre">
     <div class="flex w-full justify-center items-center gap-2" id="titre">
-        <h1 
-            class="text-primary font-poppins text-5xl"
-            th:text="${cours.getTitre()}"
-            >
-        </h1>
+        <h1 class="text-3xl font-poppins text-primary" th:inline="text">[[${module.getLibelle()}]] - Module</h1>
         <span class="px-2">
             <img 
             src="/img/icons/editer.svg"
@@ -34,11 +33,22 @@
     <form 
         id="titre-modif"
         class="flex flex-col w-full items-center justify-center hidden"
-        th:hx-patch="'/cours/admin/titre?id=' + ${cours.getId()}"
+        th:hx-patch="'/admin/modules/titre?id=' + ${module.getId()}"
         hx-target="#wrapper-titre"    
+        th:hx-select-oob="'#module-' + ${module.getId()}"
         hx-swap="outerHTML"
         >
-        <input name="message" class="text-primary text-center font-poppins text-5xl" type="text" th:value="${cours.getTitre()}">
+        <input id="titre" name="message" class="text-primary border-2 border-primary w-full text-center font-poppins text-3xl" type="text" th:value="${module.getLibelle()}">
         <span id="error"></span>
     </form>
 </div>  
+</th:block>
+<div 
+    th:id="'module-' + ${module.getId()}"
+    th:hx-get="'/admin/modules/details?id=' + ${module.getId()}"
+    hx-target="#admin-card"
+    class="flex w-full gap-2 hover:cursor-pointer"
+    >
+    <th:block th:replace="svg/icons/module :: svg('20', '20')"></th:block>
+    <div th:text="${module.getLibelle()}"></div>
+</div>

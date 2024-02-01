@@ -227,7 +227,7 @@ public class CoursAdminController {
     public ResponseEntity<?> ajouterPhoto(Model model, @ModelAttribute("file") MultipartFile file, HttpServletResponse response) throws IOException {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
-        String fileName = photoService.uploadPhoto(file, userInfos);
+        String fileName = photoService.uploadPhoto(file, "/public/", userInfos);
         return ResponseEntity.ok(Map.of("name", fileName));
     }
 
@@ -235,7 +235,7 @@ public class CoursAdminController {
     public String ajouterQCMPhoto(Model model, @RequestParam("id") Long idQuestion, @ModelAttribute("file") MultipartFile file, HttpServletResponse response) throws IOException {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
-        String fileName = photoService.uploadPhoto(file, userInfos);
+        String fileName = photoService.uploadPhoto(file, "/public/", userInfos);
         QCMQuestion question = chapitreService.updateIllustrationQCM(idQuestion, fileName);
         model.addAttribute("question", question);
         return Routes.ADR_QCM_ILLUSTRATION;

@@ -23,7 +23,16 @@ public class PhotoController {
 
     @GetMapping
     public ResponseEntity<byte[]> getPhoto(@RequestParam("name") String nomPhoto) throws IOException {
-        Media photo = photoService.getPhoto(nomPhoto);
+        Media photo = photoService.getPhoto("/public/", nomPhoto);
+        return sendPhoto(photo);
+    }
+    @GetMapping("/module")
+    public ResponseEntity<byte[]> getPhotoModule(@RequestParam("name") String nomPhoto) throws IOException {
+        Media photo = photoService.getPhoto("/public/modules/",  nomPhoto);
+        return sendPhoto(photo);
+    }
+
+    private ResponseEntity<byte[]> sendPhoto(Media photo) throws IOException {
         ContentDisposition contentDisposition = ContentDisposition.inline()
                 .filename(photo.getNomRessource(), StandardCharsets.UTF_8)
                 .build();

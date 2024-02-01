@@ -1,0 +1,32 @@
+<th:block th:replace="~{pages/admin/modules/fragments/details.titre :: titre()}"></th:block>
+<div id="module-photo" class="flex flex-col gap-2 p-5 items-center">
+    <th:block th:replace="pages/admin/modules/fragments/module.photo"></th:block>
+</div>
+<div class="flex w-full h-full gap-2">
+    <div class="flex flex-col w-1/2">
+        <h2 class="text-xl pb-2 font-poppins text-primary">Formations associées : </h2>
+        <div class="flex p-2 h-[50%] overflow-y-auto flex-col bg-lightAccent rounded-md">
+            <th:block th:each="formation, iterStat : ${module.getFormations()}">
+                <div class="" th:text="${formation.getNom()}"></div>
+                <div class="w-full h-0.5 bg-primary"></div>
+            </th:block>
+        </div>
+        <div class="flex w-full py-2">
+            <button class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150" id="button-formation">Ajouter une formation</button>
+        </div>
+    </div>
+    <div class="flex flex-col w-1/2">
+        <h2 class="text-xl pb-2 font-poppins text-primary">Sous modules associés : </h2>
+        <div class="flex p-2 h-[50%] overflow-y-auto flex-col bg-lightAccent rounded-md">
+            <th:block th:each="smodule, iterStat : ${module.getSousModules()}">
+                <div class="flex flex-col gap-1 py-1">
+                    <div class="" th:text="${smodule.getNom()}"></div>
+                    <div class="w-full h-0.5 bg-primary"></div>
+                </div>
+            </th:block>
+        </div>
+        <div class="flex w-full py-2">
+            <button class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150" id="button-formation">Ajouter un sous module</button>
+        </div>
+    </div>
+</div>

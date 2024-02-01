@@ -7,15 +7,21 @@ import fr.diginamic.digilearning.service.types.Media;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.Objects;
 
 @Service
@@ -23,7 +29,7 @@ import java.util.Objects;
 public class PhotoService {
 
     private static final String DEFAULT_DOCUMENT_DIRECTORY = System.getProperty("user.dir") + "/ressources/";
-    public String uploadPhoto(MultipartFile file, AuthenticationInfos userInfos) throws IOException {
+    public String uploadPhoto(MultipartFile file, String directoryName, AuthenticationInfos userInfos) throws IOException {
 
         boolean isPng = Objects.equals(file.getContentType(), "image/png");
         boolean isJpg = Objects.equals(file.getContentType(), "image/jpeg");
@@ -34,7 +40,6 @@ public class PhotoService {
 
         String extension = (isPng) ? ".png" : ".jpeg";
 
-        String directoryName = "/public/";
         Path directoryPath = Path.of(DEFAULT_DOCUMENT_DIRECTORY + directoryName);
 
         if (!Files.isDirectory(directoryPath)){
@@ -43,20 +48,24 @@ public class PhotoService {
 
         String fileWithoutExtension = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf('.'));
         String fileName = StringUtils.determineFileName(fileWithoutExtension, extension, directoryPath);
-
-        file.transferTo(new File(directoryPath + "/" + fileName));
+        OutputStream outputStream = new FileOutputStream(directoryPath + "/" + fileName);
+        Thumbnails.of(file.getInputStream())
+                .scale(1)
+                .outputQuality(0.5)
+                .toOutputStream(outputStream);
+        outputStream.close();
         return fileName;
     }
 
-    public Media getPhoto(String nomPhoto){
-        Path photoPath = Path.of(DEFAULT_DOCUMENT_DIRECTORY + "/public/" + nomPhoto);
+    public Media getPhoto(String sourceDirectory, String nomPhoto){
+        Path photoPath = Path.of(DEFAULT_DOCUMENT_DIRECTORY + sourceDirectory + nomPhoto);
         Media media = new Media();
         if(!Files.exists(photoPath)) {
             throw new EntityNotFoundException("La photo n'a pas été trouvée");
         }
         String suffix = nomPhoto.substring(nomPhoto.lastIndexOf("."));
         switch (suffix) {
-            case ".png" -> media.setMediaType(MediaType.IMAGE_PNG);
+            case ".png", ".webp" -> media.setMediaType(MediaType.IMAGE_PNG);
             case ".jpeg" ->  media.setMediaType(MediaType.IMAGE_JPEG);
             case ".svg" ->  media.setMediaType(MediaType.APPLICATION_XML);
             default -> throw new BrokenRuleException("Vous ne pouvez demander autre chose qu'une photo via ce point d'entrée");

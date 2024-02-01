@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.entities;
 
 import fr.diginamic.digilearning.entities.enums.StatusPublication;
+import fr.diginamic.digilearning.entities.enums.TypeCoursElement;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +22,7 @@ import java.util.Optional;
 @Builder
 @Entity
 @Table(name = "dl_cours")
-public class Cours implements Comparable<Cours> {
+public class Cours implements Comparable<Cours>, CoursElement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -90,5 +91,15 @@ public class Cours implements Comparable<Cours> {
             return titre.compareTo(o.titre);
         }
         return comp;
+    }
+
+    @Override
+    public String getNom() {
+        return titre;
+    }
+
+    @Override
+    public TypeCoursElement getTypeElement() {
+        return TypeCoursElement.COURS;
     }
 }

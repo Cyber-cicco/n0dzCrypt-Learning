@@ -71,6 +71,11 @@ public class Routes {
     public static final String ADR_ADMIN_MODULE = "pages/admin/apprenants/fragments/session.cours.module";
     public static final String ADR_ADMIN_COURS_LISTE = "pages/admin/apprenants/fragments/session.cours.liste-cours";
     public static final String ADR_CHAPITRE_VIDEO = "pages/cours/admin/fragments/chapitre.video";
+    public static final String ADR_ADMIN_MODULES = "pages/admin/modules/base";
+    public static final String ADR_ADMIN_MODULES_DETAILS = "pages/admin/modules/fragments/details";
+    public static final String ADR_ADMIN_MODULES_TITRE = "pages/admin/modules/fragments/details.titre";
+
+    public static final String ADR_ADMIN_MODULES_PHOTO = "pages/admin/modules/fragments/module.photo";
 
     private Routes(){}
 }
