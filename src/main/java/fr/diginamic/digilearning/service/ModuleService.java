@@ -126,6 +126,16 @@ public class ModuleService {
         return sousModuleRepository.save(sousModule);
     }
 
+    @Transactional
+    public SousModule deleteModuleFromSousModule(Long idSmodule, Long idModule) {
+        SousModule sousModule = sousModuleRepository.findById(idSmodule)
+                .orElseThrow(EntityNotFoundException::new);
+        Module module = moduleRepository.findById(idModule)
+                .orElseThrow(EntityNotFoundException::new);
+        sousModule.getModules().remove(module);
+        return sousModuleRepository.save(sousModule);
+    }
+
     public record ReponseChangementTitreSmodule(SousModule smodule, Optional<String> diagnostic){}
 
     public ReponseChangementTitreSmodule patchSmoduleTitre(String titre, Long idSmodule) {

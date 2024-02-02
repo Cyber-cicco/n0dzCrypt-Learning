@@ -196,6 +196,14 @@ public class ModuleController implements DiagnoticHandler {
         moduleIrrigator.irrigateDetailsModulesForFormation(model, formation);
         return Routes.ADR_ADMIN_MODULE_FORMATION_MODULE_DETAILS;
     }
+    @DeleteMapping("/smodule/module")
+    public String deleteModuleFromSousModule(Model model, @RequestParam("idSmodule") Long idSmodule, @RequestParam("idModule") Long idModule, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        SousModule sousModule = moduleService.deleteModuleFromSousModule(idSmodule, idModule);
+        moduleIrrigator.irrigateDetailsModulesForSousModule(model, sousModule);
+        return Routes.ADR_ADMIN_MODULE_SMODULES_MODULE_DETAILS;
+    }
     @DeleteMapping("/formation")
     public String deleteFormation(Model model, @RequestParam("idFormation") Long idFormation, @RequestParam("idModule") Long idModule, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
