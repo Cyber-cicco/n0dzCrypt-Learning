@@ -68,4 +68,22 @@ public class ModuleIrrigator {
     public void irrigateDetailsSousModule(Model model, Module module) {
         model.addAttribute("module", module);
     }
+
+    public void irrigateDetailsPageFormation(Model model, Long idFormation, HttpServletResponse response) {
+        Formation formation = formationRepository.findById(idFormation).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("formation", formation);
+    }
+
+    public void irrigateDetailsPageSmodule(Model model, Long idSmodule, HttpServletResponse response) {
+        SousModule sousModule = sousModuleRepository.findById(idSmodule).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("smodule", sousModule);
+    }
+
+    public void irrigateModuleDetails(Model model, Module module, HttpServletResponse response) {
+        model.addAttribute("module", module);
+    }
+
+    public void irrigateSmoduleDetails(Model model, SousModule smodule) {
+        model.addAttribute("smodule", smodule);
+    }
 }

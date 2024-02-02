@@ -6,6 +6,7 @@
         >
         <div data-smodule>
             <div 
+                th:fragment="smodule()"
                 th:id="'smodule-' + ${smodule.getId()}"
                 th:hx-get="'/admin/modules/smodule/details?id=' + ${smodule.getId()}"
                 hx-target="#admin-card"

@@ -1,23 +1,5 @@
 <th:block th:fragment="titre()">
-<script>
-    function changeToModifier() {
-
-        let titreModif = document.querySelector(`#titre-modif`)
-        let titre = document.querySelector(`#titre`)
-
-        if(titreModif.classList.contains('hidden')) {
-            titreModif.classList.remove('hidden')
-            titre.classList.add('hidden')
-            const titreInput = titreModif.querySelector('#titre')
-            titreInput.focus();
-            titreInput.select();
-            return
-        }
-
-        titreModif.classList.add('hidden')
-        titre.classList.remove('hidden')
-    }
-</script>
+<script th:insert="scripts/modifier.titre.js"></script>
 <div class="flex w-full items-center p-5" id="wrapper-titre">
     <div class="flex w-full justify-center items-center gap-2" id="titre">
         <h1 class="text-3xl font-poppins text-primary" th:inline="text">[[${module.getLibelle()}]] - Module</h1>

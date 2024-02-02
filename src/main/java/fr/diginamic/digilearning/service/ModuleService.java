@@ -84,6 +84,18 @@ public class ModuleService {
         return moduleRepository.save(module);
     }
 
+    public record ReponseChangementTitreSmodule(SousModule smodule, Optional<String> diagnostic){}
+
+    public ReponseChangementTitreSmodule patchSmoduleTitre(String titre, Long idSmodule) {
+        Optional<String> diagnostic = moduleValidator.validateModuleTitre(titre);
+        if(diagnostic.isPresent()){
+            return new ReponseChangementTitreSmodule(null, diagnostic);
+        }
+        SousModule smodule = sousModuleRepository.findById(idSmodule).orElseThrow(EntityNotFoundException::new);
+        smodule.setTitre(titre);
+        return new ReponseChangementTitreSmodule(sousModuleRepository.save(smodule), diagnostic);
+    }
+
     public record ReponseChangementTitre(Module module, Optional<String> diagnostic){}
     public ReponseChangementTitre patchModuleTitre(String titre, Long idModule){
         Optional<String> diagnostic = moduleValidator.validateModuleTitre(titre);

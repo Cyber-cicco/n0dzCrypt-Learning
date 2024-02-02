@@ -56,6 +56,20 @@ public class ModuleController implements DiagnoticHandler {
         moduleIrrigator.irrigateModuleDetails(model, idModule, response);
         return Routes.ADR_ADMIN_MODULES_DETAILS;
     }
+    @GetMapping("formation/details")
+    public String getFormationDetails(Model model, @RequestParam("id") Long idFormation, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        moduleIrrigator.irrigateDetailsPageFormation(model, idFormation, response);
+        return Routes.ADR_ADMIN_MODULES_FORMATION_DETAILS;
+    }
+    @GetMapping("smodule/details")
+    public String getSmoduleDetails(Model model, @RequestParam("id") Long idSmodule, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        moduleIrrigator.irrigateDetailsPageSmodule(model, idSmodule, response);
+        return Routes.ADR_ADMIN_MODULES_SMODULE_DETAILS;
+    }
 
     @GetMapping("/formations-module")
     public String getFormationsForModule(Model model, @RequestParam("id") Long idModule, HttpServletResponse response){
@@ -72,6 +86,17 @@ public class ModuleController implements DiagnoticHandler {
         moduleIrrigator.irrigateSousModules(model, idModule);
         return Routes.ADR_ADMIN_MODULE_SMODULES_MODAL;
     }
+    @PatchMapping("smodule/titre")
+    public String patchSmoduleTitre(Model model, @RequestParam("id") Long idSmodule, @ModelAttribute MessageDto titre, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        var changementResponse = moduleService.patchSmoduleTitre(titre.getMessage(), idSmodule);
+        if(changementResponse.diagnostic().isPresent()){
+            return handleSingleDiagnostic(model, response, changementResponse.diagnostic().get(), "error", Routes.ADR_FORM_ERROR);
+        }
+        moduleIrrigator.irrigateSmoduleDetails(model, changementResponse.smodule());
+        return Routes.ADR_ADMIN_MODULES_SMODULE_TITRE;
+    }
     @PatchMapping("titre")
     public String patchModuleTitre(Model model, @RequestParam("id") Long idModule, @ModelAttribute MessageDto titre, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -80,7 +105,7 @@ public class ModuleController implements DiagnoticHandler {
         if(changementResponse.diagnostic().isPresent()){
             return handleSingleDiagnostic(model, response, changementResponse.diagnostic().get(), "error", Routes.ADR_FORM_ERROR);
         }
-        moduleIrrigator.irrigateModuleDetails(model, idModule, response);
+        moduleIrrigator.irrigateModuleDetails(model, changementResponse.module(), response);
         return Routes.ADR_ADMIN_MODULES_TITRE;
     }
 
