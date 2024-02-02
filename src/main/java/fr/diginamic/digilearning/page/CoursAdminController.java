@@ -5,6 +5,7 @@ import fr.diginamic.digilearning.entities.Chapitre;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.QCMChoix;
 import fr.diginamic.digilearning.entities.QCMQuestion;
+import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -150,10 +151,31 @@ public class CoursAdminController {
     }
 
     @PostMapping("/description")
-    public String editerDescription(@RequestParam("id") Long idCours, @ModelAttribute MessageDto descriptionCours) {
+    public String editerDescription(@RequestParam("id") Long idCours, @ModelAttribute MessageDto descriptionCours, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(
+                userInfos.getRoles(),
+                List.of(TypeRole.ROLE_ADMINISTRATEUR, TypeRole.ROLE_FORMATEUR),
+                response
+        );
         coursService.editerDescription(idCours, descriptionCours, userInfos);
         return Routes.ADR_FORM_ERROR;
+    }
+
+    private record VideoDto(String video){}
+    @PostMapping("/chapitre/video")
+    public String postNewVideo(Model model, @RequestParam("id") Long idChapitre, @ModelAttribute VideoDto videoDto, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(
+                userInfos.getRoles(),
+                List.of(TypeRole.ROLE_ADMINISTRATEUR, TypeRole.ROLE_FORMATEUR),
+                response
+        );
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId()).orElseThrow(EntityNotFoundException::new);
+        chapitre.setLienVideo(videoDto.video());
+        chapitreRepository.save(chapitre);
+        model.addAttribute("video", chapitre.getLienVideo());
+        return Routes.ADR_CHAPITRE_VIDEO;
     }
 
     @PostMapping
@@ -205,7 +227,7 @@ public class CoursAdminController {
     public ResponseEntity<?> ajouterPhoto(Model model, @ModelAttribute("file") MultipartFile file, HttpServletResponse response) throws IOException {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
-        String fileName = photoService.uploadPhoto(file, userInfos);
+        String fileName = photoService.uploadPhoto(file, "/public/", userInfos);
         return ResponseEntity.ok(Map.of("name", fileName));
     }
 
@@ -213,7 +235,7 @@ public class CoursAdminController {
     public String ajouterQCMPhoto(Model model, @RequestParam("id") Long idQuestion, @ModelAttribute("file") MultipartFile file, HttpServletResponse response) throws IOException {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
-        String fileName = photoService.uploadPhoto(file, userInfos);
+        String fileName = photoService.uploadPhoto(file, "/public/", userInfos);
         QCMQuestion question = chapitreService.updateIllustrationQCM(idQuestion, fileName);
         model.addAttribute("question", question);
         return Routes.ADR_QCM_ILLUSTRATION;
@@ -235,8 +257,10 @@ public class CoursAdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), reponse);
         Chapitre chapitre = coursService.publierContenu(userInfos, idChapitre, contenuChapitreDto);
-        model.addAttribute("content", "La version de votre cours est publiée");
-        return Routes.ADR_MESSAGE;
+        model.addAttribute("aJour", "La version de votre cours est publiée et à jour.");
+        model.addAttribute("classAJour", "text-validation grow text-center");
+        model.addAttribute("id", "info");
+        return Routes.ADR_GENERIC_MESSAGE;
     }
 
     @PostMapping("/qcm/choix")
@@ -275,6 +299,24 @@ public class CoursAdminController {
         return Routes.ADR_QCM_CHOIX_LISTE;
     }
 
+    @PatchMapping("qcm/depublier")
+    public String depublierQCM(Model model, @RequestParam("id") Long id, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        Chapitre chapitre = chapitreService.depublierChapitre(id, userInfos.getId());
+        chapitreIrrigator.irrigateAdminQCM(model, chapitre);
+        return Routes.ADR_ADMIN_QCM_QUESTION_LISTE;
+    }
+    @PatchMapping("chapitre/depublier")
+    public String depublierChapitre(Model model, @RequestParam("id") Long id, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
+        chapitreService.depublierChapitre(userInfos.getId(), id);
+        model.addAttribute("aJour", "Votre cours n'est pas encore publié");
+        model.addAttribute("classAJour", "text-error grow text-center");
+        model.addAttribute("id", "info");
+        return Routes.ADR_GENERIC_MESSAGE;
+    }
     @PatchMapping("/titre")
     public String changerTitre(Model model, @RequestParam("id") Long idCours, HttpServletResponse response, @ModelAttribute MessageDto messageDto) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -311,7 +353,7 @@ public class CoursAdminController {
         reponse.setHeader("HX-Retarget", "#qcm-error-publication");
         reponse.setHeader("HX-Reswap", "outerHTML");
         model.addAttribute("aJour", reponsePublicationQCM.getMessage());
-        model.addAttribute("classAJour", "text-error");
+        model.addAttribute("classAJour", "text-error text-error grow text-center");
         model.addAttribute("id", "qcm-error-publication");
         return Routes.ADR_GENERIC_MESSAGE;
     }
@@ -341,7 +383,7 @@ public class CoursAdminController {
         if(qcmQuestion.diagnostic().isPresent()){
             reponse.setHeader("HX-Reswap", "outerHTML");
             model.addAttribute("aJour", qcmQuestion.diagnostic().get());
-            model.addAttribute("classAJour", "text-error");
+            model.addAttribute("classAJour", "text-error text-error grow text-center");
             model.addAttribute("id", "error-commentaire");
             return Routes.ADR_GENERIC_MESSAGE;
         }

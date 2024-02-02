@@ -124,6 +124,9 @@ public class Session {
 			inverseJoinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id")
 	)
 	private List<Post> postList;
+	@OneToMany(mappedBy = "session")
+	@Builder.Default
+	private List<CoursSession> coursSessions = new ArrayList<>();
 
 	@Override
 	public boolean equals(Object o) {

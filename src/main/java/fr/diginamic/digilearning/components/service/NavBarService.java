@@ -17,7 +17,7 @@ public class NavBarService {
      * @return la liste des liens de la navbar en fonction du role de l'utilisateur
      */
     public NavLinks[] getLinks(AuthenticationInfos userInfos) {
-        if(userInfos.isAdministrateur() || userInfos.isFormateur()){
+        if(userInfos.isAdministrateur()){
             return new NavLinks[]{
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
@@ -29,7 +29,12 @@ public class NavBarService {
                                     NavLink.builder()
                                             .iconSource("svg/icons/school")
                                             .url("cours/admin")
-                                            .libelle("Ressources")
+                                            .libelle("Mes cours")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/admin")
+                                            .url("admin")
+                                            .libelle("Administration")
                                             .build(),
                                     NavLink.builder()
                                             .iconSource("svg/icons/conversation")
@@ -45,6 +50,33 @@ public class NavBarService {
                             .build(),
                     NavLinks.builder()
                             .navLinks(new NavLink[]{})
+                            .build(),
+            };
+        } else if (userInfos.isFormateur()){
+            return new NavLinks[]{
+                    NavLinks.builder()
+                            .navLinks(new NavLink[]{
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/home")
+                                            .url("home")
+                                            .libelle("Accueil")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/school")
+                                            .url("cours/admin")
+                                            .libelle("Mes cours")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/conversation")
+                                            .url("conversation/admin")
+                                            .libelle("Mes messages")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/forum")
+                                            .url("forum")
+                                            .libelle("Forum")
+                                            .build(),
+                            })
                             .build(),
             };
         } else if(userInfos.isStagiaire()) {

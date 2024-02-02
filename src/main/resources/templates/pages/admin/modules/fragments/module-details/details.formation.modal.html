@@ -1,0 +1,26 @@
+<form
+    th:hx-put="'/admin/modules/formation?id=' + ${module.getId()}"
+    hx-select-oob="#formations-card"
+    hx-select="#formations-modal"
+    hx-target="#formations-modal"
+    hx-swap="outerHTML"
+    class="flex flex-col py-5 gap-2"
+    >
+    <div class="flex gap-2 items-center">
+        <th:block th:replace="svg/icons/search :: svg('30', '30')"></th:block>
+        <label for="modules-choice">Rechercher</label>
+    </div>
+    <input minlength="2" class="rounded-sm p-2 text-black w-full" list="formations-list" name="formation" id="formations-choice">
+    <datalist style="overflow:hidden" id="formations-list">
+        <th:block th:each="formation, iterStat : ${formations}">
+            <option th:value="${formation.getNom()}"></option>
+        </th:block>
+    </datalist>
+    <button 
+        class="bg-primary w-full p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+        type="submit"
+        >Ajouter</button>
+</form>
+<div id="formations-modal" class="flex flex-col h-[50%]">
+    <th:block th:replace="pages/admin/modules/fragments/module-details/details.formations :: formations()"></th:block>
+</div>

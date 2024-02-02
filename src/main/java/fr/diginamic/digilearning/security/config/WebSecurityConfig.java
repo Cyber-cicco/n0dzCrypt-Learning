@@ -44,10 +44,6 @@ public class WebSecurityConfig {
                         .requestMatchers(mvc.pattern("styles/**")).permitAll()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
-
-                        httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(customAuthenticationEntryPoint)
-                )
                 .csrf(AbstractHttpConfigurer::disable
                                 )
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer

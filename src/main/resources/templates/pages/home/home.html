@@ -1,4 +1,4 @@
-<div id="home" class="flex flex-col items-center w-full h-full overflow-y-scroll">
+<div id="home" class="flex items-center flex-col w-full h-full overflow-y-scroll">
     <div class="flex flex-col w-full md:w-2/3">
         <th:block th:replace="~{components/entete.nav :: entete('Accueil')}"></th:block>
         <div class="flex p-2 gap-2 w-full">
@@ -31,7 +31,7 @@
                 hx-push-url="agenda"
                 >
                 <div class="text-xl text-primary font-poppins">Consulter mon agenda</div>
-                <img width="462" height="240" src="/img/home/calendar.png">
+                <img loading="lazy" width="462" height="240" src="/img/home/calendar.png">
                 <div class="">
                     <article class="text-primary italic text-justify ">L'agenda est là pour vous permettre de gérer vos cours et vous assurer de garder le tout au long de votre formation !
                         Glissez-déposez vos cours à a date souhaitée pour organiser votre emploi du temps et vous assurer d'avoir toujours un coup d'avance !
@@ -39,7 +39,7 @@
                 </div>
             </section>
         </div>
-        <div class="w-full md:w-1/2 lg:w-1/3 p-2 translate-y-10">
+        <div class="w-full md:w-1/2 lg:w-1/3 p-2">
             <section 
                 class="flex flex-col w-full hoverzoom items-center gap-2 bg-grey overflow-hidden p-5 shadow-dark shadow-md rounded-md hover:cursor-pointer"
                 hx-get="/conversation/stagiaire/api"
@@ -48,14 +48,14 @@
                 hx-push-url="conversation/stagiaire"
                 >
                 <div class="text-xl text-center text-primary font-poppins">Prendre contact avec un(e) responsable de ma session</div>
-                <img height="240" class="h-[240px]" src="/img/home/ricardo.webp">
+                <img loading="lazy" height="240" class="h-[240px]" src="/img/home/ricardo.webp">
                 <div class="">
-                    <article class="text-primary italic text-justify ">Si vous avez la moindre question concernant la formation, cette section vous permet de prendre contact directement avec l'un des reponsables de votre session.
+                    <article class="text-primary italic text-justify ">Si vous avez la moindre question concernant la formation, cette section vous permet de prendre contact directement avec l'un des reponsables de votre session. Vous pouvez ainsi poser des questions sur le parcours à votre reponsable de formation, faire des retours au Room Master, ou poser des questions au responsable administratif.
                     </article>
                 </div>
             </section>
         </div>
-        <div class="w-full md:w-1/2 lg:w-1/3 p-2 translate-y-20">
+        <div class="w-full md:w-1/2 lg:w-1/3 p-2">
             <section 
                 class="flex flex-col w-full text-center hoverzoom items-center gap-2 bg-grey overflow-hidden p-5 shadow-dark shadow-md rounded-md hover:cursor-pointer"
                 hx-get="/forum/api"
@@ -64,14 +64,14 @@
                 hx-push-url="/forum/"
                 >
                 <div class="text-xl text-primary font-poppins">Participer au forum</div>
-                <img class="h-[240px]" height="240" src="/img/home/forum.jpg">
+                <img loading="lazy" class="h-[240px]" height="240" src="/img/home/forum.jpg">
                 <div class="">
-                    <article class="text-primary italic text-justify ">
+                <article class="text-primary italic text-justify ">
                         Si vous souhaitez échanger avec vos camarades sur divers sujets, le forum est là pour vous !
                         Que ce soit pour de la veille technologique, des échanges sur les cours, ou tout simplement
                         parler de tout et rien, il y a forcément un salon qui pourrait vous intéresser.
-                    </article>
-                </div>
-            </section>
-        </div>
+                </article>
+            </div>
+        </section>
+    </div>
 </div>

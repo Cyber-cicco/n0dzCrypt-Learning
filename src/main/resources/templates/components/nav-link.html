@@ -4,6 +4,8 @@
         th:hx-get="'/' + ${url} + '/api'"
         th:href="'/' + ${url}"
         th:hx-push-url="'/' + ${url}"
+        hx-on::before-request="showLoad()"
+        hx-on::after-request="hideLoad()"
         hx-swap="innerHTML transition:true"
         hx-target="#insert"
         hx-boost="true"

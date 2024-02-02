@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -38,9 +39,9 @@ public class Chapitre {
 	@OneToMany(mappedBy = "qcm")
 	@Builder.Default
 	private List<QCMQuestion> qcmQuestions = new ArrayList<>();
-	@OneToMany(mappedBy = "qcmPublie")
-	@Builder.Default
-	private List<QCMQuestion> qcmQuestionsPubliees = new ArrayList<>();
+
+	@OneToMany(mappedBy = "qcm")
+	private List<QCMPublication> qcmPublications = new ArrayList<>();
 	@OneToMany(mappedBy = "chapitre")
 	private List<Question> questions;
 	@ManyToOne
@@ -60,7 +61,16 @@ public class Chapitre {
 		return qcmQuestions;
 	}
 	public List<QCMQuestion> getQcmQuestions() {
-		return qcmQuestions.stream().sorted(Comparator.comparing(QCMQuestion::getOrdre)).toList();
+		return qcmQuestions.stream()
+				.sorted(Comparator.comparing(QCMQuestion::getOrdre)).toList();
+	}
+
+	public List<QCMQuestion> getQcmQuestionsPubliees(){
+		return qcmPublications.stream()
+				.filter(QCMPublication::getDerniere)
+				.flatMap(qcmPublication -> qcmPublication.getQuestions().stream())
+				.sorted(Comparator.comparing(QCMQuestion::getOrdre))
+				.toList();
 	}
 
 	public String getNomAndStatus() {
@@ -72,5 +82,9 @@ public class Chapitre {
 			default -> status = "Inconnu";
 		}
 		return libelle + " (" + status  + ")";
+	}
+
+	public QCMPublication getQcmPublication() {
+		return qcmPublications.stream().filter(QCMPublication::getDerniere).findFirst().orElseThrow();
 	}
 }

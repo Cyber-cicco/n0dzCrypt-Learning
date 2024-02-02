@@ -22,11 +22,17 @@
     <link rel="stylesheet" th:href="@{/styles/addons.css}">
     <script th:insert="~{scripts/htmx.min.js}"></script>
     <script th:insert="~{scripts/dragula.js}"></script>
-    <script src="/js/highlight.js"></script>
+    <script th:insert="scripts/onload.js"></script>
     <script th:insert="~{scripts/flowbite.min.js}"></script>
     <title>Digi-Learning</title>
 </head>
-<body class="flex flex-col xl:flex-row w-full h-full overflow-hidden">
+<body id="root" class="flex flex-col xl:flex-row w-full h-full overflow-hidden">
+    <div id="loading" class="z-50 hidden fixed top-0 left-0 w-screen h-screen bg-opacity-40 bg-lightAccent">
+        <div 
+            th:insert="~{svg/spinner}"
+            class="fixed top-[50%] z-50 translate-x-[-100px] translate-y-[-100px] left-[50%]"
+            ></div>
+    </div>
     <th:block th:replace="~{components/navbar}"></th:block>
     <main id="router-outlet" class="w-full bg-secondary">
         <div id="insert" th:insert="${insert}" class="w-full h-screen"></div>

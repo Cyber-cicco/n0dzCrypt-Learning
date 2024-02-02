@@ -22,6 +22,7 @@ public interface ChapitreRepository extends JpaRepository<Chapitre, Long>  {
     join SESSION_STAGIAIRE SS on S.ID = SS.ID_SES
     join UTILISATEUR U on SS.ID_STAG = U.ID
     where ch.id = ?1
+    and ch.statusPublication != 0
     and U.ID = ?2
     """)
     Optional<Chapitre> findByIdAndUtilisateurId(Long idChapitre, Long idUtilisateur);

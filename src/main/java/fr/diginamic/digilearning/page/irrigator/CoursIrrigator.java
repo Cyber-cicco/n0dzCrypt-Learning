@@ -181,14 +181,14 @@ public class CoursIrrigator {
         model.addAttribute("duree", cours.getDuree());
     }
 
-    public void irrigateQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, int index) {
+    public void irrigateQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, List<QCMQuestion> questions, Cours cours, int index) {
         model.addAttribute("slide", Routes.ADR_QCM);
-        irrigateBaseQCM(model, userInfos, qcm, cours, index);
+        irrigateBaseQCM(model, userInfos, qcm, questions, cours, index);
     }
 
-    public void irrigateBaseQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, int index) {
+    public void irrigateBaseQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, List<QCMQuestion> questions, Cours cours, int index) {
         model.addAttribute("qcm", qcm);
-        model.addAttribute("question", qcm.getQcmQuestions().get(index));
+        model.addAttribute("question", questions.get(index));
         model.addAttribute("idUtilisateur", userInfos.getId());
         model.addAttribute("cours", cours);
         model.addAttribute("idCours", cours.getId());

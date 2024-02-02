@@ -161,4 +161,16 @@ where c.ordre >= ?1
 and c.sous_module_id = ?2
 """)
     void changeOrdre(Integer ordre, Long idSousModule);
+
+    @Query(nativeQuery = true, value = """
+select c.* 
+from dl_cours c
+inner join dl_sous_module dsm on c.sous_module_id = dsm.id
+inner join dl_module_smodule dms on dsm.id = dms.id_smodule
+inner join dl_module_formation dmf on dms.id_module = dmf.id_module
+inner join FORMATION F on dmf.id_formation = F.ID
+inner join SESSION S on F.ID = S.ID_FOR
+where S.ID = ?1
+""")
+    List<Cours> getCoursBySession(Long idSession);
 }

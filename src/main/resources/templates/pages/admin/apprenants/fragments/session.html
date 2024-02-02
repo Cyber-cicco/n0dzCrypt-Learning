@@ -1,0 +1,84 @@
+<section class="flex flex-col p-2 h-full gap-10">
+    <h1 class="text-5xl pt-5 font-poppins text-center text-primary" th:text="${_session.getNom()}"></h1>
+    <div class="flex justify-between p-5">
+        <h2 
+            class="text-2xl font-poppins text-primary"
+            th:inline="text"
+            >Formation associée : [[${_session.getFormation().getNom()}]]</h2>
+        <div 
+            class="text-2xl font-poppins text-primary"
+            th:inline="text"
+            >Date de fin : [[${_session.getDateFin()}]]</div>
+    </div>
+    <div class="flex gap-5">
+        <div class="flex flex-col w-1/2 p-2 gap-2">
+            <h2 class="text-xl font-poppins text-primary">Modules associés : </h2>
+            <div class="bg-lightAccent rounded-md">
+                <th:block th:each="module, iterStat : ${_session.getFormation().getModules()}">
+                    <div class="p-2 text-center" th:text="${module.getLibelle()}"></div>
+                </th:block>
+            </div>
+            <button class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Changer les modules de la formation</button>
+        </div>
+        <div class="flex flex-col w-1/2 p-2 gap-2">
+            <h3 class="text-xl font-poppins text-primary">Responsables de la session : </h3>
+            <div class="bg-lightAccent rounded-md flex flex-col">
+                <th:block th:each="admin, iterStat : ${_session.getAdministrationSessions()}">
+                    <div class="flex p-2 w-full justify-between">
+                        <div th:text="${admin.getUtilisateur().getFullName()}"></div>
+                        <div class="" th:text="${admin.getStatusResponsableSession().getLibelle()}"></div>
+                    </div>
+                </th:block>
+            </div>
+            <button class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Changer les responsables de la session</button>
+        </div>
+    </div>
+    <div class="grow"></div>
+    <div class="flex flex-col gap-2">
+        <h2 class="text-xl font-poppins text-primary">Actions : </h2>
+        <div class="flex gap-2 w-full">
+            <button 
+                th:hx-get="'/admin/session/cours?id=' + ${_session.getId()}"
+                hx-target="#modal-cours-content"
+                hx-on::before-request="openModalCours()"
+                class="w-full bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+                >Prévoir des cours</button>
+            <button 
+                class="w-full bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+                >Gérer les accès au forum</button>
+    </div>
+</section>
+<aside id="modal-cours" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
+    <div class="flex justify-end w-full">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeModalCours()">
+    </div>
+    <section id="modal-cours-content" class="flex flex-col h-full gap-2">
+    </section>
+</aside>
+<aside id="modal-forum" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
+    <div class="flex justify-end w-full">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeModalForum()">
+    </div>
+    <section class="flex flex-col h-full gap-2">
+    </section>
+</aside>
+<script>
+function openModalForum(){
+    document.querySelector('#modal-forum').classList.add("modal");
+    document.querySelector('#modal-bg').removeAttribute("hidden")
+}
+
+function closeModalForum(){
+    document.querySelector('#modal-forum').classList.remove("modal");
+    document.querySelector('#modal-bg').setAttribute("hidden", "true")
+}
+function openModalCours(){
+    document.querySelector('#modal-cours').classList.add("modal");
+    document.querySelector('#modal-bg').removeAttribute("hidden")
+}
+
+function closeModalCours(){
+    document.querySelector('#modal-cours').classList.remove("modal");
+    document.querySelector('#modal-bg').setAttribute("hidden", "true")
+}
+</script>

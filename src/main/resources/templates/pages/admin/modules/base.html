@@ -1,0 +1,59 @@
+<div class="flex -center flex-col w-full h-full">
+    <nav class="flex justify-around h-[5%] w-full bg-white text-primary text-lg">
+        <ul class="flex justify-around w-full">
+            <li class="flex p-2 hover:bg-greyDeep w-full h-full hover:cursor-pointer justify-center">
+                <a 
+                    class="w-full text-center"
+                    th:href="'/admin/apprenants?date=' + ${currDate}"
+                    th:hx-get="'/admin/apprenants/api?date=' + ${currDate}"
+                    th:hx-push-url="'/admin/apprenants?date=' + ${currDate}"
+                    hx-target="#insert"
+                    >Gestion des apprenants</a>
+            </li>
+            <li class="flex bg-grey w-full p-2 hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
+                <a 
+                    class="w-full text-center"
+                    href="/admin/modules"
+                    hx-get="/admin/modules/api"
+                    hx-push-url="/admin/modules"
+                    hx-target="#insert"
+                    >Gestion des modules</a>
+            </li>
+            <li class="flex w-full p-2 hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
+                <a 
+                    class="w-full text-center"
+                    href="/admin/cours-admin"
+                    >Gestion des cours</a>
+            </li>
+        </ul>
+    </nav>
+    <section id="modules-root" class="flex gap-2 p-2 rounded-md h-[95%] w-full">
+        <div id="side-bar" class="flex h-full overflow-y-scroll p-3 flex-col gap-2 w-2/5 rounded-lg bg-primary text-white">
+            <div class="flex gap-2 items-center">
+                <th:block th:replace="svg/icons/search.white :: svg('30', '30')"></th:block>
+                <label for="modules-choice">Rechercher</label>
+            </div>
+            <input minlength="2" class="rounded-sm p-2 text-black w-full" list="modules-list" name="modules-choice" id="modules-choice">
+            <datalist style="overflow:hidden" id="modules-list">
+                <th:block th:each="el, iterStat : ${elements}">
+                    <option th:value="${el.getNom()} + ' - ' + ${el.getTypeElement().getLibelle()}"></option>
+                </th:block>
+            </datalist>
+            <div class="flex h-[80%] w-full pt-2">
+                <th:block th:replace="~{pages/admin/modules/fragments/formations.liste}"></th:block>
+                <th:block th:replace="~{pages/admin/modules/fragments/modules.liste}"></th:block>
+                <th:block th:replace="~{pages/admin/modules/fragments/smodules.liste}"></th:block>
+            </div>
+        </div>
+        <div class="flex flex-col items-center gap-2 bg-white h-full overflow-y-auto w-[60%] p-5 rounded-md" id="admin-card">
+        </div>
+    </section>
+    <aside id="modal-changement" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
+        <div class="flex justify-end w-full">
+            <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" data-close-modal >
+        </div>
+        <section id="modal-content" class="flex flex-col h-full gap-2">
+        </section>
+    </aside>
+    <script th:insert="~{scripts/cours-elements-tree.js}" type="module" th:inline="javascript"></script>
+</div>

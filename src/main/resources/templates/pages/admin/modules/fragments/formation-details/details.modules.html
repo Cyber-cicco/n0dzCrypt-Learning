@@ -1,0 +1,33 @@
+<div id="modules-card" class="h-[50%]">
+    <th:block th:fragment="modules()">
+        <div class="flex p-2 h-full overflow-y-auto flex-col bg-lightAccent rounded-md">
+            <th:block th:each="module, iterStat : ${formation.getModules()}">
+                <div class="flex flex-col gap-1 py-1">
+                    <div class="flex items-center">
+                        <div class="w-4/5" th:text="${module.getNom()}"></div>
+                        <div class="grow"></div>
+                        <div 
+                            class="rounded-full hover:cursor-pointer hover:bg-accent p-1"
+                            th:hx-delete="
+                                '/admin/modules/formation/module?idFormation='
+                                + ${formation.getId()}
+                                + '&idModule=' 
+                                + ${module.getId()}
+                            "
+                            hx-select="#modules-card"
+                            hx-select-oob="#modules-modal"
+                            hx-target="#modules-card"
+                            hx-swap="outerHTML"
+                            >
+                            <th:block th:replace="svg/icons/delete :: svg('25', '25')"></th:block>
+                        </div>
+                    </div>
+                    <div class="w-full h-0.5 bg-primary"></div>
+                </div>
+            </th:block>
+        </div>
+    </th:block>
+</div>
+<div id="modules-modal" class="flex flex-col h-[50%]">
+    <th:block th:replace="pages/admin/modules/fragments/formation-details/details.modules :: modules()"></th:block>
+</div>

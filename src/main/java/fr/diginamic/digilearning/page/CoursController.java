@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,19 +123,25 @@ public class CoursController {
     }
 
     private void handleQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, FlagCours flagCours){
-        Optional<QCMPasse> qcmPasseOpt = qcmPasseRepository.findByUtilisateurAndQCMWithArchived(userInfos.getId(), qcm.getId()).stream().findFirst();
+        Optional<QCMPasse> qcmPasseOpt = qcmPasseRepository.findByUtilisateurAndQCMWithArchived(userInfos.getId(), qcm.getId())
+                .stream()
+                .max(Comparator.comparing(QCMPasse::getDatePassage));
         if(qcmPasseOpt.isPresent()){
+            System.out.println("here");
             QCMPasse qcmPasse = qcmPasseOpt.get();
-            coursIrrigator.irrigateBaseQCM(model, userInfos, qcm, cours, 0);
+            coursIrrigator.irrigateBaseQCM(model, userInfos, qcm, qcmPasse.getQcmPublication().getQuestions(), cours, 0);
             if(qcmPasse.isQCMFinished()) {
                 coursIrrigator.irrigateQCMFinished(model, userInfos, qcm, qcmPasse);
                 model.addAttribute("slide", Routes.ADR_QCM_REFAIRE);
                 return;
             }
-            model.addAttribute("slide", Routes.ADR_QCM_EN_COURS);
-            return;
+            if(!qcmPasse.getArchived()){
+                model.addAttribute("qcm", qcm);
+                model.addAttribute("slide", Routes.ADR_QCM_EN_COURS);
+                return;
+            }
         }
-        coursIrrigator.irrigateQCM(model, userInfos, qcm, cours, 0);
+        coursIrrigator.irrigateQCM(model, userInfos, qcm, qcm.getQcmQuestionsPubliees(), cours, 0);
     }
 
     @GetMapping("/chapitre")
@@ -152,29 +159,6 @@ public class CoursController {
         return Routes.ADR_BASE_LAYOUT;
     }
 
-    @GetMapping("/qcm/resultat")
-    public String getResultats(Model model, @RequestParam("id") Integer id, @RequestParam("idCours") Long idCours) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, id, idCours);
-        Optional<QCMPasse> qcmPasse = qcmPasseRepository.findByUtilisateurAndQCM(userInfos.getId(), chapitreInfos.chapitre().getId());
-        coursIrrigator.irrigateQCMFinished(model, userInfos, chapitreInfos.chapitre(), qcmPasse.get());
-        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_VISIONNEUSE);
-        return Routes.ADR_BASE_LAYOUT;
-    }
-
-    @PostMapping("/qcm/response")
-    public String postNewResponseToQCM(Model model, @RequestParam("id") Long idQCM, @RequestParam("idQuestion") Long idQuestion, @RequestBody List<ReponseQCMDto> reponseQCM, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        var nextPage = qcmService.postNewResponse(userInfos.getId(), idQCM, idQuestion, reponseQCM);
-        if(nextPage.index().isPresent()){
-            coursIrrigator.irrigateQCM(model, userInfos, nextPage.qcm(), nextPage.qcm().getCours(), nextPage.index().get());
-            return Routes.ADR_QCM;
-        }
-        qcmService.archiveQCMPasse(nextPage.qcmPasse());
-        coursIrrigator.irrigateQCMFinished(model, userInfos, nextPage.qcm(), nextPage.qcmPasse());
-        response.setHeader("HX-Push-Url", "/cours/qcm/resultat?id=" + nextPage.qcm().getId());
-        return Routes.ADR_QCM_TERMINE;
-    }
 
     @PatchMapping("/bookmark")
     public String patchBookmark(@RequestParam("id") Long idCours, Model model) {

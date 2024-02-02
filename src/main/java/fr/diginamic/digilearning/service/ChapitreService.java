@@ -1,7 +1,9 @@
 package fr.diginamic.digilearning.service;
 
 import fr.diginamic.digilearning.entities.*;
+import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
+import fr.diginamic.digilearning.repository.ChapitreRepository;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.repository.QCMQuestionRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
@@ -18,6 +20,7 @@ public class ChapitreService {
     private final QCMQuestionRepository qcmQuestionRepository;
     private final CoursService coursService;
     private final CoursRepository coursRepository;
+    private final ChapitreRepository chapitreRepository;
     public void likeQuestion(Question question, Long idUtilisateur){
         questionRatingService.likePushed(question, idUtilisateur, ()->
                 RelationQuestion.builder()
@@ -76,6 +79,12 @@ public class ChapitreService {
                 .orElseThrow(EntityNotFoundException::new);
         question.setIllustration(null);
         return qcmQuestionRepository.save(question);
+    }
+
+    public Chapitre depublierChapitre(Long idUtilisateur, Long idChapitre) {
+        Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idUtilisateur, idChapitre).orElseThrow(EntityNotFoundException::new);
+        chapitre.setStatusPublication(StatusPublication.NON_PUBLIE);
+        return chapitreRepository.save(chapitre);
     }
 
     public record ChapitreInfos(Chapitre chapitre, FlagCours flagCours, Cours cours){}

@@ -1,0 +1,27 @@
+<div class="flex flex-col h-full gap-2 w-full">
+    <div class="flex gap-2 items-center">
+        <th:block th:replace="svg/icons/search :: svg('30', '30')"></th:block>
+        <label for="cours-choice">Rechercher</label>
+    </div>
+    <input minlength="2" class="rounded-sm p-2 text-black w-full" list="cours-list" name="cours-choice" id="cours-choice">
+    <datalist style="overflow:hidden" id="cours-list">
+        <th:block th:each="cour, iterStat : ${cours}">
+            <option th:value="${cour.getTitre()}"></option>
+        </th:block>
+    </datalist>
+    <div class="flex flex-col h-4/5 w-full p-2 border-2 border-black rounded-md overflow-y-scroll">
+        <th:block th:each="module, iterStat : ${modules}">
+            <div 
+                th:id="'module-' + ${module.getId()}"
+                class="flex w-full gap-2 hover:cursor-pointer"
+                th:hx-get="'/admin/module?id=' + ${module.getId()}"
+                th:hx-target="'#module-' + ${module.getId()}"
+                hx-swap="outerHTML"
+                >
+                <th:block th:replace="svg/icons/module :: svg('20', '20')"></th:block>
+                <div th:text="${module.getLibelle()}"></div>
+            </div>
+            <div class="flex flex-col pl-5" ></div>
+        </th:block>
+    </div>
+</div>

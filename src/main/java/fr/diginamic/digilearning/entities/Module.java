@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.entities;
 
+import fr.diginamic.digilearning.entities.enums.TypeCoursElement;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "dl_module")
-public class Module {
+public class Module implements CoursElement {
 
 	/** Identifiant */
 	@Id
@@ -39,4 +40,13 @@ public class Module {
 	)
 	private List<SousModule> sousModules = new ArrayList();
 
+	@Override
+	public String getNom() {
+		return libelle;
+	}
+
+	@Override
+	public TypeCoursElement getTypeElement() {
+		return TypeCoursElement.MODULE;
+	}
 }

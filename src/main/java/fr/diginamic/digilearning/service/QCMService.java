@@ -9,7 +9,9 @@ import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +59,28 @@ public class QCMService {
     }
 
 
+    public record RepriseQCMInfos(Cours cours, Chapitre chapitre, QCMPasse qcmPasse, int index){}
+
+    @Transactional
+    public RepriseQCMInfos recommencerQCM(Long idUtilisateur, Long idChapitre) {
+        QCMPasse qcmPasse = qcmPasseRepository.findByUtilisateurAndQCM(idUtilisateur, idChapitre)
+                .orElseThrow(EntityNotFoundException::new);
+        Chapitre chapitre = qcmPasse.getQcm();
+        qcmPasse.setArchived(true);
+        qcmPasseRepository.save(qcmPasse);
+        return new RepriseQCMInfos(chapitre.getCours(), chapitre, qcmPasse, 0);
+    }
+
+    public RepriseQCMInfos reprendreQCM(Long idUtilisateur, Long idChapitre) {
+        QCMPasse qcmPasse = qcmPasseRepository.findByUtilisateurAndQCM(idUtilisateur, idChapitre)
+                .orElseThrow(EntityNotFoundException::new);
+        Chapitre chapitre = qcmPasse.getQcm();
+        Cours cours = chapitre.getCours();
+        int index = qcmPasse.getIndex();
+        return new RepriseQCMInfos(cours, chapitre, qcmPasse, index);
+    }
+
+
     public record ResponseForNewResponse(Chapitre qcm, QCMPasse qcmPasse, Optional<Integer> index){}
 
     /**
@@ -76,10 +100,12 @@ public class QCMService {
                 .orElseGet(() -> qcmPasseRepository.save(QCMPasse
                         .builder()
                         .qcm(qcm)
+                        .qcmPublication(qcm.getQcmPublication())
+                        .datePassage(LocalDateTime.now())
                         .archived(false)
                         .utilisateur(utilisateur)
                         .build()));
-        QCMQuestion question = qcm.getQcmQuestions()
+        QCMQuestion question = qcmPasse.getQcmPublication().getQuestions()
                 .stream()
                 .filter(question1 -> question1.getId().equals(idQuestion))
                 .findFirst()
@@ -95,8 +121,8 @@ public class QCMService {
                 )
                 .build();
         resultatQuestionRepository.save(resultatQuestion);
-        int idCurrQ = qcm.getQcmQuestions().indexOf(question);
-        if(idCurrQ + 1 >= qcm.getQcmQuestions().size()){
+        int idCurrQ = qcmPasse.getQcmPublication().getQuestions().indexOf(question);
+        if(idCurrQ + 1 >= qcm.getQcmQuestionsPubliees().size()){
             return new ResponseForNewResponse(qcm, qcmPasse, Optional.empty());
         }
         return new ResponseForNewResponse(qcm, qcmPasse, Optional.of(idCurrQ + 1));

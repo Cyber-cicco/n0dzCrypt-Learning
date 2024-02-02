@@ -1,0 +1,41 @@
+<th:block th:replace="~{pages/admin/modules/fragments/module-details/details.titre :: titre()}"></th:block>
+<div id="module-photo" class="flex flex-col gap-2 p-5 items-center">
+    <th:block th:replace="pages/admin/modules/fragments/module-details/module.photo"></th:block>
+</div>
+<div class="flex w-full h-full gap-2">
+    <div class="flex flex-col w-1/2">
+        <div class="flex flex-col w-full h-full">
+            <h2 class="text-xl pb-2 font-poppins text-primary">Formations associées : </h2>
+            <div id="formations-card" class="h-[50%]">
+                <th:block th:replace="pages/admin/modules/fragments/module-details/details.formations :: formations()"></th:block>
+            </div>
+            <div class="flex w-full py-2">
+                <button 
+                    data-open-modal
+                    class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                    id="button-formation"
+                    th:hx-get="'/admin/modules/formations-module?id=' + ${module.getId()}"
+                    hx-target="#modal-content"
+                    >Ajouter une formation</button>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col w-1/2">
+        <div class="flex flex-col w-full h-full">
+            <h2 class="text-xl pb-2 font-poppins text-primary">Sous modules associés : </h2>
+            <div id="smodules-card" class="h-[50%]">
+                <th:block th:replace="pages/admin/modules/fragments/module-details/details.smodules :: smodules()"></th:block>
+            </div>
+            <div class="flex w-full py-2">
+                <button 
+                    data-open-modal
+                    class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                    id="button-smodule"
+                    th:hx-get="'/admin/modules/smodules-module?id=' + ${module.getId()}"
+                    hx-target="#modal-content"
+                    >Ajouter un sous module</button>
+            </div>
+        </div>
+    </div>
+    <script type="module" th:insert="~{scripts/admin.module.modal.js}" th:inline="javascript"></script>
+</div>

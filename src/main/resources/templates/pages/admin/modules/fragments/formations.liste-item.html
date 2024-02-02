@@ -1,0 +1,22 @@
+<th:block th:fragment="item()">
+    <div 
+        data-formations
+        th:data-id="${formation.getId()}"
+        th:data-libelle="${formation.getNom()}"
+        >
+        <div data-formation>
+            <div 
+                th:id="'formation-' + ${formation.getId()}"
+                th:hx-get="'/admin/modules/formation/details?id=' + ${formation.getId()}"
+                hx-target="#admin-card"
+                class="flex w-full gap-2 hover:cursor-pointer"
+                >
+                <div class="w-[15px]">
+                    <th:block th:replace="svg/icons/module :: svg('15', '15')"></th:block>
+                </div>
+                <div class="truncate" th:text="${formation.getNom()}"></div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<div id="new-formation"></div>

@@ -1,0 +1,34 @@
+<div class="flex w-full justify-center p-5" id="wrapper-titre">
+    <h1 class=" text-3xl font-poppins w-[80%] text-center text-primary" th:inline="text">[[${formation.getNom()}]] - Formation</h1>
+</div>
+<div class="flex w-full h-full gap-2">
+    <div class="flex flex-col w-full">
+        <div class="flex flex-col w-full h-full">
+            <h2 class="text-xl pb-2 font-poppins text-primary">Modules associés : </h2>
+            <div id="modules-card" class="h-[50%]">
+                <th:block th:replace="pages/admin/modules/fragments/formation-details/details.modules :: modules()"></th:block>
+                :wa
+            </div>
+            <div class="flex w-full py-2">
+                <button 
+                    data-open-modal
+                    class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                    id="button-smodule"
+                    th:hx-get="'/admin/modules/formation/modules-modal?id=' + ${formation.getId()}"
+                    hx-target="#modal-content"
+                    >Ajouter un module</button>
+            </div>
+        </div>
+        <div class="flex flex-col w-full h-full">
+            <h2 class="text-xl pb-2 font-poppins text-primary">Sessions associés : </h2>
+            <div id="sessions-card" class="h-fit">
+                <div class="flex p-2 h-full overflow-y-auto flex-col bg-lightAccent rounded-md">
+                    <th:block th:each="_session, iterStat : ${formation.getSessions()}">
+                        <div th:text="${_session.getNom()}"></div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" th:insert="~{scripts/admin.module.modal.js}" th:inline="javascript"></script>
+</div>

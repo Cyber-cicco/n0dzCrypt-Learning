@@ -18,6 +18,7 @@ public class ResultatQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    /**List des choix notés bons par l'apprenant*/
     @ManyToMany
     @JoinTable(name = "dl_resultat_choix",
             joinColumns = @JoinColumn(name = "resultat_id", referencedColumnName = "id"),
@@ -31,24 +32,28 @@ public class ResultatQuestion {
     @JoinColumn(name = "qcmPasse_id")
     private QCMPasse qcmPasse;
 
-    public record Resultat(Map<QCMChoix, Boolean> choixToValidite, boolean isQuestionBienRepondue){}
+    public record FlagsChoix(Boolean doitEtreValide, Boolean aEteValide){}
+    public record Resultat(Map<QCMChoix, FlagsChoix> choixToValidite, boolean isQuestionBienRepondue){}
     public Resultat getResultats(){
         List<QCMChoix> bonChoix = question.getBonChoix();
-        Map<QCMChoix, Boolean> choixToValidite = new HashMap<>();
+        Map<QCMChoix, FlagsChoix> choixToValidite = new HashMap<>();
         boolean isQuestionBienRepondue = true;
-        for (QCMChoix choixValide : choixValides) {
-            if(bonChoix.contains(choixValide)) {
-                choixToValidite.put(choixValide, true);
-            } else {
-                choixToValidite.put(choixValide, false);
-                isQuestionBienRepondue = false;
-            }
+        for (QCMChoix choix : getQuestion().getChoix()) {
+            choixToValidite.put(choix, new FlagsChoix(false, false));
         }
         for (QCMChoix choix : bonChoix) {
             if(choixValides.contains(choix)) {
-                choixToValidite.put(choix, true);
+                choixToValidite.put(choix, new FlagsChoix(true, true));
             } else {
-                choixToValidite.put(choix, false);
+                choixToValidite.put(choix, new FlagsChoix(true, false));
+                isQuestionBienRepondue = false;
+            }
+        }
+        for (QCMChoix choixValide : choixValides) {
+            if(bonChoix.contains(choixValide)) {
+                choixToValidite.put(choixValide, new FlagsChoix(true, true));
+            } else {
+                choixToValidite.put(choixValide, new FlagsChoix(false, true));
                 isQuestionBienRepondue = false;
             }
         }

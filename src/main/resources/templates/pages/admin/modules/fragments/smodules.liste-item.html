@@ -1,0 +1,24 @@
+<th:block th:fragment="item()">
+    <div 
+        data-smodules
+        th:data-id="${smodule.getId()}"
+        th:data-libelle="${smodule.getNom()}"
+        >
+        <div data-smodule>
+            <div 
+                th:fragment="smodule()"
+                th:id="'smodule-' + ${smodule.getId()}"
+                th:hx-get="'/admin/modules/smodule/details?id=' + ${smodule.getId()}"
+                hx-target="#admin-card"
+                hx-swap="innerHTML"
+                class="flex w-full gap-2 hover:cursor-pointer"
+                >
+                <div class="w-[15px]">
+                    <th:block th:replace="svg/icons/module :: svg('15', '15')"></th:block>
+                </div>
+                <div class="truncate" th:text="${smodule.getNom()}"></div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<div id="new-smodule"></div>

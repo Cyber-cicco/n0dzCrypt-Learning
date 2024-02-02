@@ -63,6 +63,33 @@ public class Routes {
     public static final String ADR_QCM_REFAIRE = "pages/cours/visionneuse/fragments/qcm/already-done";
     public static final String ADR_QCM_EN_COURS = "pages/cours/visionneuse/fragments/qcm/en-cours";
     public static final String ADR_QCM_TERMINE = "pages/cours/visionneuse/fragments/qcm/termine";
+    public static final String ADR_ADMIN_APPRENANTS = "pages/admin/apprenants/base";
+    public static final String ADR_ADMIN_PRESENTATION = "pages/admin/fragments/presentation";
+    public static final String ADR_ADMIN_SESSION = "pages/admin/apprenants/fragments/session";
+    public static final String ADR_ADMIN_UTILISATEUR = "pages/admin/apprenants/fragments/utilisateur";
+    public static final String ADR_ADMIN_SESSION_COURS_MODAL = "pages/admin/apprenants/fragments/session.cours.modal";
+    public static final String ADR_ADMIN_MODULE = "pages/admin/apprenants/fragments/session.cours.module";
+    public static final String ADR_ADMIN_COURS_LISTE = "pages/admin/apprenants/fragments/session.cours.liste-cours";
+    public static final String ADR_CHAPITRE_VIDEO = "pages/cours/admin/fragments/chapitre.video";
+    public static final String ADR_ADMIN_MODULES = "pages/admin/modules/base";
+    public static final String ADR_ADMIN_MODULES_DETAILS = "pages/admin/modules/fragments/module-details/details";
+    public static final String ADR_ADMIN_MODULES_TITRE = "pages/admin/modules/fragments/module-details/details.titre";
+
+    public static final String ADR_ADMIN_MODULES_PHOTO = "pages/admin/modules/fragments/module-details/module.photo";
+    public static final String ADR_ADMIN_MODULE_FORMATION_MODAL = "pages/admin/modules/fragments/module-details/details.formation.modal";
+    public static final String ADR_ADMIN_MODULE_FORMATION_DETAILS = "pages/admin/modules/fragments/module-details/details.formations";
+    public static final String ADR_ADMIN_MODULE_SMODULES_DETAILS = "pages/admin/modules/fragments/module-details/details.smodules";
+    public static final String ADR_ADMIN_MODULE_SMODULES_MODAL = "pages/admin/modules/fragments/module-details/module.smodules.modal";
+    public static final String ADR_ADMIN_MODULE_LISTE_ITEM = "pages/admin/modules/fragments/modules.liste-item";
+    public static final String ADR_ADMIN_MODULES_FORMATION_DETAILS = "pages/admin/modules/fragments/formation-details/details";
+    public static final String ADR_ADMIN_MODULES_SMODULE_DETAILS = "pages/admin/modules/fragments/smodule-details/details";
+    public static final String ADR_ADMIN_MODULES_SMODULE_TITRE = "pages/admin/modules/fragments/smodule-details/details.titre";
+    public static final String ADR_ADMIN_MODULE_FORMATION_MODULE_DETAILS = "pages/admin/modules/fragments/formation-details/details.modules";
+    public static final String ADR_ADMIN_MODULE_FORMATION_MODULES_MODAL = "pages/admin/modules/fragments/formation-details/modules.modal";
+    public static final String ADR_ADMIN_MODULES_SMODULE_PHOTO = "pages/admin/modules/fragments/smodule-details/details.photo";
+    public static final String ADR_ADMIN_MODULE_SMODULES_MODULES_MODAL = "pages/admin/modules/fragments/smodule-details/modules.modal";
+    public static final String ADR_ADMIN_MODULE_SMODULES_MODULE_DETAILS = "pages/admin/modules/fragments/smodule-details/details.modules";
+    public static final String ADR_ADMIN_SMODULE_LISTE_ITEM = "pages/admin/modules/fragments/smodules.liste-item";
 
     private Routes(){}
 }
