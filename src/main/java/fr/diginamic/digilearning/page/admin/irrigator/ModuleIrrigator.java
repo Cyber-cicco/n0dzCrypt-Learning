@@ -96,4 +96,15 @@ public class ModuleIrrigator {
         model.addAttribute("modules", modules);
         model.addAttribute("formation", formation);
     }
+
+    public void irrigateModulesModalSmodule(Model model, Long idSmodule) {
+        SousModule sousModule = sousModuleRepository.findById(idSmodule).orElseThrow(EntityNotFoundException::new);
+        List<Module> modules = moduleRepository.findAll();
+        model.addAttribute("modules", modules);
+        model.addAttribute("smodule", sousModule);
+    }
+
+    public void irrigateDetailsModulesForSousModule(Model model, SousModule smodule) {
+        model.addAttribute("smodule", smodule);
+    }
 }

@@ -37,4 +37,5 @@ join dl_module_smodule dms on sm.id = dms.id_smodule
 where dms.id_module = ?1
 """)
     List<SousModule> findSousModuleByModuleId(Long idModule);
+
 }

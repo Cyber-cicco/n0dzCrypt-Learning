@@ -114,6 +114,18 @@ public class ModuleService {
         return  sousModuleRepository.save(sousModule);
     }
 
+    public SousModule putModuleInSousModule(Long idSmodule, String nomModule) {
+        SousModule sousModule = sousModuleRepository.findById(idSmodule)
+                .orElseThrow(EntityNotFoundException::new);
+        Module module = moduleRepository.findByLibelle(nomModule)
+                .orElseThrow(EntityNotFoundException::new);
+        if(sousModule.getModules().contains(module)){
+            return sousModule;
+        }
+        sousModule.getModules().add(module);
+        return sousModuleRepository.save(sousModule);
+    }
+
     public record ReponseChangementTitreSmodule(SousModule smodule, Optional<String> diagnostic){}
 
     public ReponseChangementTitreSmodule patchSmoduleTitre(String titre, Long idSmodule) {

@@ -88,6 +88,13 @@ public class ModuleController implements DiagnoticHandler {
         moduleIrrigator.irrigateSousModules(model, idModule);
         return Routes.ADR_ADMIN_MODULE_SMODULES_MODAL;
     }
+    @GetMapping("/smodule/modules-modal")
+    public String getModulesForSmodule(Model model, @RequestParam("id") Long idSmodule, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        moduleIrrigator.irrigateModulesModalSmodule(model, idSmodule);
+        return Routes.ADR_ADMIN_MODULE_SMODULES_MODULES_MODAL;
+    }
     @GetMapping("/formation/modules-modal")
     public String getModulesForFormationModal(Model model, @RequestParam("id") Long idFormation, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -163,6 +170,14 @@ public class ModuleController implements DiagnoticHandler {
         Formation formation = moduleService.putModuleInFormation(idFormation, moduleRequest.module);
         moduleIrrigator.irrigateDetailsModulesForFormation(model, formation);
         return Routes.ADR_ADMIN_MODULE_FORMATION_MODULE_DETAILS;
+    }
+    @PutMapping("/smodule/module")
+    public String putNewModuleForSousModule(Model model, @RequestParam("id") Long idSmodule, @ModelAttribute ModuleRequest moduleRequest, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        SousModule smodule = moduleService.putModuleInSousModule(idSmodule, moduleRequest.module);
+        moduleIrrigator.irrigateDetailsModulesForSousModule(model, smodule);
+        return Routes.ADR_ADMIN_MODULE_SMODULES_MODULE_DETAILS;
     }
     private record SModuleRequest(String smodule){}
     @PutMapping("/smodule")

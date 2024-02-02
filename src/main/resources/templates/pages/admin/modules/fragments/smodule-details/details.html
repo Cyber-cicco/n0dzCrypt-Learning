@@ -3,11 +3,41 @@
     <th:block th:replace="pages/admin/modules/fragments/smodule-details/details.photo"></th:block>
 </div>
 <div class="flex w-full h-full gap-2">
-    <div class="flex flex-col w-full">
+    <div class="flex flex-col w-1/2">
         <div class="flex flex-col w-full h-full">
-            <h2 class="text-xl pb-2 font-poppins text-primary">Modules associés : </h2>
-            <div id="modules-card" class="h-[50%]">
+            <div class="flex flex-col w-full h-full">
+                <h2 class="text-xl pb-2 font-poppins text-primary">Modules associés : </h2>
+                <div id="modules-card" class="h-[50%]">
+                    <th:block th:replace="pages/admin/modules/fragments/smodule-details/details.modules :: modules()"></th:block>
+                </div>
+                <div class="flex w-full py-2">
+                    <button 
+                        data-open-modal
+                        class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                        id="button-formation"
+                        th:hx-get="'/admin/modules/smodule/modules-modal?id=' + ${smodule.getId()}"
+                        hx-target="#modal-content"
+                        >Ajouter un module</button>
+                </div>
             </div>
         </div>
     </div>
+    <div class="flex flex-col w-1/2">
+        <div class="flex flex-col w-full h-full">
+            <div class="flex flex-col w-full h-full">
+                <h2 class="text-xl pb-2 font-poppins text-primary">Cours associés : </h2>
+                <div id="cours-card" class="h-[50%]">
+                    <div class="flex p-2 h-full overflow-y-scroll flex-col bg-lightAccent rounded-md">
+                        <th:block th:each="cours, iterStat : ${smodule.getCours()}">
+                            <div class="flex flex-col gap-1 py-1">
+                                <div th:text="${cours.getNom()}"></div>
+                                <div class="w-full h-0.5 bg-primary"></div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" th:insert="~{scripts/admin.module.modal.js}" th:inline="javascript"></script>
 </div>

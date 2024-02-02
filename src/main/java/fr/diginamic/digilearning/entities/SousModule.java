@@ -35,7 +35,8 @@ public class SousModule implements Comparable<SousModule>, CoursElement {
             inverseJoinColumns = @JoinColumn(name = "id_module", referencedColumnName = "id"),
             joinColumns = @JoinColumn(name = "id_smodule", referencedColumnName = "id")
     )
-    private List<Module> module = new ArrayList<>();
+    @Builder.Default
+    private List<Module> modules = new ArrayList<>();
 
     @Override
     public int compareTo(SousModule o) {
