@@ -3,6 +3,7 @@ package fr.diginamic.digilearning.page.admin;
 import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Formation;
 import fr.diginamic.digilearning.entities.Module;
+import fr.diginamic.digilearning.entities.SousModule;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.DiagnoticHandler;
 import fr.diginamic.digilearning.page.Routes;
@@ -127,6 +128,15 @@ public class ModuleController implements DiagnoticHandler {
         return Routes.ADR_ADMIN_MODULES_PHOTO;
     }
 
+    @PostMapping("/photo/smodule")
+    public String postNewPhotoSmodule(Model model, @RequestParam("id") Long idSmodule, @ModelAttribute("file") MultipartFile file, HttpServletResponse response) throws IOException {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        String fileName = photoService.uploadPhoto(file, "/public/smodules/", userInfos);
+        SousModule smodule = moduleService.updateNewPhotoSmodule(fileName, idSmodule);
+        model.addAttribute("smodule", smodule);
+        return Routes.ADR_ADMIN_MODULES_SMODULE_PHOTO;
+    }
     @PostMapping
     public String postNewModule(Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();

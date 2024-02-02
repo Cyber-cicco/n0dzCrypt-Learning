@@ -1,28 +1,28 @@
 <th:block th:fragment="titre()">
-<script th:insert="scripts/modifier.titre.js"></script>
-<div class="flex w-full items-center p-5" id="wrapper-titre">
-    <div class="flex w-full justify-center items-center gap-2" id="titre">
-        <h1 class="text-3xl font-poppins text-primary" th:inline="text">[[${smodule.getNom()}]] - Sous-module</h1>
-        <span class="px-2">
-            <img 
-            src="/img/icons/editer.svg"
-            width="30"
-            height="30"
-            onclick="changeToModifier()"
+    <script th:insert="scripts/modifier.titre.js"></script>
+    <div class="flex w-full items-center p-5" id="wrapper-titre">
+        <div class="flex w-full justify-center items-center gap-2" id="titre">
+            <h1 class="flex w-[80%] text-3xl justify-center font-poppins text-primary" th:inline="text">[[${smodule.getNom()}]] - Sous-module</h1>
+            <span class="px-2">
+                <img 
+                src="/img/icons/editer.svg"
+                width="30"
+                height="30"
+                onclick="changeToModifier()"
+                >
+            </span>
+        </div>
+        <form 
+            id="titre-modif"
+            class="flex flex-col w-full items-center justify-center hidden"
+            th:hx-patch="'/admin/modules/smodule/titre?id=' + ${smodule.getId()}"
+            hx-target="#wrapper-titre"    
+            th:hx-select-oob="'#smodule-' + ${smodule.getId()}"
+            hx-swap="outerHTML"
             >
-        </span>
-    </div>
-    <form 
-        id="titre-modif"
-        class="flex flex-col w-full items-center justify-center hidden"
-        th:hx-patch="'/admin/modules/smodule/titre?id=' + ${smodule.getId()}"
-        hx-target="#wrapper-titre"    
-        th:hx-select-oob="'#smodule-' + ${smodule.getId()}"
-        hx-swap="outerHTML"
-        >
-        <input id="titre" name="message" class="text-primary border-2 border-primary w-full text-center font-poppins text-3xl" type="text" th:value="${smodule.getNom()}">
-        <span id="error"></span>
-    </form>
-</div>  
+            <input id="titre" name="message" class="text-primary border-2 border-primary w-full text-center font-poppins text-3xl" type="text" th:value="${smodule.getNom()}">
+            <span id="error"></span>
+        </form>
+    </div>  
 </th:block>
 <th:block th:replace="pages/admin/modules/fragments/smodules.liste-item"></th:block>

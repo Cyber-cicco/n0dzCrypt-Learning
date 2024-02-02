@@ -31,6 +31,11 @@ public class PhotoController {
         Media photo = photoService.getPhoto("/public/modules/",  nomPhoto);
         return sendPhoto(photo);
     }
+    @GetMapping("/smodule")
+    public ResponseEntity<byte[]> getPhotoSmodule(@RequestParam("name") String nomPhoto) throws IOException {
+        Media photo = photoService.getPhoto("/public/smodules/",  nomPhoto);
+        return sendPhoto(photo);
+    }
 
     private ResponseEntity<byte[]> sendPhoto(Media photo) throws IOException {
         ContentDisposition contentDisposition = ContentDisposition.inline()

@@ -107,6 +107,13 @@ public class ModuleService {
         return formationRepository.save(formation);
     }
 
+    public SousModule updateNewPhotoSmodule(String fileName, Long idSmodule) {
+        SousModule sousModule = sousModuleRepository.findById(idSmodule)
+                .orElseThrow(EntityNotFoundException::new);
+        sousModule.setPhoto(fileName);
+        return  sousModuleRepository.save(sousModule);
+    }
+
     public record ReponseChangementTitreSmodule(SousModule smodule, Optional<String> diagnostic){}
 
     public ReponseChangementTitreSmodule patchSmoduleTitre(String titre, Long idSmodule) {

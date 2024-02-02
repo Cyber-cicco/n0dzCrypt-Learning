@@ -10,6 +10,7 @@
                 th:id="'smodule-' + ${smodule.getId()}"
                 th:hx-get="'/admin/modules/smodule/details?id=' + ${smodule.getId()}"
                 hx-target="#admin-card"
+                hx-swap="innerHTML"
                 class="flex w-full gap-2 hover:cursor-pointer"
                 >
                 <div class="w-[15px]">
