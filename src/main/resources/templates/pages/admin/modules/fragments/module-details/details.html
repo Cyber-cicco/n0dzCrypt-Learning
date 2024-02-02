@@ -1,13 +1,13 @@
-<th:block th:replace="~{pages/admin/modules/fragments/details.titre :: titre()}"></th:block>
+<th:block th:replace="~{pages/admin/modules/fragments/module-details/details.titre :: titre()}"></th:block>
 <div id="module-photo" class="flex flex-col gap-2 p-5 items-center">
-    <th:block th:replace="pages/admin/modules/fragments/module.photo"></th:block>
+    <th:block th:replace="pages/admin/modules/fragments/module-details/module.photo"></th:block>
 </div>
 <div class="flex w-full h-full gap-2">
     <div class="flex flex-col w-1/2">
         <div class="flex flex-col w-full h-full">
             <h2 class="text-xl pb-2 font-poppins text-primary">Formations associées : </h2>
             <div id="formations-card" class="h-[50%]">
-                <th:block th:replace="pages/admin/modules/fragments/details.formations :: formations()"></th:block>
+                <th:block th:replace="pages/admin/modules/fragments/module-details/details.formations :: formations()"></th:block>
             </div>
             <div class="flex w-full py-2">
                 <button 
@@ -24,7 +24,7 @@
         <div class="flex flex-col w-full h-full">
             <h2 class="text-xl pb-2 font-poppins text-primary">Sous modules associés : </h2>
             <div id="smodules-card" class="h-[50%]">
-                <th:block th:replace="pages/admin/modules/fragments/details.smodules :: smodules()"></th:block>
+                <th:block th:replace="pages/admin/modules/fragments/module-details/details.smodules :: smodules()"></th:block>
             </div>
             <div class="flex w-full py-2">
                 <button 

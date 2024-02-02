@@ -2,7 +2,7 @@
 <div id="modules-liste" class="flex flex-col bg-white overflow-y-scroll text-primary p-2 border-2 rounded-md h-full w-1/3">
     <div class="overflow-y-scroll">
         <th:block th:each="module, iterStat : ${modules}">
-            <th:block th:replace="~{pages/admin/modules/fragments/details.modules.liste-item :: item()}"></th:block>
+            <th:block th:replace="~{pages/admin/modules/fragments/modules.liste-item :: item()}"></th:block>
         </th:block>
     </div>
     <div id="new-module"></div>

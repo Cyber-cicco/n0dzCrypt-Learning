@@ -1,7 +1,7 @@
 <div id="formations-liste" class="flex flex-col bg-white text-primary p-2 border-2 rounded-md h-full w-1/3">
     <div class="overflow-y-scroll">
         <th:block th:each="formation, iterStat : ${formations}">
-            <th:block th:replace="~{pages/admin/modules/fragments/details.formations.liste-item :: item()}"></th:block>
+            <th:block th:replace="~{pages/admin/modules/fragments/formations.liste-item :: item()}"></th:block>
         </th:block>
     </div>
     <div id="new-formation"></div>

@@ -72,16 +72,15 @@ public class Routes {
     public static final String ADR_ADMIN_COURS_LISTE = "pages/admin/apprenants/fragments/session.cours.liste-cours";
     public static final String ADR_CHAPITRE_VIDEO = "pages/cours/admin/fragments/chapitre.video";
     public static final String ADR_ADMIN_MODULES = "pages/admin/modules/base";
-    public static final String ADR_ADMIN_MODULES_DETAILS = "pages/admin/modules/fragments/details";
-    public static final String ADR_ADMIN_MODULES_TITRE = "pages/admin/modules/fragments/details.titre";
+    public static final String ADR_ADMIN_MODULES_DETAILS = "pages/admin/modules/fragments/module-details/details";
+    public static final String ADR_ADMIN_MODULES_TITRE = "pages/admin/modules/fragments/module-details/details.titre";
 
-    public static final String ADR_ADMIN_MODULES_PHOTO = "pages/admin/modules/fragments/module.photo";
-    public static final String ADR_ADMIN_MODULE_FORMATION_MODAL = "pages/admin/modules/fragments/module.formation.modal";
-    public static final String ADR_ADMIN_MODULE_FORMATION_DETAILS = "pages/admin/modules/fragments/details.formations";
-    public static final String ADR_ADMIN_MODULE_SMODULES_DETAILS = "pages/admin/modules/fragments/details.smodules";
-    public static final String ADR_ADMIN_MODULE_SMODULES_MODAL = "pages/admin/modules/fragments/module.smodules.modal";
-    public static final String ADR_ADMIN_MODULE_LISTE_ITEM = "pages/admin/modules/fragments/details.modules.liste-item";
-    public static final String ADR_ADMIN_MODULE_LISTE = "pages/admin/modules/fragments/details.modules.liste";
+    public static final String ADR_ADMIN_MODULES_PHOTO = "pages/admin/modules/fragments/module-details/module.photo";
+    public static final String ADR_ADMIN_MODULE_FORMATION_MODAL = "pages/admin/modules/fragments/module-details/details.formation.modal";
+    public static final String ADR_ADMIN_MODULE_FORMATION_DETAILS = "pages/admin/modules/fragments/module-details/details.formations";
+    public static final String ADR_ADMIN_MODULE_SMODULES_DETAILS = "pages/admin/modules/fragments/module-details/details.smodules";
+    public static final String ADR_ADMIN_MODULE_SMODULES_MODAL = "pages/admin/modules/fragments/module-details/module.smodules.modal";
+    public static final String ADR_ADMIN_MODULE_LISTE_ITEM = "pages/admin/modules/fragments/modules.liste-item";
 
     private Routes(){}
 }
