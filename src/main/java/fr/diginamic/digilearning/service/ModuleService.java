@@ -136,6 +136,14 @@ public class ModuleService {
         return sousModuleRepository.save(sousModule);
     }
 
+    public SousModule createNewSousModule() {
+        SousModule sousModule = SousModule.builder()
+                //.ordre(sousModuleRepository.findMaxOrdre() + 1)
+                .titre("Nouveau sous-module")
+                .build();
+        return sousModuleRepository.save(sousModule);
+    }
+
     public record ReponseChangementTitreSmodule(SousModule smodule, Optional<String> diagnostic){}
 
     public ReponseChangementTitreSmodule patchSmoduleTitre(String titre, Long idSmodule) {

@@ -153,6 +153,14 @@ public class ModuleController implements DiagnoticHandler {
         return Routes.ADR_ADMIN_MODULE_LISTE_ITEM;
     }
 
+    @PostMapping("/smodule")
+    public String postNewSousModule(Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        SousModule smodule = moduleService.createNewSousModule();
+        model.addAttribute("smodule", smodule);
+        return Routes.ADR_ADMIN_SMODULE_LISTE_ITEM;
+    }
     public record FormationRequest(String formation){}
     @PutMapping("/formation")
     public String putNewFormation(Model model, @RequestParam("id") Long idModule, @ModelAttribute FormationRequest formationRequest, HttpServletResponse response) {

@@ -38,4 +38,9 @@ where dms.id_module = ?1
 """)
     List<SousModule> findSousModuleByModuleId(Long idModule);
 
+    @Query(nativeQuery = true, value = """
+select max(sm.ordre)
+from dl_sous_module sm
+""")
+    Integer findMaxOrdre();
 }
