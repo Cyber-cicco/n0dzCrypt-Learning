@@ -1,6 +1,7 @@
 package fr.diginamic.digilearning.page.admin;
 
 import fr.diginamic.digilearning.dto.MessageDto;
+import fr.diginamic.digilearning.entities.Formation;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.DiagnoticHandler;
@@ -60,7 +61,7 @@ public class ModuleController implements DiagnoticHandler {
     public String getFormationDetails(Model model, @RequestParam("id") Long idFormation, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
-        moduleIrrigator.irrigateDetailsPageFormation(model, idFormation, response);
+        moduleIrrigator.irrigateDetailsPageFormation(model, idFormation);
         return Routes.ADR_ADMIN_MODULES_FORMATION_DETAILS;
     }
     @GetMapping("smodule/details")
@@ -85,6 +86,13 @@ public class ModuleController implements DiagnoticHandler {
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         moduleIrrigator.irrigateSousModules(model, idModule);
         return Routes.ADR_ADMIN_MODULE_SMODULES_MODAL;
+    }
+    @GetMapping("/formation/modules-modal")
+    public String getModulesForFormationModal(Model model, @RequestParam("id") Long idFormation, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        moduleIrrigator.irrigateModulesModalFormation(model, idFormation);
+        return Routes.ADR_ADMIN_MODULE_FORMATION_MODULES_MODAL;
     }
     @PatchMapping("smodule/titre")
     public String patchSmoduleTitre(Model model, @RequestParam("id") Long idSmodule, @ModelAttribute MessageDto titre, HttpServletResponse response) {
@@ -137,6 +145,15 @@ public class ModuleController implements DiagnoticHandler {
         moduleIrrigator.irrigateDetailsSousModule(model, module);
         return Routes.ADR_ADMIN_MODULE_FORMATION_DETAILS;
     }
+    private record ModuleRequest(String module){}
+    @PutMapping("/formation/module")
+    public String putNewModuleForFormation(Model model, @RequestParam("id") Long idFormation, @ModelAttribute ModuleRequest moduleRequest, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        Formation formation = moduleService.putModuleInFormation(idFormation, moduleRequest.module);
+        moduleIrrigator.irrigateDetailsModulesForFormation(model, formation);
+        return Routes.ADR_ADMIN_MODULE_FORMATION_MODULE_DETAILS;
+    }
     private record SModuleRequest(String smodule){}
     @PutMapping("/smodule")
     public String putNewSModule(Model model, @RequestParam("id") Long idModule, @ModelAttribute SModuleRequest formationRequest, HttpServletResponse response) {
@@ -145,6 +162,14 @@ public class ModuleController implements DiagnoticHandler {
         Module module = moduleService.putSousModule(idModule, formationRequest.smodule);
         moduleIrrigator.irrigateDetailsFormation(model, module);
         return Routes.ADR_ADMIN_MODULE_SMODULES_DETAILS;
+    }
+    @DeleteMapping("/formation/module")
+    public String deleteModuleFromFormation(Model model, @RequestParam("idFormation") Long idFormation, @RequestParam("idModule") Long idModule, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        Formation formation = moduleService.deleteModuleFromFormation(idFormation, idModule);
+        moduleIrrigator.irrigateDetailsModulesForFormation(model, formation);
+        return Routes.ADR_ADMIN_MODULE_FORMATION_MODULE_DETAILS;
     }
     @DeleteMapping("/formation")
     public String deleteFormation(Model model, @RequestParam("idFormation") Long idFormation, @RequestParam("idModule") Long idModule, HttpServletResponse response) {

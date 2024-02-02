@@ -58,6 +58,9 @@ public class Formation implements CoursElement {
 	)
 	private List<Module> modules = new ArrayList<>();
 
+	@OneToMany(mappedBy = "formation")
+	private List<Session> sessions;
+
 
 	@Override
 	public TypeCoursElement getTypeElement() {

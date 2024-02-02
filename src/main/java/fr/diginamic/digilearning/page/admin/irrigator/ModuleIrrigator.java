@@ -69,8 +69,11 @@ public class ModuleIrrigator {
         model.addAttribute("module", module);
     }
 
-    public void irrigateDetailsPageFormation(Model model, Long idFormation, HttpServletResponse response) {
+    public void irrigateDetailsPageFormation(Model model, Long idFormation) {
         Formation formation = formationRepository.findById(idFormation).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("formation", formation);
+    }
+    public void irrigateDetailsModulesForFormation(Model model, Formation formation) {
         model.addAttribute("formation", formation);
     }
 
@@ -85,5 +88,12 @@ public class ModuleIrrigator {
 
     public void irrigateSmoduleDetails(Model model, SousModule smodule) {
         model.addAttribute("smodule", smodule);
+    }
+
+    public void irrigateModulesModalFormation(Model model, Long idFormation) {
+        Formation formation = formationRepository.findById(idFormation).orElseThrow(EntityNotFoundException::new);
+        List<Module> modules = moduleRepository.findAll();
+        model.addAttribute("modules", modules);
+        model.addAttribute("formation", formation);
     }
 }

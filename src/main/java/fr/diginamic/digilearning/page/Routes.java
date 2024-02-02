@@ -84,6 +84,8 @@ public class Routes {
     public static final String ADR_ADMIN_MODULES_FORMATION_DETAILS = "pages/admin/modules/fragments/formation-details/details";
     public static final String ADR_ADMIN_MODULES_SMODULE_DETAILS = "pages/admin/modules/fragments/smodule-details/details";
     public static final String ADR_ADMIN_MODULES_SMODULE_TITRE = "pages/admin/modules/fragments/smodule-details/details.titre";
+    public static final String ADR_ADMIN_MODULE_FORMATION_MODULE_DETAILS = "pages/admin/modules/fragments/formation-details/details.modules";
+    public static final String ADR_ADMIN_MODULE_FORMATION_MODULES_MODAL = "pages/admin/modules/fragments/formation-details/modules.modal";
 
     private Routes(){}
 }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ModuleRepository extends JpaRepository<Module, Long>  {
 
@@ -36,4 +37,6 @@ join SESSION S on F.ID = S.ID_FOR
 where S.ID = ?1
 """)
     List<Module> findModuleBySession(Long idSession);
+
+    Optional<Module> findByLibelle(String nomModule);
 }

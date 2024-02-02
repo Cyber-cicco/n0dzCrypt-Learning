@@ -54,6 +54,16 @@ public class ModuleService {
         module.getFormations().remove(formation);
         return moduleRepository.save(module);
     }
+
+    @Transactional
+    public Formation deleteModuleFromFormation(Long idFormation, Long idModule){
+        Formation formation = formationRepository.findById(idFormation)
+                .orElseThrow(EntityNotFoundException::new);
+        Module module = moduleRepository.findById(idModule)
+                .orElseThrow(EntityNotFoundException::new);
+        formation.getModules().remove(module);
+        return formationRepository.save(formation);
+    }
     @Transactional
     public Module deleteSousModule(Long idSmodule, Long idModule) {
         SousModule sousModule = sousModuleRepository.findById(idSmodule)
@@ -82,6 +92,19 @@ public class ModuleService {
                 .libelle("Nouveau module")
                 .build();
         return moduleRepository.save(module);
+    }
+
+    @Transactional
+    public Formation putModuleInFormation(Long idFormation, String nomModule) {
+        Module module = moduleRepository.findByLibelle(nomModule)
+                .orElseThrow(EntityNotFoundException::new);
+        Formation formation = formationRepository.findById(idFormation)
+                .orElseThrow(EntityNotFoundException::new);
+        if(formation.getModules().contains(module)){
+            return formation;
+        }
+        formation.getModules().add(module);
+        return formationRepository.save(formation);
     }
 
     public record ReponseChangementTitreSmodule(SousModule smodule, Optional<String> diagnostic){}
