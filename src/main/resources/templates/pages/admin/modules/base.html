@@ -39,42 +39,10 @@
                     <option th:value="${el.getNom()} + ' - ' + ${el.getTypeElement().getLibelle()}"></option>
                 </th:block>
             </datalist>
-            <div class="flex h-full w-full pt-2">
-                <div class="bg-white overflow-y-scroll text-primary p-2 border-2 rounded-md h-full w-full">
-                    <th:block th:each="module, iterStat : ${modules}">
-                        <div 
-                            data-modules
-                            th:data-id="${module.getId()}"
-                            th:data-libelle="${module.getLibelle()}"
-                            th:data-photo="${module.getPhoto()}"
-                            >
-                            <div data-module>
-                                <div 
-                                    th:id="'module-' + ${module.getId()}"
-                                    th:hx-get="'/admin/modules/details?id=' + ${module.getId()}"
-                                    hx-target="#admin-card"
-                                    class="flex w-full gap-2 hover:cursor-pointer"
-                                    >
-                                    <th:block th:replace="svg/icons/module :: svg('20', '20')"></th:block>
-                                    <div th:text="${module.getLibelle()}"></div>
-                                </div>
-                           </div>
-                            <div data-smodules th:id="'smodules-' + ${module.getId()}" class="flex hidden flex-col pl-5">
-                                <th:block th:each="smodule, iterStat : ${module.getSousModules()}">
-                                    <div data-smodule>
-                                        <div 
-                                            th:id="'smodule-' + ${smodule.getId()}"
-                                            class="flex w-full gap-2 hover:cursor-pointer"
-                                            >
-                                            <th:block th:replace="svg/icons/module :: svg('20', '20')"></th:block>
-                                            <div th:text="${smodule.getTitre()}"></div>
-                                        </div>
-                                    </div>
-                                </th:block>
-                            </div>
-                        </div>
-                    </th:block>
-                </div>
+            <div class="flex h-[80%] w-full pt-2">
+                <th:block th:replace="~{pages/admin/modules/fragments/details.formations.liste}"></th:block>
+                <th:block th:replace="~{pages/admin/modules/fragments/details.modules.liste}"></th:block>
+                <th:block th:replace="~{pages/admin/modules/fragments/details.smodules.liste}"></th:block>
             </div>
         </div>
         <div class="flex flex-col items-center gap-2 bg-white h-full w-3/5 p-5 rounded-md" id="admin-card">

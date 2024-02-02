@@ -4,6 +4,7 @@ const smodules = Array.prototype.slice.call(moduleRoute.querySelectorAll("[data-
 const adminCard = moduleRoute.querySelector("#admin-card")
 const children = Array.prototype.slice.call(modules);
 
+/**
 for (const child of children) {
     const moduleName = child.querySelector("[data-module]")
     moduleName.addEventListener("click", () => {
@@ -14,4 +15,4 @@ for (const child of children) {
             smodules.classList.add("hidden");
         }
     })
-}
+}*/

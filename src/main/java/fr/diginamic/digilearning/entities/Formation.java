@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.entities;
 
+import fr.diginamic.digilearning.entities.enums.TypeCoursElement;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,7 @@ import java.util.*;
 @Entity
 @Table(name = "FORMATION")
 @Cacheable
-public class Formation {
+public class Formation implements CoursElement {
 
 	/** identifiant */
 	@Id
@@ -58,4 +59,8 @@ public class Formation {
 	private List<Module> modules = new ArrayList<>();
 
 
+	@Override
+	public TypeCoursElement getTypeElement() {
+		return TypeCoursElement.FORMATION;
+	}
 }

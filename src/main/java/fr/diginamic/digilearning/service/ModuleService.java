@@ -77,6 +77,13 @@ public class ModuleService {
         return moduleRepository.save(module);
     }
 
+    public Module createNewModule() {
+        Module module = Module.builder()
+                .libelle("Nouveau module")
+                .build();
+        return moduleRepository.save(module);
+    }
+
     public record ReponseChangementTitre(Module module, Optional<String> diagnostic){}
     public ReponseChangementTitre patchModuleTitre(String titre, Long idModule){
         Optional<String> diagnostic = moduleValidator.validateModuleTitre(titre);

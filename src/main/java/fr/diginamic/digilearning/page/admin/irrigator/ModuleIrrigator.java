@@ -25,16 +25,19 @@ public class ModuleIrrigator {
     private final FormationRepository formationRepository;
     private final SousModuleRepository sousModuleRepository;
     public void irrigateBaseModule(Model model){
+        List<Formation> formations = formationRepository.findAllActive();
         List<Module> modules = moduleRepository.findAll();
         Set<SousModule> sousModules = modules
                 .stream()
                 .flatMap(module -> module.getSousModules().stream())
                 .collect(Collectors.toUnmodifiableSet());
         List<CoursElement> elements = new ArrayList<>();
+        elements.addAll(formations);
         elements.addAll(modules);
         elements.addAll(sousModules);
         model.addAttribute("currDate", LocalDate.now());
         model.addAttribute("elements", elements);
+        model.addAttribute("formations", formations);
         model.addAttribute("modules", modules);
         model.addAttribute("smodules", sousModules);
     }
