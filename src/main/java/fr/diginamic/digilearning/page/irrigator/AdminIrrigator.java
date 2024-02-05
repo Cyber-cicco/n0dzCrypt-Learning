@@ -21,6 +21,7 @@ public class AdminIrrigator {
     private final ModuleRepository moduleRepository;
     private final CoursRepository coursRepository;
     private final SousModuleRepository sousModuleRepository;
+    private final SujetRepository sujetRepository;
 
     public void irrigateAdminPanelApprenants(Model model, AuthenticationInfos userInfos, List<Session> sessions, String adminInsert){
         model.addAttribute("_sessions", sessions);
@@ -55,5 +56,11 @@ public class AdminIrrigator {
     public void irrigateCoursModal(Model model, AuthenticationInfos userInfos, Long idSModule) {
         SousModule sousModule = sousModuleRepository.findById(idSModule).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("smodule", sousModule);
+    }
+
+    public void irrigateForumModal(Model model, Long idSession) {
+        List<Sujet> sujets = sujetRepository.findAll();
+        model.addAttribute("idSession", idSession);
+        model.addAttribute("sujets", sujets);
     }
 }

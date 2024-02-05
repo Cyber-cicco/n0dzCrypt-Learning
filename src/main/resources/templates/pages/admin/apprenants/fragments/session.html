@@ -34,7 +34,6 @@
                     </div>
                 </th:block>
             </div>
-            <button class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Changer les responsables de la session</button>
         </div>
     </div>
     <div class="grow"></div>
@@ -49,6 +48,9 @@
                 >Prévoir des cours</button>
             <button 
                 class="w-full bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+                th:hx-get="'/admin/forum/modal?id=' + ${_session.getId()}"
+                hx-target="#modal-forum-content"
+                hx-on::before-request="openForum()"
                 >Gérer les accès au forum</button>
     </div>
 </section>
@@ -59,6 +61,20 @@
     <section id="modal-cours-content" class="flex flex-col h-full gap-2">
     </section>
 </aside>
+<aside id="modal-calendar" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-100%]">
+    <div class="absolute top-0 right-0">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeCalendar()">
+    </div>
+    <section id="modal-cours-content" class="flex flex-col h-full gap-2">
+    </section>
+</aside>
+<aside id="modal-forum" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
+    <div class="flex justify-end w-full">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeForum()" >
+    </div>
+        <section id="modal-forum-content" class="flex flex-col h-full gap-2">
+        </section>
+</aside>
 <script>
     function openCalendar() {
         document.querySelector('#modal-calendar').classList.add("modal");
@@ -66,6 +82,14 @@
     }
     function closeCalendar() {
         document.querySelector('#modal-calendar').classList.remove("modal");
+        document.querySelector('#modal-bg').setAttribute("hidden", "true")
+    }
+    function openForum() {
+        document.querySelector('#modal-forum').classList.add("modal");
+        document.querySelector('#modal-bg').removeAttribute("hidden")
+    }
+    function closeForum() {
+        document.querySelector('#modal-forum').classList.remove("modal");
         document.querySelector('#modal-bg').setAttribute("hidden", "true")
     }
 </script>

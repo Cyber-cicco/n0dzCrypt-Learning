@@ -88,6 +88,14 @@ public class AdminController {
         return Routes.ADR_BASE_LAYOUT;
     }
 
+    @GetMapping("/forum/modal")
+    public String getForumModal(Model model, @RequestParam("id") Long idSession, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        adminIrrigator.irrigateForumModal(model, idSession);
+        return Routes.ADR_ADMIN_FORUM_MODAL;
+    }
+
     private void irrigateForApprenant(Long idSession, Long idUtilisateur, Model model, AuthenticationInfos userInfos, List<Session> sessions){
         if(idSession != null) {
             adminIrrigator.irrigateSession(model, userInfos, idSession);

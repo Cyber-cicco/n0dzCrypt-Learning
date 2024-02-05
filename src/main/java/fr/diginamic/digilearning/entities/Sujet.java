@@ -49,6 +49,10 @@ public class Sujet {
         return salonsUtilisateur;
     }
 
+    public List<Salon> getWhiteList(){
+        return salonList.stream().filter(salon -> salon.getStatusForum().equals(StatusForum.WHITELISTE)).toList();
+    }
+
     public Long getId() {
         return id;
     }

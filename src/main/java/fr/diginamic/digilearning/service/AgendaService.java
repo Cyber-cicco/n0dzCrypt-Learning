@@ -198,13 +198,13 @@ public class AgendaService {
         return coursRepository.getAllCoursForSessionAdmin(idSession)
                 .stream()
                 .map(c -> SqlResultMapper.mapToObject(CoursAdminDto.class, c))
+                .sorted(Comparator.comparing(CoursAdminDto::getDatePrevue, Comparator.nullsFirst(Comparator.naturalOrder())))
                 .toList();
     }
 
     public List<CoursAdminDto> getCoursPrevusForSession(Long idSession) {
         return coursRepository.getCoursPrevusForSession(idSession)
                 .stream()
-                .peek(System.out::println)
                 .map(c -> SqlResultMapper.mapToObject(CoursAdminDto.class, c))
                 .toList();
     }
