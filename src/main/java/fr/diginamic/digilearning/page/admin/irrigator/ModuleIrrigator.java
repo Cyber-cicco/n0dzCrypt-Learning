@@ -72,18 +72,6 @@ public class ModuleIrrigator {
 
     public void irrigateDetailsPageFormation(Model model, Long idFormation) {
         Formation formation = formationRepository.findById(idFormation).orElseThrow(EntityNotFoundException::new);
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
-        System.out.println("caca");
         model.addAttribute("formation", formation);
     }
     public void irrigateDetailsModulesForFormation(Model model, Formation formation) {
