@@ -98,6 +98,7 @@ public class AgendaIrrigator {
     public void irrigateAdminCalendar(Model model, LocalDate date, Long idSession, AuthenticationInfos userInfos) {
         List<CoursAdminDto> cours = agendaService.getCoursForAdmin(idSession);
         List<CoursAdminDto> coursPrevus = agendaService.getCoursPrevusForSession(idSession);
+        model.addAttribute("idSession", idSession);
         model.addAttribute("cours", cours);
         model.addAttribute("cal", agendaService.getCalendarInfos(date));
         model.addAttribute("week", agendaService.getDayInfosForWeek(date));

@@ -24,6 +24,7 @@ public class FlagCours {
     private Boolean liked;
     private Boolean boomarked;
     private Boolean finished;
+    private Boolean mandatory;
     private LocalDateTime datePrevue;
     @ManyToOne
     @JoinColumn(name = "stagiaire_id")

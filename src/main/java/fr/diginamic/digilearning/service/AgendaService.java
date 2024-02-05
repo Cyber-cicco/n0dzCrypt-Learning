@@ -2,17 +2,17 @@ package fr.diginamic.digilearning.service;
 
 import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.Cours;
+import fr.diginamic.digilearning.entities.CoursSession;
 import fr.diginamic.digilearning.entities.FlagCours;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;
+import fr.diginamic.digilearning.repository.*;
 import fr.diginamic.digilearning.service.enums.DateOption;
-import fr.diginamic.digilearning.repository.CoursRepository;
-import fr.diginamic.digilearning.repository.FlagCoursRepository;
-import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,11 +27,15 @@ public class AgendaService {
     private final CoursRepository coursRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final FlagCoursRepository flagCoursRepository;
+    private final CoursSessionRepository coursSessionRepository;
+    private final SessionRepository sessionRepository;
 
     public AgendaService(
             CoursRepository coursRepository,
             UtilisateurRepository utilisateurRepository,
-            FlagCoursRepository flagCoursRepository
+            FlagCoursRepository flagCoursRepository,
+            CoursSessionRepository coursSessionRepository,
+            SessionRepository sessionRepository
     ) {
         englishWeekDayToFr.put("MONDAY", "Lundi");
         englishWeekDayToFr.put("TUESDAY", "Mardi");
@@ -56,6 +60,8 @@ public class AgendaService {
         this.coursRepository = coursRepository;
         this.utilisateurRepository = utilisateurRepository;
         this.flagCoursRepository = flagCoursRepository;
+        this.coursSessionRepository = coursSessionRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     public List<HourInfos> getHeuresJournee() {
@@ -186,8 +192,57 @@ public class AgendaService {
                 .toList();
     }
 
+    @Transactional
     public Optional<CoursAdminDto> prevoirCoursForSession(AuthenticationInfos userInfos, LocalDateTime temps, Long idCours, Long idSession) {
+        CoursSession coursSession = coursSessionRepository.findByCours_IdAndSession_Id(idCours, idSession)
+                .orElseGet(() ->
+                    CoursSession
+                            .builder()
+                            .cours(coursRepository.findById(idCours).orElseThrow(EntityNotFoundException::new))
+                            .session(sessionRepository.findById(idSession).orElseThrow(EntityNotFoundException::new))
+                            .build()
+                );
+        coursSession.setDatePrevue(temps);
+        List<CoursSession> coursPrevusCeJour = coursSessionRepository
+                .findByDatePrevueBetweenAndSession_Id(
+                        LocalDateTime.of(temps.getYear(), temps.getMonth(), temps.getDayOfMonth(), 0, 0, 0),
+                        LocalDateTime.of(temps.getYear(), temps.getMonth(), temps.getDayOfMonth(), 23, 0, 0),
+                        idSession);
+        for (CoursSession cours : coursPrevusCeJour) {
+            if(
+                    (temps.isEqual(cours.getDatePrevue())
+                            || (temps.isBefore(cours.getDatePrevue()) && temps.plusHours(cours.getCours().getDureeEstimee()).isAfter(cours.getDatePrevue()))
+                            || (temps.isAfter(cours.getDatePrevue()) && cours.getDatePrevue().plusHours(cours.getCours().getDureeEstimee()).isAfter(temps)))
+                            && !cours.getId().equals(coursSession.getId())
+            ) {
+                return Optional.empty();
+            }
+        }
+        coursSessionRepository.save(coursSession);
         flagCoursRepository.setToNullForDateAndSession(temps, idCours, idSession);
-        return Optional.empty();
+        List<Utilisateur> stagiairesSession = utilisateurRepository.findBySession(idSession);
+        List<FlagCours> flagCours = stagiairesSession.stream()
+                .map(utilisateur -> flagCoursRepository
+                        .findByStagiaire_IdAndCours_Id(utilisateur.getId(), idCours)
+                        .orElseGet(() -> flagCoursRepository.save(FlagCours.builder()
+                                        .finished(false)
+                                        .liked(false)
+                                        .cours(coursRepository.findById(idCours).orElseThrow(EntityNotFoundException::new))
+                                        .stagiaire(utilisateur)
+                                .build())))
+                .toList();
+        for (FlagCours flagCour : flagCours) {
+            flagCour.setDatePrevue(temps);
+            flagCour.setMandatory(true);
+        }
+        flagCoursRepository.saveAll(flagCours);
+        return Optional.of(
+                CoursAdminDto.builder()
+                        .datePrevue(temps)
+                        .titre(coursSession.getCours().getTitre())
+                        .difficulte(coursSession.getCours().getDifficulte())
+                        .dureeEstimee(coursSession.getCours().getDureeEstimee())
+                        .build()
+        );
     }
 }

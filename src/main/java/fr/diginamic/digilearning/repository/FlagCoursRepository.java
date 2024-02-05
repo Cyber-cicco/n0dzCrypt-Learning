@@ -18,6 +18,7 @@ public interface FlagCoursRepository extends JpaRepository<FlagCours,Long>{
     @Query(nativeQuery = true, value = """
 update dl_flag_cours fc
 join dl_cours dc on fc.cours_id = dc.id
+join (select dureeEstimee durr from dl_cours where id = ?2) as durr
 set fc.datePrevue = null
 where fc.stagiaire_id in (
     select U.ID from UTILISATEUR U
@@ -34,7 +35,7 @@ and (
             fc.datePrevue  -- date1 debut
             and 
             date_add(fc.datePrevue, INTERVAL dc.dureeEstimee HOUR) -- date1 fin
-    OR date_add(?1, INTERVAL (select dc.dureeEstimee from dl_cours where id = ?2) HOUR)  -- date2 fin
+    OR date_add(?1, INTERVAL durr.durr HOUR)  -- date2 fin
         between  
             fc.datePrevue -- date 1 debut
             and
@@ -43,13 +44,15 @@ and (
         between 
             ?1 -- date 2 debut
             and 
-            date_add(?1, INTERVAL (select dc.dureeEstimee from dl_cours where id = ?2) HOUR)  -- date 2 fin
+            date_add(?1, INTERVAL durr.durr HOUR)  -- date 2 fin
     OR date_add(fc.datePrevue, INTERVAL dc.dureeEstimee HOUR) -- date 1 fin
         between 
             ?1 -- date 2 debut
             and 
-            date_add(?1, INTERVAL (select dc.dureeEstimee from dl_cours where id = ?2) HOUR)  -- date 2 fin
+            date_add(?1, INTERVAL durr.durr HOUR)  -- date 2 fin
 )
 """)
     void setToNullForDateAndSession(LocalDateTime temps, Long idCours, Long idSession);
+
+    Optional<FlagCours> findByStagiaire_IdAndCours_Id(Long id, Long idCours);
 }

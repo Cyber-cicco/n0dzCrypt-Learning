@@ -1,9 +1,12 @@
 /*Variable contenant les éléments pouvant se drag and drop*/
 drake = undefined;
+
+/*Peut être l'occasion d'obtenir l'un des succès cachés ?*/
 /*<![CDATA[*/
 admin = /*[[${_user.isAdministrateur()}]]*/ false;
 idSession = /*[[${idSession}]]*/ -1;
 /*]]>*/
+
 /*Permet d'initialiser les éléments pouvant se drag and drop*/
 function reInit() {
 
@@ -18,11 +21,13 @@ function reInit() {
 function drakeListen(drake) {
 
         drake.on("drop", (el, target, source, sibling) => {
+            console.log(admin)
+
             if(admin) {
                 if(target.getAttribute("data-draggable2")) {
                     const date = target.getAttribute("data-draggable2");
                     const id = el.getAttribute("id");
-                    htmx.ajax('POST', '/admin/session/cours?date=' + date + '&id=' + id, '#' + target.getAttribute("id")).then(() => {
+                    htmx.ajax('POST', `/admin/session/cours?date=${date}&id=${id}&idSession=${idSession}`, '#' + target.getAttribute("id")).then(() => {
                         reInit();
                         return;
                     });
@@ -31,7 +36,7 @@ function drakeListen(drake) {
                 if(target.getAttribute("data-draggable1") && el.getAttribute("data-dragged")) {
                     const date = el.getAttribute("data-dragged");
                     const id = el.getAttribute("id");
-                    htmx.ajax('DELETE', '/agenda/session/cours?date=' + date + '&id=' + id, '#cours-a-prevoir').then(() => {
+                    htmx.ajax('DELETE',  `/admin/session/cours?date=${date}&id=${id}&idSession=${idSession}`, '#cours-a-prevoir').then(() => {
                         reInit();
                         return;
                     });
