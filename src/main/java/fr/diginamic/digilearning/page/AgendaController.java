@@ -6,6 +6,7 @@ import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.service.AgendaService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
+import fr.diginamic.digilearning.utils.hx.HX;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -90,7 +91,7 @@ public class AgendaController {
             agendaIrrigator.irrigateCoursOnCalendar(userInfos, model, temps, cours.get());
             return Routes.ADR_COURS_CAL;
         }
-        response.setHeader("HX-Retarget", "#insert");
+        response.setHeader(HX.RETARGET, "#insert");
         agendaIrrigator.irrigateBaseModel(userInfos, model, temps.toLocalDate());
         return Routes.ADR_AGENDA_BODY;
 

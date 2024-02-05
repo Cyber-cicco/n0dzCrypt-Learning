@@ -8,6 +8,7 @@ import fr.diginamic.digilearning.repository.SessionRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import fr.diginamic.digilearning.service.SessionService;
+import fr.diginamic.digilearning.utils.hx.HX;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,7 @@ public class AdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         LocalDate dateRecherche = LocalDate.now();
-        response.addHeader("HX-Push-Url", "/admin/apprenant?date=" + dateRecherche);
+        response.addHeader(HX.PUSH_URL, "/admin/apprenant?date=" + dateRecherche);
         var sessions = sessionService.getSessionsWhereDateFinAfter(dateRecherche);
         adminIrrigator.irrigateAdminPanelApprenants(model, userInfos, sessions, Routes.ADR_ADMIN_PRESENTATION);
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_ADMIN_APPRENANTS);
@@ -45,7 +46,7 @@ public class AdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         LocalDate dateRecherche = LocalDate.now();
-        response.addHeader("HX-Push-Url", "/admin/apprenants?date=" + dateRecherche);
+        response.addHeader(HX.PUSH_URL, "/admin/apprenants?date=" + dateRecherche);
         var sessions = sessionService.getSessionsWhereDateFinAfter(dateRecherche);
         adminIrrigator.irrigateAdminPanelApprenants(model, userInfos, sessions, Routes.ADR_ADMIN_PRESENTATION);
         return Routes.ADR_ADMIN_APPRENANTS;

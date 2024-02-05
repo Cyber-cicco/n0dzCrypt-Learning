@@ -1,9 +1,11 @@
 spring:
+    profiles:
+        active: prod
     datasource:
-        url: "jdbc:mariadb://localhost:3306/sid"
-        username: "digi-suivi"
-        password: "pazo1928!"
-        driver-class-name: org.mariadb.jdbc.Driver
+        url: '@jdbc.url@'
+        username: '@jdbc.user@'
+        password: '@jdbc.pass@'
+        driver-class-name: '@jdbc.driver@'
     servlet:
         multipart:
             max-file-size: "10MB"
@@ -24,7 +26,7 @@ spring:
         resources:
             static-locations: classpath:/static/
             cache:
-                period: 0
+                period: 3600
 jwt:
     cookie: "AUTH-TOKEN"
     expires_in: 864000
@@ -32,8 +34,8 @@ jwt:
 logging:
     level:
       org.springframework: WARN
-      org.hibernate.type.descriptor: trace
-      org.hibernate.sql: debug
+      org.hibernate.type.descriptor: warn
+      org.hibernate.sql: error
 server:
     http2:
         enabled: true
@@ -41,3 +43,45 @@ server:
     ssl:
         key-store: classpath:keystore.jks
         key-store-password: pazo1928!
+---
+spring:
+    profiles:
+        active: dev
+    datasource:
+        url: '@jdbc.url@'
+        username: '@jdbc.user@'
+        password: '@jdbc.pass@'
+        driver-class-name: '@jdbc.driver@'
+    jpa:
+        database: mysql
+        generate-ddl: false
+        hibernate:
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    servlet:
+        multipart:
+            max-file-size: "10MB"
+            max-request-size: "10MB"
+    thymeleaf: # Thymeleaf
+        cache: false
+        mode: HTML
+        encoding: UTF-8
+        prefix: file:src/main/resources/templates/
+    web:
+        resources:
+            static-locations: file:src/main/resources/static/
+            cache:
+                period: 0
+jwt:
+    cookie: "AUTH-TOKEN"
+    expires_in: 864000
+    secret: "3dDsYHtBkTz0gAoPmPMwL2ksjVfVyR2Js0OsaVTx3RobUGI6YGM3gWJRFhPG"
+logging:
+    level:
+        org.springframework: WARN
+        org.hibernate.type.descriptor: debug
+        org.hibernate.sql: trace
+server:
+    http2:
+        enabled: false
+    port: 8080

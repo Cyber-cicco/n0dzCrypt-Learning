@@ -9,6 +9,7 @@ import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import fr.diginamic.digilearning.service.ChapitreService;
 import fr.diginamic.digilearning.service.QCMService;
+import fr.diginamic.digilearning.utils.hx.HX;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -63,7 +64,7 @@ public class QCMController {
         }
         qcmService.archiveQCMPasse(nextPage.qcmPasse());
         coursIrrigator.irrigateQCMFinished(model, userInfos, nextPage.qcm(), nextPage.qcmPasse());
-        response.setHeader("HX-Push-Url", "/cours/qcm/resultat?id=" + nextPage.qcm().getId());
+        response.setHeader(HX.PUSH_URL, "/cours/qcm/resultat?id=" + nextPage.qcm().getId());
         return Routes.ADR_QCM_TERMINE;
     }
 }

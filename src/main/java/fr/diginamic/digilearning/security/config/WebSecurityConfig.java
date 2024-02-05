@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.security.config;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.http2.Http2Protocol;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -27,7 +28,10 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+    private final CustomLogoutHandler customLogoutHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -52,8 +56,12 @@ public class WebSecurityConfig {
                 .headers(
                         headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
+                .logout(logoutConfigurer ->
+                       logoutConfigurer.addLogoutHandler(customLogoutHandler)
+                               .logoutUrl("/logout")
+                               .logoutSuccessHandler(customLogoutSuccessHandler)
+                        )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        //.apply(AadWebApplicationHttpSecurityConfigurer.aadWebApplication());
         return http.build();
     }
     @Bean
