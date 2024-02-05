@@ -168,6 +168,23 @@ public class AgendaService {
         flagCours.setDatePrevue(null);
         flagCoursRepository.save(flagCours);
     }
+    @Transactional
+    public void removeCoursFromAgendaForSession(AuthenticationInfos userInfos, Long idCours, Long idSession) {
+        List<Utilisateur> stagiairesSession = utilisateurRepository.findBySession(idSession);
+        List<FlagCours> flagCours = stagiairesSession
+                .stream()
+                .map(utilisateur -> flagCoursRepository.findByStagiaire_IdAndCours_Id(utilisateur.getId(), idCours)
+                        .orElseThrow(EntityNotFoundException::new))
+                .toList();
+        for (FlagCours flagCour : flagCours) {
+            flagCour.setDatePrevue(null);
+        }
+        flagCoursRepository.saveAll(flagCours);
+        CoursSession coursSession = coursSessionRepository.findByCours_IdAndSession_Id(idCours, idSession)
+                .orElseThrow(EntityNotFoundException::new);
+        coursSession.setDatePrevue(null);
+        coursSessionRepository.save(coursSession);
+    }
 
     public List<CoursDto> getCoursForAgenda(Long id) {
         return coursRepository.getAllCoursForUser(id)

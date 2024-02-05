@@ -46,6 +46,11 @@ public class AgendaIrrigator {
         model.addAttribute("cours", agendaService.getCoursForAgenda(userInfos.getId()));
     }
 
+    public void irrigateCoursAdmin(Model model, Long idSession) {
+        List<CoursAdminDto> cours = agendaService.getCoursForAdmin(idSession);
+        model.addAttribute("cours", cours);
+    }
+
     /**
      * Irrigue le modèle d'un cours dans le calendrier
      * @param userInfos les informations d'authentification de l'utilisateur

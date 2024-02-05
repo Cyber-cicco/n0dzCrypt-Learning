@@ -1,7 +1,6 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.dto.CoursAdminDto;
-import fr.diginamic.digilearning.dto.CoursDto;
 import fr.diginamic.digilearning.entities.Session;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.irrigator.AdminIrrigator;
@@ -17,10 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -120,7 +116,7 @@ public class AdminController {
     }
 
     @GetMapping("/session/cours")
-    public String getSessionCoursModal(Model model, @RequestParam("id") Long idSession, HttpServletResponse response){
+    public String getSessionCoursModal(Model model, @RequestParam("idCours") Long idSession, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         adminIrrigator.irrigateCoursSessionModal(model, userInfos, idSession);
@@ -131,7 +127,7 @@ public class AdminController {
     public String prevoirCours(
             Model model,
             @RequestParam("date") LocalDateTime temps,
-            @RequestParam("id") Long coursId,
+            @RequestParam("idCours") Long coursId,
             @RequestParam("idSession") Long idSession,
             HttpServletResponse response
     ){
@@ -140,11 +136,24 @@ public class AdminController {
         Optional<CoursAdminDto> cours = agendaService.prevoirCoursForSession(userInfos, temps, coursId, idSession);
         if(cours.isPresent()){
             agendaIrrigator.irrigateCoursAdminOnCalendar(userInfos, model, temps, cours.get());
-            return Routes.ADR_COURS_CAL;
+            return Routes.ADR_COURS_CAL_ADMIN;
         }
         response.setHeader(HX.RETARGET, "#insert");
         agendaIrrigator.irrigateAdminCalendar(model, temps.toLocalDate(), idSession, userInfos);
         return Routes.ADR_AGENDA_BODY;
+    }
+    @DeleteMapping("/session/cours")
+    public String supprimerCours(
+            Model model,
+            @RequestParam("id") Long idCours,
+            @RequestParam("idSession") Long idSession,
+            HttpServletResponse response
+    ){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        agendaService.removeCoursFromAgendaForSession(userInfos, idCours, idSession);
+        agendaIrrigator.irrigateCoursAdmin(model, idSession);
+        return Routes.ADR_AGENDA_COURSAPREVOIR;
     }
 
 }

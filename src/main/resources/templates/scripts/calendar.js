@@ -36,7 +36,7 @@ function drakeListen(drake) {
                 if(target.getAttribute("data-draggable1") && el.getAttribute("data-dragged")) {
                     const date = el.getAttribute("data-dragged");
                     const id = el.getAttribute("id");
-                    htmx.ajax('DELETE',  `/admin/session/cours?date=${date}&id=${id}&idSession=${idSession}`, '#cours-a-prevoir').then(() => {
+                    htmx.ajax('DELETE',  `/admin/session/cours?id=${id}&idSession=${idSession}`, '#cours-a-prevoir').then(() => {
                         reInit();
                         return;
                     });

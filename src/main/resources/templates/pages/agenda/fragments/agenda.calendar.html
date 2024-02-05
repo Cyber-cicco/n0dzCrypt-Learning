@@ -85,6 +85,15 @@
                                 ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time()))}
                             )}"></th:block>
                     </th:block>
+                    <th:block th:if="${hourMap.containsKey(dateUtil.getLdt(w.dateJour(), h.time())) && _user.isAdministrateur()}">
+                        <th:block
+                            th:replace="~{pages/agenda/fragments/cours.admin :: cours(
+                                ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getId()},
+                                ${dateUtil.getLdt(w.dateJour(), h.time()).toString()},
+                                ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time())).getDureeEstimee()},
+                                ${hourMap.get(dateUtil.getLdt(w.dateJour(), h.time()))}
+                            )}"></th:block>
+                    </th:block>
                 </td>
             </tr>
         </tbody>
