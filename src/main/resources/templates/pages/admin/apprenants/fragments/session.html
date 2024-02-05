@@ -38,9 +38,9 @@
         <h2 class="text-xl font-poppins text-primary">Actions : </h2>
         <div class="flex gap-2 w-full">
             <button 
-                th:hx-get="'/admin/session/cours?id=' + ${_session.getId()}"
+                th:hx-get="'/agenda/api?id=' + ${_session.getId()}"
                 hx-target="#modal-cours-content"
-                hx-on::before-request="openModalCours()"
+                hx-on::before-request="openCalendar()"
                 class="w-full bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
                 >Prévoir des cours</button>
             <button 
@@ -48,37 +48,20 @@
                 >Gérer les accès au forum</button>
     </div>
 </section>
-<aside id="modal-cours" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
-    <div class="flex justify-end w-full">
-        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeModalCours()">
+<aside id="modal-calendar" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-100%]">
+    <div class="absolute top-0 right-0">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeCalendar()">
     </div>
     <section id="modal-cours-content" class="flex flex-col h-full gap-2">
     </section>
 </aside>
-<aside id="modal-forum" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
-    <div class="flex justify-end w-full">
-        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeModalForum()">
-    </div>
-    <section class="flex flex-col h-full gap-2">
-    </section>
-</aside>
 <script>
-function openModalForum(){
-    document.querySelector('#modal-forum').classList.add("modal");
-    document.querySelector('#modal-bg').removeAttribute("hidden")
-}
-
-function closeModalForum(){
-    document.querySelector('#modal-forum').classList.remove("modal");
-    document.querySelector('#modal-bg').setAttribute("hidden", "true")
-}
-function openModalCours(){
-    document.querySelector('#modal-cours').classList.add("modal");
-    document.querySelector('#modal-bg').removeAttribute("hidden")
-}
-
-function closeModalCours(){
-    document.querySelector('#modal-cours').classList.remove("modal");
-    document.querySelector('#modal-bg').setAttribute("hidden", "true")
-}
+    function openCalendar() {
+        document.querySelector('#modal-calendar').classList.add("modal");
+        document.querySelector('#modal-bg').removeAttribute("hidden")
+    }
+    function closeCalendar() {
+        document.querySelector('#modal-calendar').classList.remove("modal");
+        document.querySelector('#modal-bg').setAttribute("hidden", "true")
+    }
 </script>

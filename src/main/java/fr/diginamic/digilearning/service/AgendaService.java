@@ -1,9 +1,6 @@
 package fr.diginamic.digilearning.service;
 
-import fr.diginamic.digilearning.dto.CalendarInfos;
-import fr.diginamic.digilearning.dto.CoursDto;
-import fr.diginamic.digilearning.dto.DayInfos;
-import fr.diginamic.digilearning.dto.HourInfos;
+import fr.diginamic.digilearning.dto.*;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.FlagCours;
 import fr.diginamic.digilearning.entities.Utilisateur;
@@ -107,6 +104,11 @@ public class AgendaService {
         coursPrevus.forEach(coursDto -> mapDateToCours.put(coursDto.getDatePrevue(), coursDto));
         return mapDateToCours;
     }
+    public Map<LocalDateTime, CoursAdminDto> getHourMapAdmin(List<CoursAdminDto> coursPrevus) {
+        Map<LocalDateTime, CoursAdminDto> mapDateToCours = new HashMap<>();
+        coursPrevus.forEach(coursDto -> mapDateToCours.put(coursDto.getDatePrevue(), coursDto));
+        return mapDateToCours;
+    }
 
     public Optional<CoursDto> putCoursInDate(AuthenticationInfos userInfos, LocalDateTime datePrevue, Long coursId) {
         Utilisateur utilisateur = utilisateurRepository.findById(userInfos.getId())
@@ -167,5 +169,25 @@ public class AgendaService {
                 .map(c -> SqlResultMapper.mapToObject(CoursDto.class, c))
                 .sorted(Comparator.comparing(CoursDto::getDatePrevue, Comparator.nullsFirst(Comparator.naturalOrder())))
                 .toList();
+    }
+
+    public List<CoursAdminDto> getCoursForAdmin(Long idSession) {
+        return coursRepository.getAllCoursForSessionAdmin(idSession)
+                .stream()
+                .map(c -> SqlResultMapper.mapToObject(CoursAdminDto.class, c))
+                .toList();
+    }
+
+    public List<CoursAdminDto> getCoursPrevusForSession(Long idSession) {
+        return coursRepository.getCoursPrevusForSession(idSession)
+                .stream()
+                .peek(System.out::println)
+                .map(c -> SqlResultMapper.mapToObject(CoursAdminDto.class, c))
+                .toList();
+    }
+
+    public Optional<CoursAdminDto> prevoirCoursForSession(AuthenticationInfos userInfos, LocalDateTime temps, Long idCours, Long idSession) {
+        flagCoursRepository.setToNullForDateAndSession(temps, idCours, idSession);
+        return Optional.empty();
     }
 }

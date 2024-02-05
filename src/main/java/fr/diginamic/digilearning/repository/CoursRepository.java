@@ -82,6 +82,28 @@ and fc.datePrevue IS NOT NULL
     List<String[]> getCoursPrevus(Long idUtilisateur);
 
     @Query(nativeQuery = true, value = """
+select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, cs.datePrevue
+from dl_cours c
+join dl_cours_session cs on c.id = cs.cours_id
+where cs.session_id = ?1
+and cs.datePrevue IS NOT NULL
+""")
+    List<String[]> getCoursPrevusForSession(Long idSession);
+    @Query(nativeQuery = true, value = """
+select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, cs.datePrevue
+from dl_cours c
+left outer join dl_cours_session cs on c.id = cs.cours_id
+join dl_sous_module dsm on c.sous_module_id = dsm.id
+join dl_module_smodule dms on dsm.id = dms.id_smodule
+join dl_module dm on dms.id_module = dm.id
+join dl_module_formation dmf on dm.id = dmf.id_module
+join FORMATION F on dmf.id_formation = F.ID
+join SESSION S on F.ID = S.ID_FOR
+where S.ID = ?1
+""")
+    List<String[]> getAllCoursForSessionAdmin(Long idSession);
+
+    @Query(nativeQuery = true, value = """
 select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, fc.boomarked, fc.finished, fc.liked, fc.datePrevue, dsm.titre
 from dl_cours c
 join dl_flag_cours fc on c.id = fc.cours_id

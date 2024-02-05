@@ -1,7 +1,10 @@
 package fr.diginamic.digilearning.page.irrigator;
 
+import fr.diginamic.digilearning.dto.CoursAdminDto;
 import fr.diginamic.digilearning.dto.CoursDto;
+import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.page.Routes;
+import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.service.AgendaService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.DateUtil;
@@ -21,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AgendaIrrigator {
     private final AgendaService agendaService;
+    private final CoursRepository coursRepository;
     private final DateUtil dateUtil;
 
     /***
@@ -55,6 +59,14 @@ public class AgendaIrrigator {
         model.addAttribute("dureeEstimee", cours.getDureeEstimee());
         model.addAttribute("cours", cours);
     }
+
+    public void irrigateCoursAdminOnCalendar(AuthenticationInfos userInfos, Model model, LocalDateTime temps, CoursAdminDto cours){
+        model.addAttribute("id", cours.getId());
+        model.addAttribute("date", temps);
+        model.addAttribute("dureeEstimee", cours.getDureeEstimee());
+        model.addAttribute("cours", cours);
+    }
+
     /**
      * Irrigue le model avec les informations nécessaires au fait de créer le calendrier
      * Donne le mois courant
@@ -78,6 +90,23 @@ public class AgendaIrrigator {
         model.addAttribute("hourMap", agendaService.getHourMap(coursPrevus));
         model.addAttribute("dateUtil", dateUtil);
         model.addAttribute("coursPrevus", coursPrevus);
+        model.addAttribute("_user", userInfos);
+        model.addAttribute("prev", date.minusWeeks(1).toString());
+        model.addAttribute("next", date.plusWeeks(1).toString());
+    }
+
+    public void irrigateAdminCalendar(Model model, LocalDate date, Long idSession, AuthenticationInfos userInfos) {
+        List<CoursAdminDto> cours = agendaService.getCoursForAdmin(idSession);
+        List<CoursAdminDto> coursPrevus = agendaService.getCoursPrevusForSession(idSession);
+        model.addAttribute("cours", cours);
+        model.addAttribute("cal", agendaService.getCalendarInfos(date));
+        model.addAttribute("week", agendaService.getDayInfosForWeek(date));
+        model.addAttribute("dateValue", date.toString());
+        model.addAttribute("hours", agendaService.getHeuresJournee());
+        model.addAttribute("hourMap", agendaService.getHourMapAdmin(coursPrevus));
+        model.addAttribute("dateUtil", dateUtil);
+        model.addAttribute("coursPrevus", coursPrevus);
+        model.addAttribute("_user", userInfos);
         model.addAttribute("prev", date.minusWeeks(1).toString());
         model.addAttribute("next", date.plusWeeks(1).toString());
     }

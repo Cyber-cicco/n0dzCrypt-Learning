@@ -36,8 +36,12 @@ public class AgendaController {
      * @return l'agenda
      * */
     @GetMapping("/api")
-    public String getAgendaApi( Model model){
+    public String getAgendaApi(Model model, @RequestParam(required = false, value = "id") Long idSession){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        if(userInfos.isAdministrateur()){
+          agendaIrrigator.irrigateAdminCalendar(model, LocalDate.now(), idSession, userInfos);
+            return Routes.ADR_AGENDA_BODY;
+        }
         agendaIrrigator.irrigateBaseModel(userInfos, model, LocalDate.now());
         return Routes.ADR_AGENDA_BODY;
     }
