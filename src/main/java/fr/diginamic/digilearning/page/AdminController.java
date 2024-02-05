@@ -127,7 +127,7 @@ public class AdminController {
     public String prevoirCours(
             Model model,
             @RequestParam("date") LocalDateTime temps,
-            @RequestParam("idCours") Long coursId,
+            @RequestParam("id") Long coursId,
             @RequestParam("idSession") Long idSession,
             HttpServletResponse response
     ){

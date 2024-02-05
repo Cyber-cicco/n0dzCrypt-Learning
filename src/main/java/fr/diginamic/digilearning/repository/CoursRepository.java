@@ -92,7 +92,7 @@ and cs.datePrevue IS NOT NULL
     @Query(nativeQuery = true, value = """
 select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, cs.datePrevue
 from dl_cours c
-left outer join dl_cours_session cs on c.id = cs.cours_id
+left outer join dl_cours_session cs on c.id = cs.cours_id and cs.session_id = ?1
 join dl_sous_module dsm on c.sous_module_id = dsm.id
 join dl_module_smodule dms on dsm.id = dms.id_smodule
 join dl_module dm on dms.id_module = dm.id

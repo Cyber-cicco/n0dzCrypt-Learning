@@ -255,6 +255,7 @@ public class AgendaService {
         flagCoursRepository.saveAll(flagCours);
         return Optional.of(
                 CoursAdminDto.builder()
+                        .id(coursSession.getCours().getId())
                         .datePrevue(temps)
                         .titre(coursSession.getCours().getTitre())
                         .difficulte(coursSession.getCours().getDifficulte())

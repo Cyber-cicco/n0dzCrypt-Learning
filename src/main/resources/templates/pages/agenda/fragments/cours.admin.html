@@ -3,7 +3,7 @@
     th:fragment="cours(id, date, dureeEstimee, cours)"
     hx-history="false"    
 
-    th:id="${id}"
+    th:id="${cours.getId()}"
     th:data-dragged="${date}"
     th:class="'relative hover:cursor-move flex bg-lightPrimary text-white shadow-dark w-full overflow-y-visible shadow-md rounded-md h-[' + ${dureeEstimee} + '00%]'"
     >
