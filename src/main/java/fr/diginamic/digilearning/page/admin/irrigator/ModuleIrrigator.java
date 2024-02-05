@@ -24,7 +24,7 @@ public class ModuleIrrigator {
     private final ModuleRepository moduleRepository;
     private final FormationRepository formationRepository;
     private final SousModuleRepository sousModuleRepository;
-    public void irrigateBaseModule(Model model){
+    public void irrigateBaseModule(Model model, String route){
         List<Formation> formations = formationRepository.findAllActive();
         List<Module> modules = moduleRepository.findAll();
         Set<SousModule> sousModules = modules
@@ -40,6 +40,7 @@ public class ModuleIrrigator {
         model.addAttribute("formations", formations);
         model.addAttribute("modules", modules);
         model.addAttribute("smodules", sousModules);
+        model.addAttribute("adminCard", route);
     }
 
     public void irrigateModuleDetails(Model model, Long idModule, HttpServletResponse response) {
@@ -71,6 +72,18 @@ public class ModuleIrrigator {
 
     public void irrigateDetailsPageFormation(Model model, Long idFormation) {
         Formation formation = formationRepository.findById(idFormation).orElseThrow(EntityNotFoundException::new);
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
+        System.out.println("caca");
         model.addAttribute("formation", formation);
     }
     public void irrigateDetailsModulesForFormation(Model model, Formation formation) {

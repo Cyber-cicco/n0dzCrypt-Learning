@@ -4,6 +4,7 @@ import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Formation;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.entities.SousModule;
+import fr.diginamic.digilearning.entities.enums.TypeCoursElement;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.DiagnoticHandler;
 import fr.diginamic.digilearning.page.Routes;
@@ -35,19 +36,55 @@ public class ModuleController implements DiagnoticHandler {
     private final SessionService sessionService;
 
     @GetMapping
-    public String getModulesApi(Model model, HttpServletResponse response){
+    public String getModulesApi(
+            Model model,
+            HttpServletResponse response,
+            @RequestParam(required = false, name = "type") Long typeCoursElement,
+            @RequestParam(required = false, name = "id") Long idCoursElement
+    ){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
-        moduleIrrigator.irrigateBaseModule(model);
+        if(typeCoursElement != null){
+            if (typeCoursElement == 1) {
+                moduleIrrigator.irrigateModuleDetails(model, idCoursElement, response);
+                moduleIrrigator.irrigateBaseModule(model, Routes.ADR_ADMIN_MODULES_DETAILS);
+            } else if (typeCoursElement == 2) {
+                moduleIrrigator.irrigateDetailsPageSmodule(model, idCoursElement, response);
+                moduleIrrigator.irrigateBaseModule(model, Routes.ADR_ADMIN_MODULES_SMODULE_DETAILS);
+            } else {
+                moduleIrrigator.irrigateDetailsPageFormation(model, idCoursElement);
+                moduleIrrigator.irrigateBaseModule(model, Routes.ADR_ADMIN_MODULES_FORMATION_DETAILS);
+            }
+        } else {
+            moduleIrrigator.irrigateBaseModule(model, Routes.ADR_ADMIN_MODULE_DESC);
+        }
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_ADMIN_MODULES);
         return Routes.ADR_BASE_LAYOUT;
     }
 
     @GetMapping("/api")
-    public String getModule(Model model, HttpServletResponse response){
+    public String getModule(
+            Model model,
+            HttpServletResponse response,
+            @RequestParam(required = false, name = "type") Long typeCoursElement,
+            @RequestParam(required = false, name = "id") Long idCoursElement
+            ){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
-        moduleIrrigator.irrigateBaseModule(model);
+        if(typeCoursElement != null){
+            if (typeCoursElement == 1) {
+                moduleIrrigator.irrigateModuleDetails(model, idCoursElement, response);
+                moduleIrrigator.irrigateBaseModule(model, Routes.ADR_ADMIN_MODULES_DETAILS);
+            } else if (typeCoursElement == 2) {
+                moduleIrrigator.irrigateDetailsPageSmodule(model, idCoursElement, response);
+                moduleIrrigator.irrigateBaseModule(model, Routes.ADR_ADMIN_MODULES_SMODULE_DETAILS);
+            } else {
+                moduleIrrigator.irrigateDetailsPageFormation(model, idCoursElement);
+                moduleIrrigator.irrigateBaseModule(model, Routes.ADR_ADMIN_MODULES_FORMATION_DETAILS);
+            }
+        } else {
+            moduleIrrigator.irrigateBaseModule(model, Routes.ADR_ADMIN_MODULE_DESC);
+        }
         return Routes.ADR_ADMIN_MODULES;
     }
 

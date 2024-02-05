@@ -8,6 +8,7 @@
             <div 
                 th:id="'formation-' + ${formation.getId()}"
                 th:hx-get="'/admin/modules/formation/details?id=' + ${formation.getId()}"
+                th:hx-push-url="'/admin/modules?id=' + ${formation.getId()} + '&type=0'"
                 hx-target="#admin-card"
                 class="flex w-full gap-2 hover:cursor-pointer"
                 >

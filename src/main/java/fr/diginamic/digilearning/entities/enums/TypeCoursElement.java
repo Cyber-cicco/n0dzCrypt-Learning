@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum TypeCoursElement {
-    FORMATION("Formation"), COURS("Cours"), MODULE("Module"), SOUS_MODULE("Sous module");
+    FORMATION("Formation"),  MODULE("Module"), SOUS_MODULE("Sous module"), COURS("Cours");
     private String libelle;
 }
