@@ -1,7 +1,7 @@
 <div class="flex -center flex-col w-full h-full">
     <nav class="flex justify-around h-[5%] w-full bg-white text-primary text-lg">
         <ul class="flex justify-around w-full">
-            <li class="flex bg-grey p-2 hover:bg-greyDeep w-full h-full hover:cursor-pointer justify-center">
+            <li class="flex p-2 hover:bg-greyDeep w-full h-full hover:cursor-pointer justify-center">
                 <a 
                     class="w-full text-center"
                     th:href="'/admin/apprenants?date=' + ${currDate}"
@@ -11,7 +11,7 @@
                     hx-swap="innerHTML transition:true"
                     >Gestion des apprenants</a>
             </li>
-            <li class="flex w-full p-2 hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
+            <li class="flex w-full bg-grey p-2 hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
                 <a 
                     class="w-full text-center"
                     href="/admin/modules"

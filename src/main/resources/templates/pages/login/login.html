@@ -27,7 +27,9 @@
                 <form 
                     class="flex flex-col w-4/5 gap-5 p-10"
                     hx-post="login"
+                    hx-target="#error"
                     hx-on::before-request="showLoad()"
+                    hx-on::after-request="hideLoad()"
                     >
                     <div th:replace="~{components/form :: textInput('Adresse e-mail* ', 'email', 'ex : vincent@gmail.fr')}"></div>
                     <div th:replace="~{components/form :: password('Mot de passe*', 'password')}"></div>
