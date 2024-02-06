@@ -118,4 +118,10 @@ public class ForumService {
         }
         utilisateurRepository.saveAll(stagiaires);
     }
+
+    public Long supprimerPost(Long idPost) {
+        PostForum post = postForumRepository.findById(idPost).orElseThrow(EntityNotFoundException::new);
+        postForumRepository.delete(post);
+        return post.getFilDiscussion().getId();
+    }
 }

@@ -4,6 +4,7 @@ import fr.diginamic.digilearning.entities.FilDiscussion;
 import fr.diginamic.digilearning.entities.Salon;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.page.Routes;
+import fr.diginamic.digilearning.repository.SalonRepository;
 import fr.diginamic.digilearning.service.ForumService;
 import fr.diginamic.digilearning.repository.SujetRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
@@ -27,6 +28,7 @@ public class ForumIrrigator {
     private final SujetRepository sujetRepository;
     private final LayoutIrrigator layoutIrrigator;
     private final ForumService forumService;
+    private final SalonRepository salonRepository;
     public void irrigateBaseTemplate(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
         model.addAttribute("utilisateur", utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new));
         model.addAttribute("sujets", sujetRepository.findAll());
@@ -38,7 +40,12 @@ public class ForumIrrigator {
     }
 
     public void irrigateSalonAttribute(AuthenticationInfos userInfos, Model model, HttpServletResponse response, Long idSalon) {
-        Salon salon = forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), idSalon);
+        Salon salon;
+        if(userInfos.isAdministrateur()){
+            salon = salonRepository.findById(idSalon).orElseThrow(EntityNotFoundException::new);
+        } else {
+            salon = forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), idSalon);
+        }
         FilDiscussion regles = forumService.getRegles();
         List<FilDiscussion> discussions = forumService.getFilOrderedFilDiscussion(salon.getId());
         model.addAttribute("salon", salon);
@@ -47,7 +54,9 @@ public class ForumIrrigator {
     }
 
     public void irrigateFilAttribute(AuthenticationInfos userInfos, Model model, HttpServletResponse response, Long idFil, Long page) {
-        forumService.verifyIfUserIsAllowed(userInfos, idFil, response);
+        if(!(userInfos.isAdministrateur() || userInfos.isFormateur())){
+            forumService.verifyIfUserIsAllowed(userInfos, idFil, response);
+        }
         FilDiscussion fil = forumService.getFilDiscussion(idFil);
         model.addAttribute("page", page);
         model.addAttribute("nbPages", forumService.getNbPages(fil));

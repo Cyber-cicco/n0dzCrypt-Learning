@@ -16,9 +16,18 @@
         <th:block th:replace="~{pages/forum/fragments/forum.fil.body.pagination}"></th:block>
     </div>
     <div class="flex flex-col gap-1 bg-white text-sm truncatew-sm rounded-md p-3" th:each="message, iterStat : ${messages}" >
-        <div class="flex justify-between text-primary" >
+        <div class="flex gap-4 justify-between text-primary" >
             <div class="" th:text="${message.getFullName()}"></div>
             <div class="" th:text="${message.getDateEmissionString()}"></div>
+            <div class="grow"></div>
+            <div 
+                class="flex p-2 rounded-full gap-2 hover:cursor-pointer hover:bg-lightAccent"
+                th:hx-delete="'/admin/forum/post?id=' + ${message.getId()} + '&page=' + ${page}"
+                hx-target="#forum-canvas"
+                hx-swap="outerHTML"
+                >
+                <th:block th:if="${user.isAdministrateur()}" th:replace="svg/icons/delete :: svg('20', '20')"></th:block>
+            </div>
         </div>
         <div class="bg-dark h-[2px] w-full"></div>
         <div class="whitespace-pre-wrap text-justify" th:text="${message.getContenu()}"></div>

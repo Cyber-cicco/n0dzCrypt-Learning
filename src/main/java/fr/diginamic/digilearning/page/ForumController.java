@@ -122,8 +122,10 @@ public class ForumController {
             return handleBan(response);
         }
         postForumValidator.validatePostForum(postForumDto);
+        if(!(userInfos.isAdministrateur() || userInfos.isFormateur())){
+            forumService.verifyIfUserIsAllowed(userInfos, id, response);
+        }
         forumService.saveNewMessage(userInfos, id, postForumDto);
-        forumService.verifyIfUserIsAllowed(userInfos, id, response);
         forumIrrigator.irrigateFilAttribute(userInfos, model, response, id, page);
         return Routes.ADR_FORUM_FIL;
     }
@@ -134,7 +136,9 @@ public class ForumController {
             return handleBan(response);
         }
         filValidator.validateFil(postFilDto);
-        forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), id);
+        if(!(userInfos.isAdministrateur() || userInfos.isFormateur())){
+            forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), id);
+        }
         forumService.saveNewFil(userInfos, id, postFilDto);
         forumIrrigator.irrigateSalonAttribute(userInfos, model, response, id);
         return Routes.ADR_FORUM_SALON;

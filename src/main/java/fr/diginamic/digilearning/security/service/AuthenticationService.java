@@ -69,7 +69,11 @@ public class AuthenticationService {
         }
     }
 
-    public Boolean checkBanned(Long id) {
-        return utilisateurRepository.findById(id).orElseThrow(EntityNotFoundException::new).getBanned();
+    public boolean checkBanned(Long id) {
+        Boolean banned = utilisateurRepository.findById(id).orElseThrow(EntityNotFoundException::new).getBanned();
+        if (banned == null){
+            return false;
+        }
+        return banned;
     }
 }
