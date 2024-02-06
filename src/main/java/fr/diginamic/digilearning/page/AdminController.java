@@ -150,6 +150,7 @@ public class AdminController {
         agendaIrrigator.irrigateAdminCalendar(model, temps.toLocalDate(), idSession, userInfos);
         return Routes.ADR_AGENDA_BODY;
     }
+
     @DeleteMapping("/session/cours")
     public String supprimerCours(
             Model model,

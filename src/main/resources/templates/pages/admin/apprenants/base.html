@@ -1,4 +1,4 @@
-<div class="flex -center flex-col w-full h-full">
+<div hx-history="false" class="flex -center flex-col w-full h-full">
     <nav class="flex justify-around h-[5%] w-full bg-white text-primary text-lg">
         <ul class="flex justify-around w-full">
             <li class="flex bg-grey p-2 hover:bg-greyDeep w-full h-full hover:cursor-pointer justify-center">
@@ -8,6 +8,7 @@
                     th:hx-get="'/admin/apprenants/api?date=' + ${currDate}"
                     th:hx-push-url="'/admin/apprenants?date=' + ${currDate}"
                     hx-target="#insert"
+                    hx-swap="innerHTML transition:true"
                     >Gestion des apprenants</a>
             </li>
             <li class="flex w-full p-2 hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
@@ -17,12 +18,17 @@
                     hx-get="/admin/modules/api"
                     hx-push-url="/admin/modules"
                     hx-target="#insert"
+                    hx-swap="innerHTML transition:true"
                     >Gestion des modules</a>
             </li>
             <li class="flex w-full p-2 hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
                 <a 
                     class="w-full text-center"
+                    hx-get="/admin/cours-admin/api"
+                    hx-push-url="/admin/cours-admin"
+                    hx-target="#insert"
                     href="/admin/cours-admin"
+                    hx-swap="innerHTML transition:true"
                     >Gestion des cours</a>
             </li>
         </ul>

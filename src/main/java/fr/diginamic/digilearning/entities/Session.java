@@ -128,6 +128,13 @@ public class Session {
 	@Builder.Default
 	private List<CoursSession> coursSessions = new ArrayList<>();
 
+	@ManyToMany
+	@JoinTable(name = "dl_salon_session",
+			joinColumns = @JoinColumn(name = "session_id", referencedColumnName = "ID"),
+			inverseJoinColumns = @JoinColumn(name = "salon_id", referencedColumnName = "id")
+	)
+	private List<Salon> salonsAutorises = new ArrayList<>();
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

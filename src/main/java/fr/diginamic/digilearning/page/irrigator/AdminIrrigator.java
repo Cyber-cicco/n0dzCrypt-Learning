@@ -60,7 +60,9 @@ public class AdminIrrigator {
 
     public void irrigateForumModal(Model model, Long idSession) {
         List<Sujet> sujets = sujetRepository.findAll();
-        model.addAttribute("idSession", idSession);
+        Session session = sessionRepository.findById(idSession).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("_session", session);
+        model.addAttribute("salonAutorises", session.getSalonsAutorises());
         model.addAttribute("sujets", sujets);
     }
 }

@@ -12,9 +12,11 @@ import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class ForumService {
     private final FilDiscussionRepository filDiscussionRepository;
     private final PostForumRepository postForumRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final SessionRepository sessionRepository;
     public static final Long TAILLE_PAGE = 10L;
 
     public Salon getSalonByIdAndCheckIfUserAuthorized(Long idUtilisateur, Long idSalon) {
@@ -86,4 +89,24 @@ public class ForumService {
                 .build());
     }
 
+    @Transactional
+    public void changerAutorisationPourSession(Long idSession, Long idSalon) {
+        Session session = sessionRepository.findById(idSession)
+                .orElseThrow(EntityNotFoundException::new);
+        Salon salon = salonRepository.findById(idSalon)
+                .orElseThrow(EntityNotFoundException::new);
+        Set<Utilisateur> stagiaires = session.getStagiaires();
+        if (sessionRepository.hasAuthorization(idSession, idSalon) > 0){
+            sessionRepository.removeAuthorization(idSession, idSalon);
+            for (Utilisateur stagiaire : stagiaires) {
+                stagiaire.getSalonsSurWhiteList().remove(salon);
+            }
+        } else {
+            sessionRepository.grandAuthorization(idSession, idSalon);
+            for (Utilisateur stagiaire : stagiaires) {
+                stagiaire.getSalonsSurWhiteList().add(salon);
+            }
+        }
+        utilisateurRepository.saveAll(stagiaires);
+    }
 }

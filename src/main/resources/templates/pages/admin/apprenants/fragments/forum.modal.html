@@ -1,16 +1,30 @@
 <section class="flex flex-col w-full h-full">
-    <div class="bg-white rounded-md h-1/2 border-2 p-2 border-black">
+    <div class="flex flex-col overflow-y-scroll bg-white rounded-md h-1/2 border-2 p-2 border-black">
         <th:block th:each="sujet, iterStat : ${sujets}">
-            <div
-                th:data-id="${sujet.getId()}"
-                th:data-libelle="${sujet.getLibelle()}"
-                >
+            <div th:data-id="${sujet.getId()}" th:data-libelle="${sujet.getLibelle()}" >
                 <div class="flex w-full gap-2 items-center hover:cursor-pointer">
                     <div class="w-[15px]">
                         <th:block th:replace="svg/icons/module :: svg('15', '15')"></th:block>
                     </div>
                     <div class="truncate" th:text="${sujet.getLibelle()}"></div>
                 </div>
+            </div>
+            <div class="pl-10" >
+                <th:block th:each="salon, iterStat: ${sujet.getWhiteList()}">
+                    <div th:data-id="${salon.getId()}" th:data-libelle="${salon.getTitre()}" >
+                        <div class="flex w-1/2 gap-2 items-center hover:cursor-pointer">
+                            <th:block th:replace="svg/icons/forum :: svg('15', '15')"></th:block>
+                            <div class="truncate" th:text="${salon.getTitre()}"></div>
+                            <div class="grow"></div>
+                            <input 
+                                data-whitelist
+                                th:checked="${salonAutorises.contains(salon)}"
+                                th:hx-post="'/admin/forum/whitelist?idSession=' + ${_session.getId()} + '&idSalon=' + ${salon.getId()}"
+                                type="checkbox"
+                            >
+                        </div>
+                    </div>
+                </th:block>
             </div>
         </th:block>
     </div>

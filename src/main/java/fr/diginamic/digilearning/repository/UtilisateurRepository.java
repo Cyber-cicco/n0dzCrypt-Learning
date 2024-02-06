@@ -17,4 +17,5 @@ join SESSION_STAGIAIRE SS on UTILISATEUR.ID = SS.ID_STAG
 where SS.ID_SES = ?1
 """)
     List<Utilisateur> findBySession(Long id);
+
 }

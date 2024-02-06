@@ -22,4 +22,18 @@ select * from SESSION
 where ID_NEXT IS NULL
 """)
     List<Session> findAll();
+
+    @Query(nativeQuery = true, value = """
+select count(session_id) from dl_salon_session where session_id = ?1 and salon_id = ?2
+""")
+    int hasAuthorization(Long idSession, Long idSalon);
+    @Query(nativeQuery = true, value = """
+delete from dl_salon_session where session_id = ?1 and salon_id = ?2
+""")
+    void removeAuthorization(Long idSession, Long idSalon);
+
+    @Query(nativeQuery = true, value = """
+insert into dl_salon_session(session_id, salon_id) values (?1, ?2)
+""")
+    void grandAuthorization(Long idSession, Long idSalon);
 }
