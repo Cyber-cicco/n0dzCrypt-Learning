@@ -93,6 +93,7 @@ public class Routes {
     public static final String ADR_ADMIN_SMODULE_LISTE_ITEM = "pages/admin/modules/fragments/smodules.liste-item";
     public static final String ADR_ADMIN_MODULE_DESC = "pages/admin/modules/fragments/description";
     public static final String ADR_ADMIN_FORUM_MODAL = "pages/admin/apprenants/fragments/forum.modal";
+    public static final String ADR_ADMIN_APPRENANTS_DETAILS = "pages/admin/apprenants/fragments/apprenant.details";
 
     private Routes(){}
 }

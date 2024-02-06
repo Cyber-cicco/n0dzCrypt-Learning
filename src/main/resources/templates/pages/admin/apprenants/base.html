@@ -62,8 +62,8 @@
                                 th:each="stagiaire, iterStat : ${_session.getStagiaires()}"
                                 th:text="${stagiaire.getFullName()}"
                                 th:hx-get="'/admin/utilisateur?id=' + ${stagiaire.getId()}"
-                                hx-target="#forum-canvas"
-                                hx-swap="outerHTML transition:true"
+                                hx-target="#admin-card"
+                                hx-swap="innerHTML transition:true"
                                 ></li>
                         </div>
                     </ul>

@@ -18,6 +18,6 @@
             <div th:text="${telephone}">0666666666</div>
         </div>
         <div class="grow"></div>
-        <div hx-get="profil/modifier" class="flex h-full justify-end items-center" hx-target="#modal" th:insert="~{components/buttons :: buttonPrimary('Modifier les informations')}"></div>
+        <div th:if="${!_user.isAdministrateur()}" hx-get="profil/modifier" class="flex h-full justify-end items-center" hx-target="#modal" th:insert="~{components/buttons :: buttonPrimary('Modifier les informations')}"></div>
     </div>
 </div>

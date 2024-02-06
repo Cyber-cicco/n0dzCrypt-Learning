@@ -32,16 +32,28 @@ public class ProfilIrrigator {
     public void irrigateBaseAttributes(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
         List<Cours> bookmarked = coursRepository.getBookMarked(userInfos.getId());
-        model.addAttribute("presentation", utilisateur.getNom().toUpperCase() + " " + utilisateur.getPrenom());
-        model.addAttribute("email", utilisateur.getEmail());
-        model.addAttribute("telephone", utilisateur.getTelephone());
+        irrigateLeftCard(model, utilisateur);
         model.addAttribute("bookmarked", bookmarked);
+        model.addAttribute("_user" ,userInfos);
         model.addAttribute("dateNaissance", utilisateur.getDateNaissance());
         model.addAttribute("schedueled", coursService.getCoursCeJour(userInfos.getId()));
         model.addAttribute("progresCours", utilisateurService.getProgression(utilisateur.getId()));
         model.addAttribute("progresJour", utilisateurService.getProgressionJournee(utilisateur.getId()));
         model.addAttribute("dateUtil", dateUtil);
         model.addAttribute("title", "Mon Compte");
+    }
+
+    public void irrigateLeftCard(Model model, Utilisateur utilisateur){
+        model.addAttribute("presentation", utilisateur.getNom().toUpperCase() + " " + utilisateur.getPrenom());
+        model.addAttribute("email", utilisateur.getEmail());
+        model.addAttribute("telephone", utilisateur.getTelephone());
+    }
+
+    public void irrigateApprenantAdmin(Model model, Long idUtilisateur, AuthenticationInfos userInfos){
+        Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("_user" ,userInfos);
+        model.addAttribute("progresCours", utilisateurService.getProgression(utilisateur.getId()));
+        irrigateLeftCard(model, utilisateur);
     }
 
     public void irrigatePatchProgress(Model model, AuthenticationInfos userInfos, Long idCours){
