@@ -11,7 +11,13 @@
         <div class="flex flex-col gap-5 p-5">
             <h2 class="text-3xl font-poppins text-primary">Actions : </h2>
 <button
-        class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Révoquer les droits d'accès au forum</button>
+        th:fragment="banButton()"
+        class="bg-accent w-full p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+        th:hx-put="'/admin/utilisateur/droitsforum?id=' + ${id}"
+        th:text="(${banned != null && banned} ? 'Rendre le droit au forum' : 'Révoquer le droit au forum')"
+        hx-target="this"
+        hx-swap="outerHTML"
+        ></button>
         </div>
     </div>
 </div>

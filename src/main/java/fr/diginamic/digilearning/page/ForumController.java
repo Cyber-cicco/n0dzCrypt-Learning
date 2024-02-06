@@ -5,6 +5,7 @@ import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.dto.PostFilDto;
 import fr.diginamic.digilearning.page.irrigator.ForumIrrigator;
 import fr.diginamic.digilearning.service.ForumService;
+import fr.diginamic.digilearning.utils.hx.HX;
 import fr.diginamic.digilearning.validators.FilValidator;
 import fr.diginamic.digilearning.validators.PostForumValidator;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
@@ -26,24 +27,33 @@ public class ForumController {
     private final ForumIrrigator forumIrrigator;
     private final ForumService forumService;
     @GetMapping("/api")
-    public String getForumApi(Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+    public String getForumApi(@CookieValue("AUTH-TOKEN") String cookie, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         forumIrrigator.irrigateCard(model, userInfos, Routes.ADR_FORUM_PRESENTATION);
         forumIrrigator.irrigateBaseTemplate(userInfos, model, response);
         return Routes.ADR_FORUM;
     }
 
     @GetMapping
-    public String getForum(Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+    public String getForum(@CookieValue("AUTH-TOKEN") String cookie, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         forumIrrigator.irrigateCard(model, userInfos, Routes.ADR_FORUM_PRESENTATION);
         forumIrrigator.irrigateBaseTemplate(userInfos, model, response);
         return Routes.ADR_BASE_LAYOUT;
     }
 
     @GetMapping("/salon")
-    public String getBaseSalon(@RequestParam("id") Long idSalon, Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+    public String getBaseSalon(@CookieValue("AUTH-TOKEN") String cookie,@RequestParam("id") Long idSalon, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         forumIrrigator.irrigateBaseTemplate(userInfos, model, response);
         forumIrrigator.irrigateSalonAttribute(userInfos, model, response, idSalon);
         forumIrrigator.irrigateCard(model, userInfos, Routes.ADR_FORUM_SALON);
@@ -51,8 +61,11 @@ public class ForumController {
     }
 
     @GetMapping("/fil")
-    public String getBaseFil(@RequestParam("id") Long idFil, @RequestParam Long page, Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+    public String getBaseFil(@CookieValue("AUTH-TOKEN") String cookie,@RequestParam("id") Long idFil, @RequestParam Long page, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         forumIrrigator.irrigateBaseTemplate(userInfos, model, response);
         forumIrrigator.irrigateFilAttribute(userInfos, model, response, idFil, page);
         forumIrrigator.irrigateCard(model, userInfos, Routes.ADR_FORUM_FIL);
@@ -60,28 +73,41 @@ public class ForumController {
     }
 
     @GetMapping("/salon/api")
-    public String getSalonById( @RequestParam("id") Long idSalon, Model model, HttpServletResponse response) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+    public String getSalonById(@CookieValue("AUTH-TOKEN") String cookie, @RequestParam("id") Long idSalon, Model model, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         forumIrrigator.irrigateSalonAttribute(userInfos, model, response, idSalon);
         return Routes.ADR_FORUM_SALON;
     }
 
 
     @GetMapping("/fil/api")
-    public String getFil( @RequestParam("id") Long idFil, @RequestParam Long page, Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+    public String getFil(@CookieValue("AUTH-TOKEN") String cookie, @RequestParam("id") Long idFil, @RequestParam Long page, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         forumIrrigator.irrigateFilAttribute(userInfos, model, response, idFil, page);
         return Routes.ADR_FORUM_FIL;
     }
 
     @GetMapping("/regles/api")
-    public String getRegles(@RequestParam Long id, Model model){
+    public String getRegles(@CookieValue("AUTH-TOKEN") String cookie,@RequestParam Long id, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         forumIrrigator.irrigateRegles(model, id);
         return Routes.ADR_FORUM_FIL;
     }
     @GetMapping("/regles")
-    public String getBaseRegles(@RequestParam Long id,  Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+    public String getBaseRegles(@CookieValue("AUTH-TOKEN") String cookie,@RequestParam Long id,  Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         forumIrrigator.irrigateBaseTemplate(userInfos, model, response);
         forumIrrigator.irrigateRegles(model, id);
         forumIrrigator.irrigateCard(model, userInfos, Routes.ADR_FORUM_FIL);
@@ -90,8 +116,11 @@ public class ForumController {
 
 
     @PostMapping("/message")
-    public String postNewMessage(@RequestParam Long id, @RequestParam Long page, @ModelAttribute MessageDto postForumDto, Model model, HttpServletResponse response) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+    public String postNewMessage(@CookieValue("AUTH-TOKEN") String cookie,@RequestParam Long id, @RequestParam Long page, @ModelAttribute MessageDto postForumDto, Model model, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         postForumValidator.validatePostForum(postForumDto);
         forumService.saveNewMessage(userInfos, id, postForumDto);
         forumService.verifyIfUserIsAllowed(userInfos, id, response);
@@ -99,12 +128,20 @@ public class ForumController {
         return Routes.ADR_FORUM_FIL;
     }
     @PostMapping("/fil")
-    public String postNewFil(@RequestParam Long id, @ModelAttribute PostFilDto postFilDto, Model model, HttpServletResponse response) {
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+    public String postNewFil(@CookieValue("AUTH-TOKEN") String cookie, @RequestParam Long id, @ModelAttribute PostFilDto postFilDto, Model model, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos(cookie);
+        if(authenticationService.checkBanned(userInfos.getId())){
+            return handleBan(response);
+        }
         filValidator.validateFil(postFilDto);
         forumService.getSalonByIdAndCheckIfUserAuthorized(userInfos.getId(), id);
         forumService.saveNewFil(userInfos, id, postFilDto);
         forumIrrigator.irrigateSalonAttribute(userInfos, model, response, id);
         return Routes.ADR_FORUM_SALON;
+    }
+
+    private String handleBan(HttpServletResponse response){
+        response.setHeader(HX.RETARGET, "#insert");
+        return Routes.ADR_FORUM_BANNED;
     }
 }

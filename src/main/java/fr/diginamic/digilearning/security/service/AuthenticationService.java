@@ -2,6 +2,8 @@ package fr.diginamic.digilearning.security.service;
 
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
+import fr.diginamic.digilearning.exception.EntityNotFoundException;
+import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.hx.HX;
 import io.jsonwebtoken.Claims;
@@ -19,12 +21,14 @@ import java.util.List;
 public class AuthenticationService {
 
     private final JwtService jwtService;
+    private final UtilisateurRepository utilisateurRepository;
     public AuthenticationInfos getAuthInfos(String token){
         Claims claims = jwtService.extractAllClaims(token);
         return AuthenticationInfos.builder()
                 .email(jwtService.extractEmail(claims))
                 .roles(jwtService.extractRoles(claims))
                 .id(jwtService.extractId(claims))
+                .banned(jwtService.extractBanned(claims))
                 .token(token)
                 .build();
     }
@@ -63,5 +67,9 @@ public class AuthenticationService {
                 throw new BrokenRuleException();
             }
         }
+    }
+
+    public Boolean checkBanned(Long id) {
+        return utilisateurRepository.findById(id).orElseThrow(EntityNotFoundException::new).getBanned();
     }
 }

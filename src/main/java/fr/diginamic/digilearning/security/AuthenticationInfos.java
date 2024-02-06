@@ -18,6 +18,7 @@ public class AuthenticationInfos {
     private String email;
     private String token;
     private Long id;
+    private Boolean banned;
 
     public boolean isFormateur(){
         return roles.contains(TypeRole.ROLE_FORMATEUR.getLibelle());

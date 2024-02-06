@@ -33,6 +33,15 @@ public class ForumService {
         return salonRepository.getSalonByIdAndCheckAuthorized(idSalon, idUtilisateur).orElseThrow(EntityNotFoundException::new);
     }
 
+    public boolean revoquerDroit(Long idUtilisateur) {
+        if(utilisateurRepository.isBanned(idUtilisateur) > 0) {
+            utilisateurRepository.unban(idUtilisateur);
+            return false;
+        }
+        utilisateurRepository.ban(idUtilisateur);
+        return true;
+    }
+
     public FilDiscussion getRegles() {
         return filDiscussionRepository.findRegles();
     }

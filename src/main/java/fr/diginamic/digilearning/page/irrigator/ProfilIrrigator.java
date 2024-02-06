@@ -52,6 +52,8 @@ public class ProfilIrrigator {
     public void irrigateApprenantAdmin(Model model, Long idUtilisateur, AuthenticationInfos userInfos){
         Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("_user" ,userInfos);
+        model.addAttribute("id", utilisateur.getId());
+        model.addAttribute("banned", utilisateur.getBanned());
         model.addAttribute("progresCours", utilisateurService.getProgression(utilisateur.getId()));
         irrigateLeftCard(model, utilisateur);
     }

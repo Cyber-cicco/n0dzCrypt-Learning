@@ -18,4 +18,18 @@ where SS.ID_SES = ?1
 """)
     List<Utilisateur> findBySession(Long id);
 
+    @Query(nativeQuery = true, value = """
+update UTILISATEUR set dl_banned = true where ID = ?1
+""")
+    void ban(Long idUtilisateur);
+
+    @Query(nativeQuery = true, value = """
+select count(id) from UTILISATEUR where ID = ?1 and dl_banned = 1
+""")
+    int isBanned(Long idUtilisateur);
+
+    @Query(nativeQuery = true, value = """
+update UTILISATEUR set dl_banned = 0 where ID = ?1
+""")
+    void unban(Long id);
 }

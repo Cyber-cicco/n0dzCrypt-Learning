@@ -49,6 +49,7 @@ public class LoginController {
                     .email(auth.get().getEmail())
                     .roles(auth.get()
                             .getRoles().stream().map(Role::getLibelle).collect(Collectors.toList()))
+                    .banned(auth.get().getBanned())
                     .build();
             response.setHeader(HttpHeaders.SET_COOKIE, jwtService.buildJWTCookie(auth.get()));
             layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_HOME);

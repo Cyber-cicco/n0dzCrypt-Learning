@@ -215,6 +215,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@OneToMany(mappedBy = "stagiaire")
 	private List<FlagCours> flagCours;
 
+	@Column(name = "dl_banned")
+	private Boolean banned;
+
 	@OneToMany(mappedBy = "auteur")
 	private List<Question> questions;
 

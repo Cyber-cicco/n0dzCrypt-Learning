@@ -68,6 +68,7 @@ public class JwtService {
                             .toList())
                     ))
                     .addClaims(Map.of("id", user.getId()))
+                    .addClaims(Map.of("banned", user.getBanned()))
                     .setExpiration(new Date(System.currentTimeMillis() + getExpireIn() * 1000))
                     .signWith(
                             getSecretKey()
@@ -156,5 +157,9 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public Boolean extractBanned(Claims claims) {
+        return claims.get("banned", Boolean.class);
     }
 }
