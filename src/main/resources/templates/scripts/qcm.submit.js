@@ -11,7 +11,6 @@ function submitResponse(event) {
             value : choice.checked
         })
     }
-    console.log(requestObject)
     fetch(`/cours/qcm/response?id=${idQCM}&idQuestion=${idQuestion}`,  {
         method : 'POST',
         body : JSON.stringify(requestObject),

@@ -41,6 +41,10 @@
                             Ajouter une nouvelle image depuis votre PC.
                             <div class="tooltip-arrow" data-popper-arrow></div>
                         </div>
+                        <div class="rounded-lg bg-white border-2 border-black p-1 hover:cursor-pointer hover:bg-grey">
+                            <input onchange="getMarkdownFromFile(event)" class="hidden" id="markdown-input" type="file">
+                            <label for="markdown-input" class="hover:cursor-pointer">Téléverser le markdown</label>
+                        </div>
                     </div>
                     <form class="flex flex-col h-full w-full justify-between">
                         <div class="p-3 flex flex-col h-full">

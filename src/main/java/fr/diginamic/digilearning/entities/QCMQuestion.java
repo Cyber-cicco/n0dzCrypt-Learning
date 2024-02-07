@@ -45,6 +45,7 @@ public class QCMQuestion {
         QCMQuestion qcmQuestion = QCMQuestion.builder()
                 .libelle(libelle)
                 .ordre(ordre)
+                .commentaire(commentaire)
                 .illustration(illustration)
                 .build();
         qcmQuestion.setChoix(choix.stream().map(choix -> choix.clone(qcmQuestion)).toList());

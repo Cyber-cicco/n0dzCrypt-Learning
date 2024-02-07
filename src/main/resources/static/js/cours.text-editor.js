@@ -1,5 +1,6 @@
 var putInHistory;
 var uploadPhoto;
+var getMarkdownFromFile;
 
 function initTextEditor() {
     let textOptions = document.querySelectorAll("[data-text-option]")
@@ -23,6 +24,7 @@ function initTextEditor() {
     const middle = 1;
     const id = new URLSearchParams(window.location.search).get("id");
 
+
     const uploadMD = () => {
         const formData = new FormData();
         formData.append("contenu", writingArea.value);
@@ -36,6 +38,33 @@ function initTextEditor() {
             hljs.highlightAll();
         })
     }
+
+    getMarkdownFromFile = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const markdownContent = event.target.result;
+            writingArea.value = markdownContent;
+            const fileName = file.name.toLowerCase();
+            if (fileName.endsWith('.md')) {
+                const formData = new FormData();
+                formData.append("contenu", markdownContent);
+                fetch(`/cours/admin/chapitre/contenu?id=${id}`, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        htmx.find("#markdown").innerHTML = html
+                        hljs.highlightAll();
+                    })
+                    .catch(error => console.error('Error posting markdown content:', error));
+            }
+        };
+
+    reader.readAsText(file);
+}
 
     uploadPhoto = () => {
 

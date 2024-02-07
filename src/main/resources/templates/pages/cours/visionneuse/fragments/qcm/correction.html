@@ -11,5 +11,7 @@
                 <div th:class="${res.value.aEteValide() != res.value.doitEtreValide()} ? 'text-error' : 'text-validation'" th:text="${res.key.getLibelle()}"></div>
             </div>
         </th:block>
+        <div th:if="${resQuestion.getQuestion.getCommentaire() != null}" th:text="${resQuestion.getQuestion.getCommentaire()}" class="rounded-md border-2 border-primary w-full p-2">
+        </div>
     </th:block>
 </div>
