@@ -46,7 +46,7 @@ public class ConversationAdminController {
     public String getConversationApi(Model model, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(userInfos.getRoles(), List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR), response);
-        conversationAdminIrrigator.irrigateConversationAdmin(model, userInfos, Routes.ADR_ADMIN_CONVERSATIONS);
+        conversationAdminIrrigator.irrigateConversationAdmin(model, userInfos, Routes.ADR_ADMIN_CONVERSATIONS_PRESENTATION);
         return Routes.ADR_ADMIN_CONVERSATIONS;
     }
 }
