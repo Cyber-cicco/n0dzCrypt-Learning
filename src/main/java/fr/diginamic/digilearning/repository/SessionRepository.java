@@ -36,4 +36,11 @@ delete from dl_salon_session where session_id = ?1 and salon_id = ?2
 insert into dl_salon_session(session_id, salon_id) values (?1, ?2)
 """)
     void grandAuthorization(Long idSession, Long idSalon);
+
+    @Query(nativeQuery = true, value = """
+select S.* from SESSION S
+join ADMINISTRATION_SESSION ASS on S.ID = ASS.ID_SESSION and ASS.ID_UTILISATEUR = ?1
+where DATE_FIN > ?2
+""")
+    List<Session> findByResponsabiliteAndDatefin(Long id, LocalDate now);
 }

@@ -1,6 +1,6 @@
 <nav class="hidden items-center shrink p-1 gap-10 bg-grey h-full xl:flex flex-col drop-shadow-xl z-10 shadow-black">
     <div class="p-2">
-        <img class="rounded-full" th:src="@{/img/logo_nav.webp}" width="70">
+        <img class="rounded-full" th:src="@{/img/logo_nav.webp}" width="50">
     </div>
     <ol id="navbar" class="flex gap-5 p-2 flex-col h-full items-center" >
         <li class="flex justify-center gap-5 flex-col w-full" th:each="linkGroup, iterStat : ${links}">
@@ -11,7 +11,7 @@
         </li>
         <a class="flex flex-col text-primary items-center hover:cursor-pointer" hx-get="/logout">
             <div class="hover:bg-accent text-white rounded-full p-2 bg-white" th:insert="svg/icons/logout :: svg('25', '25')"></div>
-            <div class="text-xs font-poppins text-center">Se déconnecter</div>
+            <div class="text-xs font-poppins text-center">Déconnexion</div>
         </a>
     </ol>
 </nav>

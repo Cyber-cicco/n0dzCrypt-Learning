@@ -38,7 +38,7 @@ public class NavBarService {
                                             .build(),
                                     NavLink.builder()
                                             .iconSource("svg/icons/conversation")
-                                            .url("conversation/admin")
+                                            .url("admin/conversation")
                                             .libelle("Mes messages")
                                             .build(),
                                     NavLink.builder()

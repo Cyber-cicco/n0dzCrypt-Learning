@@ -96,6 +96,8 @@ public class Routes {
     public static final String ADR_ADMIN_APPRENANTS_DETAILS = "pages/admin/apprenants/fragments/apprenant.details";
     public static final String ADR_FORUM_BANNED = "pages/forum/fragments/banned";
     public static final String ADR_ADMIN_APPRENANTS_DETAILS_BAN = "pages/admin/apprenants/fragments/apprenant.details :: banButton()";
+    public static final String ADR_ADMIN_CONVERSATIONS = "pages/conversation/admin/base";
+    public static final String ADR_ADMIN_CONVERSATIONS_PRESENTATION = "pages/conversation/admin/presentation";
 
     private Routes(){}
 }

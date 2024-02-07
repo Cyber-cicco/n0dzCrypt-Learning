@@ -61,6 +61,7 @@ public class ConversationIrrigator {
 
     /**
      * Permet d'irriguer le modèle du chat pour un interlocuteur donné
+     * Sécuriser l'API pour assurer qu'un utilisateur ne peut créer de conversations avec des gens avec qui il n'est pas censé pouvoir le faire.
      * @param model un objet permettant d'irriguer le template thymeleaf
      * @param userInfos les informations d'authentification de l'utilisateur
      * @param idInterlocuteur l'identifiant de l'interlocuteur.
