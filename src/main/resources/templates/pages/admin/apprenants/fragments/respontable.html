@@ -1,0 +1,46 @@
+<th:block th:fragment="table()">
+    <table id="respontable" class="flex flex-col w-full rounded-md">
+        <thead class="flex flex-col w-full">
+            <tr class="flex w-full">
+                <th class="flex justify-center items-center w-2/5">Nom</th>
+                <th class="flex justify-center items-center w-2/5">Role</th>
+                <th class="flex justify-center items-center w-1/5"></th>
+            </tr>
+        </thead>
+        <tbody class="flex flex-col bg-white w-full">
+            <th:block th:each="responsable, iterStat : ${responsables}">
+                <tr class="flex w-full">
+                    <td class="flex justify-center p-2 items-center w-2/5" th:text="${responsable.getUtilisateur().getFullName()}"></td>
+                    <td class="flex justify-center p-2 items-center w-2/5" th:text="${responsable.getStatusResponsableSession().getLibelle()}"></td>
+                    <td class="flex justify-center p-2 items-center w-1/5">
+                        <div 
+                            class="rounded-full hover:cursor-pointer hover:bg-accent p-1"
+                            th:hx-delete="
+                            '/admin/responsables?id='
+                            + ${responsable.getId()}
+                            + '&idSession='
+                            + ${idSession}
+                            "
+                            hx-select="#respontable"
+                            hx-select-oob="#responsables-liste"
+                            hx-target="#respontable"
+                            hx-swap="outerHTML"
+                            >
+                            <th:block th:replace="svg/icons/delete :: svg('25', '25')"></th:block>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+</th:block>
+<th:block th:fragment="liste()">
+    <div id="responsables-liste" class="bg-lightAccent rounded-md flex flex-col">
+        <th:block th:each="admin, iterStat : ${responsables}">
+            <div class="flex p-2 w-full justify-between">
+                <div th:text="${admin.getUtilisateur().getFullName()}"></div>
+                <div class="" th:text="${admin.getStatusResponsableSession().getLibelle()}"></div>
+            </div>
+        </th:block>
+    </div>
+</th:block>

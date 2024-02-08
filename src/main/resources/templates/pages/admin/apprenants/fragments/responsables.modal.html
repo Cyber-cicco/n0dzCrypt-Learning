@@ -1,0 +1,15 @@
+<section class="flex flex-col w-full h-full">
+    <div class="flex gap-2 items-center">
+        <th:block th:replace="svg/icons/search :: svg('30', '30')"></th:block>
+        <label for="responsables-choice">Rechercher</label>
+    </div>
+    <input minlength="2" autocomplete="off" class="rounded-sm p-2 text-black w-full" list="responsables-choices" name="module" id="responsables-choice">
+    <datalist style="overflow:hidden" id="responsables-choices">
+        <th:block th:each="candidat, iterStat : ${candidats}">
+            <option th:value="${candidat.getFullName()}"></option>
+        </th:block>
+    </datalist>
+    <div class="flex w-full p-5">
+        <th:block th:replace="pages/admin/apprenants/fragments/respontable :: table()"></th:block>
+    </div>
+</section>
