@@ -22,6 +22,7 @@ public class AdminIrrigator {
     private final CoursRepository coursRepository;
     private final SousModuleRepository sousModuleRepository;
     private final SujetRepository sujetRepository;
+    private final AdministrationSessionRepository administrationSessionRepository;
 
     public void irrigateAdminPanelApprenants(Model model, AuthenticationInfos userInfos, List<Session> sessions, String adminInsert){
         model.addAttribute("_sessions", sessions);
@@ -33,6 +34,7 @@ public class AdminIrrigator {
         Session session = sessionRepository.findById(idSession)
                 .orElseThrow(EntityNotFoundException::new);
         model.addAttribute("_session", session);
+        model.addAttribute("responsables", session.getAdministrationSessions());
     }
 
     public void irrigateUtilisateur(Model model, AuthenticationInfos userInfos, Long idUtilisateur) {
@@ -64,5 +66,19 @@ public class AdminIrrigator {
         model.addAttribute("_session", session);
         model.addAttribute("salonAutorises", session.getSalonsAutorises());
         model.addAttribute("sujets", sujets);
+    }
+
+    public void irrigateResponsablesModal(Model model, Long idSession) {
+        List<AdministrationSession> administrationSessions = administrationSessionRepository.findBySession_Id(idSession);
+        List<Utilisateur> candidats = utilisateurRepository.findAllResponsables();
+        model.addAttribute("responsables", administrationSessions);
+        model.addAttribute("candidats", candidats);
+        model.addAttribute("idSession", idSession);
+    }
+
+    public void irrigateChangementResponsables(Model model, Long idSession) {
+        List<AdministrationSession> administrationSessions = administrationSessionRepository.findBySession_Id(idSession);
+        model.addAttribute("responsables", administrationSessions);
+        model.addAttribute("idSession", idSession);
     }
 }

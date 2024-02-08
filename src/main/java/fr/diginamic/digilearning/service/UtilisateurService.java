@@ -43,7 +43,7 @@ public class UtilisateurService {
 
         public Integer getPourcentageCompletion(){
             if(nbCours != 0) return (int) Math.ceil((Double.valueOf(nbCoursTermines) / Double.valueOf(nbCours)) * 100d);
-            return 101;
+            return 100;
         }
     }
     public Integer getProgression(Long id){

@@ -98,6 +98,8 @@ public class Routes {
     public static final String ADR_ADMIN_APPRENANTS_DETAILS_BAN = "pages/admin/apprenants/fragments/apprenant.details :: banButton()";
     public static final String ADR_ADMIN_CONVERSATIONS = "pages/conversation/admin/base";
     public static final String ADR_ADMIN_CONVERSATIONS_PRESENTATION = "pages/conversation/admin/presentation";
+    public static final String ADR_ADMIN_RESPONSABLES_MODAL = "pages/admin/apprenants/fragments/responsables.modal";
+    public static final String ADR_ADMIN_SESSION_RESPONSABLES = "pages/admin/apprenants/fragments/respontable";
 
     private Routes(){}
 }

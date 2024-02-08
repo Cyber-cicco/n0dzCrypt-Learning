@@ -17,7 +17,18 @@
             <img src="/img/icons/telephone.svg">
             <div th:text="${telephone}">0666666666</div>
         </div>
+        <div th:if="${!_user.isAdministrateur() && _session.isPresent()}">
+            <div class="flex gap-2">
+                <span class="text-primary text-lg font-poppins">Ma session : </span>
+                <span th:text="${_session.get().getNom()}"></span>
+            </div>
+        </div>
         <div class="grow"></div>
-        <div th:if="${!_user.isAdministrateur()}" hx-get="profil/modifier" class="flex h-full justify-end items-center" hx-target="#modal" th:insert="~{components/buttons :: buttonPrimary('Modifier les informations')}"></div>
+        <div th:if="${!_user.isAdministrateur()}" 
+            hx-get="profil/modifier" 
+            class="flex h-full justify-end items-center"
+            hx-target="#modal"
+            th:insert="~{components/buttons :: buttonPrimary('Changer la photo')}"
+            ></div>
     </div>
 </div>

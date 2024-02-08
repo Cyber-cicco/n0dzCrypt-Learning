@@ -44,6 +44,7 @@ public class ProfilIrrigator {
     }
 
     public void irrigateLeftCard(Model model, Utilisateur utilisateur){
+        model.addAttribute("_session", utilisateur.getSessionCourante());
         model.addAttribute("presentation", utilisateur.getNom().toUpperCase() + " " + utilisateur.getPrenom());
         model.addAttribute("email", utilisateur.getEmail());
         model.addAttribute("telephone", utilisateur.getTelephone());

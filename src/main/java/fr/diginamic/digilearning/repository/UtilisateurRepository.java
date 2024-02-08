@@ -32,4 +32,10 @@ select count(id) from UTILISATEUR where ID = ?1 and dl_banned = 1
 update UTILISATEUR set dl_banned = 0 where ID = ?1
 """)
     void unban(Long id);
+
+    @Query(nativeQuery = true, value = """
+select DISTINCT U.* from UTILISATEUR U
+join ROLE_UTILISATEUR RU on U.ID = RU.ID_UTILISATEUR and (RU.ID_ROLE = 1 OR RU.ID_ROLE = 3)
+""")
+    List<Utilisateur> findAllResponsables();
 }

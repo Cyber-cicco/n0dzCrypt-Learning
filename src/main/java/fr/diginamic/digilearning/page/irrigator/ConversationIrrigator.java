@@ -51,7 +51,7 @@ public class ConversationIrrigator {
     public void irrigateBaseAttributesConversationStagiaire(Utilisateur utilisateur, Model model){
         model.addAttribute("idUtilisateur", utilisateur.getId());
         List<ConversationService.ContactInfos> contactInfos = conversationService.createContactList(utilisateur);
-        if(contactInfos.get(0) != null) {
+        if(contactInfos.size() > 0) {
             model.addAttribute("page", 0);
             model.addAttribute("interlocuteur", contactInfos.get(0));
             model.addAttribute("conversation", conversationService.getConversation(utilisateur, contactInfos.get(0).utilisateur(), 0));

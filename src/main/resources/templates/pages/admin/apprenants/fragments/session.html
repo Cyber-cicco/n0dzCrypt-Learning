@@ -22,18 +22,20 @@
                 th:hx-get="'/admin/modules/api?id=' + ${_session.getFormation().getId()} + '&type=0'"
                 hx-target="#insert"
                 th:hx-push-url="'/admin/modules?id=' + ${_session.getFormation().getId()} + '&type=0'"
-                class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Changer les modules de la formation</button>
+                class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">
+                Changer les modules de la formation
+            </button>
         </div>
         <div class="flex flex-col w-1/2 p-2 gap-2">
-            <h3 class="text-xl font-poppins text-primary">Responsables de la session : </h3>
-            <div class="bg-lightAccent rounded-md flex flex-col">
-                <th:block th:each="admin, iterStat : ${_session.getAdministrationSessions()}">
-                    <div class="flex p-2 w-full justify-between">
-                        <div th:text="${admin.getUtilisateur().getFullName()}"></div>
-                        <div class="" th:text="${admin.getStatusResponsableSession().getLibelle()}"></div>
-                    </div>
-                </th:block>
-            </div>
+            <h3 class="text-xl font-poppins text-primary">Interlocuteurs de la session : </h3>
+            <th:block th:replace="pages/admin/apprenants/fragments/respontable :: liste()"></th:block>
+            <button 
+                th:hx-get="'/admin/responsables/modal?id=' + ${_session.getId()}"
+                hx-target="#modal-responsables-content"
+                hx-on::before-request="openResponsables()"
+                class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">
+                Changer les interlocuteurs de la session.
+            </button>
         </div>
     </div>
     <div class="grow"></div>
@@ -49,18 +51,11 @@
             <button 
                 class="w-full bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
                 th:hx-get="'/admin/forum/modal?id=' + ${_session.getId()}"
-                hx-target="#modal-forum-content"
-                hx-on::before-request="openForum()"
+                hx-target="#modal-responsables-content"
+                hx-on::before-request="openResponsables()"
                 >Gérer les accès au forum</button>
     </div>
 </section>
-<aside id="modal-calendar" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-100%]">
-    <div class="absolute top-0 right-0">
-        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeCalendar()">
-    </div>
-    <section id="modal-cours-content" class="flex flex-col h-full gap-2">
-    </section>
-</aside>
 <aside id="modal-calendar" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-100%]">
     <div class="absolute top-0 right-0">
         <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeCalendar()">
@@ -75,6 +70,13 @@
         <section id="modal-forum-content" class="flex flex-col h-full gap-2">
         </section>
 </aside>
+<aside id="modal-responsables" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
+    <div class="flex justify-end w-full">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeResponsables()" >
+    </div>
+        <section id="modal-responsables-content" class="flex flex-col h-full gap-2">
+        </section>
+</aside>
 <script>
     function openCalendar() {
         document.querySelector('#modal-calendar').classList.add("modal");
@@ -82,6 +84,14 @@
     }
     function closeCalendar() {
         document.querySelector('#modal-calendar').classList.remove("modal");
+        document.querySelector('#modal-bg').setAttribute("hidden", "true")
+    }
+    function openResponsables() {
+        document.querySelector('#modal-responsables').classList.add("modal");
+        document.querySelector('#modal-bg').removeAttribute("hidden")
+    }
+    function closeResponsables() {
+        document.querySelector('#modal-responsables').classList.remove("modal");
         document.querySelector('#modal-bg').setAttribute("hidden", "true")
     }
     function openForum() {

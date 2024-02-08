@@ -258,6 +258,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 		this.prenom = prenom;
 	}
 
+	public Optional<Session> getSessionCourante(){
+		return sessionsStagiaire.stream().filter(session -> session.getDateFin().isAfter(LocalDate.now())).findFirst();
+	}
 	public TypeRessource getTypeRessource() {
 		return TypeRessource.UTILISATEUR;
 	}

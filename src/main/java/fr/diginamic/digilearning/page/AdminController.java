@@ -96,6 +96,27 @@ public class AdminController {
         return Routes.ADR_ADMIN_FORUM_MODAL;
     }
 
+    @GetMapping("/responsables/modal")
+    public String getResponsablesModal(Model model, @RequestParam("id") Long idSession, HttpServletResponse response) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        adminIrrigator.irrigateResponsablesModal(model, idSession);
+        return Routes.ADR_ADMIN_RESPONSABLES_MODAL;
+    }
+
+    @DeleteMapping("/responsables")
+    public String deleteResponsable(
+            Model model,
+            @RequestParam("id") Long idResponsable,
+            @RequestParam("idSession") Long idSession,
+            HttpServletResponse response
+    ){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        sessionService.deleteResponsable(idResponsable);
+        adminIrrigator.irrigateChangementResponsables(model, idSession);
+        return Routes.ADR_ADMIN_SESSION_RESPONSABLES;
+    }
     private void irrigateForApprenant(Long idSession, Long idUtilisateur, Model model, AuthenticationInfos userInfos, List<Session> sessions){
         if(idSession != null) {
             adminIrrigator.irrigateSession(model, userInfos, idSession);
