@@ -180,7 +180,7 @@ public class CoursAdminController {
     }
 
     @PostMapping
-    public String creerCours(Model model, @RequestParam("id") Long idSousModule, @ModelAttribute CreationCoursDto creationCoursDto, HttpServletResponse response) {
+public String creerCours(Model model, @RequestParam("id") Long idSousModule, @ModelAttribute CreationCoursDto creationCoursDto, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.rolesMustMatchOne(
                 userInfos.getRoles(),

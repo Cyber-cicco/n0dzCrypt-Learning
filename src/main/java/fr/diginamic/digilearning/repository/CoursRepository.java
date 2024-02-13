@@ -3,6 +3,7 @@ package fr.diginamic.digilearning.repository;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -176,6 +177,7 @@ where c.sous_module_id = ?1
 """)
     Optional<Integer> maxByOrdre(Long idSousModule);
 
+    @Modifying
     @Query(nativeQuery = true, value = """
 update dl_cours c 
 set c.ordre = c.ordre + 1
