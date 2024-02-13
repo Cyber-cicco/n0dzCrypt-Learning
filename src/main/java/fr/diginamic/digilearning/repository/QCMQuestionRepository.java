@@ -37,6 +37,7 @@ and qq.ordre >= ?2
     """)
     void updateOrdreDescendant(int oldOrdre, int ordre, long idChapitre);
 
+    @Modifying
     @Query(nativeQuery = true, value = """
 update dl_qcm_question qq
 set ordre = ordre - 1

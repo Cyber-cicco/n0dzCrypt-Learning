@@ -66,6 +66,7 @@ where ch.cours_id = ?3
 and ch.ordre between ?1 and ?2
     """)
     void updateOrdreAscendant(int oldOrdre, int ordre, Long idCours);
+    @Modifying
     @Query(nativeQuery = true, value = """
 update dl_chapitre ch
 set ordre = ordre - 1

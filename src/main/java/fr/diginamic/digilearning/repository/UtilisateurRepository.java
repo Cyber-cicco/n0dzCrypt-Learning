@@ -2,6 +2,7 @@ package fr.diginamic.digilearning.repository;
 
 import fr.diginamic.digilearning.entities.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -18,6 +19,7 @@ where SS.ID_SES = ?1
 """)
     List<Utilisateur> findBySession(Long id);
 
+    @Modifying
     @Query(nativeQuery = true, value = """
 update UTILISATEUR set dl_banned = true where ID = ?1
 """)
@@ -28,6 +30,7 @@ select count(id) from UTILISATEUR where ID = ?1 and dl_banned = 1
 """)
     int isBanned(Long idUtilisateur);
 
+    @Modifying
     @Query(nativeQuery = true, value = """
 update UTILISATEUR set dl_banned = 0 where ID = ?1
 """)
