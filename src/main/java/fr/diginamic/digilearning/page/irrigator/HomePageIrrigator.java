@@ -23,7 +23,6 @@ public class HomePageIrrigator {
     private final CoursService coursService;
     private final DateUtil dateUtil;
 
-    @Transactional
     public void irrigateModel(Model model, AuthenticationInfos userInfos) {
         model.addAttribute("utilisateur", utilisateurRepository.findById(userInfos.getId())
                 .orElseThrow(EntityNotFoundException::new));

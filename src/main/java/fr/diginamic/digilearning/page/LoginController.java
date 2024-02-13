@@ -40,7 +40,6 @@ public class LoginController {
         response.setHeader(HX.REDIRECT, "/login");
     }
 
-    @Transactional
     @PostMapping("/login")
     public String login(@ModelAttribute LoginDto loginDto, Model model, HttpServletResponse response){
         Optional<Utilisateur> auth = utilisateurRepository.findByEmail(loginDto.getEmail())
