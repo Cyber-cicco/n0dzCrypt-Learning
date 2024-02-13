@@ -78,3 +78,5 @@ logging:
 server:
     http2:
         enabled: true
+prod:
+    url: '@prod.url@'

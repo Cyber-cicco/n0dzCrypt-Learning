@@ -177,6 +177,7 @@
                 <jdbc.connections.max.active>5</jdbc.connections.max.active>
                 <filesystem.logs>C:/Temp/logs</filesystem.logs>
                 <filesystem.upload>C:/Temp/upload</filesystem.upload>
+                <prod.url>https://localhost:8080</prod.url>
                 <ressources-utilisateur.dir></ressources-utilisateur.dir>
             </properties>
         </profile>
@@ -194,6 +195,7 @@
                 <jdbc.user>${env.MYSQL_ADDON_USER}</jdbc.user>
                 <jdbc.pass>${env.MYSQL_ADDON_PASSWORD}</jdbc.pass>
                 <jdbc.dialect>org.hibernate.dialect.MySQLDialect</jdbc.dialect>
+                <prod.url>${env.PROD_URL}</prod.url>
                 <jdbc.connections.max.active>2</jdbc.connections.max.active>
             </properties>
         </profile>
