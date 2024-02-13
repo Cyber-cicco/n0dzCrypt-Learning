@@ -47,6 +47,9 @@ spring:
         username: '@jdbc.user@'
         password: '@jdbc.pass@'
         driver-class-name: '@jdbc.driver@'
+        tomcat:
+            max-active: '@jdbc.connections.max.active@'
+            max-idle: '@jdbc.connections.max.active@'
     jpa:
         database: mysql
         hibernate:

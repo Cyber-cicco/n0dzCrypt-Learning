@@ -196,7 +196,7 @@
                 <jdbc.pass>${env.MYSQL_ADDON_PASSWORD}</jdbc.pass>
                 <jdbc.dialect>org.hibernate.dialect.MySQLDialect</jdbc.dialect>
                 <prod.url>${env.PROD_URL}</prod.url>
-                <jdbc.connections.max.active>2</jdbc.connections.max.active>
+                <jdbc.connections.max.active>5</jdbc.connections.max.active>
             </properties>
         </profile>
     </profiles>
