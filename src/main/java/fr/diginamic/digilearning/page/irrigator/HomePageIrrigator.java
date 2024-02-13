@@ -8,6 +8,7 @@ import fr.diginamic.digilearning.utils.DateUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 /**
@@ -22,6 +23,7 @@ public class HomePageIrrigator {
     private final CoursService coursService;
     private final DateUtil dateUtil;
 
+    @Transactional
     public void irrigateModel(Model model, AuthenticationInfos userInfos) {
         model.addAttribute("utilisateur", utilisateurRepository.findById(userInfos.getId())
                 .orElseThrow(EntityNotFoundException::new));
