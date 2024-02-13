@@ -10,16 +10,14 @@ import java.util.Optional;
 public interface FormationRepository extends JpaRepository<Formation, Long>  {
 
     @Query(nativeQuery = true, value = """
-select ID,  NOM, NOM_COURT, REFERENCE, TITRE from FORMATION where ID_NEXT IS NULL
+select ID, NOM, NOM_COURT, REFERENCE from FORMATION 
 """ )
     List<Formation> findAllActive();
 
     @Query(nativeQuery = true, value = """
-select ID, NOM, NOM_COURT, REFERENCE, TITRE 
+select ID, NOM, NOM_COURT, REFERENCE
 from FORMATION 
-where ID_NEXT 
-IS NULL and NOM = ?
-order by DATE_MAJ DESC 
+where NOM = ?
 limit 1
 """)
     Optional<Formation> findByNom(String nom);

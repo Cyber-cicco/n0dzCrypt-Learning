@@ -13,6 +13,7 @@ import fr.diginamic.digilearning.service.AgendaService;
 import fr.diginamic.digilearning.service.SessionService;
 import fr.diginamic.digilearning.utils.hx.HX;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -102,6 +103,20 @@ public class AdminController {
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         adminIrrigator.irrigateResponsablesModal(model, idSession);
         return Routes.ADR_ADMIN_RESPONSABLES_MODAL;
+    }
+
+    @PostMapping("/responsables")
+    public String postResponsableSession(
+            Model model,
+            @RequestParam("idResponsable") Long idResponsable,
+            @RequestParam("idSession") Long idSession,
+            HttpServletResponse response
+    ) {
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
+        sessionService.addResponsable(idResponsable, idSession);
+        adminIrrigator.irrigateChangementResponsables(model, idSession);
+        return Routes.ADR_ADMIN_SESSION_RESPONSABLES;
     }
 
     @DeleteMapping("/responsables")

@@ -27,10 +27,7 @@ public class ModuleIrrigator {
     public void irrigateBaseModule(Model model, String route){
         List<Formation> formations = formationRepository.findAllActive();
         List<Module> modules = moduleRepository.findAll();
-        Set<SousModule> sousModules = modules
-                .stream()
-                .flatMap(module -> module.getSousModules().stream())
-                .collect(Collectors.toUnmodifiableSet());
+        List<SousModule> sousModules = sousModuleRepository.findAll();
         List<CoursElement> elements = new ArrayList<>();
         elements.addAll(formations);
         elements.addAll(modules);

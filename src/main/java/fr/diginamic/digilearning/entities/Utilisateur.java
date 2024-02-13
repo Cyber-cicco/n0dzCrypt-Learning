@@ -29,28 +29,9 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@Column(name = "ID")
 	private Long id;
 
-	/** valideur : Utilisateur */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID_VALIDEUR")
-	private Utilisateur valideur;
-
-	/** Pour les formateurs, indique si le formateur est certifié */
-	@Column(name = "CERTIF_DGN", length = 3)
-	private String certifieDgn;
-
-	@Column(name = "ds_statusAse")
-	private StatusAse statusAse;
-
 	@OneToMany(mappedBy = "utilisateur")
 	private List<AdministrationSession> administrationSessions = new ArrayList<>();
 
-	/**
-	 * Type de profil: administrateur, planificateur, formateur, visiteur ou
-	 * stagiaire
-	 */
-	@Column(nullable = false, length = 30)
-	@Enumerated(EnumType.STRING)
-	private TypeRole defaultRole;
 
 	/** Adresse mail */
 	@Column(nullable = false, unique = true, length = 30)
@@ -76,65 +57,12 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@Column(name="DATE_NAISSANCE")
 	private LocalDate dateNaissance;
 
-	/** Indique si le compte de l'utilisateur est activé ou non */
-	@Column(nullable = false)
-	private boolean enabled;
-
-	/**
-	 * checkRGPD : Indique que l'utilisateur a bien accepté les conditions
-	 * d'utilisation de ses données
-	 */
-	@Column(name = "CHECK_RGPD", nullable = false)
-	private boolean checkRGPD = true;
-
-	/**
-	 * Token unique envoyé par mail à l'utilisateur dans un lien HTTP et qui permet
-	 * l'activation de son compte.
-	 */
-	@Column(name = "TOKEN_INIT")
-	private String tokenInit;
-
-	/** Date de création du compte */
-	@Column(name = "DATE_CREATION")
-	private LocalDateTime dateCreation;
-
-	/** Date de révocation du compte (sur action d'un administrateur) */
-	@Column(name = "DATE_DESACTIVATION")
-	private LocalDateTime dateDesactivation;
-
-	/**
-	 * Date à laquelle le compte a été vérrouillé suite à plus de 3 tentatives de
-	 * connexion infructueuses
-	 */
-	@Column(name = "DATE_LOCKED")
-	private LocalDateTime dateLocked;
-
-	/**
-	 * Compteur du nombre de tentatives de connexion infructueuses successives. Ce
-	 * nb est remis à 0 si l'utilisateur se connecte correctement
-	 */
-	@Column(name = "NB_ESSAIS")
-	private Integer nbEssais;
-
-	/** Date de dernière mise à jour */
-	@Column(name = "DATE_MAJ")
-	private LocalDateTime dateMaj;
-
-	/** Auteur de la dernière mise à jour */
-	@Column(name = "USER_MAJ")
-	private String userMaj;
-
 	/**
 	 * Liste des profils de l'utilisateur (exemple: administrateur et formateur)
 	 */
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "ROLE_UTILISATEUR", joinColumns = @JoinColumn(name = "ID_UTILISATEUR", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID"))
 	private Set<Role> roles = new HashSet<>();
-
-	///** indisponibilites : List de Indisponibilite */
-	//@OneToMany(mappedBy = "utilisateur", fetch = FetchType.LAZY)
-	//private Set<Indisponibilite> indisponibilites = new HashSet<>();
-
 	/**
 	 * Uniquement pour un profil stagiaire: un stagiaire peut être rattaché à
 	 * plusieurs sessions
@@ -143,12 +71,6 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	@JoinTable(name = "SESSION_STAGIAIRE", joinColumns = @JoinColumn(name = "ID_STAG", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ID_SES", referencedColumnName = "ID"))
 	private Set<Session> sessionsStagiaire = new HashSet<>();
 
-	/**
-	 * Uniquement pour un planificateur : Liste des sessions pour lesquelles il est
-	 * planificateur
-	 */
-	@Transient
-	private List<Session> sessions = new ArrayList<>();
 	@ManyToMany
 	@JoinTable(name = "dl_utilisateur_cours",
 			inverseJoinColumns = @JoinColumn(name = "id_cours", referencedColumnName = "id"),
@@ -156,36 +78,18 @@ public class Utilisateur implements Comparable<Utilisateur> {
 	)
 	private List<Cours> coursPrepares;
 
-	/** supprimable : boolean */
-	@Transient
-	private boolean supprimable;
-
-	/** recevoirNotification */
-	@Column(name = "RECEVOIR_NOTIFICATIONS")
-	private boolean recevoirNotifications;
-
-
-	/** dateAbandon */
-	@Transient
-	private LocalDate dateAbandon;
-
 	@ManyToMany
 	@JoinTable(name = "ROLE_UTILISATEUR",
 			joinColumns = @JoinColumn(name = "ID_UTILISATEUR", referencedColumnName = "ID"),
 			inverseJoinColumns = @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID")
 	)
 	private List<Role> roleList;
-	@ManyToOne
-	@JoinColumn(name = "ds_adresse_id")
-	private Adresse adresse;
 	@ManyToMany
 	@JoinTable(name = "dl_utilisateur_conversation",
 			joinColumns = @JoinColumn(name = "utilisateur_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "conversation_id", referencedColumnName = "id")
 	)
 	private List<Conversation> conversationList = new ArrayList<>();
-	@OneToMany(mappedBy = "emetteur")
-	private List<Post> postList;
 	@OneToMany(mappedBy = "emetteur")
 	private List<Message> messageList;
 

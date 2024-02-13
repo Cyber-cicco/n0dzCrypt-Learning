@@ -62,8 +62,8 @@
             <th class="px-5 py-2  bg-lightAccent"></th>
             <th
                     class="px-5 py-2 w-1/5 min-w-[200px] bg-lightAccent text-center"
-                    th:each="w, iterStat : ${week}"
-                    th:text="${w.weekDay()}  + ' ' + ${w.dateNumber()}"
+                    th:each="d, iterStat : ${week}"
+                    th:text="${d.weekDay()}  + ' ' + ${d.dateNumber()}"
             >
             </th>
         </tr>

@@ -40,12 +40,6 @@ public class Formation implements CoursElement {
 	/** reference : String */
 	@Column(name = "REFERENCE", length = 10)
 	private String reference;
-	/**
-	 * Indique par OUI ou par NON si la formation donne lieu à la délivrance d'un
-	 * titre pro.
-	 */
-	@Column(name = "TITRE")
-	private String titre;
 
 	/**
 	 * Liste des modules (une formation sans module a malgré tout un unique module,

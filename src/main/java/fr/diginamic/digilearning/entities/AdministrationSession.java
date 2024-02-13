@@ -16,6 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "ADMINISTRATION_SESSION")
 public class AdministrationSession {
     @Id
