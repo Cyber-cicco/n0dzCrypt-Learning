@@ -239,6 +239,7 @@ public class CoursService {
         return chapitreRepository.save(chapitre);
     }
 
+    @Transactional
     public Cours supprimerChapitre(AuthenticationInfos userInfos, Long idChapitre) {
         Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
                 .orElseThrow(UnauthorizedException::new);
@@ -247,6 +248,7 @@ public class CoursService {
         return chapitre.getCours();
     }
 
+    @Transactional
     public CoursCreationResult creerCours(AuthenticationInfos userInfos, Long idSousModule, CreationCoursDto creationCoursDto) {
         CoursCreationDiagnostics diagnostics = coursValidator.validateCoursCreation(creationCoursDto, idSousModule);
         if(diagnostics.isValid()) {
@@ -295,6 +297,7 @@ public class CoursService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional
     public Chapitre supprimerQuestion(AuthenticationInfos userInfos, Long idQuestion) {
         Chapitre chapitre = chapitreRepository.findByAdminIdAndQuestionId(userInfos.getId(), idQuestion)
                 .orElseThrow(EntityNotFoundException::new);

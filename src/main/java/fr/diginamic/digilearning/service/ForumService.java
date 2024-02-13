@@ -33,6 +33,7 @@ public class ForumService {
         return salonRepository.getSalonByIdAndCheckAuthorized(idSalon, idUtilisateur).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional
     public boolean revoquerDroit(Long idUtilisateur) {
         if(utilisateurRepository.isBanned(idUtilisateur) > 0) {
             utilisateurRepository.unban(idUtilisateur);
