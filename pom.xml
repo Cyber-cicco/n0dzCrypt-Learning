@@ -178,7 +178,7 @@
                 <filesystem.logs>C:/Temp/logs</filesystem.logs>
                 <filesystem.upload>C:/Temp/upload</filesystem.upload>
                 <prod.url>https://localhost:8080</prod.url>
-                <ressources-utilisateur.dir></ressources-utilisateur.dir>
+                <prod.photo></prod.photo>
             </properties>
         </profile>
         <profile>
@@ -196,6 +196,7 @@
                 <jdbc.pass>${env.MYSQL_ADDON_PASSWORD}</jdbc.pass>
                 <jdbc.dialect>org.hibernate.dialect.MySQLDialect</jdbc.dialect>
                 <prod.url>${env.PROD_URL}</prod.url>
+                <prod.photo>${env.RESSOURCE_UTILISATEUR_DIR}</prod.photo>
                 <jdbc.connections.max.active>5</jdbc.connections.max.active>
             </properties>
         </profile>

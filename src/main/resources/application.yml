@@ -83,3 +83,4 @@ server:
         enabled: true
 prod:
     url: '@prod.url@'
+    photo : '@photo@'

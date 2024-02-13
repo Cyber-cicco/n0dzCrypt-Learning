@@ -6,8 +6,11 @@ import fr.diginamic.digilearning.exception.UnauthorizedException;
 import fr.diginamic.digilearning.service.types.Media;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.utils.StringUtils;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -25,10 +28,19 @@ import java.util.Iterator;
 import java.util.Objects;
 
 @Service
-@RequiredArgsConstructor
 public class PhotoService {
 
-    private static final String DEFAULT_DOCUMENT_DIRECTORY = System.getProperty("user.dir") + "/ressources/";
+    public static final String DEFAULT_DOCUMENT_DIRECTORY = System.getProperty("user.dir") + "/ressources/";
+
+    @Getter
+    private final String documentDir;
+
+    public PhotoService(
+            Environment environment
+    ) {
+        documentDir = environment.getProperty("ressources-utilisateur.dir", DEFAULT_DOCUMENT_DIRECTORY);
+    }
+
     public String uploadPhoto(MultipartFile file, String directoryName, AuthenticationInfos userInfos) throws IOException {
 
         boolean isPng = Objects.equals(file.getContentType(), "image/png");
@@ -40,7 +52,7 @@ public class PhotoService {
 
         String extension = (isPng) ? ".png" : ".jpeg";
 
-        Path directoryPath = Path.of(DEFAULT_DOCUMENT_DIRECTORY + directoryName);
+        Path directoryPath = Path.of(documentDir + directoryName);
 
         if (!Files.isDirectory(directoryPath)){
             Files.createDirectory(directoryPath);
@@ -58,7 +70,7 @@ public class PhotoService {
     }
 
     public Media getPhoto(String sourceDirectory, String nomPhoto){
-        Path photoPath = Path.of(DEFAULT_DOCUMENT_DIRECTORY + sourceDirectory + nomPhoto);
+        Path photoPath = Path.of(documentDir + sourceDirectory + nomPhoto);
         Media media = new Media();
         if(!Files.exists(photoPath)) {
             throw new EntityNotFoundException("La photo n'a pas été trouvée");
