@@ -38,10 +38,6 @@ logging:
 server:
     http2:
         enabled: true
-    port: 8080
-    ssl:
-        key-store: classpath:keystore.jks
-        key-store-password: pazo1928!
 ---
 spring:
     profiles:
@@ -81,5 +77,4 @@ logging:
         org.hibernate.sql: trace
 server:
     http2:
-        enabled: false
-    port: 8080
+        enabled: true
