@@ -27,6 +27,9 @@
     flex-direction: column;
     gap: 1.25rem;
 }
+#markdown > p {
+    max-width: 100%;
+}
 
 #markdown ul {
     display: flex;
@@ -55,15 +58,20 @@
     padding: 0.5rem;
     border-radius: 0.5rem;
 }
+#markdown > pre {
+    max-width: 66vw;
+}
+
 #markdown a {
     color: #0067a3;
     text-underline: #0067a3;
     text-decoration: underline;
 }
+
 #markdown code {
     background-color: #dedede;
+    max-width: 100%;
     color: #444444;
     font-family: "JetBrains Mono", serif;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    overflow-x: scroll;
 }
