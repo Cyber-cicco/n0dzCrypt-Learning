@@ -2,9 +2,18 @@
     <div class="p-5 font-poppins">Chapitres : </div>
     <div
         class="p-2 w-full bg-lightPrimary hover:brightness-150 hover:cursor-pointer"
-        th:hx-get="'/cours/admin/editer/api?id=' + ${cours.getId()}"
-        th:hx-push-url="'/cours/admin/editer?id=' + ${cours.getId()}"
-        hx-target="#insert"
+        th:hx-get="${authorized} 
+            ? '/cours/admin/editer/api?id=' + ${cours.getId()} 
+            : '/cours/sommaire/api?id=' + ${cours.getId()}"
+        th:hx-select=" ${authorized} 
+            ? '' 
+            : '#chapitre-cours'"
+        th:hx-push-url="${authorized}
+            ? '/cours/admin/editer?id=' + ${cours.getId()}
+            : '/cours/admin/sommaire?id=' + ${cours.getId()}"
+        th:hx-target="${authorized} 
+            ? '#insert' 
+            : '#router-cours'"
         >Sommaire</div>
     <div
         th:each="c, iterStat : ${cours.getAllChapitres()}"

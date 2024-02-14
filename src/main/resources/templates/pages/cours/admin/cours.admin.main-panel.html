@@ -68,10 +68,11 @@
                                     th:each="cours, iterStat : ${smodule.getCours()}"
                                     th:class="(${#lists.contains(coursCrees, cours.getId())}) ?
                                     'bg-grey hover:cursor-pointer p-2 hover:underline' :
-                                    'bg-greyDeep p-2'"
+                                    'bg-greyDeep hover:cursor-pointer hover:underline p-2'"
                                     th:text="${cours.getTitre()}"
-                                    th:attrappend="hx-get=${#lists.contains(coursCrees, cours.getId())}? 
-                                        @{'/cours/admin/editer/api?id=' + ${cours.getId()}}"
+                                    th:hx-get="${#lists.contains(coursCrees, cours.getId())} ? 
+                                    '/cours/admin/editer/api?id=' + ${cours.getId()} : 
+                                    '/cours/admin/visionner/api?ordre=1&cours=' + ${cours.getId()}"
                                     th:hx-push-url="'/cours/admin/editer?id=' + ${cours.getId()}"
                                     hx-target="#insert"
                                     hx-swap="innerHTML transition:true"

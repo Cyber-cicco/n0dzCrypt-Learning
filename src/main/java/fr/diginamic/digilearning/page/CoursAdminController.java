@@ -146,7 +146,7 @@ public class CoursAdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_FORMATEUR, response);
         var chapitreInfos = chapitreService.getChapitreInfos(userInfos, ordreChapitre, idCours);
-        coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+        coursIrrigator.irrigateChapitreAdmin(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_ADMIN_VISIONNEUSE_CHAPITRE);
         return Routes.ADR_BASE_LAYOUT;
     }
@@ -155,9 +155,19 @@ public class CoursAdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_FORMATEUR, response);
         var chapitreInfos = chapitreService.getChapitreInfos(userInfos, ordreChapitre, idCours);
-        coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+        coursIrrigator.irrigateChapitreAdmin(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
         return Routes.ADR_ADMIN_VISIONNEUSE_CHAPITRE;
     }
+    @GetMapping("sommaire")
+    public String getSommaire(@RequestParam("id") Long idCours, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_FORMATEUR, response);
+        coursIrrigator.irrigateSommaire(userInfos, idCours, model);
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_ADMIN_VISIONNEUSE_CHAPITRE);
+        return Routes.ADR_BASE_LAYOUT;
+    }
+
+
 
     @GetMapping("/qcm/question")
     public String getAdminQCMQuestion(@RequestParam("id") Long idQuestion, Model model, HttpServletResponse response){

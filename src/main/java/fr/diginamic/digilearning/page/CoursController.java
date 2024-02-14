@@ -151,7 +151,7 @@ public class CoursController {
             case EXERCICE -> throw new RuntimeException("Partie non implémentée");
             default ->  throw new RuntimeException();
         }
-        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_VISIONNEUSE_ADMIN);
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_VISIONNEUSE);
         return Routes.ADR_BASE_LAYOUT;
     }
 

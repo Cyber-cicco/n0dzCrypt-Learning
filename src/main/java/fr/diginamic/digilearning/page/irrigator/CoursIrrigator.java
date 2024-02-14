@@ -80,11 +80,13 @@ public class CoursIrrigator {
      */
     public void irrigateSommaire(AuthenticationInfos userInfos, Long idCours, Model model) {
         Cours cours;
-        if(userInfos.isAdministrateur()) {
+        if(userInfos.isAdministrateur() || userInfos.isFormateur()) {
             cours = coursRepository.findById(idCours).orElseThrow(EntityNotFoundException::new);
+            model.addAttribute("adminInsert", Routes.ADR_COURS_SOMMAIRE);
         } else {
             cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
         }
+        model.addAttribute("superUser", userInfos.isAdministrateur() || userInfos.isFormateur());
         FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
         model.addAttribute("cours", cours);
         model.addAttribute("flags", flagCours);
@@ -187,5 +189,11 @@ public class CoursIrrigator {
         model.addAttribute("resultat", qcmPasse);
         model.addAttribute("qcm", qcm);
         model.addAttribute("slide", Routes.ADR_QCM_TERMINE);
+    }
+
+    public void irrigateChapitreAdmin(AuthenticationInfos userInfos, Chapitre chapitre, Cours cours, FlagCours flagCours, Model model) {
+        model.addAttribute("authorized", coursRepository.getCoursByIdAndFormateur(cours.getId(), userInfos.getId()).isPresent());
+        model.addAttribute("adminInsert", Routes.ADR_ADMIN_VISIONNEUSE_CHAPITRE_FRAGMENT);
+        irrigateChapitre(userInfos, chapitre, cours, flagCours, model);
     }
 }

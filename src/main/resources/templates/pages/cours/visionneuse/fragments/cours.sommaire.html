@@ -7,24 +7,37 @@
     <div class="flex flex-col gap-10 items-center">
         <article class="p-2 text-lg bg-lightAccent w-full" th:text="${cours.getDescription()}"></article>
         <h2 class="text-primary font-poppins text-3xl text-center">Sommaire : </h2>
-        <div class="" th:each="c, iterStat : ${cours.getChapitres()}">
-            <div
+        <th:block th:if="${superUser}">
+            <div class="" th:each="c, iterStat : ${cours.getAllChapitres()}">
+                <div
                     class="text-primary text-lg underline hover:cursor-pointer"
                     th:text="${c.getLibelle()}"
-                    th:hx-get="'/cours/chapitre/api?id='
-                            + ${c.getOrdre()}
-                            + '&cours=' + ${cours.getId()}
-                            + '&smodule=' + ${idSModule}
-                            + '&module=' + ${idModuleOrigine}"
-                    th:hx-push-url="'/cours/chapitre?id='
-                            + ${c.getOrdre()}
-                            + '&cours=' + ${cours.getId()}
-                            + '&smodule=' + ${idSModule}
-                            + '&module=' + ${idModuleOrigine}"
-                    hx-target="#chapitre-cours"
-                    hx-swap="outerHTML"
-                    hx-select="#chapitre-cours"
-            ></div>
-        </div>
+                    th:hx-get="'/cours/admin/visionner/api?ordre=' + ${c.getOrdre()} + '&cours=' + ${cours.getId()}"
+                    th:hx-push-url="'/cours/admin/visionner?ordre=' + ${c.getOrdre()} + '&cours=' + ${cours.getId()}"
+                    hx-target="#insert"
+                ></div>
+            </div>
+        </th:block>
+        <th:block th:unless="${superUser}">
+            <div class="" th:each="c, iterStat : ${cours.getChapitres()}">
+                <div
+                        class="text-primary text-lg underline hover:cursor-pointer"
+                        th:text="${c.getLibelle()}"
+                        th:hx-get="'/cours/chapitre/api?id='
+                                + ${c.getOrdre()}
+                                + '&cours=' + ${cours.getId()}
+                                + '&smodule=' + ${idSModule}
+                                + '&module=' + ${idModuleOrigine}"
+                        th:hx-push-url="'/cours/chapitre?id='
+                                + ${c.getOrdre()}
+                                + '&cours=' + ${cours.getId()}
+                                + '&smodule=' + ${idSModule}
+                                + '&module=' + ${idModuleOrigine}"
+                        hx-target="#chapitre-cours"
+                        hx-swap="outerHTML"
+                        hx-select="#chapitre-cours"
+                ></div>
+            </div>
+        </th:block>
     </div>
 </section>

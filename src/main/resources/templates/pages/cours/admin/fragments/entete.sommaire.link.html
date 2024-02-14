@@ -1,0 +1,15 @@
+<a
+    class="underline hover:cursor-pointer"
+    th:hx-get="${authorized} 
+        ? '/cours/admin/editer/api?id=' + ${cours.getId()} 
+        : '/cours/sommaire/api?id=' + ${cours.getId()}"
+    th:hx-select=" ${authorized} 
+        ? '' 
+        : '#chapitre-cours'"
+    th:hx-push-url="${authorized}
+        ? '/cours/admin/editer?id=' + ${cours.getId()}
+        : '/cours/admin/sommaire?id=' + ${cours.getId()}"
+    th:hx-target="${authorized} 
+        ? '#insert' 
+        : '#router-cours'"
+    >Sommaire</a>

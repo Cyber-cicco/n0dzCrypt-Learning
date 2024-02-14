@@ -20,12 +20,7 @@
         >Chapitre précédent</a>
 </div>
 <div class="flex flex-col w-1/6 text-center" th:unless="${precedent}">
-    <a
-        class="underline hover:cursor-pointer"
-        th:hx-get="'/cours/admin/editer/api?id=' + ${cours.getId()}"
-        th:hx-push-url="'/cours/admin/editer?id=' + ${cours.getId()}"
-        hx-target="#insert"
-        >Sommaire</a>
+    <th:block th:replace="~{pages/cours/admin/fragments/entete.sommaire.link}"></th:block>
 </div>
 <div class="w-2/3 p-3 text-center text-5xl font-poppins" th:text="${chapitre.getLibelle()}"></div>
 <div class="flex flex-col w-1/6 text-center" th:if="${suivant}">
@@ -44,10 +39,5 @@
         >Chapitre suivant</a>
 </div>
 <div class="flex flex-col w-1/6 text-center" th:unless="${suivant}">
-    <a
-        class="underline hover:cursor-pointer"
-        th:hx-get="'/cours/admin/editer/api?id=' + ${cours.getId()}"
-        th:hx-push-url="'/cours/admin/editer?id=' + ${cours.getId()}"
-        hx-target="#insert"
-        >Sommaire</a>
+    <th:block th:replace="~{pages/cours/admin/fragments/entete.sommaire.link}"></th:block>
 </div>

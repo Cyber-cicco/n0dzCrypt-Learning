@@ -1,12 +1,14 @@
 <div id="visionneuse" class="flex w-full justify-center h-full">
+    <script src="/js/highlight.js"></script>
     <div class="flex justify-center w-full gap-2 p-5 h-screen overflow-y-scroll">
         <div id="router-cours" class="flex w-2/3 justify-center">
-            <th:block th:replace="~{pages/cours/admin/fragments/cours.visionneuse.chapitre}"></th:block>
+            <th:block th:replace="~{${adminInsert}}"></th:block>
         </div>
         <th:block th:replace="~{pages/cours/admin/fragments/cours.navigation}"></th:block>
     </div>
 </div>
 <button 
+    th:if="${authorized}"
     id="visibility"
     class="absolute bottom-5 right-5 p-2 rounded-full bg-lightPrimary"
     th:hx-get="'/cours/admin/chapitre/editer/api?id=' + ${chapitre.getId()}"
