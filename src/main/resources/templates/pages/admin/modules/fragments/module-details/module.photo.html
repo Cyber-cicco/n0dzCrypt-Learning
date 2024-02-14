@@ -15,8 +15,8 @@
         })
     }) 
 </script>
-<img th:alt="${module.getPhoto()}" th:unless="${module.getPhoto() == null}" class="h-[300px]" th:src="'/photo/module?name=' + ${module.getPhoto()}">
-<div th:if="${module.getPhoto() == null}" class="h-[300px] flex w-full items-center justify-center">Pas d'image à afficher</div>
+<img th:alt="${module.getPhoto()}" th:unless="${module.getPhoto() == null}" class="h-[200px]" th:src="'/photo/module?name=' + ${module.getPhoto()}">
+<div th:if="${module.getPhoto() == null}" class="h-[200px] flex w-full items-center justify-center">Pas d'image à afficher</div>
 <label 
     id="illustration"
     class="bg-primary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150 text-center"
