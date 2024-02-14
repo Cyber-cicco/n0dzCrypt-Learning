@@ -11,7 +11,7 @@
                 th:hx-get="'/admin/modules/details?id=' + ${module.getId()}"
                 hx-target="#admin-card"
                 th:hx-push-url="'/admin/modules?id=' + ${module.getId()} + '&type=1'"
-                class="flex w-full gap-2 hover:cursor-pointer"
+                class="flex items-center w-full gap-2 hover:cursor-pointer"
                 >
                 <div class="w-[15px]">
                     <th:block th:replace="svg/icons/module :: svg('15', '15')"></th:block>

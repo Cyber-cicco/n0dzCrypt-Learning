@@ -12,7 +12,7 @@
                 hx-target="#admin-card"
                 th:hx-push-url="'/admin/modules?id=' + ${smodule.getId()} + '&type=2'"
                 hx-swap="innerHTML"
-                class="flex w-full gap-2 hover:cursor-pointer"
+                class="flex items-center w-full gap-2 hover:cursor-pointer"
                 >
                 <div class="w-[15px]">
                     <th:block th:replace="svg/icons/module :: svg('15', '15')"></th:block>
