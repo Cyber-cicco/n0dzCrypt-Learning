@@ -37,9 +37,14 @@ public class ChapitreIrrigator {
      * @return la question
      */
     public Question irrigateCoursQuestion(Model model, AuthenticationInfos userInfos, Long idQuestion) {
-        Question question = questionRepository
-                .findByIdAndUtilisateurId(idQuestion, userInfos.getId())
-                .orElseThrow(EntityNotFoundException::new);
+        Question question;
+        if(userInfos.isAdministrateur() || userInfos.isFormateur()){
+            question = questionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
+        } else {
+            question = questionRepository
+                    .findByIdAndUtilisateurId(idQuestion, userInfos.getId())
+                    .orElseThrow(EntityNotFoundException::new);
+        }
         model.addAttribute("question", question);
         model.addAttribute("idUtilisateur", userInfos.getId());
         return question;
@@ -54,9 +59,16 @@ public class ChapitreIrrigator {
      * @return la question
      */
     public Reponse irrigateReponse(Model model, AuthenticationInfos userInfos, Long idReponse) {
-        Reponse reponse = reponseRepository
-                .findByIdAndUtilisateurId(idReponse, userInfos.getId())
-                .orElseThrow(EntityNotFoundException::new);
+        Reponse reponse;
+        if(userInfos.isFormateur() || userInfos.isAdministrateur()){
+            reponse = reponseRepository
+                    .findById(idReponse)
+                    .orElseThrow(EntityNotFoundException::new);
+        } else {
+            reponse = reponseRepository
+                    .findByIdAndUtilisateurId(idReponse, userInfos.getId())
+                    .orElseThrow(EntityNotFoundException::new);
+        }
         model.addAttribute("reponse", reponse);
         model.addAttribute("idUtilisateur", userInfos.getId());
         return reponse;
@@ -72,7 +84,7 @@ public class ChapitreIrrigator {
      */
     public void irrigateListQuestions(Model model, AuthenticationInfos userInfos, Long idChapitre, MessageDto questionDto) {
         questionValidator.validateQuestion(questionDto.getMessage());
-        Chapitre chapitre = coursService.saveQuestion(userInfos.getId(), idChapitre, questionDto);
+        Chapitre chapitre = coursService.saveQuestion(userInfos, idChapitre, questionDto);
         model.addAttribute("chapitre", chapitre);
         model.addAttribute("questions", chapitre.getQuestions());
     }
@@ -86,7 +98,7 @@ public class ChapitreIrrigator {
      */
     public void irrigateListeReponses(Model model, AuthenticationInfos userInfos, Long idQuestion, MessageDto reponseDto) {
         reponseValidator.validateReponse(reponseDto.getMessage());
-        Question updatedQuestion = coursService.saveReponse(userInfos.getId(), idQuestion, reponseDto);
+        Question updatedQuestion = coursService.saveReponse(userInfos, idQuestion, reponseDto);
         model.addAttribute("question", updatedQuestion);
         model.addAttribute("idUtilisateur", userInfos.getId());
     }
@@ -96,6 +108,8 @@ public class ChapitreIrrigator {
         model.addAttribute("contenu", chapitre.getContenuNonPublie());
         model.addAttribute("video", chapitre.getLienVideo());
         model.addAttribute("id", chapitre.getId());
+        model.addAttribute("idCours", chapitre.getCours().getId());
+        model.addAttribute("ordre", chapitre.getOrdre());
         irrigateAjour(model, chapitre);
     }
 

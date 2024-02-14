@@ -1,4 +1,4 @@
-<section class="flex h-screen w-full">
+<section id="editer-cours" class="flex h-screen w-full">
     <script src="/js/highlight.js"></script>
     <div class="flex p-2 flex-col w-1/2 h-full items-center">
         <div class="bg-white w-full h-full rounded-lg shadow-md">
@@ -198,3 +198,15 @@
     </script>
     <script>hljs.highlightAll();</script>
 </section>
+<button 
+    id="visibility" 
+    class="absolute bottom-5 right-5 p-2 rounded-full bg-lightPrimary"
+    th:hx-get="'/cours/admin/visionner/api?ordre=' + ${ordre} + '&cours=' + ${idCours}"
+    th:hx-push-url="'/cours/admin/visionner?ordre=' + ${ordre} + '&cours=' + ${idCours}"
+    hx-target="#editer-cours"
+    hx-select="#visionneuse"
+    hx-select-oob="#visibility"
+    hx-swap="outerHTML"
+    >
+    <th:block th:replace="~{svg/icons/visibility :: svg('25', '25')}"></th:block>
+</button>

@@ -1,0 +1,53 @@
+<!--/*@thymesVar id="cours" type="fr.diginamic.digilearning.entities.Cours"*/-->
+<!--/*@thymesVar id="chapitre" type="fr.diginamic.digilearning.entities.Chapitre"*/-->
+<!--/*@thymesvar id="question" type="fr.diginamic.digilearning.entities.Question"*/-->
+<!--/*@thymesVar id="idUtilisateur" type="java.lang.Long"*/-->
+<!--/*@thymesVar id="suivant" type="fr.diginamic.digilearning.entities.Chapitre"*/-->
+<!--/*@thymesVar id="precedent" type="fr.diginamic.digilearning.entities.Chapitre"*/-->
+<div class="flex flex-col w-1/6 text-center" th:if="${precedent}">
+    <a
+        class="underline hover:cursor-pointer"
+        th:hx-get="'/cours/admin/visionner/api?ordre=' + ${precedent.getOrdre()} 
+            + '&cours=' + ${cours.getId()}"
+        th:hx-push-url="'/cours/admin/visionner?ordre=' + ${precedent.getOrdre()} 
+            + '&cours=' + ${cours.getId()}"
+        th:href="'/cours/admin/visionner?ordre=' + ${precedent.getOrdre()} 
+            + '&cours=' + ${cours.getId()}"
+        hx-target="#chapitre-cours"
+        hx-swap="outerHTML transition:true"
+        hx-select="#chapitre-cours"
+        hx-select-oob="#visibility"
+        >Chapitre précédent</a>
+</div>
+<div class="flex flex-col w-1/6 text-center" th:unless="${precedent}">
+    <a
+        class="underline hover:cursor-pointer"
+        th:hx-get="'/cours/admin/editer/api?id=' + ${cours.getId()}"
+        th:hx-push-url="'/cours/admin/editer?id=' + ${cours.getId()}"
+        hx-target="#insert"
+        >Sommaire</a>
+</div>
+<div class="w-2/3 p-3 text-center text-5xl font-poppins" th:text="${chapitre.getLibelle()}"></div>
+<div class="flex flex-col w-1/6 text-center" th:if="${suivant}">
+    <a
+        class="underline hover:cursor-pointer"
+        th:hx-get="'/cours/admin/visionner/api?ordre=' + ${suivant.getOrdre()} 
+            + '&cours=' + ${cours.getId()}"
+        th:hx-push-url="'/cours/admin/visionner?ordre=' + ${suivant.getOrdre()} 
+            + '&cours=' + ${cours.getId()}"
+        th:href="'/cours/admin/visionner?ordre=' + ${suivant.getOrdre()} 
+            + '&cours=' + ${cours.getId()}"
+        hx-target="#chapitre-cours"
+        hx-swap="outerHTML transition:true"
+        hx-select="#chapitre-cours"
+        hx-select-oob="#visibility"
+        >Chapitre suivant</a>
+</div>
+<div class="flex flex-col w-1/6 text-center" th:unless="${suivant}">
+    <a
+        class="underline hover:cursor-pointer"
+        th:hx-get="'/cours/admin/editer/api?id=' + ${cours.getId()}"
+        th:hx-push-url="'/cours/admin/editer?id=' + ${cours.getId()}"
+        hx-target="#insert"
+        >Sommaire</a>
+</div>

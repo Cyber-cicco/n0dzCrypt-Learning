@@ -74,8 +74,9 @@ public class CoursAdminController {
     }
 
     @GetMapping("/chapitre/editer/api")
-    public String getAdminPanelChapitreApi(Model model, @RequestParam("id") Long idChapitre) {
+    public String getAdminPanelChapitreApi(Model model, @RequestParam("id") Long idChapitre, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_FORMATEUR, response);
         Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
                 .orElseThrow(UnauthorizedException::new);
         switch (chapitre.getStatusChapitre()) {
@@ -97,8 +98,9 @@ public class CoursAdminController {
     }
 
     @GetMapping("/chapitre/editer")
-    public String getAdminPanelChapitre(Model model, @RequestParam("id") Long idChapitre) {
+    public String getAdminPanelChapitre(Model model, @RequestParam("id") Long idChapitre, HttpServletResponse response) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_FORMATEUR, response);
         Chapitre chapitre = chapitreRepository.findByIdAndAdminId(idChapitre, userInfos.getId())
                 .orElseThrow(UnauthorizedException::new);
         String route;
@@ -123,18 +125,38 @@ public class CoursAdminController {
     }
 
     @GetMapping("/editer/api")
-    public String getAdminCoursEditerApi(@RequestParam("id") Long idCours, Model model){
+    public String getAdminCoursEditerApi(@RequestParam("id") Long idCours, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_FORMATEUR, response);
         coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
         return Routes.ADR_COURS_ADMIN_EDITER;
     }
 
     @GetMapping("/editer")
-    public String getAdminCoursEditer(@RequestParam("id") Long idCours, Model model){
+    public String getAdminCoursEditer(@RequestParam("id") Long idCours, Model model, HttpServletResponse response){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_FORMATEUR, response);
         coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_ADMIN_EDITER);
         return Routes.ADR_BASE_LAYOUT;
+    }
+
+    @GetMapping("visionner")
+    public String getVisionneuse(@RequestParam("ordre") Integer ordreChapitre, @RequestParam("cours") Long idCours, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_FORMATEUR, response);
+        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, ordreChapitre, idCours);
+        coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_ADMIN_VISIONNEUSE_CHAPITRE);
+        return Routes.ADR_BASE_LAYOUT;
+    }
+    @GetMapping("visionner/api")
+    public String getVisionneuseApi(@RequestParam("ordre") Integer ordreChapitre, @RequestParam("cours") Long idCours, Model model, HttpServletResponse response){
+        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_FORMATEUR, response);
+        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, ordreChapitre, idCours);
+        coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+        return Routes.ADR_ADMIN_VISIONNEUSE_CHAPITRE;
     }
 
     @GetMapping("/qcm/question")

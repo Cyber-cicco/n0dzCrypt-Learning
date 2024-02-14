@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -110,10 +109,15 @@ public class CoursService {
         return renderer.render(document);
     }
 
-    public Question saveReponse(Long id, Long idQuestion, MessageDto reponseDto) {
-        Question question = questionRepository.findByIdAndUtilisateurId(idQuestion, id)
-                .orElseThrow(EntityNotFoundException::new);
-        Utilisateur utilisateur = utilisateurRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public Question saveReponse(AuthenticationInfos userInfos, Long idQuestion, MessageDto reponseDto) {
+        Question question;
+        if(userInfos.isAdministrateur() || userInfos.isFormateur()){
+            question = questionRepository.findById(idQuestion).orElseThrow(EntityNotFoundException::new);
+        } else {
+            question = questionRepository.findByIdAndUtilisateurId(idQuestion, userInfos.getId())
+                    .orElseThrow(EntityNotFoundException::new);
+        }
+        Utilisateur utilisateur = utilisateurRepository.findById(userInfos.getId()).orElseThrow(EntityNotFoundException::new);
         Reponse reponse = Reponse.builder()
                 .auteur(utilisateur)
                 .contenu(reponseDto.getMessage())
@@ -125,10 +129,15 @@ public class CoursService {
         return question;
     }
 
-    public Chapitre saveQuestion(Long id, Long idChapitre, MessageDto questionDto) {
-        Chapitre chapitre = chapitreRepository.findByIdAndUtilisateurId(idChapitre, id)
-                .orElseThrow(EntityNotFoundException::new);
-        Utilisateur utilisateur = utilisateurRepository.findById(id)
+    public Chapitre saveQuestion(AuthenticationInfos userInfos, Long idChapitre, MessageDto questionDto) {
+        Chapitre chapitre;
+        if (userInfos.isAdministrateur() || userInfos.isFormateur()){
+            chapitre = chapitreRepository.findById(idChapitre).orElseThrow(EntityNotFoundException::new);
+        } else {
+            chapitre = chapitreRepository.findByIdAndUtilisateurId(idChapitre, userInfos.getId())
+                    .orElseThrow(EntityNotFoundException::new);
+        }
+        Utilisateur utilisateur = utilisateurRepository.findById(userInfos.getId())
                 .orElseThrow(EntityNotFoundException::new);
         Question question = Question.builder()
                 .auteur(utilisateur)
@@ -157,10 +166,17 @@ public class CoursService {
                         .build());
     }
 
-    public Chapitre getChapitreIfExistsElseThrow(Cours cours, Integer idChapitre) {
+    public Chapitre getChapitreIfExistsAndPublie(Cours cours, Integer ordreChapitre) {
         return cours.getChapitres()
                 .stream()
-                .filter(chapitre1 -> chapitre1.getOrdre().equals(idChapitre))
+                .filter(chapitre1 -> chapitre1.getOrdre().equals(ordreChapitre))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new);
+    }
+    public Chapitre getChapitreIfExists(Cours cours, Integer ordreChapitre) {
+        return cours.getAllChapitres()
+                .stream()
+                .filter(chapitre1 -> chapitre1.getOrdre().equals(ordreChapitre))
                 .findFirst()
                 .orElseThrow(EntityNotFoundException::new);
     }
@@ -177,6 +193,7 @@ public class CoursService {
         cours.setDescription(descriptionCours.getMessage());
         coursRepository.save(cours);
     }
+
 
     public record ReponseCreationChapitre(Chapitre chapitre, Optional<String> diagnostic){}
     public ReponseCreationChapitre createNewChapitre(AuthenticationInfos userInfos, Long idCours, ChapitreDto chapitreDto) {

@@ -1,0 +1,17 @@
+<div id="visionneuse" class="flex w-full justify-center h-full">
+    <div class="flex justify-center w-full gap-2 p-5 h-screen overflow-y-scroll">
+        <div id="router-cours" class="flex w-2/3 justify-center">
+            <th:block th:replace="~{pages/cours/admin/fragments/cours.visionneuse.chapitre}"></th:block>
+        </div>
+        <th:block th:replace="~{pages/cours/admin/fragments/cours.navigation}"></th:block>
+    </div>
+</div>
+<button 
+    id="visibility"
+    class="absolute bottom-5 right-5 p-2 rounded-full bg-lightPrimary"
+    th:hx-get="'/cours/admin/chapitre/editer/api?id=' + ${chapitre.getId()}"
+    th:hx-push-url="'/cours/admin/chapitre/editer?id=' + ${chapitre.getId()}"
+    hx-target="#insert"
+    >
+    <th:block th:replace="~{svg/icons/visibility-off :: svg('25', '25')}"></th:block>
+</button>

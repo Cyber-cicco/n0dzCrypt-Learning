@@ -100,6 +100,8 @@ public class Routes {
     public static final String ADR_ADMIN_CONVERSATIONS_PRESENTATION = "pages/conversation/admin/presentation";
     public static final String ADR_ADMIN_RESPONSABLES_MODAL = "pages/admin/apprenants/fragments/responsables.modal";
     public static final String ADR_ADMIN_SESSION_RESPONSABLES = "pages/admin/apprenants/fragments/respontable";
+    public static final String ADR_COURS_VISIONNEUSE_ADMIN = "pages/cours/admin/fragments/chapitre.admin.visionneuse";
+    public static final String ADR_ADMIN_VISIONNEUSE_CHAPITRE = "pages/cours/admin/fragments/chapitre.admin.visionneuse";
 
     private Routes(){}
 }

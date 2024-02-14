@@ -57,6 +57,12 @@ public class Cours implements Comparable<Cours>, CoursElement {
                 .toList();
     }
 
+    public Chapitre getChapitreSuivantAdmin(Integer ordre) {
+        return chapitres.stream().filter(c -> c.getOrdre().equals(ordre + 1)).findFirst().orElse(null);
+    }
+    public Chapitre getChapitrePrecedentAdmin(Integer ordre) {
+        return chapitres.stream().filter(c -> c.getOrdre().equals(ordre - 1)).findFirst().orElse(null);
+    }
     public Chapitre getChapitrePrecedent(Integer ordre) {
         Optional<Chapitre> chapitre = chapitres.stream().filter(c -> c.getOrdre().equals(ordre - 1)).findFirst();
         while (chapitre.isPresent() && chapitre.get().getStatusPublication().equals(StatusPublication.NON_PUBLIE)){

@@ -1,7 +1,6 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
-import fr.diginamic.digilearning.dto.ReponseQCMDto;
 import fr.diginamic.digilearning.entities.Chapitre;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.FlagCours;
@@ -13,14 +12,12 @@ import fr.diginamic.digilearning.service.ChapitreService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
 import fr.diginamic.digilearning.service.QCMService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -145,17 +142,16 @@ public class CoursController {
     }
 
     @GetMapping("/chapitre")
-    public String getChapitre(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model) {
+    public String getChapitre(@RequestParam("id") Integer ordreChapitre, @RequestParam("cours") Long idCours, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, id, idCours);
-        coursIrrigator.irrigateChapitre(userInfos, id, idCours, model);
+        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, ordreChapitre, idCours);
         switch (chapitreInfos.chapitre().getStatusChapitre()){
             case COURS -> coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
             case QCM -> handleQCM(model, userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours());
             case EXERCICE -> throw new RuntimeException("Partie non implémentée");
             default ->  throw new RuntimeException();
         }
-        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_VISIONNEUSE);
+        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_VISIONNEUSE_ADMIN);
         return Routes.ADR_BASE_LAYOUT;
     }
 

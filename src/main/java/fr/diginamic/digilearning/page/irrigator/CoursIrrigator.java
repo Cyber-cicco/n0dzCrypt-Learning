@@ -79,37 +79,26 @@ public class CoursIrrigator {
      * @param idCours l'identifiant du cours dont on veut le sommaire.
      */
     public void irrigateSommaire(AuthenticationInfos userInfos, Long idCours, Model model) {
-        Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
+        Cours cours;
+        if(userInfos.isAdministrateur()) {
+            cours = coursRepository.findById(idCours).orElseThrow(EntityNotFoundException::new);
+        } else {
+            cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
+        }
         FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
         model.addAttribute("cours", cours);
         model.addAttribute("flags", flagCours);
         model.addAttribute("slide", Routes.ADR_COURS_SOMMAIRE);
     }
 
-    /**
-     * Permet d'irriguer le modèle de la page de chapitre
-     * Ajoute une entité chapitre
-     * Ajoute l'id de l'utilisateur
-     * Ajoute le contenu au format HTML
-     * Ajoute une liste des questions
-     * Ajoute une entité cours
-     * Ajoute les flags du cours
-     * Ajoute l'adresse d'un autre template correpondant au chapitre du cours
-     * @param model un objet permettant d'irriguer le template thymeleaf
-     * @param userInfos les informations d'authentification de l'utilisateur
-     * @param idChapitre l'identifiant du chapitre
-     * @param idCours l'identifiant du cours
-     */
-    public void irrigateChapitre(AuthenticationInfos userInfos, Integer idChapitre, Long idCours, Model model) {
-        Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
-        Chapitre chapitre = coursService.getChapitreIfExistsElseThrow(cours, idChapitre);
-        FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
-        irrigateChapitre(userInfos, chapitre, cours, flagCours, model);
-    }
     public void irrigateChapitre(AuthenticationInfos userInfos, Chapitre chapitre , Cours cours, FlagCours flagCours, Model model) {
         model.addAttribute("idUtilisateur", userInfos.getId());
         model.addAttribute("contenu", coursService.getHtmlFromChapitreMarkdown(chapitre.getContenu()));
         model.addAttribute("chapitre", chapitre);
+        if(userInfos.isAdministrateur() || userInfos.isFormateur()){
+            model.addAttribute("suivant", cours.getChapitreSuivantAdmin(chapitre.getOrdre()));
+            model.addAttribute("precedent", cours.getChapitrePrecedentAdmin(chapitre.getOrdre()));
+        }
         model.addAttribute("questions", chapitre.getQuestionsNonSuppr());
         model.addAttribute("cours", cours);
         model.addAttribute("flags", flagCours);

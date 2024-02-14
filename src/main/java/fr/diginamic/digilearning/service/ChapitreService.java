@@ -88,10 +88,21 @@ public class ChapitreService {
     }
 
     public record ChapitreInfos(Chapitre chapitre, FlagCours flagCours, Cours cours){}
-    public ChapitreInfos getChapitreInfos(AuthenticationInfos userInfos, Integer idChapitre, Long idCours){
-        Cours cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
-        Chapitre chapitre = coursService.getChapitreIfExistsElseThrow(cours, idChapitre);
-        FlagCours flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
+    public ChapitreInfos getChapitreInfos(AuthenticationInfos userInfos, Integer ordreChapitre, Long idCours){
+        Cours cours;
+        Chapitre chapitre;
+        FlagCours flagCours = null;
+        if(userInfos.isFormateur() || userInfos.isAdministrateur()){
+            cours = coursRepository.findById(idCours).orElseThrow(EntityNotFoundException::new);
+            chapitre = coursService.getChapitreIfExists(cours, ordreChapitre);
+        } else {
+            cours = coursRepository.findByUserAndId(userInfos.getId(), idCours).orElseThrow(EntityNotFoundException::new);
+            chapitre = coursService.getChapitreIfExistsAndPublie(cours, ordreChapitre);
+        }
+
+        if(userInfos.isStagiaire()){
+            flagCours = coursService.getFlagByCoursAndStagiaire(cours, userInfos);
+        }
         return new ChapitreInfos(chapitre, flagCours, cours);
     }
 }
