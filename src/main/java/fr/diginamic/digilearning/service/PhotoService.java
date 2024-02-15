@@ -38,7 +38,7 @@ public class PhotoService {
     public PhotoService(
             Environment environment
     ) {
-        documentDir = environment.getProperty("ressources-utilisateur.dir", DEFAULT_DOCUMENT_DIRECTORY);
+        documentDir = environment.getProperty("prod.photo", DEFAULT_DOCUMENT_DIRECTORY);
     }
 
     public String uploadPhoto(MultipartFile file, String directoryName, AuthenticationInfos userInfos) throws IOException {
