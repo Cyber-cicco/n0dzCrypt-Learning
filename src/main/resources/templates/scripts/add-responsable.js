@@ -23,7 +23,7 @@ form.addEventListener("submit", (e) => {
             {
                 handler : swapTable
             }
-        );
+        )
     }
 })
 
@@ -35,4 +35,5 @@ function swapTable(target, response) {
     const liste = doc.querySelector("#responsables-liste");
     respontable.innerHTML = table.innerHTML;
     responListe.innerHTML = liste.innerHTML;
+    htmx.process(respontable);
 }
