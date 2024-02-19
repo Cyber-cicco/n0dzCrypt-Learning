@@ -41,22 +41,6 @@ public class CoursValidator {
         if(cours.getDifficulte() != null && (cours.getDifficulte() > 5 || cours.getDifficulte() < 1)) {
             diagnostics.setDifficulte("La difficulté du cours doit être comprise entre 1 et 5");
         }
-        Optional<Integer> maxOrdre = coursRepository.maxByOrdre(idSousModule);
-        if (cours.getOrdre() == null){
-            diagnostics.setOrdre("L'ordre doit obligatoirement être renseigné");
-        }
-        if(cours.getOrdre() != null && cours.getOrdre() < 1) {
-            diagnostics.setOrdre("L'ordre d'un cours dans un sous module ne peut être inférieur à 1");
-        }
-        maxOrdre.ifPresentOrElse((max) -> {
-           if(cours.getOrdre() != null && cours.getOrdre() > max + 1){
-               diagnostics.setOrdre("L'ordre du cours ne peut être supérieur à l'ordre maximum plus 1 des cours du sous module");
-           }
-        }, () -> {
-            if(cours.getOrdre() != null && cours.getOrdre() != 1){
-                diagnostics.setOrdre("l'ordre du cours ne peut être supérieur à l'ordre maximum plus 1 des cours du sous module");
-            }
-        });
         if(cours.getDuree() == null){
             diagnostics.setDuree("La durée estimée doit obligatoirement être renseignée");
         } else {

@@ -41,13 +41,13 @@
                     <li 
                         class="flex p-2 justify-between w-full items-center shadow-md hover:cursor-pointer"
                         >
-                        <div 
+                        <a 
                             class="w-3/4 p-2"
                             th:text="${_session.getNom()}"
                             th:hx-get="'/admin/session?id=' + ${_session.getId()}"
                             th:hx-push-url="'/admin/apprenants?date=' + ${currDate} + '&idSession=' + ${_session.getId()} "
                             hx-target="#admin-card"
-                            ></div>
+                            ></a>
                         <img
                         class="hover:cursor-pointer"
                         width="24"
@@ -67,7 +67,7 @@
                                 ></li>
                         </div>
                     </ul>
-                </th:block>
+                </div>
             </ul>
         </div>
         <div class="flex flex-col bg-white h-full w-4/5 rounded-md" id="admin-card">

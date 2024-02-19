@@ -271,7 +271,7 @@ public class CoursService {
         if(diagnostics.isValid()) {
             Cours newCours = Cours.builder()
                     .auteurs(List.of(utilisateurRepository.findById(userInfos.getId()).orElseThrow(EntityNotFoundException::new)))
-                    .ordre(creationCoursDto.getOrdre())
+                    .ordre(coursRepository.maxByOrdre(idSousModule).orElseGet(() -> 0) + 1)
                     .titre(creationCoursDto.getTitre())
                     .difficulte(creationCoursDto.getDifficulte())
                     .dureeEstimee(creationCoursDto.getDuree())

@@ -13,7 +13,6 @@ import fr.diginamic.digilearning.service.AgendaService;
 import fr.diginamic.digilearning.service.SessionService;
 import fr.diginamic.digilearning.utils.hx.HX;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
