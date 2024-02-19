@@ -29,7 +29,7 @@ spring:
 jwt:
     cookie: "AUTH-TOKEN"
     expires_in: 864000
-    secret: "3dDsYHtBkTz0gAoPmPMwL2ksjVfVyR2Js0OsaVTx3RobUGI6YGM3gWJRFhPG"
+    secret: "3dOnmPOBkTz0gtoPmJMwB5kejVfVsRsJs8OsaVsxsRsNUGI6YGM6gWJRFhKG"
 logging:
     level:
       org.springframework: WARN
@@ -75,7 +75,7 @@ spring:
 jwt:
     cookie: "AUTH-TOKEN"
     expires_in: 864000
-    secret: "3dDsYHtBkTz0gAoPmPMwL2ksjVfVyR2Js0OsaVTx3RobUGI6YGM3gWJRFhPG"
+    secret: "3dOnmPOBkTz0gtoPmJMwB5kejVfVsRsJs8OsaVsxsRsNUGI6YGM6gWJRFhKG"
 logging:
     level:
         org.springframework: WARN

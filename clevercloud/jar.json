@@ -1,9 +1,0 @@
-{
-  "build": {
-    "type": "maven",
-    "goal": "package"
-  },
-  "deploy": {
-    "jarName": "target/digi-learning-0.0.1-SNAPSHOT.jar"
-  }
-}
