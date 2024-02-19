@@ -197,4 +197,12 @@ inner join SESSION S on F.ID = S.ID_FOR
 where S.ID = ?1
 """)
     List<Cours> getCoursBySession(Long idSession);
+
+    @Query(nativeQuery = true, value = """
+select max(c.ordre)
+from dl_cours c
+inner join dl_sous_module dsm on c.sous_module_id = dsm.id
+where dsm.id = ?1
+""")
+    Integer getMaxOrdre(Long idSousModule);
 }

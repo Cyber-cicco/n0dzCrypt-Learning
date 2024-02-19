@@ -3,7 +3,7 @@
         <ul class="flex justify-around w-full h-full">
             <li class="flex hover:bg-greyDeep items-center w-full h-full hover:cursor-pointer justify-center">
                 <a 
-                    class="w-full text-center"
+                    class="flex w-full h-full justify-center items-center text-center"
                     th:href="'/admin/apprenants?date=' + ${currDate}"
                     th:hx-get="'/admin/apprenants/api?date=' + ${currDate}"
                     th:hx-push-url="'/admin/apprenants?date=' + ${currDate}"
@@ -13,7 +13,7 @@
             </li>
             <li class="flex w-full items-center hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
                 <a 
-                    class="w-full text-center"
+                    class="flex w-full h-full justify-center items-center text-center"
                     href="/admin/modules"
                     hx-get="/admin/modules/api"
                     hx-push-url="/admin/modules"
@@ -23,7 +23,7 @@
             </li>
             <li class="flex w-full items-center hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
                 <a 
-                    class="w-full text-center"
+                    class="flex w-full h-full justify-center items-center text-center"
                     hx-get="/admin/cours-admin/api"
                     hx-push-url="/admin/cours-admin"
                     hx-target="#insert"
@@ -41,13 +41,13 @@
                     <li 
                         class="flex p-2 justify-between w-full items-center shadow-md hover:cursor-pointer"
                         >
-                        <div 
+                        <a 
                             class="w-3/4 p-2"
                             th:text="${_session.getNom()}"
                             th:hx-get="'/admin/session?id=' + ${_session.getId()}"
                             th:hx-push-url="'/admin/apprenants?date=' + ${currDate} + '&idSession=' + ${_session.getId()} "
                             hx-target="#admin-card"
-                            ></div>
+                            ></a>
                         <img
                         class="hover:cursor-pointer"
                         width="24"
@@ -67,7 +67,7 @@
                                 ></li>
                         </div>
                     </ul>
-                </th:block>
+                </div>
             </ul>
         </div>
         <div class="flex flex-col bg-white h-full w-4/5 rounded-md" id="admin-card">

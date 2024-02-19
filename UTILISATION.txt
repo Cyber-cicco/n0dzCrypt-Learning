@@ -1,0 +1,48 @@
+Bonjour tout le monde !
+
+Le projet digi-learning est maintenant disponible en ligne à cette adresse  : https://digilearning-preprod.cleverapps.io/https://digilearning-preprod.cleverapps.io/
+
+Vous pouvez maintenant tester le plateforme en organisant des formations de e-learning, en créant des cours au format markdown, etc.
+
+Il s'agit d'une preprod, donc d'un environnement de test. Donc aucune obligation d'y mettre quoi que ce soit, le but est juste d'avoir une plateforme sur laquelle le projet pourra 
+être testé par tout formateur qui le souhaite.
+
+Pour s'y connecter il y a plusieurs comptes disponibles:
+
+Coté apprenant :
+
+java1@diginamic.fr
+java2@diginamic.fr
+dotnet1@diginamic.fr
+dotnet2@diginamic.fr
+python1@diginamic.fr
+python2@diginamic.fr
+data1@diginamic.fr
+data2@diginamic.fr
+php1@diginamic.fr
+php2@diginamic.fr
+web1@diginamic.fr
+web2@diginamic.fr
+htmx1@diginamic.fr
+htmx2@diginamic.fr
+
+Chacun des ces comptes est relié à une session en lien avec son mail
+
+Coté formateur / administrateur:
+
+rbonnamy@diginamic.fr
+lucas@diginamic.fr
+emmanuel@diginamic.fr
+robin@diginamic.fr
+valentin@diginamic.fr
+herve@diginamic.fr
+yvan@diginamic.fr
+nicolas@diginamic.fr
+sebastien@diginamic.fr
+christophe@diginamic.fr
+
+Tous ont le même mot de passe : "a"
+
+Si vous avez des remarques, des idées d'améliorations, que vous avez repérer des bugs, vous pouvez les notifier sur le projet github à cette adresse : https://github.com/orgs/TeckenESN/projects/17
+
+Voilà voilà, bonne journée à tous !
