@@ -27,8 +27,7 @@ function drakeListen(drake) {
                 if(target.getAttribute("data-draggable2")) {
                     const date = target.getAttribute("data-draggable2");
                     const id = el.getAttribute("id");
-                    htmx.ajax('POST', `/admin/session/cours?date=${date}&id=${id}&idSession=${idSession}`, '#' + target.getAttribute("id")).then(() => {
-                        reInit();
+                    htmx.ajax('POST', `/admin/session/cours?date=${date}&id=${id}&idSession=${idSession}`, '#modal-cours-content').then(() => {
                         return;
                     });
                 }
@@ -37,7 +36,6 @@ function drakeListen(drake) {
                     const date = el.getAttribute("data-dragged");
                     const id = el.getAttribute("id");
                     htmx.ajax('DELETE',  `/admin/session/cours?id=${id}&idSession=${idSession}`, '#cours-a-prevoir').then(() => {
-                        reInit();
                         return;
                     });
                 }
@@ -45,8 +43,7 @@ function drakeListen(drake) {
                 if(target.getAttribute("data-draggable2")) {
                     const date = target.getAttribute("data-draggable2");
                     const id = el.getAttribute("id");
-                    htmx.ajax('POST', '/agenda/cours?date=' + date + '&id=' + id, '#' + target.getAttribute("id")).then(() => {
-                        reInit();
+                    htmx.ajax('POST', '/agenda/cours?date=' + date + '&id=' + id, '#insert').then(() => {
                         return;
                     });
                 }
@@ -55,7 +52,6 @@ function drakeListen(drake) {
                     const date = el.getAttribute("data-dragged");
                     const id = el.getAttribute("id");
                     htmx.ajax('DELETE', '/agenda/cours?date=' + date + '&id=' + id, '#cours-a-prevoir').then(() => {
-                        reInit();
                         return;
                     });
                 }

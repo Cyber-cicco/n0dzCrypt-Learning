@@ -91,11 +91,6 @@ public class AgendaController {
     ) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         Optional<CoursDto> cours = agendaService.putCoursInDate(userInfos, temps, coursId);
-        if(cours.isPresent()){
-            agendaIrrigator.irrigateCoursOnCalendar(userInfos, model, temps, cours.get());
-            return Routes.ADR_COURS_CAL;
-        }
-        response.setHeader(HX.RETARGET, "#insert");
         agendaIrrigator.irrigateBaseModel(userInfos, model, temps.toLocalDate());
         return Routes.ADR_AGENDA_BODY;
 

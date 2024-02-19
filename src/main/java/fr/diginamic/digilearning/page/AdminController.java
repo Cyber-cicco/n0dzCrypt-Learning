@@ -178,11 +178,6 @@ public class AdminController {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         authenticationService.mustBeOfRole(userInfos.getRoles(), TypeRole.ROLE_ADMINISTRATEUR, response);
         Optional<CoursAdminDto> cours = agendaService.prevoirCoursForSession(userInfos, temps, coursId, idSession);
-        if(cours.isPresent()){
-            agendaIrrigator.irrigateCoursAdminOnCalendar(userInfos, model, temps, cours.get());
-            return Routes.ADR_COURS_CAL_ADMIN;
-        }
-        response.setHeader(HX.RETARGET, "#insert");
         agendaIrrigator.irrigateAdminCalendar(model, temps.toLocalDate(), idSession, userInfos);
         return Routes.ADR_AGENDA_BODY;
     }
