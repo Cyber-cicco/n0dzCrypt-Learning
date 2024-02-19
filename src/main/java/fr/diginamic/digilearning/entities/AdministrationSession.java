@@ -3,7 +3,6 @@ package fr.diginamic.digilearning.entities;
 import fr.diginamic.digilearning.entities.enums.StatusResponsableSession;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.TypeBinderType;
 
 /**
  * Entité servant de relation entre un utilisateur
@@ -17,6 +16,7 @@ import org.hibernate.annotations.TypeBinderType;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "ADMINISTRATION_SESSION")
 public class AdministrationSession {
     @Id

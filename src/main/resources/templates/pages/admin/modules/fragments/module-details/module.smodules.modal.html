@@ -1,0 +1,26 @@
+<form
+    th:hx-put="'/admin/modules/smodule?id=' + ${module.getId()}"
+    hx-select-oob="#smodules-card"
+    hx-select="#smodules-modal"
+    hx-target="#smodules-modal"
+    hx-swap="outerHTML"
+    class="flex flex-col py-5 gap-2"
+    >
+    <div class="flex gap-2 items-center">
+        <th:block th:replace="svg/icons/search :: svg('30', '30')"></th:block>
+        <label for="smodules-choice">Rechercher</label>
+    </div>
+    <input minlength="2" autocomplete="off" class="rounded-sm p-2 text-black w-full" list="smodules-list" name="smodule" id="smodules-choice">
+    <datalist style="overflow:hidden" id="smodules-list">
+        <th:block th:each="smodule, iterStat : ${smodules}">
+            <option th:value="${smodule.getTitre()}"></option>
+        </th:block>
+    </datalist>
+    <button 
+        class="bg-primary w-full p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+        type="submit"
+        >Ajouter</button>
+</form>
+<div id="smodules-modal" class="flex flex-col h-[50%]">
+    <th:block th:replace="pages/admin/modules/fragments/module-details/details.smodules :: smodules()"></th:block>
+</div>

@@ -1,12 +1,12 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.dto.CoursDto;
-import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.page.irrigator.AgendaIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
-import fr.diginamic.digilearning.page.service.AgendaService;
+import fr.diginamic.digilearning.service.AgendaService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
+import fr.diginamic.digilearning.utils.hx.HX;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -36,8 +36,12 @@ public class AgendaController {
      * @return l'agenda
      * */
     @GetMapping("/api")
-    public String getAgendaApi( Model model){
+    public String getAgendaApi(Model model, @RequestParam(required = false, value = "id") Long idSession){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
+        if(userInfos.isAdministrateur()){
+          agendaIrrigator.irrigateAdminCalendar(model, LocalDate.now(), idSession, userInfos);
+            return Routes.ADR_AGENDA_BODY;
+        }
         agendaIrrigator.irrigateBaseModel(userInfos, model, LocalDate.now());
         return Routes.ADR_AGENDA_BODY;
     }
@@ -87,11 +91,6 @@ public class AgendaController {
     ) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         Optional<CoursDto> cours = agendaService.putCoursInDate(userInfos, temps, coursId);
-        if(cours.isPresent()){
-            agendaIrrigator.irrigateCoursOnCalendar(userInfos, model, temps, cours.get());
-            return Routes.ADR_COURS_CAL;
-        }
-        response.setHeader("HX-Retarget", "#insert");
         agendaIrrigator.irrigateBaseModel(userInfos, model, temps.toLocalDate());
         return Routes.ADR_AGENDA_BODY;
 

@@ -3,6 +3,7 @@ package fr.diginamic.digilearning.repository;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -82,6 +83,28 @@ and fc.datePrevue IS NOT NULL
     List<String[]> getCoursPrevus(Long idUtilisateur);
 
     @Query(nativeQuery = true, value = """
+select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, cs.datePrevue
+from dl_cours c
+join dl_cours_session cs on c.id = cs.cours_id
+where cs.session_id = ?1
+and cs.datePrevue IS NOT NULL
+""")
+    List<String[]> getCoursPrevusForSession(Long idSession);
+    @Query(nativeQuery = true, value = """
+select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, cs.datePrevue
+from dl_cours c
+left outer join dl_cours_session cs on c.id = cs.cours_id and cs.session_id = ?1
+join dl_sous_module dsm on c.sous_module_id = dsm.id
+join dl_module_smodule dms on dsm.id = dms.id_smodule
+join dl_module dm on dms.id_module = dm.id
+join dl_module_formation dmf on dm.id = dmf.id_module
+join FORMATION F on dmf.id_formation = F.ID
+join SESSION S on F.ID = S.ID_FOR
+where S.ID = ?1
+""")
+    List<String[]> getAllCoursForSessionAdmin(Long idSession);
+
+    @Query(nativeQuery = true, value = """
 select c.id, c.titre, c.difficulte, c.ordre, c.dureeEstimee, fc.boomarked, fc.finished, fc.liked, fc.datePrevue, dsm.titre
 from dl_cours c
 join dl_flag_cours fc on c.id = fc.cours_id
@@ -144,4 +167,34 @@ and c.id = ?1
 
     @Query("select count(c)  from Chapitre c where c.cours.id = :id")
     Integer findNombreChapitre(Long id);
+
+    Boolean existsByTitre(String titre);
+
+    @Query(nativeQuery = true, value = """
+select max(c.ordre) 
+from dl_cours c
+where c.sous_module_id = ?1
+""")
+    Optional<Integer> maxByOrdre(Long idSousModule);
+
+    @Modifying
+    @Query(nativeQuery = true, value = """
+update dl_cours c 
+set c.ordre = c.ordre + 1
+where c.ordre >= ?1
+and c.sous_module_id = ?2
+""")
+    void changeOrdre(Integer ordre, Long idSousModule);
+
+    @Query(nativeQuery = true, value = """
+select c.* 
+from dl_cours c
+inner join dl_sous_module dsm on c.sous_module_id = dsm.id
+inner join dl_module_smodule dms on dsm.id = dms.id_smodule
+inner join dl_module_formation dmf on dms.id_module = dmf.id_module
+inner join FORMATION F on dmf.id_formation = F.ID
+inner join SESSION S on F.ID = S.ID_FOR
+where S.ID = ?1
+""")
+    List<Cours> getCoursBySession(Long idSession);
 }

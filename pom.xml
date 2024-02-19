@@ -43,6 +43,13 @@
             <version>2.2.224</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.19</version>
+        </dependency>
+
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark-ext-gfm-strikethrough</artifactId>
@@ -113,6 +120,13 @@
             <version>${jjwt.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.3.0</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -130,7 +144,61 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>fr.diginamic.digilearning.DigiLearningApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env.MAVEN_PROFILE</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+            <properties>
+                <jdbc.driver>org.mariadb.jdbc.Driver</jdbc.driver>
+                <jdbc.url>jdbc:mariadb://localhost:3306/digilearning?useLegacyDatetimeCode=false&amp;serverTimezone=Europe/Paris</jdbc.url>
+                <jdbc.user>digi-suivi</jdbc.user>
+                <jdbc.pass>pazo1928!</jdbc.pass>
+                <jdbc.dialect>org.hibernate.dialect.MariaDBDialect</jdbc.dialect>
+                <jdbc.connections.max.active>5</jdbc.connections.max.active>
+                <filesystem.logs>C:/Temp/logs</filesystem.logs>
+                <filesystem.upload>C:/Temp/upload</filesystem.upload>
+                <prod.url>https://localhost:8080</prod.url>
+                <prod.photo></prod.photo>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <property>
+                    <name>env.MAVEN_PROFILE</name>
+                    <value>prod</value>
+                </property>
+            </activation>
+            <properties>
+                <jdbc.driver>com.mysql.cj.jdbc.Driver</jdbc.driver>
+                <jdbc.url>jdbc:mysql://${env.MYSQL_ADDON_HOST}:${env.MYSQL_ADDON_PORT}/${env.MYSQL_ADDON_DB}</jdbc.url>
+                <jdbc.user>${env.MYSQL_ADDON_USER}</jdbc.user>
+                <jdbc.pass>${env.MYSQL_ADDON_PASSWORD}</jdbc.pass>
+                <jdbc.dialect>org.hibernate.dialect.MySQLDialect</jdbc.dialect>
+                <prod.url>${env.PROD_URL}</prod.url>
+                <prod.photo>${env.RESSOURCE_UTILISATEUR_DIR}</prod.photo>
+                <jdbc.connections.max.active>5</jdbc.connections.max.active>
+            </properties>
+        </profile>
+    </profiles>
 </project>

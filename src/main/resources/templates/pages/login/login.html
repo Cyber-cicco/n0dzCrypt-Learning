@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html lang="fr" class="h-full w-full">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
-    <link rel="stylesheet" th:href="@{/styles/output.css}">
-    <title>Digi-Learning</title>
-</head>
-<body class="flex flex-col h-full w-full">
-<img class="absolute top-0 left-0 z-0 h-full" src="/img/background-login.webp">
-<main class="flex w-full h-full">
-    <div class="h-full w-1/2 z-0"></div>
-    <div class="flex flex-col h-full w-1/2 bg-primary rounded-md z-10 shadow-xl shadow-black text-white items-center justify-center">
-        <img class="h-[200px]" src="/img/logoDiginamicBleu.webp">
-        <h1 class="flex p-5 font-poppins items-center text-5xl text-center font-bold">DIGILEARNING</h1>
-        <h2 class="flex p-5 font-poppins items-center text-3xl text-center">Me connecter</h2>
-        <th:block th:replace="~{components/form :: form(~{pages/login/fragments/login.form}, 'Connexion', 'login')}"/>
-    </div>
-</main>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" th:href="@{/styles/output.css}">
+        <script th:insert="scripts/onload.js"></script>
+        <script th:insert="~{scripts/htmx.min.js}"></script>
+        <title>Digi-Learning</title>
+    </head>
+    <body id="root" class="flex flex-col h-full w-full">
+        <img class="absolute top-0 left-0 z-0 h-full" src="/img/background-login.webp">
+        <main class="flex w-full h-full">
+            <div id="loading" class="z-50 hidden fixed top-0 left-0 w-screen h-screen bg-opacity-40 bg-lightAccent">
+                <div 
+                    th:insert="~{svg/spinner}"
+                    class="fixed top-[50%] z-50 translate-x-[-100px] translate-y-[-100px] left-[50%]"
+                    ></div>
+            </div>
+            <div class="h-full w-1/2 z-0"></div>
+            <div class="flex flex-col h-full w-1/2 bg-primary rounded-md z-10 shadow-xl shadow-black text-white items-center justify-center">
+                <img class="h-[200px]" src="/img/logoDiginamicBleu.webp">
+                <h1 class="flex p-5 font-poppins items-center text-5xl text-center font-bold">DIGILEARNING</h1>
+                <h2 class="flex p-5 font-poppins items-center text-3xl text-center">Me connecter</h2>
+                <form 
+                    class="flex flex-col w-4/5 gap-5 p-10"
+                    hx-post="login"
+                    hx-target="#error"
+                    hx-on::before-request="showLoad()"
+                    hx-on::after-request="hideLoad()"
+                    >
+                    <div th:replace="~{components/form :: textInput('Adresse e-mail* ', 'email', 'ex : vincent@gmail.fr')}"></div>
+                    <div th:replace="~{components/form :: password('Mot de passe*', 'password')}"></div>
+                    <span id="error" class="text-error"></span>
+                    <th:block th:replace="~{components/buttons :: buttonAccent('Connexion')}"></th:block>
+                </form>
+            </div>
+        </main>
+    </body>

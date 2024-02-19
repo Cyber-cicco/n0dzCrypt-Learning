@@ -1,18 +1,24 @@
 package fr.diginamic.digilearning.page;
 
 import fr.diginamic.digilearning.components.service.NavBarService;
-import fr.diginamic.digilearning.entities.enums.TypeRole;
+import fr.diginamic.digilearning.entities.Chapitre;
+import fr.diginamic.digilearning.entities.Cours;
+import fr.diginamic.digilearning.entities.FlagCours;
+import fr.diginamic.digilearning.entities.QCMPasse;
 import fr.diginamic.digilearning.page.irrigator.CoursIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
+import fr.diginamic.digilearning.repository.QCMPasseRepository;
+import fr.diginamic.digilearning.service.ChapitreService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
-import jakarta.servlet.http.HttpServletResponse;
+import fr.diginamic.digilearning.service.QCMService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Comparator;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("cours")
@@ -22,7 +28,10 @@ public class CoursController {
     private final AuthenticationService authenticationService;
     private final NavBarService navBarService;
     private final CoursIrrigator coursIrrigator;
+    private final ChapitreService chapitreService;
     private final LayoutIrrigator layoutIrrigator;
+    private final QCMService qcmService;
+    private final QCMPasseRepository qcmPasseRepository;
 
     @GetMapping("/api")
     public String getCoursApi( Model model){
@@ -38,30 +47,7 @@ public class CoursController {
         return Routes.ADR_BASE_LAYOUT;
     }
 
-    @GetMapping("/admin")
-    public String getCoursAdminPanel(Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        authenticationService.rolesMustMatchOne(
-                userInfos.getRoles(),
-                List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR),
-                response
-        );
-        coursIrrigator.irrigateAdminPanel(userInfos, model);
-        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_ADMIN);
-        return Routes.ADR_BASE_LAYOUT;
-    }
 
-    @GetMapping("/admin/api")
-    public String getCoursAdminPanelApi(Model model, HttpServletResponse response){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        authenticationService.rolesMustMatchOne(
-                userInfos.getRoles(),
-                List.of(TypeRole.ROLE_FORMATEUR, TypeRole.ROLE_ADMINISTRATEUR),
-                response
-        );
-        coursIrrigator.irrigateAdminPanel(userInfos, model);
-        return Routes.ADR_COURS_ADMIN;
-    }
     @GetMapping("/module/api")
     public String getModuleApi( @RequestParam("id") Long idModule, Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
@@ -112,34 +98,63 @@ public class CoursController {
     }
 
     @GetMapping("/chapitre/api")
-    public String getChapitreApi(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
+    public String getChapitreApi(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        coursIrrigator.irrigateChapitre(userInfos, id, idCours, model);
-        return Routes.ADR_VISIONNEUSE_COURS;
+        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, id, idCours);
+        switch (chapitreInfos.chapitre().getStatusChapitre()){
+            case COURS -> {
+                coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+                return Routes.ADR_VISIONNEUSE_COURS;
+            }
+            case QCM -> {
+                handleQCM(model, userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours());
+                return model.getAttribute("slide").toString();
+            }
+            case EXERCICE -> {
+                throw new RuntimeException("Partie non implémentée");
+            }
+            default -> {
+                throw new RuntimeException();
+            }
+        }
     }
 
-    @GetMapping("/admin/editer/api")
-    public String getAdminCoursEditerApi(@RequestParam("id") Long idCours, Model model){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
-        return Routes.ADR_COURS_ADMIN_EDITER;
-    }
-
-    @GetMapping("/admin/editer")
-    public String getAdminCoursEditer(@RequestParam("id") Long idCours, Model model){
-        AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        coursIrrigator.irrigateEditionCours(model, idCours, userInfos);
-        layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_ADMIN_EDITER);
-        return Routes.ADR_BASE_LAYOUT;
+    private void handleQCM(Model model, AuthenticationInfos userInfos, Chapitre qcm, Cours cours, FlagCours flagCours){
+        Optional<QCMPasse> qcmPasseOpt = qcmPasseRepository.findByUtilisateurAndQCMWithArchived(userInfos.getId(), qcm.getId())
+                .stream()
+                .max(Comparator.comparing(QCMPasse::getDatePassage));
+        if(qcmPasseOpt.isPresent()){
+            System.out.println("here");
+            QCMPasse qcmPasse = qcmPasseOpt.get();
+            coursIrrigator.irrigateBaseQCM(model, userInfos, qcm, qcmPasse.getQcmPublication().getQuestions(), cours, 0);
+            if(qcmPasse.isQCMFinished()) {
+                coursIrrigator.irrigateQCMFinished(model, userInfos, qcm, qcmPasse);
+                model.addAttribute("slide", Routes.ADR_QCM_REFAIRE);
+                return;
+            }
+            if(!qcmPasse.getArchived()){
+                model.addAttribute("qcm", qcm);
+                model.addAttribute("slide", Routes.ADR_QCM_EN_COURS);
+                return;
+            }
+        }
+        coursIrrigator.irrigateQCM(model, userInfos, qcm, qcm.getQcmQuestionsPubliees(), cours, 0);
     }
 
     @GetMapping("/chapitre")
-    public String getChapitre(@RequestParam("id") Integer id, @RequestParam("cours") Long idCours, Model model){
+    public String getChapitre(@RequestParam("id") Integer ordreChapitre, @RequestParam("cours") Long idCours, Model model) {
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
-        coursIrrigator.irrigateChapitre(userInfos, id, idCours, model);
+        var chapitreInfos = chapitreService.getChapitreInfos(userInfos, ordreChapitre, idCours);
+        switch (chapitreInfos.chapitre().getStatusChapitre()){
+            case COURS -> coursIrrigator.irrigateChapitre(userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours(), model);
+            case QCM -> handleQCM(model, userInfos, chapitreInfos.chapitre(), chapitreInfos.cours(), chapitreInfos.flagCours());
+            case EXERCICE -> throw new RuntimeException("Partie non implémentée");
+            default ->  throw new RuntimeException();
+        }
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_COURS_VISIONNEUSE);
         return Routes.ADR_BASE_LAYOUT;
     }
+
 
     @PatchMapping("/bookmark")
     public String patchBookmark(@RequestParam("id") Long idCours, Model model) {

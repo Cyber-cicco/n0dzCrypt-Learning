@@ -51,6 +51,14 @@ public class Salon {
     @OneToMany(mappedBy = "salon")
     private List<FilDiscussion> filDiscussionList;
 
+
+    @ManyToMany
+    @JoinTable(name = "dl_salon_session",
+            inverseJoinColumns = @JoinColumn(name = "session_id", referencedColumnName = "ID"),
+            joinColumns = @JoinColumn(name = "salon_id", referencedColumnName = "id")
+    )
+    private List<Session> sessionsAutorisees;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

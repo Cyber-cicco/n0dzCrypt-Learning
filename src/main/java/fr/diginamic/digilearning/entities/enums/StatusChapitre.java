@@ -7,7 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public enum StatusChapitre {
-    COURS("Cours"), QCM("QCM"), EXERCICE("Exercice");
+    COURS("Cours"), QCM("QCM"), EXERCICE("Travaux pratiques");
 
     private String libelle;
 

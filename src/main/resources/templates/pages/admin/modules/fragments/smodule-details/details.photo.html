@@ -1,0 +1,27 @@
+<script type="module">
+    const adminCard = document.querySelector("#admin-card")
+    const fileInput = adminCard.querySelector("#file-input");
+    fileInput.addEventListener("change", ()=> {
+        let photo = fileInput.files[0];
+        let id = fileInput.getAttribute("data-id");
+        const formData = new FormData();
+        formData.append("file", photo);
+        fetch(`/admin/modules/photo/smodule?id=${id}`, {
+        method : 'POST',
+        body : formData }).then((content) => {
+            return content.text();
+        }).then((text) => {
+            document.querySelector("#smodule-photo").innerHTML = text;
+        })
+    }) 
+</script>
+<img th:alt="${smodule.getPhoto()}" th:unless="${smodule.getPhoto() == null}" class="h-[200px]" th:src="'/photo/smodule?name=' + ${smodule.getPhoto()}">
+<div th:if="${smodule.getPhoto() == null}" class="h-[200px] flex w-full items-center justify-center">Pas d'image à afficher</div>
+<label 
+    id="illustration"
+    class="bg-primary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150 text-center"
+    for="file-input"
+    >
+    Changer la photo
+</label>
+<input th:data-id="${smodule.getId()}" class="hidden" id="file-input" type="file">

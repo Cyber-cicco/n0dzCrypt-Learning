@@ -1,0 +1,13 @@
+<section class="flex flex-col h-full w-full">
+    <div class="flex w-full h-full p-2 gap-2">
+        <div id="questions-liste" class="w-1/5 h-full bg-primary rounded-md text-white flex flex-col">
+            <th:block th:replace="~{pages/cours/admin/fragments/qcm.question.liste}"></th:block>
+        </div>
+        <div id="qcm-ajout" class="flex w-4/5 bg-grey rounded-md">
+            <th:block th:replace="~{pages/cours/admin/fragments/cours.admin.editer.qcm.question}"></th:block>
+        </div>
+    </div>
+    <script defer>
+        reInitQCM()
+    </script>
+</section>

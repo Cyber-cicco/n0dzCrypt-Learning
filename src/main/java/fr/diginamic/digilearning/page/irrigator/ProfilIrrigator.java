@@ -3,8 +3,8 @@ package fr.diginamic.digilearning.page.irrigator;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
-import fr.diginamic.digilearning.page.service.CoursService;
-import fr.diginamic.digilearning.page.service.UtilisateurService;
+import fr.diginamic.digilearning.service.CoursService;
+import fr.diginamic.digilearning.service.UtilisateurService;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
@@ -32,16 +32,31 @@ public class ProfilIrrigator {
     public void irrigateBaseAttributes(AuthenticationInfos userInfos, Model model, HttpServletResponse response){
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userInfos.getEmail()).orElseThrow(EntityNotFoundException::new);
         List<Cours> bookmarked = coursRepository.getBookMarked(userInfos.getId());
-        model.addAttribute("presentation", utilisateur.getNom().toUpperCase() + " " + utilisateur.getPrenom());
-        model.addAttribute("email", utilisateur.getEmail());
-        model.addAttribute("telephone", utilisateur.getTelephone());
+        irrigateLeftCard(model, utilisateur);
         model.addAttribute("bookmarked", bookmarked);
+        model.addAttribute("_user" ,userInfos);
         model.addAttribute("dateNaissance", utilisateur.getDateNaissance());
         model.addAttribute("schedueled", coursService.getCoursCeJour(userInfos.getId()));
         model.addAttribute("progresCours", utilisateurService.getProgression(utilisateur.getId()));
         model.addAttribute("progresJour", utilisateurService.getProgressionJournee(utilisateur.getId()));
         model.addAttribute("dateUtil", dateUtil);
         model.addAttribute("title", "Mon Compte");
+    }
+
+    public void irrigateLeftCard(Model model, Utilisateur utilisateur){
+        model.addAttribute("_session", utilisateur.getSessionCourante());
+        model.addAttribute("presentation", utilisateur.getNom().toUpperCase() + " " + utilisateur.getPrenom());
+        model.addAttribute("email", utilisateur.getEmail());
+        model.addAttribute("telephone", utilisateur.getTelephone());
+    }
+
+    public void irrigateApprenantAdmin(Model model, Long idUtilisateur, AuthenticationInfos userInfos){
+        Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("_user" ,userInfos);
+        model.addAttribute("id", utilisateur.getId());
+        model.addAttribute("banned", utilisateur.getBanned());
+        model.addAttribute("progresCours", utilisateurService.getProgression(utilisateur.getId()));
+        irrigateLeftCard(model, utilisateur);
     }
 
     public void irrigatePatchProgress(Model model, AuthenticationInfos userInfos, Long idCours){

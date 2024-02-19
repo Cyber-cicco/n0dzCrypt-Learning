@@ -1,0 +1,5 @@
+<div class="flex flex-col h-screen">
+    <th:block th:replace="~{components/entete.nav :: entete('Mon suivi')}"></th:block>
+    <div class="flex h-[90vh] lg:h-screen w-full p-3" th:insert="~{components/containers/card :: cardFull(~{pages/conversation/admin/body})}">
+    </div>
+</div>

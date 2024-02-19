@@ -2,17 +2,17 @@ package fr.diginamic.digilearning.security.service;
 
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
+import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
+import fr.diginamic.digilearning.utils.hx.HX;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,12 +21,14 @@ import java.util.List;
 public class AuthenticationService {
 
     private final JwtService jwtService;
+    private final UtilisateurRepository utilisateurRepository;
     public AuthenticationInfos getAuthInfos(String token){
         Claims claims = jwtService.extractAllClaims(token);
         return AuthenticationInfos.builder()
                 .email(jwtService.extractEmail(claims))
                 .roles(jwtService.extractRoles(claims))
                 .id(jwtService.extractId(claims))
+                .banned(jwtService.extractBanned(claims))
                 .token(token)
                 .build();
     }
@@ -45,10 +47,10 @@ public class AuthenticationService {
     public void mustBeOfRole(List<String> currentRoles, TypeRole expectedRole, HttpServletResponse response) {
         if(!currentRoles.contains(expectedRole.getLibelle())) {
             try {
-                response.setHeader("HX-Retarget", "html");
+                response.setHeader(HX.RETARGET, "html");
                 response.sendRedirect("/login");
             } catch (IOException e){
-                throw new BrokenRuleException();
+                throw new RuntimeException();
             }
         }
     }
@@ -59,11 +61,19 @@ public class AuthenticationService {
                 .map(TypeRole::getLibelle)
                 .toList(), currentRoles)){
             try {
-                response.setHeader("HX-Retarget", "html");
+                response.setHeader(HX.RETARGET, "html");
                 response.sendRedirect("/login");
             } catch (IOException e){
                 throw new BrokenRuleException();
             }
         }
+    }
+
+    public boolean checkBanned(Long id) {
+        Boolean banned = utilisateurRepository.findById(id).orElseThrow(EntityNotFoundException::new).getBanned();
+        if (banned == null){
+            return false;
+        }
+        return banned;
     }
 }

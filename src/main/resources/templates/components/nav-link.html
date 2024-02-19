@@ -2,13 +2,15 @@
         class="flex  flex-col text-primary items-center hover:cursor-pointer"
         th:fragment="nav_link(url, icon, libelle)"
         th:hx-get="'/' + ${url} + '/api'"
+        th:href="'/' + ${url}"
         th:hx-push-url="'/' + ${url}"
+        hx-on::before-request="showLoad()"
+        hx-on::after-request="hideLoad()"
         hx-swap="innerHTML transition:true"
         hx-target="#insert"
         hx-boost="true"
->
-    <div class="rounded-full overflow-hidden">
-        <img class="hover:bg-accent text-white p-2 bg-white" th:src="${'/img/icons/' + icon}" width="50">
+    ><div class="rounded-full overflow-hidden">
+        <div class="hover:bg-accent text-white p-2 bg-white" th:insert="${icon} :: svg('25', '25')"></div>
     </div>
-    <div class="text-sm text-center" th:text="${libelle}"></div>
+    <div class="text-xs font-poppins text-center" th:text="${libelle}"></div>
 </a>

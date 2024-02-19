@@ -4,7 +4,7 @@
 </div>
 <div>
     <form class="flex flex-col gap-5 items-center text-white justify-center w-full p-5 bg-primary rounded-md">
-        <th:block th:replace="/components/form :: textArea('Votre question', 'message')"></th:block>
+        <th:block th:replace="components/form :: textArea('Votre question', 'message')"></th:block>
         <button
                 th:hx-post="'/chapitre/question?id=' + ${idChapitre}"
                 hx-target="#question-answer"

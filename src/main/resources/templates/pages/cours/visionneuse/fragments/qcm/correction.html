@@ -1,0 +1,17 @@
+<div class="flex flex-col w-full p-5 gap-10">
+    <th:block th:each="resQuestion, iterStat : ${resultat.getResultatsQuestions()}">
+        <h3 class="text-primary text-3xl font-poppins" th:text="${resQuestion.getQuestion().getLibelle()}"></h3>
+
+        <div th:unless="${resQuestion.getQuestion.getIllustration() == null}" class="flex flex-col w-full h-[300px] items-center justify-center rounded-md border-2 border-primary">
+            <img class="h-full" th:src="'/photo?name=' + ${resQuestion.getQuestion.getIllustration()}">
+        </div>
+        <th:block th:each="res, iterStat : ${resQuestion.getResultats().choixToValidite()}">
+            <div class="flex gap-2">
+                <input type="checkbox" disabled th:checked="${res.value.aEteValide()}">
+                <div th:class="${res.value.aEteValide() != res.value.doitEtreValide()} ? 'text-error' : 'text-validation'" th:text="${res.key.getLibelle()}"></div>
+            </div>
+        </th:block>
+        <div th:if="${resQuestion.getQuestion.getCommentaire() != null}" th:text="${resQuestion.getQuestion.getCommentaire()}" class="rounded-md border-2 border-primary w-full p-2">
+        </div>
+    </th:block>
+</div>

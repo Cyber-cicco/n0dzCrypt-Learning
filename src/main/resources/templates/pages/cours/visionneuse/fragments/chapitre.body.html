@@ -1,0 +1,31 @@
+<!--/*@thymesVar id="cours" type="fr.diginamic.digilearning.entities.Cours"*/-->
+<!--/*@thymesVar id="chapitre" type="fr.diginamic.digilearning.entities.Chapitre"*/-->
+<!--/*@thymesvar id="question" type="fr.diginamic.digilearning.entities.Question"*/-->
+<!--/*@thymesVar id="idUtilisateur" type="java.lang.Long"*/-->
+<div class="flex flex-col overflow-hidden h-full">
+    <!--/*@thymesVar id="contenu" type="java.lang.String"*/-->
+    <div class="flex overflow-x-hidden grow h-full w-full  pb-2">
+        <div class="flex min-w-full flex-col h-full grow w-full overflow-y-scroll">
+            <div class="flex flex-col h-full grow" id="cours-content">
+                <article class="flex flex-col h-fit" id="markdown" th:utext="${contenu}">
+                </article>
+                <div th:if="${chapitre.getLienVideo() != null}" class="flex h-[460px] justify-center p-5"
+                    th:utext="${chapitre.getLienVideo()}"></div>
+            </div>
+        </div>
+        <th:block th:replace="pages/cours/visionneuse/fragments/chapitre.questions"></th:block>
+    </div>
+    <button
+        onclick="carousel()"
+        class="justify-self-end bg-accent p-2 text-primary disabled:brightness-75 hover:cursor-pointer hover:brightness-150"
+        >Afficher / cacher les questions - réponses</button>
+</div>
+<div id="modal-bg" class="fixed top-0 left-0 w-screen h-screen bg-accent bg-opacity-25 z-40" hidden="true">
+    <section id="modal-bot" class="absolute bottom-0 bg-grey rounded-md p-1 w-full ">
+    </section>
+</div>
+<script th:insert="scripts/animation.modal.js"></script>
+<script defer src="/js/animation.cours.js"></script>
+<script>
+    hljs.highlightAll()
+</script>

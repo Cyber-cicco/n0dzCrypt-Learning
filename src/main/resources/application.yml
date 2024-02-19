@@ -1,16 +1,64 @@
 spring:
+    profiles:
+        active: prod
     datasource:
-        url: "jdbc:mariadb://localhost:3306/sid"
-        username: "digi-suivi"
-        password: "pazo1928!"
-        driver-class-name: org.mariadb.jdbc.Driver
+        url: '@jdbc.url@'
+        username: '@jdbc.user@'
+        password: '@jdbc.pass@'
+        driver-class-name: '@jdbc.driver@'
+    servlet:
+        multipart:
+            max-file-size: "10MB"
+            max-request-size: "10MB"
     jpa:
-        show-sql: false
         database: mysql
-        generate-ddl: false
         hibernate:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    thymeleaf: # Thymeleaf
+        cache: true
+        mode: HTML
+        encoding: UTF-8
+        prefix: classpath:/templates/
+        suffix: .html
+    web:
+        resources:
+            static-locations: classpath:/static/
+            cache:
+                period: 3600
+jwt:
+    cookie: "AUTH-TOKEN"
+    expires_in: 864000
+    secret: "3dDsYHtBkTz0gAoPmPMwL2ksjVfVyR2Js0OsaVTx3RobUGI6YGM3gWJRFhPG"
+logging:
+    level:
+      org.springframework: WARN
+      org.hibernate.type.descriptor: warn
+      org.hibernate.sql: error
+server:
+    http2:
+        enabled: true
+---
+spring:
+    profiles:
+        active: dev
+    datasource:
+        url: '@jdbc.url@'
+        username: '@jdbc.user@'
+        password: '@jdbc.pass@'
+        driver-class-name: '@jdbc.driver@'
+        tomcat:
+            max-active: '@jdbc.connections.max.active@'
+            max-idle: '@jdbc.connections.max.active@'
+    jpa:
+        database: mysql
+        hibernate:
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    servlet:
+        multipart:
+            max-file-size: "10MB"
+            max-request-size: "10MB"
     thymeleaf: # Thymeleaf
         cache: false
         mode: HTML
@@ -27,8 +75,12 @@ jwt:
     secret: "3dDsYHtBkTz0gAoPmPMwL2ksjVfVyR2Js0OsaVTx3RobUGI6YGM3gWJRFhPG"
 logging:
     level:
-      org.springframework: WARN
+        org.springframework: WARN
+        org.hibernate.type.descriptor: debug
+        org.hibernate.sql: trace
 server:
     http2:
         enabled: true
-    port: 8081
+prod:
+    url: '@prod.url@'
+    photo : '@prod.photo@'

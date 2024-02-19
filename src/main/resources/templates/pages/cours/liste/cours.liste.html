@@ -10,7 +10,7 @@
                 hx-preserve="#hamb"
         >
         <div class="flex-grow text-center" th:text="${smodule.getTitre()}"></div>
-        <th:block th:replace="/components/nav-elements/nav.hamb"></th:block>
+        <th:block th:replace="components/nav-elements/nav.hamb"></th:block>
     </div>
     <section class="flex flex-col h-full gap-5 p-5 overflow-y-scroll">
         <div class="bg-white p-5 shadow-dark shadow-md rounded-md" th:each="c, iterStat : ${cours}">

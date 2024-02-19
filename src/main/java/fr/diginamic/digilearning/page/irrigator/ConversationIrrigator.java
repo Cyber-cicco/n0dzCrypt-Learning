@@ -5,8 +5,8 @@ import fr.diginamic.digilearning.entities.Conversation;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
-import fr.diginamic.digilearning.page.service.ConversationService;
-import fr.diginamic.digilearning.page.validators.MessageValidator;
+import fr.diginamic.digilearning.service.ConversationService;
+import fr.diginamic.digilearning.validators.MessageValidator;
 import fr.diginamic.digilearning.repository.UtilisateurRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
@@ -51,7 +51,7 @@ public class ConversationIrrigator {
     public void irrigateBaseAttributesConversationStagiaire(Utilisateur utilisateur, Model model){
         model.addAttribute("idUtilisateur", utilisateur.getId());
         List<ConversationService.ContactInfos> contactInfos = conversationService.createContactList(utilisateur);
-        if(contactInfos.get(0) != null) {
+        if(contactInfos.size() > 0) {
             model.addAttribute("page", 0);
             model.addAttribute("interlocuteur", contactInfos.get(0));
             model.addAttribute("conversation", conversationService.getConversation(utilisateur, contactInfos.get(0).utilisateur(), 0));
@@ -61,6 +61,7 @@ public class ConversationIrrigator {
 
     /**
      * Permet d'irriguer le modèle du chat pour un interlocuteur donné
+     * Sécuriser l'API pour assurer qu'un utilisateur ne peut créer de conversations avec des gens avec qui il n'est pas censé pouvoir le faire.
      * @param model un objet permettant d'irriguer le template thymeleaf
      * @param userInfos les informations d'authentification de l'utilisateur
      * @param idInterlocuteur l'identifiant de l'interlocuteur.

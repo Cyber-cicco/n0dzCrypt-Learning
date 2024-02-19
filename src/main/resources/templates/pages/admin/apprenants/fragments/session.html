@@ -1,0 +1,105 @@
+<section class="flex flex-col p-2 h-full gap-10">
+    <h1 class="text-5xl pt-5 font-poppins text-center text-primary" th:text="${_session.getNom()}"></h1>
+    <div class="flex justify-between p-5">
+        <h2 
+            class="text-2xl font-poppins text-primary"
+            th:inline="text"
+            >Formation associée : [[${_session.getFormation().getNom()}]]</h2>
+        <div 
+            class="text-2xl font-poppins text-primary"
+            th:inline="text"
+            >Date de fin : [[${_session.getDateFin()}]]</div>
+    </div>
+    <div class="flex gap-5">
+        <div class="flex flex-col w-1/2 p-2 gap-2">
+            <h2 class="text-xl font-poppins text-primary">Modules associés : </h2>
+            <div class="bg-lightAccent rounded-md">
+                <th:block th:each="module, iterStat : ${_session.getFormation().getModules()}">
+                    <div class="p-2 text-center" th:text="${module.getLibelle()}"></div>
+                </th:block>
+            </div>
+            <button 
+                th:hx-get="'/admin/modules/api?id=' + ${_session.getFormation().getId()} + '&type=0'"
+                hx-target="#insert"
+                th:hx-push-url="'/admin/modules?id=' + ${_session.getFormation().getId()} + '&type=0'"
+                class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">
+                Changer les modules de la formation
+            </button>
+        </div>
+        <div class="flex flex-col w-1/2 p-2 gap-2">
+            <h3 class="text-xl font-poppins text-primary">Interlocuteurs de la session : </h3>
+            <th:block th:replace="pages/admin/apprenants/fragments/respontable :: liste()"></th:block>
+            <button 
+                th:hx-get="'/admin/responsables/modal?id=' + ${_session.getId()}"
+                hx-target="#modal-responsables-content"
+                hx-on::before-request="openResponsables()"
+                class="bg-accent p-2 text-primary disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">
+                Changer les interlocuteurs de la session.
+            </button>
+        </div>
+    </div>
+    <div class="grow"></div>
+    <div class="flex flex-col gap-2">
+        <h2 class="text-xl font-poppins text-primary">Actions : </h2>
+        <div class="flex gap-2 w-full">
+            <button 
+                th:hx-get="'/agenda/api?id=' + ${_session.getId()}"
+                hx-target="#modal-cours-content"
+                hx-on::before-request="openCalendar()"
+                class="w-full bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+                >Prévoir des cours</button>
+            <button 
+                class="w-full bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+                th:hx-get="'/admin/forum/modal?id=' + ${_session.getId()}"
+                hx-target="#modal-responsables-content"
+                hx-on::before-request="openResponsables()"
+                >Gérer les accès au forum</button>
+    </div>
+</section>
+<aside id="modal-calendar" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-100%]">
+    <div class="absolute top-0 right-0">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeCalendar()">
+    </div>
+    <section id="modal-cours-content" class="flex flex-col h-full gap-2">
+    </section>
+</aside>
+<aside id="modal-forum" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
+    <div class="flex justify-end w-full">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeForum()" >
+    </div>
+        <section id="modal-forum-content" class="flex flex-col h-full gap-2">
+        </section>
+</aside>
+<aside id="modal-responsables" class="absolute z-50 top-0 bg-grey text-primary h-screen p-3 rounded-md w-full right-[-800px] sm:w-[800px]">
+    <div class="flex justify-end w-full">
+        <img alt="fermer" class="hover:cursor-pointer" src="/img/icons/close.svg" onclick="closeResponsables()" >
+    </div>
+        <section id="modal-responsables-content" class="flex flex-col h-full gap-2">
+        </section>
+</aside>
+<script>
+    function openCalendar() {
+        document.querySelector('#modal-calendar').classList.add("modal");
+        document.querySelector('#modal-bg').removeAttribute("hidden")
+    }
+    function closeCalendar() {
+        document.querySelector('#modal-calendar').classList.remove("modal");
+        document.querySelector('#modal-bg').setAttribute("hidden", "true")
+    }
+    function openResponsables() {
+        document.querySelector('#modal-responsables').classList.add("modal");
+        document.querySelector('#modal-bg').removeAttribute("hidden")
+    }
+    function closeResponsables() {
+        document.querySelector('#modal-responsables').classList.remove("modal");
+        document.querySelector('#modal-bg').setAttribute("hidden", "true")
+    }
+    function openForum() {
+        document.querySelector('#modal-forum').classList.add("modal");
+        document.querySelector('#modal-bg').removeAttribute("hidden")
+    }
+    function closeForum() {
+        document.querySelector('#modal-forum').classList.remove("modal");
+        document.querySelector('#modal-bg').setAttribute("hidden", "true")
+    }
+</script>

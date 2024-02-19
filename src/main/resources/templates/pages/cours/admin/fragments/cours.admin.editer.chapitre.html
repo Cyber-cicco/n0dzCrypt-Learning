@@ -1,214 +1,212 @@
-<section class="flex h-screen w-full">
+<section id="editer-cours" class="flex h-screen w-full">
+    <script src="/js/highlight.js"></script>
     <div class="flex p-2 flex-col w-1/2 h-full items-center">
         <div class="bg-white w-full h-full rounded-lg shadow-md">
-            <div class="flex flex-col h-full">
+            <div class="flex flex-col h-full w-full">
                 <div class="flex w-full flex-wrap gap-3 items-center p-3">
-                    <button data-text-option
-                        data-tooltip-target="tooltip-bold"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        id="bold"
-                        >
-                        <img src="/img/text-icons/bold.svg">
-                    </button>
-                    <div id="tooltip-bold"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Rendre le texte gras
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button data-text-option
-                        data-tooltip-target="tooltip-italic"
-                        id="italic"
-                        class="hover:bg-grey border-2 h-[30px] rounded-md"
-                        >
-                        <img src="/img/text-icons/italic.svg">
-                    </button>
-                    <div id="tooltip-italic"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Rendre le texte italique
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button data-text-option 
-                        data-tooltip-target="tooltip-strikethrough"
-                        id="strikethrough"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/strikethrough.svg">
-                    </button>
-                    <div id="tooltip-strikethrough"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Barrer le texte
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button data-text-option
-                        data-tooltip-target="tooltip-list"
-                        id="list"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/list.svg">
-                    </button>
-                    <div id="tooltip-list"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Créer une liste
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button data-text-option 
-                        data-tooltip-target="tooltip-ol"
-                        id="ordered-list"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/ordered-list.svg">
-                    </button>
-                    <div id="tooltip-ol"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Créer une liste ordonnée
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button 
-                        data-tooltip-target="tooltip-undo"
-                        id="undo"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/undo.svg">
-                    </button>
-                    <div id="tooltip-undo"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Revenir en arrière
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button 
-                        data-tooltip-target="tooltip-redo"
-                        id="redo"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/redo.svg">
-                    </button>
-                    <div id="tooltip-redo"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Refaire
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button data-text-option 
-                        data-tooltip-target="tooltip-link"
-                        id="link"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/link.svg">
-                    </button>
-                    <div id="tooltip-link"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Insérer un lien
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button data-text-option
-                        data-tooltip-target="tooltip-code-line"
-                        id="code-line"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/code-line.svg">
-                    </button>
-                    <div id="tooltip-code-line"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Insérer du code
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
+                    <th:block th:replace="~{components/text-option :: textOption('bold', 'Rendre le texte gras')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('italic', 'Rendre le texte italique')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('strikethrough', 'Barrer le texte')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('list', 'Créer une liste')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('ordered-list', 'Créer une liste ordonnée')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: editorOption('undo', 'Revenir en arrière')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: editorOption('redo', 'Refaire')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('link', 'Insérer un lien')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('code-line', 'Insérer du code')}"></th:block>
                 </div> 
                 <div class="bg-greyDeep h-0.5 w-full"></div>
                 <div class="flex w-full flex-wrap gap-3 items-center p-3">
-                    <button data-text-option
-                        data-tooltip-target="tooltip-title"
-                        id="title"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/title.svg">
-                    </button>
-                    <div id="tooltip-title"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Insérer un titre
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
+                    <th:block th:replace="~{components/text-option :: textOption('title', 'Insérer un titre')}"></th:block>
                     <select id="heading" class="w-[150px] p-1 rounded-md bg-grey hover:cursor-pointer">
                         <option class="hover:cursor-pointer text-primary font-poppins text-5xl" value="h1">Gros titre</option>
                         <option class="hover:cursor-pointer text-primary font-poppins text-3xl" value="h2">Titre</option>
                         <option class="hover:cursor-pointer text-primary font-poppins text-xl" value="h3">Sous titre</option>
                     </select>
-                    <button 
-                        data-tooltip-target="tooltip-tableau"
-                        data-text-option id="table"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
+                    <th:block th:replace="~{components/text-option :: textOption('table', 'Insérer un tableau')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('quote', 'Insérer une citation')}"></th:block>
+                    <th:block th:replace="~{components/text-option :: textOption('code-block', 'Insérer un bloque de code')}"></th:block>
+                    <label 
+                        data-tooltip-target="tooltip-image"
+                        id="photo"
+                        class="hover:bg-grey hover:cursor-pointer w-[30px] flex items-center justify-center h-[30px] border-2 rounded-md"
+                        for="file-input"
                         >
-                        <img src="/img/text-icons/table.svg">
-                    </button>
-                    <div id="tooltip-tableau"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Insérer un tableau
-                        <div class="tooltip-arrow" data-popper-arrow></div>
+                        <img src="/img/text-icons/img.svg">
+                    </label>
+                        <input onchange="uploadPhoto()" class="hidden" id="file-input" type="file">
+                        <div id="tooltip-image"
+                            role="tooltip"
+                            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
+                            >
+                            Ajouter une nouvelle image depuis votre PC.
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                        <div class="rounded-lg bg-white border-2 border-black p-1 hover:cursor-pointer hover:bg-grey">
+                            <input onchange="getMarkdownFromFile(event)" class="hidden" id="markdown-input" type="file">
+                            <label for="markdown-input" class="hover:cursor-pointer">Téléverser le markdown</label>
+                        </div>
                     </div>
-                    <button data-text-option
-                        data-tooltip-target="tooltip-citation"
-                        id="citation"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/quote.svg">
-                    </button>
-                    <div id="tooltip-citation"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Insérer une citation
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button data-text-option
-                        data-tooltip-target="tooltip-code-block"
-                        id="code-block"
-                        class="hover:bg-grey h-[30px] border-2 rounded-md"
-                        >
-                        <img src="/img/text-icons/code-block.svg">
-                    </button>
-                    <div id="tooltip-code-block"
-                        role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-lg shadow-sm opacity-0 tooltip"
-                        >
-                        Insérer un bloque de code
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                </div>
-                <div class="p-3 flex flex-col h-full">
-                    <textarea id="text-input" onkeyup="putInHistory()" class="border-grey border-2 rounded-md p-2 h-full" th:text="${contenu}"></textarea>
-                </div>
-                <div id="buttons" class="p-3">
-                    <button class="bg-lightPrimary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Publier</button>
+                    <form class="flex flex-col h-full w-full justify-between">
+                        <div class="p-3 flex flex-col h-full">
+                            <textarea 
+                                spellcheck="true"
+                                lang="fr"
+                                id="text-input" 
+                                name="contenu"
+                                hx-trigger="keyup changed delay:0.3s" 
+                                th:hx-post="'/cours/admin/chapitre/contenu?id=' + ${id}"
+                                hx-on::after-request="hljs.highlightAll(); putInHistory()"
+                                hx-sync="closest form:abort"
+                                hx-target="#markdown"
+                                hx-select="#markdown"
+                                hx-select-oob="#info"
+                                hx-swap="outerHTML"
+                                class="border-grey border-2 rounded-md p-2 h-full" th:text="${contenu}"></textarea>
+                        </div>
+                        <div id="buttons" class="p-3 flex gap-3 items-center">
+                            <button
+                                type="button"
+                                onclick="openModalVideo()"
+                                class="bg-lightPrimary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                                >Vidéo</button>
+                            <button
+                                type="button"
+                                onclick="openModalDepublie()"
+                                class="bg-error p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                                >Dépublier</button>
+                            <button 
+                                type="submit"
+                                th:hx-post="'/cours/admin/chapitre/publier?id=' + ${id}"
+                                hx-target="#info"
+                                hx-swap="outerHTML"
+                                class="bg-lightPrimary p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                                >Publier</button>
+                            <div id="info" th:class="${classAJour}" th:text="${aJour}"></div>
+
+                            <div 
+                                class="justify-self-end hover:cursor-pointer"
+                                onclick="openModalBot()"
+                                ><img class="w-[30px] h-[30px]" src="/img/icons/delete.svg">
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
     <div class="flex p-2 flex-col w-1/2 h-full items-center">
         <div class="bg-white w-full h-full rounded-lg shadow-md p-5 overflow-y-scroll">
-            <article class="" id="markdown" th:utext="${contenuHTML}">
+            <article class="flex flex-col max-w-[50vw]" id="markdown" th:utext="${contenuHTML}">
             </article>
+            <div class="flex p-5 w-full justify-center">
+                <div class="flex w-full justify-center" id="video" th:utext="${video}"></div>
+            </div>
         </div>
     </div>
-  <script src="/js/cours.text-editor.js"></script>
-  <script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
+    <div id="video-bg" class="fixed top-0 left-0 w-screen h-screen bg-accent bg-opacity-25 z-40" hidden="true">
+        <section id="modal-video" class="absolute bottom-0 bg-grey rounded-md p-1 w-full ">
+            <div class="flex justify-end w-full" method="dialog">
+                <button onclick="closeModalVideo()"><img src="/img/icons/close.svg"></button>
+            </div>
+            <div>
+                <div class="text-xl text-primary w-full flex flex-col items-center gap-5 p-3">
+                    <form
+                        class="flex flex-col p-5"
+                        th:hx-post="'/cours/admin/chapitre/video?id=' + ${id}"
+                        hx-target="#video"
+                        hx-swap="outerHTML"
+                        hx-on::before-request="closeModalVideo()"
+                        >
+                        <div class="flex flex-col gap-2 w-full">
+                            <label for="video">Insérez ici le lien de votre vidéo youtube.</label>
+                            <input class="rounded-sm p-2 text-black w-full" type="text" name="video" id="video">
+                            <button type="submit" class="bg-accent p-2 text-primary disabled:bg-lightAccent rounded-md hover:cursor-pointer hover:disabled:cursor-auto hover:disabled:brightness-100 hover:brightness-150">Publier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div id="depublie-bg" class="fixed top-0 left-0 w-screen h-screen bg-accent bg-opacity-25 z-40" hidden="true">
+        <section id="modal-depublie" class="absolute bottom-0 bg-grey rounded-md p-1 w-full ">
+            <div class="flex justify-end w-full" method="dialog">
+                <button onclick="closeModalDepublie()"><img src="/img/icons/close.svg"></button>
+            </div>
+            <div>
+                <div class="text-xl text-error w-full flex flex-col items-center gap-5 p-3">
+                    <form
+                        class="flex flex-col p-5"
+                        th:hx-patch="'/cours/admin/chapitre/depublier?id=' + ${id}"
+                        hx-target="#info"
+                        hx-swap="outerHTML"
+                        hx-on::before-request="closeModalDepublie()"
+                        >
+                        <div class="flex flex-col gap-2 w-full">
+                            <label>Êtes vous sur de vouloir dépublier ce cours ? Plus aucun apprenant ne pourra y avoir accès avant que vous décidiez de le republier.</label>
+                            <div class="flex w-full justify-center gap-2">
+                                <button type="submit" class="bg-accent p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150">Oui</button>
+                                <button class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150" type="button" onclick="closeModalDepublie()">Non</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+    <th:block th:replace="~{components/modal/modal.bottom :: modalBg( ~{::#modal-content})}">
+        <div class="text-xl text-error w-full flex flex-col items-center gap-5 p-3" id="modal-content">
+            <div>Êtes-vous sur de bien vouloir supprimer ce chapitre ?</div>
+            <div class="flex gap-2">
+                <button 
+                    class="bg-accent p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+                    th:hx-delete="'/cours/admin/chapitre?id=' + ${id}"
+                    hx-target="#insert"
+                    >Oui</button>
+                <button 
+                    class="bg-primary disabled:brightness-75 p-2 text-white rounded-md hover:cursor-pointer hover:brightness-150"
+                    onclick="closeModalBot()"
+                    >Non</button>
+            </div>
+        </div>
+    </th:block>
+    <script th:insert="scripts/flowbite.min.js"></script>
+    <script defer src="/js/cours.text-editor.js"></script>
+    <script>
+        function openModalBot() {
+            document.querySelector('#modal-bot').classList.add("modal-bot");
+            document.querySelector('#modal-bg').removeAttribute("hidden")
+        }
+        function closeModalBot(){
+            document.querySelector('#modal-bot').classList.remove("modal-bot");
+            document.querySelector('#modal-bg').setAttribute("hidden", "true")
+        }
+        function openModalVideo() {
+            document.querySelector('#modal-video').classList.add("modal-bot");
+            document.querySelector('#video-bg').removeAttribute("hidden")
+        }
+        function closeModalVideo(){
+            document.querySelector('#modal-video').classList.remove("modal-bot");
+            document.querySelector('#video-bg').setAttribute("hidden", "true")
+        }
+        function openModalDepublie() {
+            document.querySelector('#modal-depublie').classList.add("modal-bot");
+            document.querySelector('#depublie-bg').removeAttribute("hidden")
+        }
+        function closeModalDepublie(){
+            document.querySelector('#modal-depublie').classList.remove("modal-bot");
+            document.querySelector('#depublie-bg').setAttribute("hidden", "true")
+        }
+    </script>
+    <script>hljs.highlightAll();</script>
 </section>
+<button 
+    id="visibility" 
+    class="absolute bottom-5 right-5 p-2 rounded-full bg-lightPrimary"
+    th:hx-get="'/cours/admin/visionner/api?ordre=' + ${ordre} + '&cours=' + ${idCours}"
+    th:hx-push-url="'/cours/admin/visionner?ordre=' + ${ordre} + '&cours=' + ${idCours}"
+    hx-target="#editer-cours"
+    hx-select="#visionneuse"
+    hx-select-oob="#visibility"
+    hx-swap="outerHTML"
+    >
+    <th:block th:replace="~{svg/icons/visibility :: svg('25', '25')}"></th:block>
+</button>

@@ -17,27 +17,32 @@ public class NavBarService {
      * @return la liste des liens de la navbar en fonction du role de l'utilisateur
      */
     public NavLinks[] getLinks(AuthenticationInfos userInfos) {
-        if(userInfos.isAdministrateur() || userInfos.isFormateur()){
+        if(userInfos.isAdministrateur()){
             return new NavLinks[]{
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
                                     NavLink.builder()
-                                            .iconSource("home.svg")
+                                            .iconSource("svg/icons/home")
                                             .url("home")
                                             .libelle("Accueil")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("school.svg")
+                                            .iconSource("svg/icons/school")
                                             .url("cours/admin")
-                                            .libelle("Ressources")
+                                            .libelle("Mes cours")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("conversation.svg")
-                                            .url("conversation/admin")
+                                            .iconSource("svg/icons/admin")
+                                            .url("admin")
+                                            .libelle("Administration")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/conversation")
+                                            .url("admin/conversation")
                                             .libelle("Mes messages")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("forum.svg")
+                                            .iconSource("svg/icons/forum")
                                             .url("forum")
                                             .libelle("Forum")
                                             .build(),
@@ -47,32 +52,59 @@ public class NavBarService {
                             .navLinks(new NavLink[]{})
                             .build(),
             };
+        } else if (userInfos.isFormateur()){
+            return new NavLinks[]{
+                    NavLinks.builder()
+                            .navLinks(new NavLink[]{
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/home")
+                                            .url("home")
+                                            .libelle("Accueil")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/school")
+                                            .url("cours/admin")
+                                            .libelle("Mes cours")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/conversation")
+                                            .url("conversation/admin")
+                                            .libelle("Mes messages")
+                                            .build(),
+                                    NavLink.builder()
+                                            .iconSource("svg/icons/forum")
+                                            .url("forum")
+                                            .libelle("Forum")
+                                            .build(),
+                            })
+                            .build(),
+            };
         } else if(userInfos.isStagiaire()) {
             return new NavLinks[]{
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
                                     NavLink.builder()
-                                            .iconSource("home.svg")
+                                            .iconSource("svg/icons/home")
                                             .url("home")
                                             .libelle("Accueil")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("school.svg")
+                                            .iconSource("svg/icons/school")
                                             .url("cours")
                                             .libelle("Mes cours")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("calendar.svg")
+                                            .iconSource("svg/icons/calendar")
                                             .url("agenda")
                                             .libelle("Mon agenda")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("conversation.svg")
+                                            .iconSource("svg/icons/conversation")
                                             .url("conversation/stagiaire")
                                             .libelle("Mon suivi")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("forum.svg")
+                                            .iconSource("svg/icons/forum")
                                             .url("forum")
                                             .libelle("Forum")
                                             .build(),
@@ -81,7 +113,7 @@ public class NavBarService {
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
                                     NavLink.builder()
-                                            .iconSource("profil.svg")
+                                            .iconSource("svg/icons/profil")
                                             .url("profil")
                                             .libelle("Profil")
                                             .build(),
@@ -93,17 +125,17 @@ public class NavBarService {
                     NavLinks.builder()
                             .navLinks(new NavLink[]{
                                     NavLink.builder()
-                                            .iconSource("home.svg")
+                                            .iconSource("svg/icons/home")
                                             .url("home")
                                             .libelle("Accueil")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("school.svg")
+                                            .iconSource("svg/icons/school")
                                             .url("cours")
                                             .libelle("Cours disponibles")
                                             .build(),
                                     NavLink.builder()
-                                            .iconSource("forum.svg")
+                                            .iconSource("svg/icons/forum")
                                             .url("forum")
                                             .libelle("Consulter le forum")
                                             .build(),

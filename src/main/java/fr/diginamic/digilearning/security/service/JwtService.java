@@ -157,4 +157,8 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    public Boolean extractBanned(Claims claims) {
+        return claims.get("banned", Boolean.class);
+    }
 }

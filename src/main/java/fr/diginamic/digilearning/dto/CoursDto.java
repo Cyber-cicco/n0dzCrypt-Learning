@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.dto;
 
+import fr.diginamic.digilearning.entities.Cours;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @ToString
-public class CoursDto {
+public class CoursDto implements Comparable<CoursDto> {
     private Long id;
     private String titre;
     private Integer difficulte;
@@ -26,4 +27,12 @@ public class CoursDto {
     private Boolean liked;
     private LocalDateTime datePrevue;
     private String titreSousModule;
+    @Override
+    public int compareTo(CoursDto o) {
+        int comp = ordre.compareTo(o.getOrdre());
+        if(comp == 0){
+            return titre.compareTo(o.getTitre());
+        }
+        return comp;
+    }
 }

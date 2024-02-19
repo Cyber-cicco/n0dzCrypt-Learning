@@ -1,0 +1,25 @@
+<section class="flex flex-col w-full h-full">
+    <form
+        id="form-responsable"
+        class="flex flex-col gap-2"
+        >
+        <div class="flex gap-2 items-center">
+            <th:block th:replace="svg/icons/search :: svg('30', '30')"></th:block>
+            <label for="responsables-choice">Rechercher</label>
+        </div>
+        <input minlength="2" autocomplete="off" class="rounded-sm p-2 text-black w-full" list="responsables-choices" name="module" id="responsables-choice">
+        <datalist style="overflow:hidden" id="responsables-choices">
+            <th:block th:each="candidat, iterStat : ${candidats}">
+                <option th:data-value="${candidat.getId()}" th:value="${candidat.getFullName()}"></option>
+            </th:block>
+        </datalist>
+        <button 
+            class="bg-primary w-full p-2 text-white disabled:brightness-75 rounded-md hover:cursor-pointer hover:brightness-150"
+            type="submit"
+            >Ajouter</button>
+    </form>
+    <div class="flex w-full p-5">
+        <th:block th:replace="pages/admin/apprenants/fragments/respontable :: table()"></th:block>
+    </div>
+</section>
+<script type="module" th:insert="scripts/add-responsable.js"></script>

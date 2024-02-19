@@ -1,5 +1,6 @@
 package fr.diginamic.digilearning.entities;
 
+import fr.diginamic.digilearning.entities.enums.TypeCoursElement;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,13 +20,14 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "dl_sous_module")
-public class SousModule {
+public class SousModule implements Comparable<SousModule>, CoursElement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titre;
     private String photo;
+    private Integer ordre;
     @OneToMany(mappedBy = "sousModule")
     private List<Cours> cours = new ArrayList<>();
     @ManyToMany
@@ -33,6 +35,32 @@ public class SousModule {
             inverseJoinColumns = @JoinColumn(name = "id_module", referencedColumnName = "id"),
             joinColumns = @JoinColumn(name = "id_smodule", referencedColumnName = "id")
     )
-    private List<Module> module = new ArrayList<>();
+    @Builder.Default
+    private List<Module> modules = new ArrayList<>();
 
+    @Override
+    public int compareTo(SousModule o) {
+        if(o.ordre == null){
+            return titre.compareTo(o.titre);
+        }
+        if(o.ordre > ordre) return -1;
+        if(o.ordre.equals(ordre)) {
+            return titre.compareTo(o.titre);
+        }
+        return 1;
+    }
+
+    public List<Cours> getCours(){
+        return cours.stream().sorted().toList();
+    }
+
+    @Override
+    public String getNom() {
+        return titre;
+    }
+
+    @Override
+    public TypeCoursElement getTypeElement() {
+        return TypeCoursElement.SOUS_MODULE;
+    }
 }

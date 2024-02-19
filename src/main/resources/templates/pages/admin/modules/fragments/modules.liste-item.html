@@ -1,0 +1,24 @@
+<th:block th:fragment="item()">
+    <div 
+        data-modules
+        th:data-id="${module.getId()}"
+        th:data-libelle="${module.getLibelle()}"
+        th:data-photo="${module.getPhoto()}"
+        >
+        <div data-module>
+            <div 
+                th:id="'module-' + ${module.getId()}"
+                th:hx-get="'/admin/modules/details?id=' + ${module.getId()}"
+                hx-target="#admin-card"
+                th:hx-push-url="'/admin/modules?id=' + ${module.getId()} + '&type=1'"
+                class="flex items-center w-full gap-2 hover:cursor-pointer"
+                >
+                <div class="w-[15px]">
+                    <th:block th:replace="svg/icons/module :: svg('15', '15')"></th:block>
+                </div>
+                <div class="truncate" th:text="${module.getLibelle()}"></div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<div id="new-module"></div>

@@ -1,0 +1,44 @@
+<script>
+    function changeToModifier() {
+
+        let titreModif = document.querySelector(`#titre-modif`)
+        let titre = document.querySelector(`#titre`)
+
+        if(titreModif.classList.contains('hidden')) {
+            titreModif.classList.remove('hidden')
+            titre.classList.add('hidden')
+            titreModif.focus();
+            return
+        }
+
+        titreModif.classList.add('hidden')
+        titre.classList.remove('hidden')
+    }
+</script>
+<div class="flex w-full items-center p-5" id="wrapper-titre">
+    <div class="flex w-full justify-center items-center gap-2" id="titre">
+        <h1 
+            class="text-primary font-poppins text-5xl"
+            th:text="${cours.getTitre()}"
+            >
+        </h1>
+        <span class="px-2">
+            <img 
+            src="/img/icons/editer.svg"
+            width="30"
+            height="30"
+            onclick="changeToModifier()"
+            >
+        </span>
+    </div>
+    <form 
+        id="titre-modif"
+        class="flex flex-col w-full items-center justify-center hidden"
+        th:hx-patch="'/cours/admin/titre?id=' + ${cours.getId()}"
+        hx-target="#wrapper-titre"    
+        hx-swap="outerHTML"
+        >
+        <input name="message" class="text-primary text-center font-poppins text-5xl" type="text" th:value="${cours.getTitre()}">
+        <span id="error"></span>
+    </form>
+</div>  

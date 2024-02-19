@@ -1,6 +1,11 @@
 package fr.diginamic.digilearning.security.config;
 
+import lombok.RequiredArgsConstructor;
+import org.apache.coyote.http2.Http2Protocol;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -24,7 +29,13 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    @Value("${prod.url}")
+    private String produrl;
+    private final CustomLogoutHandler customLogoutHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -41,10 +52,6 @@ public class WebSecurityConfig {
                         .requestMatchers(mvc.pattern("styles/**")).permitAll()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
-
-                        httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(customAuthenticationEntryPoint)
-                )
                 .csrf(AbstractHttpConfigurer::disable
                                 )
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
@@ -53,14 +60,18 @@ public class WebSecurityConfig {
                 .headers(
                         headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
+                .logout(logoutConfigurer ->
+                       logoutConfigurer.addLogoutHandler(customLogoutHandler)
+                               .logoutUrl("/logout")
+                               .logoutSuccessHandler(customLogoutSuccessHandler)
+                        )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        //.apply(AadWebApplicationHttpSecurityConfigurer.aadWebApplication());
         return http.build();
     }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost", "//localhost"));
+        configuration.setAllowedOrigins(List.of(produrl, "http://localhost", "//localhost"));
         configuration.setAllowedMethods(List.of("GET", "POST", "OPTIONS", "PUT", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-XSRF-TOKEN"));
         configuration.setAllowCredentials(true);
@@ -74,6 +85,13 @@ public class WebSecurityConfig {
     @Bean
     public MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector){
         return new MvcRequestMatcher.Builder(introspector);
+    }
+
+    @Bean
+    public ConfigurableServletWebServerFactory tomcatCustomizer() {
+        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+        factory.addConnectorCustomizers(connector -> connector.addUpgradeProtocol(new Http2Protocol()));
+        return factory;
     }
 
 }
