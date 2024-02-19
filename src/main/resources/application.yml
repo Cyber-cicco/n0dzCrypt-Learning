@@ -38,6 +38,9 @@ logging:
 server:
     http2:
         enabled: true
+prod:
+    url: '@prod.url@'
+    photo : '@prod.photo@'
 ---
 spring:
     profiles:
@@ -81,6 +84,3 @@ logging:
 server:
     http2:
         enabled: true
-prod:
-    url: '@prod.url@'
-    photo : '@prod.photo@'

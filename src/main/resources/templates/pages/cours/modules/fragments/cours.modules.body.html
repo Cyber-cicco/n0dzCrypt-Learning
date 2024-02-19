@@ -11,9 +11,11 @@
             hx-swap="outerHTML transition:true"
             hx-preserve="#hamb"
             >
-            <div class="flex min-h-[400px] h-[500px] min-w-full flex-col p-5 gap-2">
+            <div class="flex min-h-[400px] max-h-[500px] min-w-full justify-center flex-col p-5 gap-2">
                 <div class="text-center text-lg text-primary font-poppins" th:text="${m.getLibelle()}"></div>
-                <img class="" width="500" th:src="'/photo/module?name=' + ${m.getPhoto()}">
+                <div class="max-h-[300px] overflow-hidden ">
+                    <img class="max-h-[100%] overflow-hidden" height="300" th:src="'/photo/module?name=' + ${m.getPhoto()}">
+                </div>
                 <div class="grow"></div>
                 <th:block th:replace="~{components/progress-bar :: progress(${m.getPourcentageCompletion()})}"></th:block>
             </div>

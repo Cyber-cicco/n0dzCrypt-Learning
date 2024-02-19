@@ -30,15 +30,17 @@ import java.util.Objects;
 @Service
 public class PhotoService {
 
-    public static final String DEFAULT_DOCUMENT_DIRECTORY = System.getProperty("user.dir") + "/ressources/";
-
     @Getter
     private final String documentDir;
 
     public PhotoService(
             Environment environment
     ) {
-        documentDir = environment.getProperty("prod.photo", DEFAULT_DOCUMENT_DIRECTORY);
+        if(environment.getProperty("spring.profiles.active", "dev").equals("prod")){
+            documentDir = environment.getProperty("prod.photo", System.getProperty("user.dir") + "/ressources/");
+        } else {
+            documentDir = System.getProperty("user.dir") + "/ressources/";
+        }
     }
 
     public String uploadPhoto(MultipartFile file, String directoryName, AuthenticationInfos userInfos) throws IOException {
