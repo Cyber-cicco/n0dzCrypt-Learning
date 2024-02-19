@@ -3,7 +3,7 @@
         <ul class="flex justify-around w-full h-full">
             <li class="flex hover:bg-greyDeep items-center w-full h-full hover:cursor-pointer justify-center">
                 <a 
-                    class="w-full text-center"
+                    class="flex w-full h-full justify-center items-center text-center"
                     th:href="'/admin/apprenants?date=' + ${currDate}"
                     th:hx-get="'/admin/apprenants/api?date=' + ${currDate}"
                     th:hx-push-url="'/admin/apprenants?date=' + ${currDate}"
@@ -13,7 +13,7 @@
             </li>
             <li class="flex w-full bg-grey items-center hover:bg-greyDeep h-full hover:cursor-pointer justify-center">
                 <a 
-                    class="w-full text-center"
+                    class="flex w-full h-full justify-center items-center text-center"
                     href="/admin/modules"
                     hx-get="/admin/modules/api"
                     hx-push-url="/admin/modules"
@@ -23,7 +23,7 @@
             </li>
             <li class="flex w-full hover:bg-greyDeep items-center h-full hover:cursor-pointer justify-center">
                 <a 
-                    class="w-full text-center"
+                    class="flex w-full h-full justify-center items-center text-center"
                     hx-get="/admin/cours-admin/api"
                     hx-push-url="/admin/cours-admin"
                     hx-target="#insert"
