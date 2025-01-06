@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.service;
 
-import fr.diginamic.digilearning.dto.*;
+import fr.diginamic.digilearning.DTO.*;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.CoursSession;
 import fr.diginamic.digilearning.entities.FlagCours;

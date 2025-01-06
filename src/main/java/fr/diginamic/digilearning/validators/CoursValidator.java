@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.validators;
 
-import fr.diginamic.digilearning.dto.CreationCoursDto;
+import fr.diginamic.digilearning.DTO.CreationCoursDto;
 import fr.diginamic.digilearning.service.types.CoursCreationDiagnostics;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import lombok.RequiredArgsConstructor;

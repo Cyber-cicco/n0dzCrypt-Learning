@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.validators;
 
-import fr.diginamic.digilearning.dto.PostFilDto;
+import fr.diginamic.digilearning.DTO.PostFilDto;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import org.springframework.stereotype.Service;
 

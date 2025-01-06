@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.service;
 
-import fr.diginamic.digilearning.dto.MessageDto;
+import fr.diginamic.digilearning.DTO.MessageDto;
 import fr.diginamic.digilearning.entities.Conversation;
 import fr.diginamic.digilearning.entities.Message;
 import fr.diginamic.digilearning.entities.Utilisateur;

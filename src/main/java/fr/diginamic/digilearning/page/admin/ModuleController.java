@@ -1,10 +1,9 @@
 package fr.diginamic.digilearning.page.admin;
 
-import fr.diginamic.digilearning.dto.MessageDto;
+import fr.diginamic.digilearning.DTO.MessageDto;
 import fr.diginamic.digilearning.entities.Formation;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.entities.SousModule;
-import fr.diginamic.digilearning.entities.enums.TypeCoursElement;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.DiagnoticHandler;
 import fr.diginamic.digilearning.page.Routes;

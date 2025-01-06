@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.service;
 
-import fr.diginamic.digilearning.dto.CoursDto;
+import fr.diginamic.digilearning.DTO.CoursDto;
 import fr.diginamic.digilearning.entities.Utilisateur;
 import fr.diginamic.digilearning.exception.FunctionalException;
 import fr.diginamic.digilearning.repository.CoursRepository;
@@ -8,7 +8,6 @@ import fr.diginamic.digilearning.utils.reflection.SqlResultMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service

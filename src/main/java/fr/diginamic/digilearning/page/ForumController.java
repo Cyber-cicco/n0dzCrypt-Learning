@@ -1,8 +1,8 @@
 package fr.diginamic.digilearning.page;
 
 
-import fr.diginamic.digilearning.dto.MessageDto;
-import fr.diginamic.digilearning.dto.PostFilDto;
+import fr.diginamic.digilearning.DTO.MessageDto;
+import fr.diginamic.digilearning.DTO.PostFilDto;
 import fr.diginamic.digilearning.page.irrigator.ForumIrrigator;
 import fr.diginamic.digilearning.service.ForumService;
 import fr.diginamic.digilearning.utils.hx.HX;

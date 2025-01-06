@@ -1,8 +1,8 @@
 package fr.diginamic.digilearning.service;
 
-import fr.diginamic.digilearning.dto.MessageDto;
-import fr.diginamic.digilearning.dto.MessageForumDto;
-import fr.diginamic.digilearning.dto.PostFilDto;
+import fr.diginamic.digilearning.DTO.MessageDto;
+import fr.diginamic.digilearning.DTO.MessageForumDto;
+import fr.diginamic.digilearning.DTO.PostFilDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.exception.UnauthorizedException;

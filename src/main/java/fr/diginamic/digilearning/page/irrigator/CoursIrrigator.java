@@ -1,7 +1,7 @@
 package fr.diginamic.digilearning.page.irrigator;
 
-import fr.diginamic.digilearning.dto.CoursDto;
-import fr.diginamic.digilearning.dto.CreationCoursDto;
+import fr.diginamic.digilearning.DTO.CoursDto;
+import fr.diginamic.digilearning.DTO.CreationCoursDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.Module;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
@@ -14,7 +14,6 @@ import fr.diginamic.digilearning.repository.ModuleRepository;
 import fr.diginamic.digilearning.repository.SousModuleRepository;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 

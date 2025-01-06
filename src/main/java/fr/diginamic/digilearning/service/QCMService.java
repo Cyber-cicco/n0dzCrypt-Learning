@@ -1,9 +1,9 @@
 package fr.diginamic.digilearning.service;
 
-import fr.diginamic.digilearning.dto.QCMChoixDto;
-import fr.diginamic.digilearning.dto.QCMDto;
-import fr.diginamic.digilearning.dto.QCMQuestionDto;
-import fr.diginamic.digilearning.dto.ReponseQCMDto;
+import fr.diginamic.digilearning.DTO.QCMChoixDto;
+import fr.diginamic.digilearning.DTO.QCMDto;
+import fr.diginamic.digilearning.DTO.QCMQuestionDto;
+import fr.diginamic.digilearning.DTO.ReponseQCMDto;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;
 import fr.diginamic.digilearning.repository.*;

@@ -82,5 +82,6 @@ logging:
         org.hibernate.type.descriptor: debug
         org.hibernate.sql: trace
 server:
+    port: 8090
     http2:
         enabled: true

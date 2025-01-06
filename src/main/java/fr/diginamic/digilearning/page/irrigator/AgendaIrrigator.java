@@ -1,8 +1,7 @@
 package fr.diginamic.digilearning.page.irrigator;
 
-import fr.diginamic.digilearning.dto.CoursAdminDto;
-import fr.diginamic.digilearning.dto.CoursDto;
-import fr.diginamic.digilearning.entities.Cours;
+import fr.diginamic.digilearning.DTO.CoursAdminDto;
+import fr.diginamic.digilearning.DTO.CoursDto;
 import fr.diginamic.digilearning.page.Routes;
 import fr.diginamic.digilearning.repository.CoursRepository;
 import fr.diginamic.digilearning.service.AgendaService;
@@ -29,7 +28,7 @@ public class AgendaIrrigator {
 
     /***
      * Irrigue le model avec les informations nécessaires à la construction de la page de l'agenda et de ses fragments
-     * Donne les liens de la navbar en fonction.
+     * Donne les liens de la navbar en fonction du rôle de l'utilisateur.
      * Donne les cours de l'utilisateur triées pour sa liste de cours
      * Irrigue la partie spécifique au calendrier
      * @param userInfos les informations d'authentification de l'utilisateur

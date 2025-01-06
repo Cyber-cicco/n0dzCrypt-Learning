@@ -20,3 +20,6 @@ document.querySelectorAll("[data-rotato-container]").forEach(el => {
     rotateButton.addEventListener("click", openMenu)
     rotateButton.addEventListener("keypress", (e) => {if(e.key === "Enter") openMenu(e)})
 })
+class CACA {
+
+}

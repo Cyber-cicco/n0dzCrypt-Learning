@@ -1,6 +1,5 @@
 package fr.diginamic.digilearning.validators;
 
-import fr.diginamic.digilearning.dto.MessageDto;
 import fr.diginamic.digilearning.entities.Chapitre;
 import fr.diginamic.digilearning.entities.QCMChoix;
 import fr.diginamic.digilearning.entities.QCMQuestion;
