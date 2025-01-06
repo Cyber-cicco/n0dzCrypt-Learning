@@ -19,9 +19,9 @@ services:
             - db
     
     app:
-        image: ghcr.io/teckenesn/digi-learning:master 
+        image: digilearning
         ports:
-            - 8080:8080
+            - 8090:8090
         environment:
             SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/sid
             SPRING_DATASOURCE_USERNAME: root

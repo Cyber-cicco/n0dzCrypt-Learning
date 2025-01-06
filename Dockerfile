@@ -14,6 +14,6 @@ RUN mvn -B -f pom.xml clean package -DskipTests
 FROM azul/zulu-openjdk-alpine:17-latest
 WORKDIR /digi-learning
 COPY --from=build /workspace/target/*.jar app.jar
-EXPOSE 8080
+EXPOSE 8090
 ENTRYPOINT ["java","-jar","app.jar"]
 
