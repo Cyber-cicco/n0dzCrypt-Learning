@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.validators;
 
-import fr.diginamic.digilearning.dto.MessageDto;
+import fr.diginamic.digilearning.DTO.MessageDto;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

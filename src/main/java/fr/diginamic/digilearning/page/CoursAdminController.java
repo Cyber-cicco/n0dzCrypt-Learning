@@ -1,11 +1,10 @@
 package fr.diginamic.digilearning.page;
 
-import fr.diginamic.digilearning.dto.*;
+import fr.diginamic.digilearning.DTO.*;
 import fr.diginamic.digilearning.entities.Chapitre;
 import fr.diginamic.digilearning.entities.Cours;
 import fr.diginamic.digilearning.entities.QCMChoix;
 import fr.diginamic.digilearning.entities.QCMQuestion;
-import fr.diginamic.digilearning.entities.enums.StatusPublication;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.exception.BrokenRuleException;
 import fr.diginamic.digilearning.exception.EntityNotFoundException;

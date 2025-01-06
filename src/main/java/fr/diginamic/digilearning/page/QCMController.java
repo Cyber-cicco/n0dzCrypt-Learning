@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.page;
 
-import fr.diginamic.digilearning.dto.ReponseQCMDto;
+import fr.diginamic.digilearning.DTO.ReponseQCMDto;
 import fr.diginamic.digilearning.entities.QCMPasse;
 import fr.diginamic.digilearning.page.irrigator.CoursIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;

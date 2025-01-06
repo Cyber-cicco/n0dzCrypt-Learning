@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 public class SqlResultMapper {
 
-    public static <T> T mapToObject(Class<T> _class, String results[]) {
+    public static <T> T mapToObject(Class<T> _class, String[] results) {
         try{
             Field[] fields = _class.getDeclaredFields();
             T newInstance = _class.newInstance();

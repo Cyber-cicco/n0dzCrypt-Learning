@@ -1,12 +1,11 @@
 package fr.diginamic.digilearning.page;
 
-import fr.diginamic.digilearning.dto.CoursDto;
+import fr.diginamic.digilearning.DTO.CoursDto;
 import fr.diginamic.digilearning.page.irrigator.AgendaIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.service.AgendaService;
 import fr.diginamic.digilearning.security.AuthenticationInfos;
 import fr.diginamic.digilearning.security.service.AuthenticationService;
-import fr.diginamic.digilearning.utils.hx.HX;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -52,7 +51,7 @@ public class AgendaController {
      * @return l'agenda
      * */
     @GetMapping
-    public String getAgenda( Model model){
+    public String getAgenda(Model model){
         AuthenticationInfos userInfos = authenticationService.getAuthInfos();
         agendaIrrigator.irrigateBaseModel(userInfos, model, LocalDate.now());
         layoutIrrigator.irrigateBaseLayout(model, userInfos, Routes.ADR_AGENDA_BODY);

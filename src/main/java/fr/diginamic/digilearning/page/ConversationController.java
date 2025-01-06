@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.page;
 
-import fr.diginamic.digilearning.dto.MessageDto;
+import fr.diginamic.digilearning.DTO.MessageDto;
 import fr.diginamic.digilearning.page.irrigator.ConversationIrrigator;
 import fr.diginamic.digilearning.page.irrigator.LayoutIrrigator;
 import fr.diginamic.digilearning.security.AuthenticationInfos;

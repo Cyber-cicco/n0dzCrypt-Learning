@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.service;
 
-import fr.diginamic.digilearning.dto.*;
+import fr.diginamic.digilearning.DTO.*;
 import fr.diginamic.digilearning.entities.*;
 import fr.diginamic.digilearning.entities.enums.StatusChapitre;
 import fr.diginamic.digilearning.entities.enums.StatusPublication;

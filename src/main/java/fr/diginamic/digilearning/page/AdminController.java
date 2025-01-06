@@ -1,6 +1,6 @@
 package fr.diginamic.digilearning.page;
 
-import fr.diginamic.digilearning.dto.CoursAdminDto;
+import fr.diginamic.digilearning.DTO.CoursAdminDto;
 import fr.diginamic.digilearning.entities.Session;
 import fr.diginamic.digilearning.entities.enums.TypeRole;
 import fr.diginamic.digilearning.page.irrigator.AdminIrrigator;

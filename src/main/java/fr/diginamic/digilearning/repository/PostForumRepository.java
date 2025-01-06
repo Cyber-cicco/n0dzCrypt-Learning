@@ -1,13 +1,10 @@
 package fr.diginamic.digilearning.repository;
 
-import fr.diginamic.digilearning.dto.MessageForumDto;
-import jakarta.persistence.SqlResultSetMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import fr.diginamic.digilearning.entities.PostForum;
 import org.springframework.data.jpa.repository.Query;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 public interface PostForumRepository extends JpaRepository<PostForum, Long>  {

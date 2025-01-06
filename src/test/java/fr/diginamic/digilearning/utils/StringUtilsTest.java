@@ -2,8 +2,6 @@ package fr.diginamic.digilearning.utils;
 
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Path;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+    db:
+        image: mariadb:latest
+        restart: always
+        environment:
+            MARIADB_ROOT_PASSWORD: root
+        ports:
+            - 3306:3306
+        volumes:
+            - ./init-db:/docker-entrypoint-initdb.d
+
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8083:80
+        depends_on:
+            - db
+    
+    app:
+        image: ghcr.io/teckenesn/digi-learning:master 
+        ports:
+            - 8080:8080
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/sid
+            SPRING_DATASOURCE_USERNAME: root
+            SPRING_DATASOURCE_PASSWORD: root
+        volumes:
+            - ./ressources:/digi-learning/ressources
