@@ -14,6 +14,17 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('Code Coverage') {
+            steps {
+                sh 'mvn verify'
+            }
+        }
+        stage('Archive Coverage Report') {
+            steps {
+                // Archive the JaCoCo coverage report
+                archiveArtifacts artifacts: 'target/site/jacoco/*.html', allowEmptyArchive: true
+            }
+        }
         stage('Build') {
             steps {
                 sh 'mvn clean package'
@@ -33,7 +44,7 @@ pipeline {
         //TODO: faire en sorte de créer une pipeline qui permet d'attendre que le conteneur soit build avant de reup pour éviter un délai entre les deux déploiements.
         stage('Deploy') {
             steps {
-                sh 'mvn spring-boot:start'
+                echo 'deploying'
             }
         }
     }
