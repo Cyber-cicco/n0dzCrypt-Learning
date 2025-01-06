@@ -24,7 +24,7 @@ pipeline {
                  script {
                      def mvnHome = tool 'Maven 3.9.9' 
                      withSonarQubeEnv('SonarQ') {
-                         sh "${mvnHome}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=11517c81d85db44889d0c79cc61284350b -Dsonar.projectName='Digilearning'"
+                         sh "${mvnHome}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey='Digilearning' -Dsonar.projectName='Digilearning'"
                      }
                  }
              }
