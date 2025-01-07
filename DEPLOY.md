@@ -32,6 +32,10 @@ dans le script présent dans le Jenkinsfile pour récupérer des données à pro
 
 ![Image](./deploy/sq_1.png)
 
+On ajoute également une quality gate que l'on associe au projet pour s'assurer que de renvoyer une erreur si le projet est dans un état non satisfaisant en terme de qualité de code.
+
+![Image](./deploy/sq_2.png)
+
 
 ## 3. Mise en place du build.
 
@@ -122,12 +126,22 @@ Enfin, il fallait simplement lancer les tests via maven dans la pipeline en ajou
         }
 ```
 
-Pour le build, il suffisait simplement d'ajouter ce stage à la pipeline:
+Pour le build, il suffit d'ajouter ce stage à la pipeline:
 
 ```groovy
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests'
+            }
+        }
+```
+
+Et l'on peut également, comme pour le rapport de JaCoCo, récupérer un artifact du build via cette commande : 
+
+```groovy
+        stage('Archive Build') {
+            steps {
+                archiveArtifacts artifacts: 'target/digi-learning-0.0.1-SNAPSHOT.jar', allowEmptyArchive: true
             }
         }
 ```
@@ -208,14 +222,15 @@ Et voici le résultat:
 
 ### 3.6 Déploiement
 
-Ce n'est pas directement la pipeline qui s'occupe du déploiement : c'est le serveur vers lequel le repo va être push qui va déployer le serveur. Pour cela, on peut simplement ajouter ce script à la pipeline:
-
+Pour déployer, on va copier le Jar via ssh vers la machine remote.
 
 ```groovy
         stage('Deploy') {
             steps {
-                git 'remote add destination git@10.99.215.34:/PC/n0dzCrypt-Learning'
-                git 'push -u destination master'
+                sshagent(['SSH-1']) {
+                    sh 'scp target/digi-learning-0.0.1-SNAPSHOT.jar hijokaidan@10.99.215.34:/home/hijokaidan/sites/digi-learning/'
+                    sh 'ssh hijokaidan@10.99.215.34 ./home/hijokaidan/sites/digi-learning/setup.sh'
+                }
             }
         }
 ```
@@ -256,7 +271,12 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh 'mvn clean package -Dskiptests'
+            }
+        }
+        stage('Archive Build') {
+            steps {
+                archiveArtifacts artifacts: 'target/digi-learning-0.0.1-SNAPSHOT.jar', allowEmptyArchive: true
             }
         }
         stage('SonarQube Analysis') {
@@ -269,12 +289,12 @@ pipeline {
                  }
              }
         }
-        //TODO: faire en sorte que ce stage ne se déclenche que si les deux dernière étapes ont fonctionnées.
-        //TODO: faire en sorte de créer une pipeline qui permet d'attendre que le conteneur soit build avant de reup pour éviter un délai entre les deux déploiements.
         stage('Deploy') {
             steps {
-                git 'remote add destination git@10.99.215.34:/home/hijokaidan/PC/Digilearning/n0dzCrypt-Learning.git'
-                git 'push -u destination master'
+                sshagent(['SSH-1']) {
+                    sh 'scp target/digi-learning-0.0.1-SNAPSHOT.jar hijokaidan@10.99.215.34:/home/hijokaidan/sites/digi-learning/'
+                    sh 'ssh hijokaidan@10.99.215.34 ./home/hijokaidan/sites/digi-learning/setup.sh'
+                }
             }
         }
     }
@@ -283,44 +303,48 @@ pipeline {
 
 ## 4. Configuration du serveur de déploiement.
 
-Le serveur de déploiement doit être un Linux possédant git et ayant configuré git pour en faire un serveur.
+Nous avons tester deux solutions pour déployer notre code sur le serveur.
 
-Pour cela, on commence, par générer un couple de clés privée / publique.
+La première copie le résultat du build via SSH.
 
-Ensuite, sur le serveur , il faut générer un utilisateur nommé git, ajouter la clé publique que l'on vient de générer dans le fichier "authorized_keys" de son dossier .ssh, et ajouter le clé privée dans Jenkins. Pour cela, on installe le plugin "Publish over SSH", et on ajoute la clé privée dans la configuration de Jenkins.
+La seconde, plus expérimentale, utilise les fonctionalité de git pour copier le code source sur le serveur et utiliser les git hooks pour build le code source via Docker
 
+### 4.1 Avec SSH 
 
-Il faut ensuite configurer git pour en faire un serveur.
+Il faut tout d'abord configuré un serveur SSH sur le serveur de destination.
 
-Une fois cela fait, il faut configurer un hook pour lancer un script de déploiement chaque fois qu'un push est reçu sur la branche main.
+Pour cela, on utilise `ssh-keygen` pour créer une clé privé et publique.
 
-L'idée est donc de créer un DockerFile et un docker-compose.yml mettant en place le stack nécessaire au déploiement de l'application, comme ceci : 
+On ajoute ensuite la clé privée dans les credentials de Jenkins.
 
-Le DockerFile:
+Enfin, on met la clé publique dans les "authorized_keys" de l'utilisateur avec lequel on souhaite se connecter au serveur.
+
+Et en ayant un DockerFile tel que celui-ci dans le dossier `/home/hijokaidan/sites/digilearning/` sur le serveur : 
 
 ```dockerfile
-#
-# Build
-#
-FROM maven:3-eclipse-temurin-17-alpine AS build
-RUN mkdir -p /workspace
-WORKDIR /workspace
-COPY pom.xml /workspace
-COPY src /workspace/src
-RUN mvn -B -f pom.xml clean package -DskipTests
-
 #
 # Package
 #
 FROM azul/zulu-openjdk-alpine:17-latest
 WORKDIR /digi-learning
-COPY --from=build /workspace/target/*.jar app.jar
+COPY ./*.jar app.jar
 EXPOSE 8090
 ENTRYPOINT ["java","-jar","app.jar"]
-
 ```
 
-Le docker-compose.yml:
+on peut, avec ce script nommé /home/hijokaidan/sites/digi-learning/setup.sh exécutable sur le serveur : 
+
+```setup.sh
+#!/bin/bash
+
+docker compose down
+docker stop digilearning || true 
+docker rm digilearning || true
+docker build -t digilearning .
+docker compose up
+```
+
+Voici le contenu du docker-compose.yml:
 
 ```yaml
 services:
@@ -354,9 +378,48 @@ services:
             - ./ressources:/digi-learning/ressources
 ```
 
-Ce docker-compose sera trigger par le web-hook présent dans le dossier .git du repository.
 
-Pour cela, on va créer un fichier .sh exécutable au chemin suivant `/home/hijokaidan/PC/Digilearning/.git/hooks/post-receive`
+On peut ainsi lancer le groupe de docker (base de données, phpmyadmin, application) permettant de déployer l'application.
+
+### 4.2 Avec Git
+
+L'idée était la suivante: on ne va pas build l'artifact sur jenkins et l'envoyer au serveur, on va simplement envoyer le code source au serveur, et build le code une une fois sur le serveur.
+
+Concrètement, cela n'a pas grand intérêt de procéder de cette façon, mais j'avais envie de jouer avec les hooks de git.
+
+Le serveur de déploiement doit être un Linux possédant git et ayant configuré git pour en faire un serveur.
+
+Pour cela, on commence, par générer un couple de clés privée / publique.
+
+Ensuite, sur le serveur , il faut générer un utilisateur nommé git, ajouter la clé publique que l'on vient de générer dans le fichier "authorized_keys" de son dossier .ssh, et ajouter le clé privée dans Jenkins. Pour cela, on utilise le même plugin SSH Agent.
+
+Une fois cela fait, il faut configurer un hook pour lancer un script de déploiement chaque fois qu'un push est reçu sur la branche main.
+
+L'idée est donc de créer un DockerFile et un docker-compose.yml mettant en place le stack nécessaire au déploiement de l'application, comme ceci : 
+
+```dockerfile
+#
+# Build
+#
+FROM maven:3-eclipse-temurin-17-alpine AS build
+RUN mkdir -p /workspace
+WORKDIR /workspace
+COPY pom.xml /workspace
+COPY src /workspace/src
+RUN mvn -B -f pom.xml clean package -DskipTests
+
+#
+# Package
+#
+FROM azul/zulu-openjdk-alpine:17-latest
+WORKDIR /digi-learning
+COPY --from=build /workspace/target/*.jar app.jar
+EXPOSE 8090
+ENTRYPOINT ["java","-jar","app.jar"]
+
+```
+
+Pour cela, on va créer un fichier bash exécutable au chemin suivant `/home/hijokaidan/PC/Digilearning/.git/hooks/post-receive`
 
 ```bash
 #!/bin/bash
@@ -392,3 +455,19 @@ Ce script s'active sur chaque push reçu, et effectue les actions suivantes :
  * Relance le stack selon le docker-compose
 
 Et permet donc de lancer la nouvelle application en production
+
+
+### 5. Configuration du déploiement continu (non terminé).
+
+Nous sommes actuellement en possession d'un VPS à l'adresse abel-ciccoli.fr / leeveen.com
+
+Pour déployer en continu sur ce serveur, il faudrait:
+
+ * Installer jenkins sur le serveur via docker.
+ * Refaire toute la configuration
+ * Configurer le reverse proxy pour que jenkins.leeveen.com redirige vers Jenkins
+ * Configurer le reverse proxy pour que learning.leeveen.com redirige vers le docker du nom de digilearning.
+ * Configurer des github actions sur le repo pour envoyer le job Jenkins
+
+L'idée est d'utiliser les github actions pour trigger les jobs Jenkins à chaque fois que l'on push sur main.
+
