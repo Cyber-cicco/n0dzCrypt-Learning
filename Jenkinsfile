@@ -47,7 +47,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sshagent(['SSH-1']) {
+                sshagent(['SSH']) {
                     sh 'scp target/digi-learning-0.0.1-SNAPSHOT.jar hijokaidan@10.99.215.34:/home/hijokaidan/sites/digi-learning/'
                     sh 'ssh hijokaidan@10.99.215.34 ./home/hijokaidan/sites/digi-learning/setup.sh'
                 }
