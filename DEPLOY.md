@@ -381,6 +381,8 @@ services:
 
 On peut ainsi lancer le groupe de docker (base de données, phpmyadmin, application) permettant de déployer l'application.
 
+![Image](./deploy/deploy_1.png)
+
 ### 4.2 Avec Git
 
 L'idée était la suivante: on ne va pas build l'artifact sur jenkins et l'envoyer au serveur, on va simplement envoyer le code source au serveur, et build le code une une fois sur le serveur.
@@ -456,6 +458,8 @@ Ce script s'active sur chaque push reçu, et effectue les actions suivantes :
 
 Et permet donc de lancer la nouvelle application en production
 
+Pour l'instant, il n'est pas fonctionnel
+
 
 ### 5. Configuration du déploiement continu (non terminé).
 
@@ -470,4 +474,5 @@ Pour déployer en continu sur ce serveur, il faudrait:
  * Configurer des github actions sur le repo pour envoyer le job Jenkins
 
 L'idée est d'utiliser les github actions pour trigger les jobs Jenkins à chaque fois que l'on push sur main.
+
 
