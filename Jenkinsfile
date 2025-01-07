@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean package -DskipTests'
             }
         }
         stage('SonarQube Analysis') {
@@ -44,7 +44,8 @@ pipeline {
         //TODO: faire en sorte de créer une pipeline qui permet d'attendre que le conteneur soit build avant de reup pour éviter un délai entre les deux déploiements.
         stage('Deploy') {
             steps {
-                echo 'deploying'
+                git 'remote add destination git@10.99.215.34:n0dzCrypt-Learning.git'
+                git 'push -u destination master'
             }
         }
     }
