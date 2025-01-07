@@ -49,6 +49,7 @@ pipeline {
             steps {
                     sshagent(credentials: ['SSH-1']) {
                         sh '''
+                            [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
                             ssh-keyscan -H 192.168.1.110 >> ~/.ssh/known_hosts
                             scp target/digi-learning-0.0.1-SNAPSHOT.jar hijokaidan@10.99.215.34:/home/hijokaidan/sites/digi-learning/
                             ssh hijokaidan@192.168.1.110 ./home/hijokaidan/sites/digi-learning/setup.sh
