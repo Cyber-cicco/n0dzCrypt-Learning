@@ -476,3 +476,10 @@ Pour déployer en continu sur ce serveur, il faudrait:
 L'idée est d'utiliser les github actions pour trigger les jobs Jenkins à chaque fois que l'on push sur main.
 
 
+### 6. Conclusion
+
+Il manque encore un bon nombre de choses pour rendre la pipeline viable.
+
+Par exemple, il faudrait pouvoir variabiliser les URLs, permettre de déclencher le build en mode dev ou production, et avoir un serveur de test qui n'implique pas de mettre une application directement accessible par internet.
+
+Toutefois, cela reste une base qui pourra être utilisé dans un contexte de mise en production d'une application, sans toutefois en être un exemple en terme de bonnes pratiques.
