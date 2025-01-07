@@ -43,7 +43,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sshagent(['SSH-1']) {
-                    sh 'git remote add destination git@10.99.215.34:n0dzCrypt-Learning.git'
+                    sh 'git remote add destination git@10.99.215.34:/home/hijokaidan/PC/digi-learning.git'
                     sh 'git push -u destination master'
                 }
             }
