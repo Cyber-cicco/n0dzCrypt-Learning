@@ -21,17 +21,15 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sshagent(['SSH']) {
-                    sshagent(credentials: ['SSH']) {
-                        sh '''
+                sshagent(credentials: ['SSH']) {
+                    sh '''
                         mkdir -p ~/.ssh
                         chmod 700 ~/.ssh
                         ssh-keyscan -H 10.99.215.34 >> ~/.ssh/known_hosts
-                        scp -v target/digi-learning-0.0.1-SNAPSHOT.jar hijokaidan@10.99.215.34:/home/hijokaidan/sites/digi-learning/
+                        scp -i ${SSH} -v target/digi-learning-0.0.1-SNAPSHOT.jar hijokaidan@10.99.215.34:/home/hijokaidan/sites/digi-learning/
                         ssh hijokaidan@10.99.215.34 ./home/hijokaidan/sites/digi-learning/setup.sh
 
                         '''
-}
                 }
             }
         }
