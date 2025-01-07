@@ -25,11 +25,6 @@ pipeline {
                 archiveArtifacts artifacts: 'target/site/jacoco/*.html', allowEmptyArchive: true
             }
         }
-        stage('Build') {
-            steps {
-                sh 'mvn clean package -DskipTests'
-            }
-        }
         stage('SonarQube Analysis') {
             steps {
                  script {
