@@ -40,12 +40,12 @@ pipeline {
                  }
              }
         }
-        //TODO: faire en sorte que ce stage ne se déclenche que si les deux dernière étapes ont fonctionnées.
-        //TODO: faire en sorte de créer une pipeline qui permet d'attendre que le conteneur soit build avant de reup pour éviter un délai entre les deux déploiements.
         stage('Deploy') {
             steps {
-                git 'remote add destination git@10.99.215.34:n0dzCrypt-Learning.git'
-                git 'push -u destination master'
+                sshagent(['SSH-1']) {
+                    sh 'git remote add destination git@10.99.215.34:n0dzCrypt-Learning.git'
+                    sh 'git push -u destination master'
+                }
             }
         }
     }
